@@ -100,7 +100,7 @@ good practice:
 export class HeroButtonComponent {}
 ```
 
-**Coding style Rule 4: Overal Structure:**  
+**Coding style Rule 4: Overall Structure:**  
 Put all of the app's code in a folder named src.  
 Consider creating a folder for a component when it has multiple accompanying files (.ts, .html, .css and .spec).  
 Extract templates and styles into a separate file, when **more than 3 lines.**  
