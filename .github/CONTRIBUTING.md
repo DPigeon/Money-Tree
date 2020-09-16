@@ -42,55 +42,189 @@ To see the bug report template, please refer to bug_template.md.
 
 **Styleguides**
 
-Git Commit Messages
+**Git Commit Messages**
 Use the present tense ("Add feature" not "Added feature")
 Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
-Limit the first line to 72 characters or less
-Reference issues and pull requests liberally after the first line
 
-Naming Conventions
-A folder and sub folder name should always start with small letters and the files belong the folders is always in PascalCase
+We will follow the "50/72" rule which is:
+1) The first line of your commit message must be maximum 50 characters long. No more, and (ideally), no less.
+2) Leave a blank line.
+3) Start writing your description to elaborate on the issues/improvements while trying to wrap each line in your description at (or before) the 72nd mark.
 
-Pascal case -> SampleFileName.js Ex: components/common/CustomButton.js
+**Coding style guide:**
+The following has been extracted from the Angular coding style document available at: https://angular.io/guide/styleguide
+Please refer to that document in case you are uncertain about a specific matter that was not pointed out in the following guide.
 
+**Coding style Rule 1: Single Responsibility**
+Define one thing, such as a service or component, per file.
+Consider limiting files to 400 lines of code.
+
+**Coding style Rule 2: Small Functions**
+Define small functions.
+Consider limiting to no more than 75 lines.
+
+**Coding style Rule 3: Naming Conventions**
+Use consistent names for all symbols.
+Follow a pattern that describes the symbol's feature then its type. The recommended pattern is feature.type.ts.
+Use dashes to separate words in the descriptive name when defining a component or in selectors.
+Use consistent names for all assets named after what they represent.
+All folder and sub folder names should always be lowercase.
+All TypeScript property-variable names should be camelCase.
+Ex:
+`
+export class Product {
+  constructor(
+    public name: string, 
+    public imageUrl: string, //here imageUrl has 2 words so we used camelCase
+    ) 
+	{
+  }
+}
+`
+Use upper camel case for class names.
+Use dashed-case or kebab-case for naming the element selectors of components.
+Ex:
+`
+/* avoid */
+@Component({
+  selector: 'tohHeroButton',
+  templateUrl: './hero-button.component.html'
+})
+export class HeroButtonComponent {}
+`
+good practice:
+
+`@Component({
+  selector: 'toh-hero-button',
+  templateUrl: './hero-button.component.html'
+})
+export class HeroButtonComponent {}
+`
+
+**Coding style Rule 4: Overal Structure:**
+Put all of the app's code in a folder named src.
+Consider creating a folder for a component when it has multiple accompanying files (.ts, .html, .css and .spec).
+Extract templates and styles into a separate file, when **more than 3 lines.**
 When importing modules, leave a space between the brackets and end with a semicolon
+Ex: 
+`
+import { Component, Input } from '@angular\core';
+`
+Always end statements with a semicolon ‘;’
 
-Ex: import { ScrollView, View, TouchableOpacity, KeyboardAvoidingView, ListView, AsyncStorage, Alert } from ‘react-native’;
+Use the @Input() and @Output() class decorators instead of the inputs and outputs properties of the @Directive and @Component metadata.
+Consider placing @Input() or @Output() on the same line as the property it decorates.
+Ex:
+`/* avoid */
+@Component({
+  selector: 'toh-hero-button',
+  template: `<button></button>`,
+  inputs: [
+    'label'
+  ],
+  outputs: [
+    'heroChange'
+  ]
+})
+export class HeroButtonComponent {
+  heroChange = new EventEmitter<any>();
+  label: string;
+}
+`
+good practice:
+`
+@Component({
+  selector: 'toh-hero-button',
+  template: `<button>{{label}}</button>`
+})
+export class HeroButtonComponent {
+  @Output() heroChange = new EventEmitter<any>();
+  @Input() label: string;
+}
+`
+**Coding style Rule 5: Member sequence:**
+Place properties up top followed by methods.
+Place private members after public members, alphabetized.
 
-Javascript variable names should be camel case
+**Coding style Rule 6: Delegate complex component logic to services:**
+Limit logic in a component to only that required for the view. All other logic should be delegated to services.
+Move reusable logic to services and keep components simple and focused on their intended purpose.
 
-Camel Case -> var sampleVariable;
+**Coding style Rule 7: Don't prefix output properties:**
+Name events without the prefix on.
+Name event handler methods with the prefix on followed by the event name.
+Ex:
+`
+/* avoid */
 
-Layout Conventions
-Always end statements with a semicolon ‘;’ Do NOT use setState() in the render() function
+@Component({
+  selector: 'toh-hero',
+  template: `...`
+})
+export class HeroComponent {
+  @Output() onSavedTheDay = new EventEmitter<boolean>();
+}
+`
+and avoid:
+`
+<!-- avoid -->
+<toh-hero (onSavedTheDay)="onSavedTheDay($event)"></toh-hero>
+`
+good practice:
+`export class HeroComponent {
+  @Output() savedTheDay = new EventEmitter<boolean>();
+}
+`
 
-Commenting Conventions
-Place the comment on a separate line, not at the end of a line of code.
+**Coding style Rule 8: About Services:**
+Use services as singletons within the same injector. Use them for sharing data and functionality.
+Create services with a single responsibility that is encapsulated by its context.
+Create a new service once the service begins to exceed that singular purpose.
+Refactor logic for making data operations and interacting with data to a service.
+
+
+**Coding style Rule 9: Commenting Conventions**
+Place the comment on a separate line before your code (and not at the end of a line of code).
 Insert one space between the comment delimiter (//) and the comment text.
 Begin comment text with an uppercase letter.
 End comment text with a period.
 Make sure to add a comment if your method/logic is not super clear
 Ex: // This is a test comment.
 
-Language Guidelines
-Define variables using ‘const’ whenever you can, if not use ‘let’ over ‘var’ Props should not be changed as they are considered immutable
+For a complete documentation style guide please refer to Angular documentation style guide available at: https://angular.io/guide/docs-style-guide
+
+
+**TESTING conventions:**
+
+Naming convention for tests:
+Name test specification files the same as the component they test.
+Name test specification files with a suffix of .spec.
+Name end-to-end test specification files after the feature they test with a suffix of .e2e-spec.
+
+Each test should validate one thing and one thing only; single use case.
+Tests can be run in any order; indepedent of other tests.
+Try and make test without dependencies (solitary) or provide mock data.
+
 
 **Git Guidelines**
 
-Each feature / user story will have it’s separate branch to work on
+Each feature/user-story will have it's separate branch to work on
 Branch Structure: Master - Staging - [Features]
 
-Before any commits are entered into master, they must be approved by a pull request. Request any of us to review. When working on user stories, ALWAYS branch off from staging (i assume this is develop) into your own feature branch (feature/#19-add-toggle-button). Work on your story then after you run the test, make a pull request to merge to staging (develop). Code review will follow. At the end of the sprint (or release) a dedicated teammate will merge staging into master. When adding a bug to github, add:
-Which branch and commit it was found on
-How to replicate the bug
-Which user story (github issue) it affects
-When making git commits
-Make each commit focused on one thing
-Making refactoring commits should be as such Ex: “Refactored code for pull request #12 for issue#16”
-Have relevant names and tag the user story it's connected to at the end Ex: “Added toggle button to google maps [Issue #16]” Where Issue #16 is the github issue
-Coding Linter
+Before any commits are entered into master, they must be approved by a pull request.
+Each Pull-Request has to be approved at least by one reviewer that can be any of the team members. 
+
+When working on user stories, ALWAYS branch off from staging (i assume this is develop) into your own feature branch (feature/#19-add-toggle-button). Work on your story then after you run the test, make a pull request to merge to staging (develop). Code review will follow. At the end of the sprint (or release) a dedicated teammate will merge staging into master. 
+
+
+When making git commits:
+Make each commit focused on one thing.
+Making refactoring commits should be as such Ex: “Refactored code for pull request #12 for issue#16”.
+Have relevant names and tag the user story it's connected to at the end Ex: “Added toggle button to google maps [Issue #16]” Where Issue #16 is the github issue.
+
+**Coding Linter:**
 The purpose of a linter is to assure a consistant coding style accross the application.
-Before you commit any code, the linter will run and check if your coding matches the expected style and if your code doesn't break the tests
-To run the linter, stage all the files you want to commit and run npm run pre-commit
-If you try commiting code and there is a husky error, that means that your code does not follow the standards
-If you have any questions regarding the linter, contact Alessandro from this repo
+Before you commit any code, the linter will run and check if your coding matches the expected style and if your code doesn't break the tests.
+To run the linter, stage all the files you want to commit and run npm run pre-commit.
+If you try commiting code and there is a husky error, that means that your code does not follow the standards.
+If you have any questions regarding the linter, contact Alessandro from this repo.
