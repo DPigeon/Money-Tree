@@ -1,7 +1,9 @@
-Contributing
+**Contributing**
+
 The following is a set of guidelines for contributing. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
-Reporting Bugs
+**Reporting Bugs**
+
 This section guides you through submitting a bug report. Following these guidelines helps maintainers and the community understand your report, reproduce the behavior, and find related reports.
 
 Before creating bug reports, please check this list as you might find out that you don't need to create one. When you are creating a bug report, please include as many details as possible. Fill out the required template, the information it asks for helps us resolve issues faster.
@@ -38,7 +40,8 @@ Are you using multiple monitors? If so, can you reproduce the problem when you u
 Which keyboard layout are you using? Are you using a US layout or some other layout?
 To see the bug report template, please refer to bug_template.md.
 
-Styleguides
+**Styleguides**
+
 Git Commit Messages
 Use the present tense ("Add feature" not "Added feature")
 Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
@@ -72,7 +75,8 @@ Ex: // This is a test comment.
 Language Guidelines
 Define variables using ‘const’ whenever you can, if not use ‘let’ over ‘var’ Props should not be changed as they are considered immutable
 
-Git Guidelines
+**Git Guidelines**
+
 Each feature / user story will have it’s separate branch to work on
 Branch Structure: Master - Staging - [Features]
 
