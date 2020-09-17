@@ -208,7 +208,7 @@ Tests can be run in any order; indepedent of other tests.
 Try and make test without dependencies (solitary) or provide mock data.  
 
 
-**Git Guidelines**  
+**Git Guidelines**
 
 Each feature/user-story will have it's separate branch to work on  
 Branch Structure: Master - Staging - [Features]  
@@ -216,8 +216,13 @@ Branch Structure: Master - Staging - [Features]
 Before any commits are entered into master, they must be approved by a pull request.  
 Each Pull-Request has to be approved at least by one reviewer that can be any of the team members.   
 
-When working on user stories, ALWAYS branch off from staging (i assume this is develop) into your own feature branch (feature/#19-add-toggle-button). Work on your story then after you run the test, make a pull request to merge to staging (develop). Code review will follow. At the end of the sprint (or release) a dedicated teammate will merge staging into master.   
+When working on user stories, ALWAYS branch off from staging into your own feature branch (feature/#19-add-toggle-button). Work on your story then after you run the test, make a pull request to merge to staging (develop). Code review will follow. At the end of the sprint (or release) a dedicated teammate will merge staging into master.   
 
+Branch naming convention:
+For tasks that add a feature use:		feature/...  
+For tasks that restructure the cod use:		refactor/...  
+For tasks  that fix a bug use: 			bug/...  
+For tasks that don't follow any of the above:	issue/...  
 
 When making git commits:  
 Make each commit focused on one thing.  
