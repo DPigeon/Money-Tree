@@ -3,3 +3,15 @@
 
 # vscode
 .vscode/
+
+# misc.
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+*.out
+
+# goyave related secrets
+config.json
