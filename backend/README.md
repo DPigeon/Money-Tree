@@ -1,8 +1,42 @@
-We will be using maven as our dependency manager.
+# How to run locally
 
-Test can be written in both GROOVY and JAVA (GROOVY is a superset of java, much easier to write and you can write java inside groovy files).
-Testing framework is SPOCK. (https://www.baeldung.com/groovy-spock for spock with springboot examples) 
-(http://spockframework.org/spock/docs/1.3/all_in_one.html actual documentation of spock in a single page)
+## JAVA
 
+You need java 11 to run the application.
 
-For intellij, please download the gmaven plus plugin to be able to run the tests from intellij IDEA.
+##MAVEN
+There is a maven executable for unix-base dos in the backend repo called mvnw. To execute it, run `./mvnw <comands>`
+
+- Maven is a dependency manager for java project. Using the cli commands, you can import dependency, build project, run test . . .
+
+- To import all dependency and create the jar files and run the tests, run `./mvnw clean install`
+
+- To import all dependency and create jar file without running tests, run `./mvnw/ clean install -DskipTests`
+
+- To run only the tests run `./mvnw clean test`
+
+## Neo4j
+You need to install neo4j in your OS of choice. For macOS users, you can use brew by running `brew install neo4j` in your terminal.
+
+- You can use a GUI to look at your local neo4j instance using neo4j desktop (https://neo4j.com/download-neo4j-now/).
+
+- When you first start neo4j, the default username and password is neo4j (for both). neo4j will not allow any application
+to connect if the password has not been changed.
+
+- To start neo4j locally, open your terminal and run `neo4j start`
+
+- If neo4j is up and running locally, you can run `curl -v -u neo4j:neo4j -X POST localhost:7474/user/neo4j/password -H "Content-type:application/json" -d "{\"password\":\"secret\"}"` and replace the secret string with stonecap. stonecap is our db password for dev when running the application locally.
+
+## Springboot App
+
+To run the application loally you can run `mvn spring-boot:run` or run it from your ide directly (I suggest Intellij IDEA).
+
+### Steps
+
+1. downlaod neo4j and change the default password to stonecap
+
+2. deploy neo4j locally
+
+3. run `./mvnw clean install` to get all dependencies locally and run tests
+
+4. run `mvn spring-boot:run` to start the application (listening in port 8080 by default)
