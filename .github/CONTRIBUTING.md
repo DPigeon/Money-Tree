@@ -57,14 +57,14 @@ Each message consists of a header, a body and a footer. The header has a **type*
 <footer>
 ```
 
-**Type Examples**: 
+*Type Examples*: 
 | Commit Message | Release Type |
 | --------------- | --------------- |
 | fix(pipeline): stop breaking on the sonarcloud job | Patch Release| 
 | feat(bid): add 'bid' option | Minor Release |
 | perf(graphCurrency): remove the graph currency  | Major Release |
 
-**Semantic Versioning**: if the version of our application is 1.2.3, then 1 refers to the major release, 2 refers to the minor release and 3 refers to a patch release.
+*Semantic Versioning*: if the version of our application is 1.2.3, then 1 refers to the major release, 2 refers to the minor release and 3 refers to a patch release.
 
 Many more types can be used. Refer to this document [here](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type).
 
