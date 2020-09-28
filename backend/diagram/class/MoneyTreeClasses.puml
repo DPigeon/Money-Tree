@@ -1,0 +1,68 @@
+@startuml
+
+package com.capstone.moneytree {
+
+    interface UserDao extends Neo4jRepository {
+        ~List<User> findAll()
+        ~User findUserById(Long id)
+    }
+    hide Neo4jRepository methods
+    hide Neo4jRepository fields
+
+    interface UserService {
+        ~Iterable<User> getAllUsers()
+        ~User getUserById(Long id)
+        ~User createUser(User user)
+    }
+
+    class UserController {
+        -final UserService userService
+        -{static} final Logger LOG
+        +UserController(UserService userService)
+        ~List<User> all()
+        ~User createUser(@RequestBody User user)
+        ~User getUser(@PathVariable Long id)
+    }
+    UserController *-- UserService
+    UserController *-- User
+
+
+    class User extends Entity {
+        ~String firstName
+        ~String lastName
+        ~Set<User> friends
+    }
+
+    class FriendShip {
+        ~Long id
+        ~User friendOne
+        ~User friendTwo
+        ~Date friendShipDate
+        ~FriendShip()
+    }
+    FriendShip *-- User
+
+    class Entity {
+        -Long id
+        +Long getId()
+    }
+
+    class DefaultUserService implements UserService {
+        -final UserDao userDao
+        -{static} final Logger LOG
+        +DefaultUserService(UserDao userDao)
+        -- @Override --
+        +Iterable<User> getAllUsers()
+        +User getUserById(Long id)
+        +User createUser(User user)
+    }
+    DefaultUserService *-- UserDao
+    DefaultUserService *-- User
+
+    class MoneyTreeApplication {
+        +{static} void main(String[] args)
+    }
+
+}
+
+@enduml
