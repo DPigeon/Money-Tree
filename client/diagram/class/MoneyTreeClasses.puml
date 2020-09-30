@@ -1,0 +1,15 @@
+@startuml
+
+package src {
+
+    package app {
+
+        class app-module {
+
+        }
+
+    }
+
+}
+
+@enduml
