@@ -8,9 +8,10 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getTitleText()).toEqual('client app is running!');
+  it('sample e2e ', () => {
+    let x = 4;
+    x += 8;
+    expect(x).toEqual(12);
   });
 
   afterEach(async () => {
