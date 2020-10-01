@@ -2,7 +2,7 @@
 
 ## JAVA
 
-You need java 11 to run the application. You can check you java version by running this command in your terminal: `java -version`.
+You need java 11 to run the application.
 
 ##MAVEN
 There is a maven executable for unix-base dos in the backend repo called mvnw. To execute it, run `./mvnw <comands>`
@@ -25,19 +25,24 @@ to connect if the password has not been changed.
 
 - To start neo4j locally, open your terminal and run `neo4j start`
 
-- If neo4j is up and running locally, you can run `curl -v -u neo4j:neo4j -X POST localhost:7474/user/neo4j/password -H "Content-type:application/json" -d "{\"password\":\"stonecap\"}"` to change the default password to stonecap. This our db password for dev when running the application locally.
-If this does not work, you can go through the browser at localhost:7474 and change the password from there.
+- If neo4j is up and running locally, you can run `curl -v -u neo4j:neo4j -X POST localhost:7474/user/neo4j/password -H "Content-type:application/json" -d "{\"password\":\"secret\"}"` and replace the secret string with stonecap. stonecap is our db password for dev when running the application locally.
 
 ## Springboot App
 
-To run the application loally you can run `mvn spring-boot:run` or run it from your ide directly (I suggest Intellij IDEA).
+To run the application locally you can run `mvn spring-boot:run` or run it from your ide directly (I suggest Intellij IDEA).
 
 ### Steps
 
-1. downlaod neo4j and change the default password to stonecap
+1. download neo4j and change the default password to stonecap
 
 2. deploy neo4j locally
 
 3. run `./mvnw clean install` to get all dependencies locally and run tests
 
 4. run `mvn spring-boot:run` to start the application (listening in port 8080 by default)
+
+### Testing
+
+1. To run tests, run this command `./mvnw clean test`
+
+2. Report will be generated in /target/spock-reports folder
