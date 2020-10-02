@@ -4,7 +4,7 @@
 
 You need java 11 to run the application. You can check you java version by running this command in your terminal: `java -version`.
 
-##MAVEN
+## MAVEN
 There is a maven executable for unix-base dos in the backend repo called mvnw. To execute it, run `./mvnw <comands>`
 
 - Maven is a dependency manager for java project. Using the cli commands, you can import dependency, build project, run test . . .
