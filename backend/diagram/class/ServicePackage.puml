@@ -1,0 +1,41 @@
+@startuml
+
+package service {
+    package api {
+        interface UserService {
+            ~Iterable<User> getAllUsers()
+            ~User getUserById(Long id)
+            ~User createUser(User user)
+        }
+
+        interface StockService {
+
+        }
+
+        interface TransactionService {
+
+        }
+    }
+
+    package imp {
+        class DefaultUserService implements UserService {
+            -final UserDao userDao
+            -{static} final Logger LOG
+            +DefaultUserService(UserDao userDao)
+            -- @Override --
+            +Iterable<User> getAllUsers()
+            +User getUserById(Long id)
+            +User createUser(User user)
+        }
+
+        class DefaultStockService implements StockService {
+
+        }
+
+        class DefaultTransactionService implements TransactionService {
+
+        }
+    }
+}
+
+@enduml

@@ -1,151 +1,30 @@
 @startuml
 
 /'
-' MoneyTree's main package
-'/
+ ' MoneyTree's main package
+ '/
 package com.capstone.moneytree {
 
-    package controller {
-        class UserController {
-            -final UserService userService
-            -{static} final Logger LOG
-            +UserController(UserService userService)
-            ~List<User> all()
-            ~User createUser(@RequestBody User user)
-            ~User getUser(@PathVariable Long id)
-        }
-    }
-
-    package dao {
-        interface UserDao extends Neo4jRepository {
-            ~List<User> findAll()
-            ~User findUserById(Long id)
-        }
-        hide Neo4jRepository methods
-        hide Neo4jRepository fields
-    }
-
-    package model {
-        package node {
-            class User extends Entity {
-                -String firstName
-                -String lastName
-                -String username
-                -String profile_picture_url
-                -String email
-                -double score
-                -double rank
-                -float available_balance
-                -String password
-            }
-
-            class Stock extends Entity {
-                -String ticker
-                -String name
-                -String industry
-                -String volatility
-            }
-
-            class Transaction extends Entity {
-                -float qty
-                -float price
-                -OrderType order_type
-                -Status status
-            }
-
-            enum OrderType {
-                BUY
-                SELL
-            }
-
-            enum Status {
-                BOUGHT
-                PENDING
-                SOLD
-            }
-            hide OrderType methods
-            hide Status methods
-        }
-
-        package relationship {
-            class FriendShip {
-                ~Long id
-                ~User friendOne
-                ~User friendTwo
-                ~Date friendShipDate
-                ~FriendShip()
-            }
-
-            class Follows {
-                -LocalDateTime since
-            }
-
-            class Deposited {
-                -LocalDateTime timestamp
-                -float amount
-            }
-
-            class Owns {
-                -float qty
-                -float average_purchase_price
-            }
-
-            class ToBuy {
-                -LocalDateTime placed_timestamp
-                -LocalDateTime fulfilled_timestamp
-            }
-
-            class ToSell {
-                -LocalDateTime placed_timestamp
-                -LocalDateTime fulfilled_timestamp
-            }
-        }
-
-        class Entity {
-            -Long id
-            +Long getId()
-        }
-    }
-
-    package service {
-        package api {
-            interface UserService {
-                ~Iterable<User> getAllUsers()
-                ~User getUserById(Long id)
-                ~User createUser(User user)
-            }
-        }
-
-        package imp {
-            class DefaultUserService implements UserService {
-                -final UserDao userDao
-                -{static} final Logger LOG
-                +DefaultUserService(UserDao userDao)
-                -- @Override --
-                +Iterable<User> getAllUsers()
-                +User getUserById(Long id)
-                +User createUser(User user)
-            }
-        }
-    }
+   /'
+    ' Gathers all packages together
+    '/
+    !include ./ControllerPackage.puml
+    !include ./DaoPackage.puml
+    !include ./ModelPackage.puml
+    !include ./ServicePackage.puml
 
     class MoneyTreeApplication {
         +{static} void main(String[] args)
     }
 
    /'
-    ' Relationships Arrows
+    ' Package2Package Relationships
     '/
-    Transaction *-- OrderType
-    Transaction *-- Status
-
     DefaultUserService *-- UserDao
     DefaultUserService *-- User
 
     UserController *-- UserService
     UserController *-- User
-
-    FriendShip *-- User
 
 }
 

@@ -1,0 +1,12 @@
+@startuml
+
+package dao {
+    interface UserDao extends Neo4jRepository {
+        ~List<User> findAll()
+        ~User findUserById(Long id)
+    }
+    hide Neo4jRepository methods
+    hide Neo4jRepository fields
+}
+
+@enduml
