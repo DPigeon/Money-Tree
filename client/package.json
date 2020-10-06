@@ -48,6 +48,14 @@
       "<rootDir>/setupJest.ts"
     ],
     "collectCoverage": true,
-    "coverageReporters": ["json", "html"]
+    "coverageReporters": [
+      "json",
+      "html"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "ng lint && npm test"
+    }
   }
 }
