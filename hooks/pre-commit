@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run at the root of the project the command:
-# ln -s -f ../../hooks/pre-commit .git/hooks/pre-commit
+# ln -s -f ../../hooks/pre-commit .git/hooks/pre-commit && chmod +x ./hooks/pre-commit
 # To make the pre-commit linter available in your Git hooks
 
 function get_latest_changes() {
