@@ -1,0 +1,28 @@
+#!/bin/bash
+
+function get_latest_changes() {
+    git diff --cached --name-only
+}
+
+function CLIENT_COMMAND() {
+   ng lint && npm test
+}
+
+function BACKEND_COMMAND() {
+   ./mvnw clean test
+}
+
+WORKING_DIRECTORY="$(pwd)"
+DIR_CLIENT_CHANGES=$(get_latest_changes client)
+DIR_BACKEND_CHANGES=$(get_latest_changes backend)
+
+function run_linter() {
+   if [[ $1 =~ $2 ]]; then
+      cd "$WORKING_DIRECTORY"
+      cd $3
+      $4
+   fi
+}
+
+run_linter "$DIR_CLIENT_CHANGES" "client/" client CLIENT_COMMAND
+run_linter "$DIR_BACKEND_CHANGES" "backend/" backend BACKEND_COMMAND
