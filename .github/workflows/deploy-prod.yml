@@ -1,0 +1,9 @@
+name: Deploy to Production
+
+# This workflow will be triggered on a manual click
+on:
+  workflow_dispatch:
+    
+jobs:
+  deploy:
+    name: Deploy-Production
