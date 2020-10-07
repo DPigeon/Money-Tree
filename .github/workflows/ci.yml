@@ -27,9 +27,6 @@ jobs:
         with:
           node-version: "12.x"
 
-      - name: Change to Frontend Directory
-        run: cd client
-
       - name: Cache Node Modules
         uses: actions/cache@v2
         with:
@@ -42,15 +39,12 @@ jobs:
             ${{ runner.OS }}-
 
       - name: Install Frontend Dependencies
-        run: npm install
+        run: cd client && npm install
 
       - name: Setup Java
         uses: actions/setup-java@v1.3.0
         with:
           java-version: 11.0.8
-
-      - name: Change to Backend Directory
-        run: cd ../backend
 
       - name: Cache Maven
         uses: actions/cache@v2
@@ -63,7 +57,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Install Backend Dependencies
-        run: ./mvnw install
+        run: cd backend && ./mvnw install
 
   # job_1:
   #   name: Lint
