@@ -1,25 +1,113 @@
 name: CI Pipeline
 
 # CI will be triggered only when making a PR to the dev branch
-on:
-  pull_request:
-    branches:
-      - '*'
-      - dev
-      
-# It will run 4 jobs in series (Lint --> Tests --> Package --> SonarCloud)
+# on:
+#   pull_request:
+#     branches:
+#       - "*"
+#       - dev
+
+# It will run 5 jobs in series (Install --> Lint --> Tests --> Package --> SonarCloud)
 jobs:
-  job_1:
-    name: Lint
-    
-  job_2:
-    needs: job_1
-    name: Tests
-    
-  job_3:
-    needs: job_2
-    name: Package
-    
-  job_4:
-    needs: job_3
-    name: SonarCloud
+  job_0:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+
+      - name: Change to Frontend Directory
+        run: cd client
+
+      - name: Cache Node Modules
+        uses: actions/cache@v2
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          # Used to create a place to store node_modules to reuse it in other jobs
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+
+      - name: Install Frontend Dependencies
+        run: npm install
+
+      - name: Setup Java
+        uses: actions/setup-java@v1.3.0
+        with:
+          java-version: 11.0.8
+
+      - name: Change to Backend Directory
+        run: cd ../backend
+
+      - name: Cache Maven
+        uses: actions/cache@v2
+        # maven cache files are stored in `~/.m2/repository` on Linux/macOS
+        # Used to create place to store libraries to resure it in other jobs
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Install Backend Dependencies
+        run: ./mvnw install
+
+  # job_1:
+  #   name: Lint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+
+  #     - name: Frontend Lint
+  #       run: cd client && ng Lint
+
+  #     - name: Backend Lint
+  #       run:
+
+  # job_2:
+  #   needs: job_1
+  #   name: Tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+
+  #     - name: Setup Java
+  #       uses: actions/setup-java@v1.3.0
+  #       with:
+  #         java-version: 11.0.8
+
+  #     - name: Setup Node & Angular-client
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: "12.x"
+
+  #     - name: Frontend Tests
+  #       run: cd client && npm install && npm test
+
+  #     - name: Backend Tests
+  #       run: cd ../backend && ./mvnw install && ./mvnw clean test
+
+  # job_3:
+  #   needs: job_2
+  #   name: Package
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+
+  # job_4:
+  #   needs: job_3
+  #   name: SonarCloud
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2

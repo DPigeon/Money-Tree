@@ -1,24 +1,36 @@
 name: CD Pipeline
 
 # CD will be triggered only on push on master branch
-on: 
-  push:
-    branches:
-      - master
-      
+# on:
+#   push:
+#     branches:
+#       - master
+
 # It will run 4 jobs in series (Build --> Publish --> Deploy-UAT --> Cleanup)
 jobs:
   job_1:
     name: Build
-    
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+
   job_2:
     needs: job_1
     name: Publish
-    
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+
   job_3:
     needs: job_2
     name: Deploy-UAT
-    
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+
   job_4:
     needs: job_3
     name: Cleanup
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
