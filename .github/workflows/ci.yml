@@ -7,6 +7,12 @@ name: CI Pipeline
 #       - "*"
 #       - dev
 
+on:
+  push:
+    branches:
+      - "*"
+      - issue/#70-setup-devops-pipeline
+
 # It will run 5 jobs in series (Install --> Lint --> Tests --> Package --> SonarCloud)
 jobs:
   job_0:
