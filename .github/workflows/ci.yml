@@ -37,19 +37,23 @@ jobs:
           # npm cache files are stored in `~/.npm` on Linux/macOS
           # Used to create a place to store node_modules to reuse it in other steps
           path: ~/.npm
-          key: ${{ runner.OS }}-temp-node-modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.OS }}-nodejs-frontend-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.OS }}-temp-node-modules-
-            ${{ runner.OS }}-temp-node-
+            ${{ runner.OS }}-nodejs-frontend-
+            ${{ runner.OS }}-nodejs-
 
       - name: Install Frontend Dependencies
         working-directory: ./client
         if: steps.node-modules.outputs.cache-hit != 'true' # Checks if node has modules as cache already
-        run: npm i && npm i -g @angular/cli && npm i --save-dev @angular-devkit/build-angular
+        run: npm i
 
+      # Note: to interact with ng on the VM (when building for example), @angular/cli & @angular-devkit/build-angular must be installed
+      # It is the case here with the linter
       - name: Frontend Lint
         working-directory: ./client
-        run: npm run lint
+        run: npm i -g @angular/cli &&
+          npm i --save-dev @angular-devkit/build-angular &&
+          npm run lint
 
       - name: Frontend Tests
         working-directory: ./client
