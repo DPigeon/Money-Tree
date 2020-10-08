@@ -36,21 +36,21 @@ jobs:
         with:
           # npm cache files are stored in `~/.npm` on Linux/macOS
           # Used to create a place to store node_modules to reuse it in other steps
-          path: ~/.npm
+          path: node_modules
           key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
 
       - name: Change to Frontend Directory
-        run: cd client
+        run: ls && cd client
 
       - name: Install Frontend Dependencies
         if: steps.node-modules.outputs.cache-hit != 'true' # Checks if node has modules as cache already
         run: npm install
 
       - name: Frontend Lint
-        run: ng lint
+        run: npm run lint
 
       - name: Frontend Tests
         run: npm test
