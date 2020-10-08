@@ -6,13 +6,14 @@ name: CD Pipeline
 #     branches:
 #       - master
 
-# It will run 4 jobs in series (Build --> Publish --> Deploy-UAT --> Cleanup)
+# TODO: It will run 4 jobs in series (Build --> Publish --> Deploy-UAT --> Cleanup)
 jobs:
   job_1:
     name: Build
     runs-on: ubuntu-latest
     steps:
       - name: TODO
+        run: echo "TODO"
 
   job_2:
     needs: job_1
@@ -20,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: TODO
+        run: echo "TODO"
 
   job_3:
     needs: job_2
@@ -27,6 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: TODO
+        run: echo "TODO"
 
   job_4:
     needs: job_3
@@ -34,3 +37,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: TODO
+        run: echo "TODO"

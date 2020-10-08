@@ -7,16 +7,19 @@ name: CI Pipeline
 #       - "*"
 #       - dev
 
+# TEMPORARY for testing
 on:
   push:
     branches:
       - "*"
       - issue/#70-setup-devops-pipeline
 
-# It will run 5 jobs in series (Install --> Lint --> Tests --> Package --> SonarCloud)
+# We have 2 main jobs:
+#   1. Integration: (Install) --> Lint --> Tests --> Package
+#   2. Quality Check
 jobs:
-  job_0:
-    name: Install
+  job_1:
+    name: Integration
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,10 +31,11 @@ jobs:
           node-version: "12.x"
 
       - name: Cache Node Modules
+        id: node-modules
         uses: actions/cache@v2
         with:
           # npm cache files are stored in `~/.npm` on Linux/macOS
-          # Used to create a place to store node_modules to reuse it in other jobs
+          # Used to create a place to store node_modules to reuse it in other steps
           path: ~/.npm
           key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
@@ -39,7 +43,14 @@ jobs:
             ${{ runner.OS }}-
 
       - name: Install Frontend Dependencies
+        if: steps.node-modules.outputs.cache-hit != 'true' # Checks if node has modules as cache already
         run: cd client && npm install
+
+      - name: Frontend Lint
+        run: ng lint
+
+      - name: Frontend Tests
+        run: npm test
 
       - name: Setup Java
         uses: actions/setup-java@v1.3.0
@@ -47,9 +58,10 @@ jobs:
           java-version: 11.0.8
 
       - name: Cache Maven
+        id: maven-dependencies
         uses: actions/cache@v2
         # maven cache files are stored in `~/.m2/repository` on Linux/macOS
-        # Used to create place to store libraries to resure it in other jobs
+        # Used to create place to store libraries to resure it in other steps
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -57,55 +69,22 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Install Backend Dependencies
-        run: cd backend && ./mvnw install
+        if: steps.maven-dependencies.outputs.cache-hit != 'true' # Checks if maven has dependencies as cache already
+        run: cd ../backend && ./mvnw install
 
-  # job_1:
-  #   name: Lint
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
+      - name: Backend Tests
+        run: ./mvnw clean test
 
-  #     - name: Frontend Lint
-  #       run: cd client && ng Lint
+      # TODO: Package sub-job
+      # This sub-job will be use docker to package our application by building it and creating an image of it
+      # Used to know if the app can be built properly before shipping it in deployment
+      # Use the cache (dependencies) of both client & backend defined above
 
-  #     - name: Backend Lint
-  #       run:
+  # TODO: Quality Check & Security Job (use Codacy.com https://github.com/marketplace/codacy/plan/MDIyOk1hcmtldHBsYWNlTGlzdGluZ1BsYW4xNA==#pricing-and-setup)
+  # SonarCloud limits us with the organization requirement that they have unfortunately
 
   # job_2:
-  #   needs: job_1
-  #   name: Tests
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-
-  #     - name: Setup Java
-  #       uses: actions/setup-java@v1.3.0
-  #       with:
-  #         java-version: 11.0.8
-
-  #     - name: Setup Node & Angular-client
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: "12.x"
-
-  #     - name: Frontend Tests
-  #       run: cd client && npm install && npm test
-
-  #     - name: Backend Tests
-  #       run: cd ../backend && ./mvnw install && ./mvnw clean test
-
-  # job_3:
   #   needs: job_2
-  #   name: Package
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-
-  # job_4:
-  #   needs: job_3
   #   name: SonarCloud
   #   runs-on: ubuntu-latest
   #   steps:

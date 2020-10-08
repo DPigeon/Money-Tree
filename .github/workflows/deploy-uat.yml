@@ -1,6 +1,6 @@
 name: Deploy to UAT
 
-# This workflow will be triggered on a manual click
+# TODO: This workflow will be triggered on a manual click
 on:
   workflow_dispatch:
 
@@ -10,3 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: TODO
+        run: echo "TODO"
