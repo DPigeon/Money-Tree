@@ -45,11 +45,11 @@ jobs:
       - name: Install Frontend Dependencies
         working-directory: ./client
         if: steps.node-modules.outputs.cache-hit != 'true' # Checks if node has modules as cache already
-        run: npm install && npm install -g @angular/cli
+        run: npm install
 
       - name: Frontend Lint
         working-directory: ./client
-        run: npm run lint
+        run: npm install -g @angular/cli && npm run lint
 
       - name: Frontend Tests
         working-directory: ./client
