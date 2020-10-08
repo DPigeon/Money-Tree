@@ -22,17 +22,17 @@ jobs:
     name: Integration
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v1.4.4
         with:
           node-version: "12.x"
 
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Cache Node Modules
         id: node-modules
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.1
         with:
           # npm cache files are stored in `~/.npm` on Linux/macOS
           # Used to create a place to store node_modules to reuse it in other steps
@@ -42,9 +42,12 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
 
+      - name: Change to Frontend Directory
+        run: cd client
+
       - name: Install Frontend Dependencies
         if: steps.node-modules.outputs.cache-hit != 'true' # Checks if node has modules as cache already
-        run: cd client && npm install
+        run: npm install
 
       - name: Frontend Lint
         run: ng lint
@@ -53,13 +56,13 @@ jobs:
         run: npm test
 
       - name: Setup Java
-        uses: actions/setup-java@v1.3.0
+        uses: actions/setup-java@v1.4.3
         with:
           java-version: 11.0.8
 
       - name: Cache Maven
         id: maven-dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.1
         # maven cache files are stored in `~/.m2/repository` on Linux/macOS
         # Used to create place to store libraries to resure it in other steps
         with:
@@ -68,9 +71,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Change to Backend Directory
+        run: cd ../backend
+
       - name: Install Backend Dependencies
         if: steps.maven-dependencies.outputs.cache-hit != 'true' # Checks if maven has dependencies as cache already
-        run: cd ../backend && ./mvnw install
+        run: ./mvnw install
 
       - name: Backend Tests
         run: ./mvnw clean test

@@ -6,6 +6,13 @@ name: CD Pipeline
 #     branches:
 #       - master
 
+# TEMPORARY for testing
+on:
+  push:
+    branches:
+      - "*"
+      - issue/#70-setup-devops-pipeline
+
 # TODO: It will run 4 jobs in series (Build --> Publish --> Deploy-UAT --> Cleanup)
 jobs:
   job_1:
