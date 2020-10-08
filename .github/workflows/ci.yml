@@ -37,19 +37,15 @@ jobs:
           # npm cache files are stored in `~/.npm` on Linux/macOS
           # Used to create a place to store node_modules to reuse it in other steps
           path: ~/.npm
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.OS }}-cache-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.OS }}-node-
-            ${{ runner.OS }}-
+            ${{ runner.OS }}-cache-node-
+            ${{ runner.OS }}-cache-
 
       - name: Install Frontend Dependencies
         working-directory: ./client
         if: steps.node-modules.outputs.cache-hit != 'true' # Checks if node has modules as cache already
-        run: npm install
-
-      - name: Install Angular-CLI Globally
-        working-directory: ./client
-        run: npm install -g @angular/cli
+        run: npm install && npm install -g @angular/cli
 
       - name: Frontend Lint
         working-directory: ./client
@@ -74,10 +70,6 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-
-      - name: Change to Backend Directory
-        working-directory: ./backend
-        run: cd ../backend
 
       - name: Install Backend Dependencies
         working-directory: ./backend
