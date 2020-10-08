@@ -42,17 +42,17 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
 
-      - name: Change to Frontend Directory
-        run: bash cd client
-
       - name: Install Frontend Dependencies
+        working-directory: ./client
         if: steps.node-modules.outputs.cache-hit != 'true' # Checks if node has modules as cache already
         run: npm install
 
       - name: Frontend Lint
+        working-directory: ./client
         run: npm run lint
 
       - name: Frontend Tests
+        working-directory: ./client
         run: npm test
 
       - name: Setup Java
@@ -72,13 +72,16 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Change to Backend Directory
-        run: bash cd ../backend
+        working-directory: ./backend
+        run: cd ../backend
 
       - name: Install Backend Dependencies
+        working-directory: ./backend
         if: steps.maven-dependencies.outputs.cache-hit != 'true' # Checks if maven has dependencies as cache already
         run: bash ./mvnw install
 
       - name: Backend Tests
+        working-directory: ./backend
         run: bash ./mvnw clean test
 
       # TODO: Package sub-job
