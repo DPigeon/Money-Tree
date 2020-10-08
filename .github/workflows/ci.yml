@@ -36,7 +36,7 @@ jobs:
         with:
           # npm cache files are stored in `~/.npm` on Linux/macOS
           # Used to create a place to store node_modules to reuse it in other steps
-          path: node_modules
+          path: ~/.npm
           key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.OS }}-node-
