@@ -47,9 +47,12 @@ jobs:
         if: steps.node-modules.outputs.cache-hit != 'true' # Checks if node has modules as cache already
         run: npm install
 
+      - name: Install Angular-CLI
+        run: npm install -g @angular/cli
+
       - name: Frontend Lint
         working-directory: ./client
-        run: npm install -g -f angular-cli && npm lint
+        run: npm lint
 
       - name: Frontend Tests
         working-directory: ./client
