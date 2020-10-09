@@ -47,7 +47,7 @@ jobs:
         if: steps.node-modules.outputs.cache-hit != 'true' # Checks if node has modules as cache already
         run: npm i
 
-      # Note: to interact with ng on the VM (when building for example), @angular/cli & @angular-devkit/build-angular must be installed
+      # Note: to interact with ng on the VM (when building the app for example), @angular/cli & @angular-devkit/build-angular must be installed
       # It is the case here with the linter
       - name: Frontend Lint
         working-directory: ./client
@@ -89,8 +89,7 @@ jobs:
       # Used to know if the app can be built properly before shipping it in deployment
       # Use the cache (dependencies) of both client & backend defined above
 
-  # TODO: Quality Check & Security Job (use Codacy.com https://github.com/marketplace/codacy/plan/MDIyOk1hcmtldHBsYWNlTGlzdGluZ1BsYW4xNA==#pricing-and-setup)
-  # SonarCloud limits us with the organization requirement that they have unfortunately
+  # TODO: SonarCloud
 
   # job_2:
   #   needs: job_2

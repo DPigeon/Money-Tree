@@ -1,17 +1,10 @@
 name: CD Pipeline
 
-# CD will be triggered only on push on master branch
-# on:
-#   push:
-#     branches:
-#       - master
-
-# TEMPORARY for testing
+CD will be triggered only on push on master branch
 on:
   push:
     branches:
-      - "*"
-      - issue/#70-setup-devops-pipeline
+      - master
 
 # TODO: It will run 4 jobs in series (Build --> Publish --> Deploy-UAT --> Cleanup)
 jobs:
@@ -31,17 +24,27 @@ jobs:
         run: echo "TODO"
 
   job_3:
+    # TODO: Determine if we deploy frontend & backend in 1 container or separate containers
     needs: job_2
     name: Deploy-UAT
     runs-on: ubuntu-latest
     steps:
-      - name: TODO
-        run: echo "TODO"
+      - name: Checkout
+      - uses: actions/checkout@v2
+
+      - name: Deploy to UAT
+      - uses: akhileshns/heroku-deploy@v3.5.7
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          appdir: "client" # This will point to the client folder in your project
+          usedocker: true # Will deploy using Dockerfile in project root
 
   job_4:
-    needs: job_3
-    name: Cleanup
     runs-on: ubuntu-latest
     steps:
-      - name: TODO
-        run: echo "TODO"
+      - name: Clean up
+        uses: glassechidna/artifact-cleaner@master
+        with:
+          minimumAge: 2592000 # Lifetime of an artifact: 30 days (in seconds)
