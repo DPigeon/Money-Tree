@@ -8,11 +8,11 @@ name: CI Pipeline
 #       - dev
 
 # TEMPORARY for testing
-on:
-  push:
-    branches:
-      - "*"
-      - issue/#70-setup-devops-pipeline
+# on:
+#   push:
+#     branches:
+#       - "*"
+#       - issue/#70-setup-devops-pipeline
 
 # We have 2 main jobs:
 #   1. Integration: (Install) --> Lint --> Tests --> Package
