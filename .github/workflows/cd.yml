@@ -25,7 +25,7 @@ jobs:
 
   job_3:
     # TODO: Determine if we deploy frontend & backend in 1 container or separate containers
-    needs: job_2
+    #needs: job_2
     name: Deploy-UAT
     runs-on: ubuntu-latest
     steps:
