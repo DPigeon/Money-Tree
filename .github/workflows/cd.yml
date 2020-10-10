@@ -8,7 +8,7 @@ on:
 
 # TODO: It will run 4 jobs in series (Build --> Publish --> Deploy-UAT --> Cleanup)
 jobs:
-  # TODO: a job that will build docker image and push to docker hub. Then we pull it?
+  # TODO: a job that will build docker image and push to heroku registry. We can pull & push if no updates
   job_1:
     name: Deployment
     runs-on: ubuntu-latest
@@ -16,21 +16,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Build & Publish # Works if we have a Dockerfile in the current directory
+      - name: Build & Publish
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:login &&
           heroku container:push --app ${{ secrets.HEROKU_UAT_ENV_NAME }} angular maven --recursive
 
-      - name: Deploy-UAT
+      - name: Deploy to UAT
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:release --app ${{ secrets.HEROKU_UAT_ENV_NAME }} angular maven
-
-  # job_2:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Clean up
-  #       uses: glassechidna/artifact-cleaner@master
-  #       with:
-  #         minimumAge: 2592000 # Lifetime of an artifact: 30 days (in seconds)
