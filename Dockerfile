@@ -41,5 +41,5 @@ COPY --from=maven /home/maven/target/moneytree-*.jar /home/maven/jar/moneytree.j
 # Setting the deployment ready
 WORKDIR /home
 COPY deploy.sh ./
-RUN chmod +x deploy.sh
+RUN chmod a+rx deploy.sh
 CMD ["/home/deploy.sh"]
