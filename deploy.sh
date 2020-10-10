@@ -1,6 +1,7 @@
 #!/bin/sh
 
-apt-get install gettext-base &&
-envsubst '\$PORT' < /home/node/etc/nginx/conf.d/default.conf.template > /home/node/etc/nginx/conf.d/default.conf && 
+cd home/node &&
+envsubst '\$PORT' < ./etc/nginx/conf.d/default.conf.template > ./etc/nginx/conf.d/default.conf && 
 nginx -g 'daemon off;' &&
-java -jar /home/maven/jar/moneytree.jar
+cd ../maven &&
+java -jar ./jar/moneytree.jar
