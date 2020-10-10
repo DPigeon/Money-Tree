@@ -11,7 +11,7 @@ COPY client/ ./
 # Build frontend in production mode
 RUN ng build --prod
 # Get nginx to host on production
-FROM nginx:1.17-alpine
+FROM nginx:1.19.3
 # Copy template
 COPY client/nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
 # Copy nginx config
@@ -19,7 +19,7 @@ COPY client/nginx/nginx.conf /etc/nginx/nginx.conf
 # Copy dist to nginx
 COPY --from=ng /home/node/dist/client/ /usr/share/nginx/html
 # Run command to bind port to heroku in config
-CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf"
+CMD /bin/sh -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;'
 
 # # Backend Build
 # FROM adoptopenjdk/maven-openjdk11 as maven
