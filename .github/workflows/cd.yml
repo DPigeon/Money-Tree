@@ -19,12 +19,12 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:login &&
-          heroku container:push --app {{ secrets.HEROKU_UAT_ENV_NAME }} web
+          heroku container:push --app ${{ secrets.HEROKU_UAT_ENV_NAME }} web
 
       - name: Deploy-UAT
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release --app {{ secrets.HEROKU_UAT_ENV_NAME }} web
+        run: heroku container:release --app ${{ secrets.HEROKU_UAT_ENV_NAME }} web
 
   # job_2:
   #   runs-on: ubuntu-latest
