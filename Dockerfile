@@ -37,5 +37,8 @@ FROM adoptopenjdk:11-jre-hotspot
 RUN mkdir jar
 # Copy jar file generated 
 COPY --from=maven /home/maven/target/moneytree-*.jar /home/maven/jar/moneytree.jar
-# Run command to bind port to heroku in config for frontend & start backend
-CMD /bin/sh -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;' && java -jar "/home/maven/jar/moneytree.jar"
+
+WORKDIR /home
+COPY deploy.sh ./
+RUN chmod +x deploy.sh
+CMD ["/deploy.sh"]
