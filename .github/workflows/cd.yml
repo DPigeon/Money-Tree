@@ -8,6 +8,7 @@ on:
 
 # TODO: It will run 4 jobs in series (Build --> Publish --> Deploy-UAT --> Cleanup)
 jobs:
+  # TODO: a job that will build docker image and push to docker hub. Then we pull it?
   job_1:
     name: Deployment
     runs-on: ubuntu-latest
