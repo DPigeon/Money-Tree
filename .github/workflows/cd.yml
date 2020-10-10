@@ -16,13 +16,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Build & Publish
+      - name: Build, Publish & Deploy-UAT Frontend
+        working-directory: ./client
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:login &&
-          heroku container:push --app ${{ secrets.HEROKU_UAT_ENV_NAME }} web maven --recursive
+          heroku container:push --app ${{ secrets.HEROKU_UAT_ENV_NAME }} web &&
+          heroku container:release --app ${{ secrets.HEROKU_UAT_ENV_NAME }} web
 
-      - name: Deploy to UAT
+      - name: Build, Publish & Deploy-UAT Backend
+        working-directory: ./backend
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release --app ${{ secrets.HEROKU_UAT_ENV_NAME }} web maven
+        run: heroku container:login &&
+          heroku container:push --app ${{ secrets.HEROKU_UAT_ENV_NAME }} web &&
+          heroku container:release --app ${{ secrets.HEROKU_UAT_ENV_NAME }} web
