@@ -15,11 +15,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build, Push and Deploy to Heroku
-        id: heroku
-        uses: snithyanantham/docker-compose-multiple-apps-heroku-deploy@v1.0
-        with:
-          email: ${{ secrets.HEROKU_EMAIL }}
-          api_key: ${{ secrets.HEROKU_API_KEY }}
-          docker_compose_file: "./docker-compose.yml"
-          heroku_apps: '[{"imagename":"client","appname":${{ secrets.HEROKU_UAT_ENV_NAME }},"apptype":"web"},{"imagename":"backend","appname":${{ secrets.HEROKU_UAT_ENV_NAME }},"apptype":"web"}]'
+
+      - name: Build & Publish
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login &&
+          heroku container:push --app ${{ secrets.HEROKU_UAT_ENV_NAME }} web worker --recursive
+
+      - name: Deploy-UAT
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release --app ${{ secrets.HEROKU_UAT_ENV_NAME }} web worker
