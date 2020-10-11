@@ -1,6 +1,35 @@
 @startuml
 
 package service {
+
+    package alpaca {
+        class AlpacaAPI
+        hide AlpacaAPI methods
+        hide AlpacaAPI fields
+
+        class OrderDecorator extends AlpacaAPI {
+            -Order order
+        }
+
+        class MarketOrderDecorator extends OrderDecorator {
+
+        }
+
+        class LimitOrderDecorator extends OrderDecorator {
+
+        }
+
+        class StopOrderDecorator extends OrderDecorator {
+            -Order order;
+            == @Override ==
+            +String decorator()
+        }
+
+        class StopLimitOrderDecorator extends OrderDecorator {
+
+        }
+    }
+
     package api {
         interface UserService {
             ~Iterable<User> getAllUsers()
