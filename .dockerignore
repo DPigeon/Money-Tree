@@ -1,0 +1,5 @@
+.git/
+.github/
+hooks/
+client/node_modules
+backend/.idea
