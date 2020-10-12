@@ -56,4 +56,5 @@ jobs:
           port: ${{ secrets.DROPLET_PORT }}
           envs: GITHUB_USERNAME, GITHUB_TOKEN
           script: |
-            sh deploy.sh $GITHUB_USERNAME $GITHUB_TOKEN
+            sudo chmod 777 deploy.sh
+            sudo sh deploy.sh $GITHUB_USERNAME $GITHUB_TOKEN
