@@ -7,7 +7,8 @@ on:
 
 # TODO: (Build --> Publish --> Deploy-UAT --> Cleanup)
 jobs:
-  Build & Publish:
+  job_1:
+    name: Build & Publish
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -35,7 +36,9 @@ jobs:
         dockerfile: Dockerfile
         tags: latest
 
-  Deploy-UAT:
+  job_2:
+    name: Deploy-UAT
+    needs: job_1
     runs-on: ubuntu-latest
     steps:
     - name: Deploy
