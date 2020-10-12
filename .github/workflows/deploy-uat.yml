@@ -19,11 +19,11 @@ jobs:
           username: ${{ secrets.DROPLET_USERNAME }}
           password: ${{ secrets.DROPLET_PASSWORD }}
           port: ${{ secrets.DROPLET_PORT }}
-          envs: USERNAME, GITHUB_TOKEN
+          envs: GITHUB_USERNAME, GITHUB_TOKEN
           script: |
             docker stop $(docker ps -a -q)
-            docker login docker.pkg.github.com -u $USERNAME -p $GITHUB_TOKEN
-            docker pull docker.pkg.github.com/DPigeon/Money-Tree/frontend:latest
-            docker pull docker.pkg.github.com/DPigeon/Money-Tree/backend:latest
-            docker run -dit -p 80:80 docker.pkg.github.com/DPigeon/Money-Tree/frontend:latest
-            docker run -dit -p 8080:8080 docker.pkg.github.com/DPigeon/Money-Tree/backend:latest
+            docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
+            docker pull docker.pkg.github.com/dpigeon/money-tree/frontend:latest
+            docker pull docker.pkg.github.com/dpigeon/money-tree/backend:latest
+            docker run -dit -p 80:80 docker.pkg.github.com/dpigeon/money-tree/frontend:latest
+            docker run -dit -p 8080:8080 docker.pkg.github.com/dpigeon/money-tree/backend:latest
