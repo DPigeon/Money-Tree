@@ -2,7 +2,7 @@ name: CD Pipeline
 
 on:
   push:
-    branches: 
+    branches:
       - issue/#70-setup-devops-pipeline
 
 # TODO: (Build --> Publish --> Deploy-UAT --> Cleanup)
@@ -11,51 +11,51 @@ jobs:
     name: Build & Publish
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-    - uses: actions/checkout@v1
+      - name: Checkout
+      - uses: actions/checkout@v1
 
-    - name: Publish Frontend
-      uses: elgohr/Publish-Docker-Github-Action@master
-      with:
-        name: DPigeon/Money-Tree/frontend
-        registry: docker.pkg.github.com
-        username: ${{ secrets.GITHUB_USERNAME }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        workdir: client
-        dockerfile: Dockerfile
-        tags: latest
-    
-    - name: Publish Backend
-      uses: elgohr/Publish-Docker-Github-Action@master
-      with:
-        name: DPigeon/Money-Tree/backend
-        registry: docker.pkg.github.com
-        username: ${{ secrets.GITHUB_USERNAME }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        workdir: backend
-        dockerfile: Dockerfile
-        tags: latest
+      - name: Publish Frontend
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: DPigeon/Money-Tree/frontend
+          registry: docker.pkg.github.com
+          username: ${{ secrets.GITHUB_USERNAME }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          workdir: client
+          dockerfile: Dockerfile
+          tags: latest
+
+      - name: Publish Backend
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: DPigeon/Money-Tree/backend
+          registry: docker.pkg.github.com
+          username: ${{ secrets.GITHUB_USERNAME }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          workdir: backend
+          dockerfile: Dockerfile
+          tags: latest
 
   job_2:
     name: Deploy-UAT
     needs: job_1
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy
-      uses: appleboy/ssh-action@master
-      env:
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        env:
           GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        host: ${{ secrets.UAT_DROPLET_HOST }}
-        username: ${{ secrets.DROPLET_USERNAME }}
-        password: ${{ secrets.DROPLET_PASSWORD }}
-        port: ${{ secrets.DROPLET_PORT }}
-        envs: GITHUB_USERNAME, GITHUB_TOKEN
-        script: |
-          docker stop $(docker ps -a -q)
-          docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
-          docker pull docker.pkg.github.com/DPigeon/Money-Tree/frontend:latest
-	        docker pull docker.pkg.github.com/DPigeon/Money-Tree/backend:latest
-          docker run -dit -p 80:80 docker.pkg.github.com/DPigeon/Money-Tree/frontend:latest
-          docker run -dit -p 8080:8080 docker.pkg.github.com/DPigeon/Money-Tree/backend:latest
+        with:
+          host: ${{ secrets.UAT_DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          password: ${{ secrets.DROPLET_PASSWORD }}
+          port: ${{ secrets.DROPLET_PORT }}
+          envs: GITHUB_USERNAME, GITHUB_TOKEN
+          script: |
+            docker stop $(docker ps -a -q)
+            docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
+            docker pull docker.pkg.github.com/DPigeon/Money-Tree/frontend:latest
+            docker pull docker.pkg.github.com/DPigeon/Money-Tree/backend:latest
+            docker run -dit -p 80:80 docker.pkg.github.com/DPigeon/Money-Tree/frontend:latest
+            docker run -dit -p 8080:8080 docker.pkg.github.com/DPigeon/Money-Tree/backend:latest
