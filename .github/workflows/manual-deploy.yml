@@ -1,0 +1,40 @@
+name: Deploy to UAT
+
+# This workflow will be triggered on a manual click
+# Input: uat or prod
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Enter uat or prod"
+        required: true
+        default: "warning"
+
+jobs:
+  job_1:
+    name: Deploy-UAT
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        if: ${{ github.event.inputs.env == 'uat' }}
+        env:
+          GITHUB_USERNAME: ${{ secrets.USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOST: ${{ secrets.UAT_DROPLET_HOST }}
+        if: ${{ github.event.inputs.env == 'prod' }}
+        env:
+          GITHUB_USERNAME: ${{ secrets.USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOST: ${{ secrets.PROD_DROPLET_HOST }}
+        with:
+          host: ${HOST}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          password: ${{ secrets.DROPLET_PASSWORD }}
+          port: ${{ secrets.DROPLET_PORT }}
+          envs: GITHUB_USERNAME, GITHUB_TOKEN
+          script: |
+            sh deploy.sh $GITHUB_USERNAME $GITHUB_TOKEN
