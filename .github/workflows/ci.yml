@@ -1,6 +1,6 @@
 name: CI Pipeline
 
-CI will be triggered only when making a PR to the dev branch
+# CI will be triggered only when making a PR to the dev branch
 on:
   pull_request:
     branches:

@@ -12,11 +12,7 @@ COPY ./ ./
 RUN ng build --prod
 # Get nginx to host on production
 FROM nginx:1.17-alpine
-# Copy template
-COPY nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
-# Copy nginx config
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
 # Copy dist to nginx
 COPY --from=ng /home/node/dist/client/ /usr/share/nginx/html
-# Bind the port with heroku's port
-CMD /bin/sh -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;'
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
