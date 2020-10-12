@@ -67,7 +67,7 @@ jobs:
         working-directory: ./client
         run: |
           nohup npx http-server dist/client -p 8000 &
-          sleep 5
+          sleep 20
           sh frontend_endpoints.sh
 
       - name: Setup Java
@@ -103,7 +103,7 @@ jobs:
         working-directory: ./backend
         run: |
           nohup java -jar target/backend.jar &
-          sleep 5
+          sleep 20
           sh backend_endpoints.sh
 
       # TODO: Package sub-job
