@@ -106,10 +106,7 @@ jobs:
           sleep 20
           sh backend_endpoints.sh
 
-      # TODO: Package sub-job
-      # This sub-job will be use docker to package our application by building it and creating an image of it
-      # Used to know if the app can be built properly before shipping it in deployment
-      # Use the cache (dependencies) of both client & backend defined above
+      # TODO: e2e tests & (optional, would be nice to have) --> test coverage reports uploaded on artifacts with action upload-artifacts
 
   # TODO: SonarCloud
 
