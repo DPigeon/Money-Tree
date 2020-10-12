@@ -5,9 +5,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  job_1:
     name: Deploy-UAT
     runs-on: ubuntu-latest
     steps:
-      - name: TODO
-        run: echo "TODO"
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_USERNAME: ${{ secrets.USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.UAT_DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          password: ${{ secrets.DROPLET_PASSWORD }}
+          port: ${{ secrets.DROPLET_PORT }}
+          envs: USERNAME, GITHUB_TOKEN
+          script: |
+            docker stop $(docker ps -a -q)
+            docker login docker.pkg.github.com -u $USERNAME -p $GITHUB_TOKEN
+            docker pull docker.pkg.github.com/DPigeon/Money-Tree/frontend:latest
+            docker pull docker.pkg.github.com/DPigeon/Money-Tree/backend:latest
+            docker run -dit -p 80:80 docker.pkg.github.com/DPigeon/Money-Tree/frontend:latest
+            docker run -dit -p 8080:8080 docker.pkg.github.com/DPigeon/Money-Tree/backend:latest

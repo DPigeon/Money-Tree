@@ -152,6 +152,5 @@
                 <version>3.7.1</version>
             </plugin>
         </plugins>
-        <finalName>backend</finalName>
     </build>
 </project>
