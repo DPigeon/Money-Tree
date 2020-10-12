@@ -63,10 +63,11 @@ jobs:
         working-directory: ./client
         run: npm run build
 
-      - name: Frontend Package
+      - name: Frontend Run
         working-directory: ./client
         run: |
-          nohup npx http-server dist/client 8000 &
+          nohup npx http-server dist/client -p 8000 &
+          sleep 5
           sh frontend_endpoints.sh
 
       - name: Setup Java
@@ -102,6 +103,7 @@ jobs:
         working-directory: ./backend
         run: |
           nohup java -jar target/backend.jar &
+          sleep 5
           sh backend_endpoints.sh
 
       # TODO: Package sub-job
