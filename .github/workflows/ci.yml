@@ -59,6 +59,16 @@ jobs:
         working-directory: ./client
         run: npm test
 
+      - name: Frontend Package
+        working-directory: ./client
+        run: npm run build
+
+      - name: Frontend Package
+        working-directory: ./client
+        run: |
+          nohup npx http-server dist/client 8000 &
+          sh frontend_endpoints.sh
+
       - name: Setup Java
         uses: actions/setup-java@v1.4.3
         with:
@@ -89,8 +99,10 @@ jobs:
         run: bash ./mvnw package
       
       - name: Backend Run
-        working-directory: ./backend/target
-        run: java -jar backend.jar
+        working-directory: ./backend
+        run: |
+          nohup java -jar target/backend.jar &
+          sh backend_endpoints.sh
 
       # TODO: Package sub-job
       # This sub-job will be use docker to package our application by building it and creating an image of it
