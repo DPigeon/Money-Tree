@@ -3,9 +3,9 @@ FROM adoptopenjdk/maven-openjdk11 as maven
 # User maven has write access
 WORKDIR /home/maven
 # Copy packages files
-COPY backend/pom.xml ./
+COPY pom.xml ./
 # Copy source files from backend
-COPY backend/src/ ./src
+COPY src/ ./src
 # Install package dependencies
 RUN mvn dependency:go-offline -B
 # Build backend

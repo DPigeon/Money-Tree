@@ -1,18 +1,18 @@
 name: CI Pipeline
 
-# # CI will be triggered only when making a PR to the dev branch
-# on:
-#   pull_request:
-#     branches:
-#       - "*"
-#       - dev
-
-# TEMPORARY for testing
+# CI will be triggered only when making a PR to the dev branch
 on:
-  push:
+  pull_request:
     branches:
       - "*"
-      - issue/#70-setup-devops-pipeline
+      - dev
+
+# # TEMPORARY for testing
+# on:
+#   push:
+#     branches:
+#       - "*"
+#       - issue/#70-setup-devops-pipeline
 
 # We have 2 main jobs:
 #   1. Integration: (Install) --> Lint --> Tests --> Package
@@ -94,11 +94,11 @@ jobs:
       - name: Backend Tests
         working-directory: ./backend
         run: bash ./mvnw clean test
-      
+
       - name: Backend Package
         working-directory: ./backend
         run: bash ./mvnw package
-      
+
       - name: Backend Run
         working-directory: ./backend
         run: |
