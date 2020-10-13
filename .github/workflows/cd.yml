@@ -13,9 +13,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          # Fetches entire history, so we can analyze commits since last tag
+          fetch-depth: 0
 
-      - name: Publish Frontend
-        uses: elgohr/Publish-Docker-Github-Action@master
+      # TODO: Uncomment once first tag release created
+      # - name: Versioning
+      #   uses: mathieudutour/github-tag-action@v4.5
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     create_annotated_tag: true # To annotate the new tag so that we can describe it with 'git describe'
+
+      # # These next 2 steps gets the latest released tag & computes the version name from git
+      # - name: Fetch Tags
+      #   run: git fetch --prune --unshallow --tags
+
+      # - name: Compute Version Name
+      #   run: echo "::set-env name=VERSION_NAME::$(git describe --tags --abbrev=0)"
+
+      - name: Build & Publish Frontend
+        uses: elgohr/Publish-Docker-Github-Action@master # This action builds & publishes on GitHub Package Registry
         with:
           name: dpigeon/money-tree/frontend
           registry: docker.pkg.github.com
@@ -23,9 +40,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           workdir: client
           dockerfile: Dockerfile
-          tags: latest
+          tags: latest # TODO: change tag here with ${{ env.VERSION_NAME }}
 
-      - name: Publish Backend
+      - name: Build & Publish Backend
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: dpigeon/money-tree/backend
@@ -34,7 +51,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           workdir: backend
           dockerfile: Dockerfile
-          tags: latest
+          tags: latest # TODO: change tag here with ${{ env.VERSION_NAME }}
 
   job_2:
     name: Deploy-UAT
@@ -42,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@master # This action is used to execute other commands on our VM
         env:
           GITHUB_USERNAME: ${{ secrets.USERNAME }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
