@@ -23,7 +23,7 @@ jobs:
 
       # These next 2 steps gets the latest released tag & computes the version name from git
       - name: Fetch Tags
-        run: git fetch --prune --unshallow --tags
+        run: git fetch --prune --tags
 
       - name: Compute Version Name
         run: echo "VERSION_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
