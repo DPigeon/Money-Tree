@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
 
       - name: Get branch name
-        run: echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
       - name: Versioning # Done only if released to prod
         if: ${{ env.BRANCH_NAME == 'issue/#70-setup-devops-pipeline' }}
@@ -31,11 +31,11 @@ jobs:
       # These next 2 steps gets the latest released tag & computes the version name from git
       - name: Fetch Tags
         if: ${{ env.BRANCH_NAME == 'issue/#70-setup-devops-pipeline' }}
-        run: git fetch --prune --unshallow --tags
+        run: git fetch --prune --tags
 
       - name: Compute Version Name
         if: ${{ env.BRANCH_NAME == 'issue/#70-setup-devops-pipeline' }}
-        run: echo "::set-env name=VERSION_NAME::$(git describe --tags --abbrev=0)"
+        run: echo "VERSION_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
       - name: Build & Publish Frontend
         if: ${{ env.BRANCH_NAME == 'issue/#70-setup-devops-pipeline' }}
@@ -73,14 +73,14 @@ jobs:
           fetch-depth: 0
 
       - name: Get branch name
-        run: echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
       # These next 2 steps gets the latest released tag & computes the version name from git
       - name: Fetch Tags
         run: git fetch --prune --unshallow --tags
 
       - name: Compute Version Name
-        run: echo "::set-env name=VERSION_NAME::$(git describe --tags --abbrev=0)"
+        run: echo "VERSION_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
       # Deploy to UAT if on dev branch
       - name: Deploy-UAT

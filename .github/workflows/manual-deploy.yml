@@ -26,7 +26,7 @@ jobs:
         run: git fetch --prune --unshallow --tags
 
       - name: Compute Version Name
-        run: echo "::set-env name=VERSION_NAME::$(git describe --tags --abbrev=0)"
+        run: echo "VERSION_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
       # Deploy to UAT if input is uat
       - name: Deploy-UAT
