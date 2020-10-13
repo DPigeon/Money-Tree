@@ -15,23 +15,47 @@ jobs:
     name: Deploy-UAT
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy
-        uses: appleboy/ssh-action@master
-        if: ${{ github.event.inputs.env == 'uat' }}
-        env:
-          GITHUB_USERNAME: ${{ secrets.USERNAME }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HOST: ${{ secrets.UAT_DROPLET_HOST }}
-        if: ${{ github.event.inputs.env == 'prod' }}
-        env:
-          GITHUB_USERNAME: ${{ secrets.USERNAME }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HOST: ${{ secrets.PROD_DROPLET_HOST }}
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          host: ${HOST}
+          # Fetches entire history, so we can analyze commits since last tag
+          fetch-depth: 0
+
+      # These next 2 steps gets the latest released tag & computes the version name from git
+      - name: Fetch Tags
+        run: git fetch --prune --unshallow --tags
+
+      - name: Compute Version Name
+        run: echo "::set-env name=VERSION_NAME::$(git describe --tags --abbrev=0)"
+
+      # Deploy to UAT if input is uat
+      - name: Deploy-UAT
+        if: ${{ github.event.inputs.env == 'uat' }}
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_USERNAME: ${{ secrets.USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.UAT_DROPLET_HOST }}
           username: ${{ secrets.DROPLET_USERNAME }}
           password: ${{ secrets.DROPLET_PASSWORD }}
           port: ${{ secrets.DROPLET_PORT }}
           envs: GITHUB_USERNAME, GITHUB_TOKEN
           script: |
-            sh deploy.sh $GITHUB_USERNAME $GITHUB_TOKEN
+            sh deploy.sh $GITHUB_USERNAME $GITHUB_TOKEN ${{ env.VERSION_NAME }}
+
+      # Deploy to Prod if input is prod
+      - name: Deploy-Prod
+        if: ${{ github.event.inputs.env == 'prod' }}
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_USERNAME: ${{ secrets.USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.PROD_DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          password: ${{ secrets.DROPLET_PASSWORD }}
+          port: ${{ secrets.DROPLET_PORT }}
+          envs: GITHUB_USERNAME, GITHUB_TOKEN
+          script: |
+            sh deploy.sh $GITHUB_USERNAME $GITHUB_TOKEN ${{ env.VERSION_NAME }}
