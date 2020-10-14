@@ -2,12 +2,11 @@
 
 package controller {
     abstract class AbstractController {
-
+        -{static} final Logger LOG
     }
 
     class UserController extends AbstractController {
         -final UserService userService
-        -{static} final Logger LOG
         +UserController(UserService userService)
         ~List<User> all()
         ~User createUser(@RequestBody User user)
@@ -15,11 +14,19 @@ package controller {
     }
 
     class StockController extends AbstractController {
-
+        -final StockService stockService
+        +StockController(StockService stockService)
+        ~List<Stock> all()
+        ~Stock createUser(@RequestBody Stock stock)
+        ~Stock getStock(@PathVariable Long id)
     }
 
     class TransactionController extends AbstractController {
-
+        -final TransactionService transactionService
+        +TransactionController(TransactionService transactionService)
+        ~List<Transaction> all()
+        ~Transaction createTransaction(@RequestBody Transaction transaction)
+        ~Transaction getTransaction(@PathVariable Long id)
     }
 }
 

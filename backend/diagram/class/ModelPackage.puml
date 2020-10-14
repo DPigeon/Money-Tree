@@ -87,7 +87,14 @@ package model {
     Transaction *-- OrderType
     Transaction *-- Status
 
-    FriendShip *-- User
+    User *-- FriendShip
+    User *-- Follows
+    User *-- Deposited
+
+    Stock *-- Owns
+
+    Transaction *-- ToBuy
+    Transaction *-- ToSell
 }
 
 @enduml

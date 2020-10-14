@@ -7,6 +7,17 @@ package dao {
     }
     hide Neo4jRepository methods
     hide Neo4jRepository fields
+
+    interface StockDao extends Neo4jRepository {
+        ~List<Stock> findAll()
+        ~Stock findStockById(Long id)
+    }
+
+    interface TransactionDao extends Neo4jRepository {
+        ~Transaction<Transaction> findAll()
+        ~Transaction findTransactionById(Long id)
+    }
+
 }
 
 @enduml

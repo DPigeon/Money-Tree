@@ -38,18 +38,25 @@ package service {
         }
 
         interface StockService {
-
+            ~Iterable<Stock> getAllStocks()
+            ~User getStockById(Long id)
+            ~User createStock(Stock stock)
         }
 
         interface TransactionService {
-
+            ~Iterable<Transaction> getAllTransactions()
+            ~User getTransactionById(Long id)
+            ~User createTransaction(Transaction transaction)
         }
     }
 
     package imp {
-        class DefaultUserService implements UserService {
-            -final UserDao userDao
+        abstract class AbstractService {
             -{static} final Logger LOG
+        }
+
+        class DefaultUserService extends AbstractService implements UserService {
+            -final UserDao userDao
             +DefaultUserService(UserDao userDao)
             -- @Override --
             +Iterable<User> getAllUsers()
@@ -57,12 +64,22 @@ package service {
             +User createUser(User user)
         }
 
-        class DefaultStockService implements StockService {
-
+        class DefaultStockService extends AbstractService implements StockService {
+            -final StockDao stockDao
+            +DefaultStockService(StockDao stockDao)
+            -- @Override --
+            +Iterable<Stock> getAllStocks()
+            +Stock getStockById(Long id)
+            +Stock createStock(Stock stock)
         }
 
-        class DefaultTransactionService implements TransactionService {
-
+        class DefaultTransactionService extends AbstractService implements TransactionService {
+            -final TransactionDao transactionDao
+            +DefaultTransactionService(TransactionDao transactionDao)
+            -- @Override --
+            +Iterable<Transaction> getAllTransactions()
+            +Stock getTransactionById(Long id)
+            +Stock createTransaction(Transaction transaction)
         }
     }
 }

@@ -23,8 +23,20 @@ package com.capstone.moneytree {
     DefaultUserService *-- UserDao
     DefaultUserService *-- User
 
+    DefaultStockService *-- StockDao
+    DefaultStockService *-- Stock
+
+    DefaultTransactionService *-- TransactionDao
+    DefaultTransactionService *-- Transaction
+
     UserController *-- UserService
     UserController *-- User
+
+    StockController *-- StockService
+    StockController *-- Stock
+
+    TransactionController *-- TransactionService
+    TransactionController *-- Transaction
 
 }
 
