@@ -1,0 +1,44 @@
+@startuml
+
+package alpaca {
+    class AlpacaFacade {
+        +final AlpacaService
+        +final AlpacaAPI
+
+        +Order createOrder(Order order)
+        +Account getAccount()
+        +ArrayList<AccountActivity> getAccountActivities()
+        +AccountConfiguration getAccountConfiguration()
+        +AccountConfiguration setAccountConfiguration(AccountConfiguration accountConfiguration)
+        +ArrayList<Order> getOrders()
+        +Order getOrder(String orderID, Boolean nested)
+        +Order getOrderByClientID(String clientOrderId)
+        +Order replaceOrder()
+        +ArrayList<CancelledOrder> cancelAllOrders()
+        +boolean cancelOrder(String orderId)
+        +ArrayList<Position> getOpenPositions()
+        +Position getOpenPositionBySymbol(String symbol)
+        +ArrayList<ClosePositionOrder> closeAllPositions()
+        +Order closePosition(String symbol)
+        +ArrayList<Asset> getAssets(AssetStatus assetStatus, String assetClass)
+        +Asset getAssetBySymbol(String symbolOrAssetID)
+        +ArrayList<Watchlist> getWatchlists()
+        +Watchlist createWatchlist(String name, String... symbols)
+        +Watchlist getWatchlist(String watchlistID)
+        +Watchlist updateWatchlist(String watchlistID, String name, String... symbols)
+        +Watchlist addWatchlistAsset(String watchlistID, String symbol)
+        +boolean deleteWatchlist(String watchlistID)
+        +Watchlist removeSymbolFromWatchlist(String watchlistID, String symbol)
+        +PortfolioHistory getPortfolioHistory(PortfolioHistory portfolioHistory)
+    }
+
+    class AlpacaService {
+
+    }
+
+    class AlpacaAPI {
+
+    }
+}
+
+@enduml

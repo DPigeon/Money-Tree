@@ -12,6 +12,7 @@ package com.capstone.moneytree {
     !include ./DaoPackage.puml
     !include ./ModelPackage.puml
     !include ./ServicePackage.puml
+    !include ./AlpacaPackage.puml
 
     class MoneyTreeApplication {
         +{static} void main(String[] args)
