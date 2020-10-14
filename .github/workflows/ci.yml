@@ -1,18 +1,18 @@
 name: CI Pipeline
 
 # CI will be triggered only when making a PR to the dev branch
-on:
-  pull_request:
-    branches:
-      - "*"
-      - dev
+#on:
+#  pull_request:
+#    branches:
+#      - "*"
+#      - dev
 
 # # TEMPORARY for testing
-# on:
-#   push:
-#     branches:
-#       - "*"
-#       - issue/#70-setup-devops-pipeline
+ on:
+   push:
+     branches:
+       - "*"
+       - issue/#70-setup-devops-pipeline
 
 # We have 2 main jobs:
 #   1. Integration: (Install) --> Lint --> Tests --> Package
@@ -69,6 +69,10 @@ jobs:
           nohup npx http-server dist/client -p 8000 &
           sleep 20
           sh frontend_endpoints.sh
+      
+      - name: Frontend e2e
+        working-directory: ./client
+        run: npm run e2e
 
       - name: Setup Java
         uses: actions/setup-java@v1.4.3
