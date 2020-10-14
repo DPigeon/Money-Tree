@@ -71,8 +71,8 @@ jobs:
 #          sh frontend_endpoints.sh
       
       - name: Cypress e2e Run (build/run)
-        working-directory: ./client
         uses: cypress-io/github-action@v2
+        working-directory: ./client
         with:
           build: npm run build
           start: nohup npx http-server dist/client -p 4200 &
