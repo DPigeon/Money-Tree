@@ -72,10 +72,9 @@ jobs:
       
       - name: Cypress e2e Run (build/run)
         uses: cypress-io/github-action@v2
-        working-directory: ./client
         with:
-          build: npm run build
-          start: nohup npx http-server dist/client -p 4200 &
+          build: npm run build --prefix client
+          start: nohup npx http-server client/dist/client -p 4200 &
           wait-on: http://localhost:4200/
 
       - name: Setup Java
