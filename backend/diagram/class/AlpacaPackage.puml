@@ -41,4 +41,7 @@ package alpaca {
     }
 }
 
+AlpacaFacade *-- AlpacaService
+AlpacaFacade *-- AlpacaAPI
+
 @enduml
