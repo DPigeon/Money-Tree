@@ -77,10 +77,6 @@ jobs:
 #          build: npm run build
 #          start: nohup npx http-server dist/client -p 4200 &
 #          wait-on: http://localhost:4200/
-      
-      - name: Front e2e
-        working-directory: ./client
-        run: npm run e2e -- --configuration=ci
 
       - name: Setup Java
         uses: actions/setup-java@v1.4.3
