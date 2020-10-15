@@ -6,7 +6,7 @@ on:
       - issue/#70-setup-devops-pipeline # replace all with dev
       - master
 
-# (Build --> Publish --> Deploy-UAT)
+# (Build --> Publish --> Deploy-UAT --> Cleanup)
 jobs:
   job_1:
     name: Build & Publish
@@ -36,6 +36,11 @@ jobs:
       - name: Compute Version Name
         if: ${{ env.BRANCH_NAME == 'issue/#70-setup-devops-pipeline' }}
         run: echo "VERSION_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
+      - name: GitHub Packages Registry Cleanup
+        run: |
+          docker images
+          docker
 
       - name: Build & Publish Frontend
         if: ${{ env.BRANCH_NAME == 'issue/#70-setup-devops-pipeline' }}
@@ -113,3 +118,15 @@ jobs:
           envs: GITHUB_USERNAME, GITHUB_TOKEN
           script: |
             sh deploy.sh $GITHUB_USERNAME $GITHUB_TOKEN ${{ env.VERSION_NAME }}
+
+  job_3:
+    name: Cleanup
+    needs: job_2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cleanup Artifactory Packages
+        uses: MobileheadHolding/github-action-purge-packages@master
+        with:
+          days-old: 30 # Lifetime: 30 days package
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
