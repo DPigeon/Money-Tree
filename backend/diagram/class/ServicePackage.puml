@@ -39,14 +39,20 @@ package service {
 
         interface StockService {
             ~Iterable<Stock> getAllStocks()
-            ~User getStockById(Long id)
-            ~User createStock(Stock stock)
+            ~Stock getStockById(Long id)
+            ~Stock createStock(Stock stock)
         }
 
         interface TransactionService {
             ~Iterable<Transaction> getAllTransactions()
-            ~User getTransactionById(Long id)
-            ~User createTransaction(Transaction transaction)
+            ~Transaction getTransactionById(Long id)
+            ~Transaction createTransaction(Transaction transaction)
+        }
+
+        interface FeedService {
+            ~Iterable<Activity> getAllActivities()
+            ~Activity getActivityById(Long id)
+            ~Activity createActivity(Activity activity)
         }
     }
 
@@ -80,6 +86,15 @@ package service {
             +Iterable<Transaction> getAllTransactions()
             +Stock getTransactionById(Long id)
             +Stock createTransaction(Transaction transaction)
+        }
+
+        class DefaultFeedService extends AbstractService implements FeedService {
+            -final ActivityDao activityDao
+            +DefaultFeedService(ActivityDao activityDao)
+            -- @Override --
+            +Iterable<Activity> getAllActivities()
+            +Activity getActivityById(Long id)
+            +Activity createActivity(Activity activity)
         }
     }
 }

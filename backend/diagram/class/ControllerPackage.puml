@@ -9,24 +9,32 @@ package controller {
         -final UserService userService
         +UserController(UserService userService)
         ~List<User> all()
-        ~User createUser(@RequestBody User user)
-        ~User getUser(@PathVariable Long id)
+        ~User createUser( User user)
+        ~User getUser( Long id)
     }
 
     class StockController extends AbstractController {
         -final StockService stockService
         +StockController(StockService stockService)
         ~List<Stock> all()
-        ~Stock createUser(@RequestBody Stock stock)
-        ~Stock getStock(@PathVariable Long id)
+        ~Stock createUser( Stock stock)
+        ~Stock getStock( Long id)
     }
 
     class TransactionController extends AbstractController {
         -final TransactionService transactionService
         +TransactionController(TransactionService transactionService)
         ~List<Transaction> all()
-        ~Transaction createTransaction(@RequestBody Transaction transaction)
-        ~Transaction getTransaction(@PathVariable Long id)
+        ~Transaction createTransaction(Transaction transaction)
+        ~Transaction getTransaction(Long id)
+    }
+
+    class ActivityController extends AbstractController {
+        -final FeedService feedService
+        +ActivityController(FeedService feedService)
+        ~List<Activity> all()
+        ~Activity createActivity(Activity activity)
+        ~Activity getActivity(Long activityId)
     }
 }
 
