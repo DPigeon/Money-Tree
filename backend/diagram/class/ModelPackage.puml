@@ -6,6 +6,12 @@ package model {
         +Long getId()
     }
 
+    class ActivityBuilder {}
+
+    class ReactionBuilder {}
+
+    class UserBuilder {}
+
     package node {
         class User extends Entity {
             -String firstName
@@ -17,6 +23,21 @@ package model {
             -double rank
             -float available_balance
             -String password
+        }
+        class Activity extends Entity {
+            -String actor
+            -String action
+            -String activityId
+            -Object object
+            -LocalDateTime timestamp
+        }
+
+        class Reaction extends Entity {
+            -String reactionId
+            -String userId
+            -Kind kind
+            -String activityId
+            -LocalDateTime timestamp
         }
 
         class Stock extends Entity {
@@ -43,6 +64,14 @@ package model {
             PENDING
             SOLD
         }
+
+        enum Kind {
+            LIKE
+            LOVE
+            AGREE
+            INSIGHTFUL
+        }
+
         hide OrderType methods
         hide Status methods
     }
@@ -54,6 +83,22 @@ package model {
             ~User friendTwo
             ~Date friendShipDate
             ~FriendShip()
+        }
+
+        class Performs {
+            ~Long id
+            ~User actor
+            ~Activity activity
+            ~Date performDate
+            ~Performs()
+        }
+
+        class Reacts {
+            ~Long id
+            ~User actor
+            ~Activity activity
+            ~Date reactDate
+            ~Reacts()
         }
 
         class Follows {
@@ -90,6 +135,8 @@ package model {
     User *-- FriendShip
     User *-- Follows
     User *-- Deposited
+    User *-- Performs
+    User *-- Reacts
 
     Stock *-- Owns
 

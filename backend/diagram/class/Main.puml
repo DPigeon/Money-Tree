@@ -13,6 +13,7 @@ package com.capstone.moneytree {
     !include ./ModelPackage.puml
     !include ./ServicePackage.puml
     !include ./AlpacaPackage.puml
+    !include ./IEXCloudPackage.puml
 
     class MoneyTreeApplication {
         +{static} void main(String[] args)
