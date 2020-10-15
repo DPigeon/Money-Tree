@@ -16,7 +16,7 @@ on:
 
 # We have 2 main jobs:
 #   1. Integration: (Install) --> Lint --> Tests --> Package
-#   2. Quality Check
+#   2. SonarCloud
 jobs:
   job_1:
     name: Integration
@@ -69,14 +69,14 @@ jobs:
           nohup npx http-server dist/client -p 4200 &
           sleep 20
           sh frontend_endpoints.sh
-      
-#      - name: Cypress e2e Run (build/run)
-#        uses: cypress-io/github-action@v2
-#        with:
-#          working-directory: ./client
-#          build: npm run build
-#          start: nohup npx http-server dist/client -p 4200 &
-#          wait-on: http://localhost:4200/
+
+      #      - name: Cypress e2e Run (build/run)
+      #        uses: cypress-io/github-action@v2
+      #        with:
+      #          working-directory: ./client
+      #          build: npm run build
+      #          start: nohup npx http-server dist/client -p 4200 &
+      #          wait-on: http://localhost:4200/
 
       - name: Setup Java
         uses: actions/setup-java@v1.4.3
@@ -114,12 +114,9 @@ jobs:
           sleep 20
           sh backend_endpoints.sh
 
-      # TODO: e2e tests & (optional, would be nice to have) --> test coverage reports uploaded on artifacts with action upload-artifacts
-
   # TODO: SonarCloud
-
   # job_2:
-  #   needs: job_2
+  #   needs: job_1
   #   name: SonarCloud
   #   runs-on: ubuntu-latest
   #   steps:
