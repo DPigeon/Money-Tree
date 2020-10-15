@@ -59,24 +59,24 @@ jobs:
         working-directory: ./client
         run: npm test
 
-#      - name: Frontend Package
-#        working-directory: ./client
-#        run: npm run build
+      - name: Frontend Package
+        working-directory: ./client
+        run: npm run build
 
-#      - name: Frontend Run
-#        working-directory: ./client
-#        run: |
-#          nohup npx http-server dist/client -p 4200 &
-#          sleep 20
-#          sh frontend_endpoints.sh
+      - name: Frontend Run
+        working-directory: ./client
+        run: |
+          nohup npx http-server dist/client -p 4200 &
+          sleep 20
+          sh frontend_endpoints.sh
       
-      - name: Cypress e2e Run (build/run)
-        uses: cypress-io/github-action@v2
-        with:
-          working-directory: ./client
-          build: npm run build
-          start: nohup npx http-server dist/client -p 4200 &
-          wait-on: http://localhost:4200/
+#      - name: Cypress e2e Run (build/run)
+#        uses: cypress-io/github-action@v2
+#        with:
+#          working-directory: ./client
+#          build: npm run build
+#          start: nohup npx http-server dist/client -p 4200 &
+#          wait-on: http://localhost:4200/
 
       - name: Setup Java
         uses: actions/setup-java@v1.4.3
