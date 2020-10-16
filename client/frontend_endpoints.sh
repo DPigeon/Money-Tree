@@ -1,0 +1,1 @@
+curl http://localhost:4200/ -i
