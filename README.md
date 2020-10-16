@@ -4,7 +4,7 @@ A web platform that encourage good investing practices.
 
 :mag:[UAT Environment](http://68.183.206.127)
 
-:rocket:[Production Environment](http://178.128.224.177):
+:rocket:[Production Environment](http://178.128.224.177)
 
 ## Configuring the Linter
 
