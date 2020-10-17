@@ -47,11 +47,7 @@
     "setupFilesAfterEnv": [
       "<rootDir>/setupJest.ts"
     ],
-    "collectCoverage": true,
-    "coverageReporters": [
-      "json",
-      "html"
-    ]
+    "collectCoverage": true
   },
   "husky": {
     "hooks": {

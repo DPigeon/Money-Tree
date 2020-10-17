@@ -11,11 +11,14 @@
     <groupId>com.capstone</groupId>
     <artifactId>moneytree</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>moneytree</name>
+    <name>money-tree_BACKEND</name>
     <description>Rest api for money tree social network</description>
 
     <properties>
         <java.version>11</java.version>
+        <sonar.projectKey>money-tree_BACKEND</sonar.projectKey>
+        <sonar.organization>money-tree</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>
@@ -150,6 +153,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.7.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.openclover</groupId>
+                <artifactId>clover-maven-plugin</artifactId>
+                <version>4.4.1</version>     
             </plugin>
         </plugins>
     </build>
