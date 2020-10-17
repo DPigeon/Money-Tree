@@ -6,10 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       env:
-        description: "Enter uat or prod"
+        description: "Enter uat or prod. Default is uat."
+        default: "uat"
         required: true
-        default: "warning"
-
 jobs:
   job_1:
     name: Deploy-UAT

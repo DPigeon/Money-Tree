@@ -1,18 +1,12 @@
 name: CI Pipeline
 
 # CI will be triggered only when making a PR to the dev branch
-#on:
-#  pull_request:
-#    branches:
-#      - "*"
-#      - dev
-
-# # TEMPORARY for testing
 on:
-  push:
+  pull_request:
     branches:
       - "*"
-      - issue/#70-setup-devops-pipeline
+      - dev
+
 jobs:
   job_1:
     name: Integration
@@ -75,20 +69,12 @@ jobs:
           sleep 20
           sh frontend_endpoints.sh
 
-      #      - name: Cypress e2e Run (build/run)
-      #        uses: cypress-io/github-action@v2
-      #        with:
-      #          working-directory: ./client
-      #          build: npm run build
-      #          start: nohup npx http-server dist/client -p 4200 &
-      #          wait-on: http://localhost:4200/
-      
       - name: Frontend SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
           projectBaseDir: ./client
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Setup Java
@@ -130,6 +116,6 @@ jobs:
       - name: Backend SonarCloud Scan
         working-directory: ./backend
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
