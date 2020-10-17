@@ -9,6 +9,7 @@ on:
         description: "Enter uat or prod. Default is uat."
         default: "uat"
         required: true
+
 jobs:
   job_1:
     name: Deploy-UAT
