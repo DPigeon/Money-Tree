@@ -1,5 +1,9 @@
 # Client
 
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=money-tree_FRONTEND)](https://sonarcloud.io/dashboard?id=money-tree_FRONTEND)
+</br>
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=money-tree_FRONTEND&metric=sqale_index)](https://sonarcloud.io/dashboard?id=money-tree_FRONTEND)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.1.
 
 ## Development server
