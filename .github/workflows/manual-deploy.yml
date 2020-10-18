@@ -1,4 +1,4 @@
-name: Deploy to UAT
+name: Manual Deployment
 
 # This workflow will be triggered on a manual click
 # Input: uat or prod
