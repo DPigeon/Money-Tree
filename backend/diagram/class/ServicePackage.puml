@@ -2,12 +2,12 @@
 
 package service {
 
-    package alpaca {
-        class AlpacaAPI
-        hide AlpacaAPI methods
-        hide AlpacaAPI fields
+    package MarketInteractions {
+        class MarketInteractionsFacade
+        hide MarketInteractionsFacade methods
+        hide MarketInteractionsFacade fields
 
-        class OrderDecorator extends AlpacaAPI {
+        class OrderDecorator extends MarketInteractionsFacade {
             -Order order
         }
 
@@ -48,12 +48,6 @@ package service {
             ~Transaction getTransactionById(Long id)
             ~Transaction createTransaction(Transaction transaction)
         }
-
-        interface FeedService {
-            ~Iterable<Activity> getAllActivities()
-            ~Activity getActivityById(Long id)
-            ~Activity createActivity(Activity activity)
-        }
     }
 
     package imp {
@@ -86,15 +80,6 @@ package service {
             +Iterable<Transaction> getAllTransactions()
             +Stock getTransactionById(Long id)
             +Stock createTransaction(Transaction transaction)
-        }
-
-        class DefaultFeedService extends AbstractService implements FeedService {
-            -final ActivityDao activityDao
-            +DefaultFeedService(ActivityDao activityDao)
-            -- @Override --
-            +Iterable<Activity> getAllActivities()
-            +Activity getActivityById(Long id)
-            +Activity createActivity(Activity activity)
         }
     }
 }

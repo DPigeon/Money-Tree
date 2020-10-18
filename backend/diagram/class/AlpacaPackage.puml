@@ -1,9 +1,8 @@
 @startuml
 
-package alpaca {
-    class AlpacaFacade {
+package MarketInteractions {
+    class MarketInteractionsFacade {
         +final AlpacaService
-        +final AlpacaAPI
 
         +Order createOrder(Order order)
         +Account getAccount()
@@ -22,12 +21,6 @@ package alpaca {
         +Order closePosition(String symbol)
         +ArrayList<Asset> getAssets(AssetStatus assetStatus, String assetClass)
         +Asset getAssetBySymbol(String symbolOrAssetID)
-        +ArrayList<Watchlist> getWatchlists()
-        +Watchlist createWatchlist(String name, String... symbols)
-        +Watchlist getWatchlist(String watchlistID)
-        +Watchlist updateWatchlist(String watchlistID, String name, String... symbols)
-        +Watchlist addWatchlistAsset(String watchlistID, String symbol)
-        +boolean deleteWatchlist(String watchlistID)
         +Watchlist removeSymbolFromWatchlist(String watchlistID, String symbol)
         +PortfolioHistory getPortfolioHistory(PortfolioHistory portfolioHistory)
     }
@@ -36,12 +29,8 @@ package alpaca {
 
     }
 
-    class AlpacaAPI {
-
-    }
 }
 
-AlpacaFacade *-- AlpacaService
-AlpacaFacade *-- AlpacaAPI
+MarketInteractionsFacade *-- AlpacaService
 
 @enduml

@@ -16,12 +16,6 @@ package dao {
         ~Transaction findTransactionById(Long id)
     }
 
-    interface ActivityDao extends Neo4jRepository {
-        ~Activity<Transaction> findAll()
-        ~Activity findActivityById(Long id)
-        ~Activity findMostPopularActivities(int range)
-    }
-
     hide Neo4jRepository methods
     hide Neo4jRepository fields
 }

@@ -6,11 +6,28 @@ package model {
         +Long getId()
     }
 
-    class ActivityBuilder {}
-
-    class ReactionBuilder {}
-
     class UserBuilder {}
+    class OrderBuilder {}
+
+    package relationship {
+
+        class Follows {
+            -LocalDateTime since
+        }
+
+        class Owns {
+            -float qty
+            -float average_purchase_price
+        }
+
+        class Made {
+            -LocalDateTime placed_timestamp
+        }
+
+        class Fullfilled {
+            -LocalDateTime fulfilled_timestamp
+        }
+    }
 
     package node {
         class User extends Entity {
@@ -23,21 +40,6 @@ package model {
             -double rank
             -float available_balance
             -String password
-        }
-        class Activity extends Entity {
-            -String actor
-            -String action
-            -String activityId
-            -Object object
-            -LocalDateTime timestamp
-        }
-
-        class Reaction extends Entity {
-            -String reactionId
-            -String userId
-            -Kind kind
-            -String activityId
-            -LocalDateTime timestamp
         }
 
         class Stock extends Entity {
@@ -55,75 +57,19 @@ package model {
         }
 
         enum OrderType {
-            BUY
-            SELL
+            MARKET_BUY
+            MARKET_SELL
+            LIMIT_BUY
+            LIMIT_SELL
         }
 
         enum Status {
-            BOUGHT
             PENDING
-            SOLD
-        }
-
-        enum Kind {
-            LIKE
-            LOVE
-            AGREE
-            INSIGHTFUL
+            COMPLETED
         }
 
         hide OrderType methods
         hide Status methods
-    }
-
-    package relationship {
-        class FriendShip {
-            ~Long id
-            ~User friendOne
-            ~User friendTwo
-            ~Date friendShipDate
-            ~FriendShip()
-        }
-
-        class Performs {
-            ~Long id
-            ~User actor
-            ~Activity activity
-            ~Date performDate
-            ~Performs()
-        }
-
-        class Reacts {
-            ~Long id
-            ~User actor
-            ~Activity activity
-            ~Date reactDate
-            ~Reacts()
-        }
-
-        class Follows {
-            -LocalDateTime since
-        }
-
-        class Deposited {
-            -LocalDateTime timestamp
-            -float amount
-        }
-
-        class Owns {
-            -float qty
-            -float average_purchase_price
-        }
-
-        class ToBuy {
-            -LocalDateTime placed_timestamp
-            -LocalDateTime fulfilled_timestamp
-        }
-
-        class ToSell {
-            -LocalDateTime placed_timestamp
-            -LocalDateTime fulfilled_timestamp
-        }
     }
 
    /'
@@ -132,16 +78,11 @@ package model {
     Transaction *-- OrderType
     Transaction *-- Status
 
-    User *-- FriendShip
-    User *-- Follows
-    User *-- Deposited
-    User *-- Performs
-    User *-- Reacts
+    (User, Stock) . Owns
+    (User, Transaction) . Made
+    (User, User) . Follows
 
-    Stock *-- Owns
-
-    Transaction *-- ToBuy
-    Transaction *-- ToSell
+    skinparam linetype ortho
 }
 
 @enduml

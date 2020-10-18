@@ -1,9 +1,7 @@
 @startuml
 
-package IEXCloud {
-    class IEXCloudFacade {
-        +final IEXCloudAPI
-        +final IEXCloudService
+package StockMarketData {
+    class StockMarketDataFacade {
 
         Stock getStockInfo(String stockLabel)
         Company getCompanyInfo(String companyName)
@@ -11,17 +9,6 @@ package IEXCloud {
         Book getBookInfo(String bookName)
 
     }
-
-    class IEXCloudService {
-
-    }
-
-    class IEXCloudAPI {
-    String apiKey
-    }
 }
-
-IEXCloudFacade *-- IEXCloudService
-IEXCloudFacade *-- IEXCloudAPI
 
 @enduml

@@ -28,14 +28,6 @@ package controller {
         ~Transaction createTransaction(Transaction transaction)
         ~Transaction getTransaction(Long id)
     }
-
-    class ActivityController extends AbstractController {
-        -final FeedService feedService
-        +ActivityController(FeedService feedService)
-        ~List<Activity> all()
-        ~Activity createActivity(Activity activity)
-        ~Activity getActivity(Long activityId)
-    }
 }
 
 @enduml
