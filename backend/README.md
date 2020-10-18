@@ -1,3 +1,7 @@
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=money-tree_BACKEND)](https://sonarcloud.io/dashboard?id=money-tree_BACKEND)
+</br>
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=money-tree_BACKEND&metric=sqale_index)](https://sonarcloud.io/dashboard?id=money-tree_BACKEND)
+
 # How to run locally
 
 ## JAVA

@@ -15,3 +15,5 @@
 
 # goyave related secrets
 config.json
+
+client/test-report.xml

@@ -1,0 +1,133 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+      - master
+
+# (Build --> Publish --> Deploy-UAT --> Cleanup)
+jobs:
+  job_1:
+    name: Build & Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Fetches entire history, so we can analyze commits since last tag
+          fetch-depth: 0
+
+      - name: Get branch name
+        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
+      - name: Versioning # Done only if released to prod
+        if: ${{ env.BRANCH_NAME == 'master' }}
+        uses: mathieudutour/github-tag-action@v4.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          create_annotated_tag: true # To annotate the new tag so that we can describe it with 'git describe'
+
+      # These next 2 steps gets the latest released tag & computes the version name from git
+      - name: Fetch Tags
+        if: ${{ env.BRANCH_NAME == 'dev' }}
+        run: git fetch --prune --tags
+
+      - name: Compute Version Name
+        if: ${{ env.BRANCH_NAME == 'dev' }}
+        run: echo "VERSION_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
+      - name: GitHub Packages Registry Cleanup
+        run: |
+          docker images
+          docker
+
+      - name: Build & Publish Frontend
+        if: ${{ env.BRANCH_NAME == 'dev' }}
+        uses: elgohr/Publish-Docker-Github-Action@master # This action builds & publishes on GitHub Package Registry
+        with:
+          name: dpigeon/money-tree/frontend
+          registry: docker.pkg.github.com
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          workdir: client
+          dockerfile: Dockerfile
+          tags: ${{ env.VERSION_NAME }}
+
+      - name: Build & Publish Backend
+        if: ${{ env.BRANCH_NAME == 'dev' }}
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: dpigeon/money-tree/backend
+          registry: docker.pkg.github.com
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          workdir: backend
+          dockerfile: Dockerfile
+          tags: ${{ env.VERSION_NAME }}
+
+  job_2:
+    name: Deploy
+    needs: job_1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Fetches entire history, so we can analyze commits since last tag
+          fetch-depth: 0
+
+      - name: Get branch name
+        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
+      # These next 2 steps gets the latest released tag & computes the version name from git
+      - name: Fetch Tags
+        run: git fetch --prune --tags
+
+      - name: Compute Version Name
+        run: echo "VERSION_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
+      # Deploy to UAT if on dev branch
+      - name: Deploy-UAT
+        if: ${{ env.BRANCH_NAME == 'dev' }}
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_USERNAME: ${{ secrets.USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.UAT_DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          password: ${{ secrets.DROPLET_PASSWORD }}
+          port: ${{ secrets.DROPLET_PORT }}
+          envs: GITHUB_USERNAME, GITHUB_TOKEN
+          script: |
+            sh deploy.sh $GITHUB_USERNAME $GITHUB_TOKEN ${{ env.VERSION_NAME }}
+
+      # Deploy to Prod if on master branch
+      - name: Deploy-Prod
+        if: ${{ env.BRANCH_NAME == 'master' }}
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_USERNAME: ${{ secrets.USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.PROD_DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          password: ${{ secrets.DROPLET_PASSWORD }}
+          port: ${{ secrets.DROPLET_PORT }}
+          envs: GITHUB_USERNAME, GITHUB_TOKEN
+          script: |
+            sh deploy.sh $GITHUB_USERNAME $GITHUB_TOKEN ${{ env.VERSION_NAME }}
+
+  job_3:
+    name: Cleanup
+    needs: job_2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cleanup Artifactory Packages
+        uses: MobileheadHolding/github-action-purge-packages@master
+        with:
+          version-regex: ".*"
+          days-old: 30 # Lifetime: 30 days package
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
