@@ -11,7 +11,7 @@ export class Effects {
 
 
 
-  constructor(private actions$: Actions, 
+  constructor(private actions$: Actions,
               private stockService: StockService,
               private transactionService: TransactionService,
               private userService: UserService) {}
