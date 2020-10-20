@@ -30,20 +30,12 @@ jobs:
 
       # These next 2 steps gets the latest released tag & computes the version name from git
       - name: Fetch Tags
-        if: ${{ env.BRANCH_NAME == 'dev' }}
         run: git fetch --prune --tags
 
       - name: Compute Version Name
-        if: ${{ env.BRANCH_NAME == 'dev' }}
         run: echo "VERSION_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
-      - name: GitHub Packages Registry Cleanup
-        run: |
-          docker images
-          docker
-
       - name: Build & Publish Frontend
-        if: ${{ env.BRANCH_NAME == 'dev' }}
         uses: elgohr/Publish-Docker-Github-Action@master # This action builds & publishes on GitHub Package Registry
         with:
           name: dpigeon/money-tree/frontend
@@ -55,7 +47,6 @@ jobs:
           tags: ${{ env.VERSION_NAME }}
 
       - name: Build & Publish Backend
-        if: ${{ env.BRANCH_NAME == 'dev' }}
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: dpigeon/money-tree/backend
