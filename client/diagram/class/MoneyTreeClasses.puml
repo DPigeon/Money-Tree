@@ -1,0 +1,29 @@
+@startuml
+
+package src {
+
+    class main
+    hide main methods
+    hide main fields
+
+    package app {
+
+        class AppModule {
+
+        }
+
+        class AppComponent {
+            ~String title
+        }
+
+        main <|-- AppModule
+        AppModule <|-- AppComponent
+
+        class app-routing-module {
+
+        }
+
+    }
+}
+
+@enduml

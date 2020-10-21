@@ -1,0 +1,14 @@
+@startuml
+
+package StockMarketData {
+    class StockMarketDataFacade {
+
+        Stock getStockInfo(String stockLabel)
+        Company getCompanyInfo(String companyName)
+        Chart getChart(String ChartName)
+        Book getBookInfo(String bookName)
+
+    }
+}
+
+@enduml
