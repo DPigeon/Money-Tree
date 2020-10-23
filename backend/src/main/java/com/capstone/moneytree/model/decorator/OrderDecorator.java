@@ -5,9 +5,9 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import net.jacobpeterson.domain.alpaca.order.Order;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+//@Builder
+//@NoArgsConstructor
+//@AllArgsConstructor
 public abstract class OrderDecorator extends Order {
 
 //   @Override
