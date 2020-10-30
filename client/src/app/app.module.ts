@@ -11,10 +11,12 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { Effects } from './store/effects/app.effects';
+import { StockDetailComponent } from './pages/stock-detail/stock-detail.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    StockDetailComponent
   ],
   imports: [
     BrowserModule,
