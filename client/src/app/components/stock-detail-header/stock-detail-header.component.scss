@@ -1,3 +1,4 @@
+@import '../../../styles.scss';
 img{
     border: 1px solid black;
     height: 60px;
@@ -7,4 +8,12 @@ img{
 .company-title{
     display: flex;
     align-items: baseline;
+}
+
+.positive-change{
+ color: $mt-green;   
+}
+
+.negative-change{
+    color: $mt-red;   
 }
