@@ -1,1 +1,1 @@
-curl http://localhost:8111/api/stockmarket/batch/AAPL -i
+curl http://localhost:8080/api/stockmarket/batch/AAPL -i
