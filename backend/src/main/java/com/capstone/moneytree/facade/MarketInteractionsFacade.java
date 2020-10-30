@@ -70,7 +70,7 @@ public class MarketInteractionsFacade {
     * @param timeFrame Resolution of the time window (1Min, 5Min, 15Min, 1H, 1D)
     * @param dateEnd Date data is returned up to.
     * @param extendedHours Includes extended hours in result. Works only for timeframe less than 1D.
-    * @return
+    * @return A PortfolioHistory of timeseries
     */
    public PortfolioHistory getPortfolioHistory(int periodLength, String periodUnit,
                                                String timeFrame, LocalDate dateEnd,
