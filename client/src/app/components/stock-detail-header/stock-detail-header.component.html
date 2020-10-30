@@ -1,12 +1,14 @@
 <div class="company-title">
-    <img src="https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0021/6847/brand.gif?itok=u0iVoArk" />
-    <h1>Air Canada</h1>
+    <div class="company-logo"></div>
+    <h1><span class="ticker">AC</span> Air Canada</h1>
 </div>
 <mat-card>
-    <div >
-        ${{ stockValue }}
-        <span [ngClass]="stockChangeColor()"> {{stockInfoFormatter()}}</span>
-        
-
+    <div class="stock-pricing">
+        <span class="stock-value">${{ stockValue }}</span>
+        <span class="stock-change" [ngClass]="stockChangeColor()"> 
+            {{stockInfoFormatter()}}
+            <mat-icon id="up-arrow" aria-hidden="false">arrow_upward</mat-icon>
+            <mat-icon id="down-arrow" aria-hidden="false">arrow_downward</mat-icon>
+        </span>
     </div>
 </mat-card>
