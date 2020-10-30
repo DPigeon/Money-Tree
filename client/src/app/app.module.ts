@@ -12,11 +12,14 @@ import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { Effects } from './store/effects/app.effects';
 import { StockDetailComponent } from './pages/stock-detail/stock-detail.component';
+import { StockDetailHeaderComponent } from './components/stock-detail-header/stock-detail-header.component';
+import { MatCardModule } from '@angular/material/card'; 
 
 @NgModule({
   declarations: [
     AppComponent,
-    StockDetailComponent
+    StockDetailComponent,
+    StockDetailHeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +28,8 @@ import { StockDetailComponent } from './pages/stock-detail/stock-detail.componen
     BrowserAnimationsModule,
     StoreModule.forRoot(reducer),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([Effects])
+    EffectsModule.forRoot([Effects]),
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
