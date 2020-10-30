@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class MarketInteractionsFacade {
 
-   private final AlpacaAPI alpacaAPI = new AlpacaAPI();
+   //private final AlpacaAPI alpacaAPI = new AlpacaAPI();
 
-   @Autowired
+   //@Autowired
    public MarketInteractionsFacade(){}
 
 }
