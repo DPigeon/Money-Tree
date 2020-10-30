@@ -14,6 +14,9 @@ import { Effects } from './store/effects/app.effects';
 import { StockDetailComponent } from './pages/stock-detail/stock-detail.component';
 import { StockDetailHeaderComponent } from './components/stock-detail-header/stock-detail-header.component';
 import { MatCardModule } from '@angular/material/card'; 
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatIconModule } from '@angular/material/icon';
+
 
 @NgModule({
   declarations: [
@@ -29,7 +32,9 @@ import { MatCardModule } from '@angular/material/card';
     StoreModule.forRoot(reducer),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([Effects]),
-    MatCardModule
+    MatCardModule,
+    FlexLayoutModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
