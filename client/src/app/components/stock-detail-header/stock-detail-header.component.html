@@ -5,7 +5,8 @@
 <mat-card>
     <div >
         ${{ stockValue }}
-        <span [style.color]="stockChangeColor()">+{{ stockChange }} ({{stockChangePercent}})</span>
+        <span [ngClass]="stockChangeColor()"> {{stockInfoFormatter()}}</span>
+        
 
     </div>
 </mat-card>
