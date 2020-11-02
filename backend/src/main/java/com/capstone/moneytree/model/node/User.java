@@ -7,6 +7,7 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @NodeEntity
 @Data
 @Builder
@@ -40,4 +41,20 @@ public class User extends Entity {
 
     @Relationship(type = "MADE")
     Set<Transaction> transactions;
+
+    public void follows(User user) {
+        user.getFollowers().add(this);
+    }
+
+    public void followedBy(User user) {
+        this.getFollowers().add(user);
+    }
+
+    public void made(Transaction transaction) {
+        this.getTransactions().add(transaction);
+    }
+
+    public void owns(Stock stock) {
+        this.getStocks().add(stock);
+    }
 }
