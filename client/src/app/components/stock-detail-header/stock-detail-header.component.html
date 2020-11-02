@@ -4,7 +4,7 @@
 </div>
 <mat-card>
     <div class="stock-pricing">
-        <span class="stock-value">${{ stockValue }}</span>
+        <span class="stock-value">${{ stockInfo.stockValue }}</span>
         <span class="stock-change" [ngClass]="stockChangeColor()"> 
             {{stockInfoFormatter()}}
             <mat-icon id="up-arrow" aria-hidden="false">arrow_upward</mat-icon>
