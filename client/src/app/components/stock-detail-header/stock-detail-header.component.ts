@@ -12,11 +12,19 @@ export class StockDetailHeaderComponent implements OnInit{
 
   ngOnInit(): void {}
 
-  stockChangeColor() {
-    return this.stockInfo.stockChange < 0 ? 'negative-change' : 'positive-change';
+  get stockValue() {
+    return this.stockInfo ? this.stockInfo.stockValue : 0;
   }
+
+  stockChangeColor() {
+    return this.stockInfo && this.stockInfo.stockChange < 0 ? 'negative-change' : 'positive-change';
+  }
+
   stockInfoFormatter() {
-    let sign = this.stockInfo.stockChange < 0 ? '-' : '+';
-    return sign + this.stockInfo.stockChange + "("+ this.stockInfo.stockChangePercent+"%)";
+    if(this.stockInfo) {
+      let sign = this.stockInfo.stockChange < 0 ? '-' : '+';
+      return sign + this.stockInfo.stockChange + "("+ this.stockInfo.stockChangePercent+"%)";
+    }
+    return '';
   }
 }

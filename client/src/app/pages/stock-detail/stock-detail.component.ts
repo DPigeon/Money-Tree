@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Stock } from '../../interfaces/stock';
+import { StoreFacadeService } from '../../store/store-facade.service';
 
 @Component({
   selector: 'app-stock-detail',
@@ -6,18 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./stock-detail.component.scss']
 })
 export class StockDetailComponent implements OnInit {
-  stockInfo: Stock = {
-    tickerSymbol: 'AC',
-    companyName: 'Air Canada',
-    industry: 'Transportation',
-    volatility: 'High',
-    stockChange: 4.27,
-    stockChangePercent: 1.68,
-    stockValue: 16.36,
-  }
-  constructor() { }
+  stockInfo$ = this.storeFacade.currentStockLoaded$;
+
+  constructor(private storeFacade: StoreFacadeService) { }
 
   ngOnInit(): void {
+    this.storeFacade.loadCurrentStock('AC');
+
+    this.stockInfo$.subscribe( val =>{
+      console.log('this is the stock info', val);
+    })
   }
 
 }
