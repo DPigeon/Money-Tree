@@ -14,10 +14,6 @@ export class StockDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.storeFacade.loadCurrentStock('AC');
-
-    this.stockInfo$.subscribe( val =>{
-      console.log('this is the stock info', val);
-    })
   }
 
 }
