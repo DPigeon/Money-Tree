@@ -45,20 +45,25 @@
         align-items: center;
     }
 
+    #up-arrow, #down-arrow {
+        display: none;
+    }
+
     .positive-change{
         color: $mt-green;
         
-        #down-arrow {
-            display: none;
+        #up-arrow {
+            display: block;
         }
     }
     
     .negative-change{
         color: $mt-red;
         
-        #up-arrow {
-            display: none;
-        }  
+        #down-arrow {
+            display: block;
+        }
     }
+
 }
 

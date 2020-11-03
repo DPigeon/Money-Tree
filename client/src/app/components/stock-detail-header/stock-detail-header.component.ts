@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Stock } from './../../interfaces/stock';
 
 @Component({
@@ -6,24 +6,25 @@ import { Stock } from './../../interfaces/stock';
   templateUrl: './stock-detail-header.component.html',
   styleUrls: ['./stock-detail-header.component.scss']
 })
-export class StockDetailHeaderComponent implements OnInit{
+export class StockDetailHeaderComponent {
   @Input() stockInfo: Stock;
   constructor() { }
-
-  ngOnInit(): void {}
 
   get stockValue() {
     return this.stockInfo ? this.stockInfo.stockValue : 0;
   }
 
   stockChangeColor() {
-    return this.stockInfo && this.stockInfo.stockChange < 0 ? 'negative-change' : 'positive-change';
+    if(this.stockInfo) {
+      return this.stockInfo.stockChange < 0 ? 'negative-change' : 'positive-change';
+    }
+    return '';
   }
 
   stockInfoFormatter() {
     if(this.stockInfo) {
-      let sign = this.stockInfo.stockChange < 0 ? '-' : '+';
-      return sign + this.stockInfo.stockChange + "("+ this.stockInfo.stockChangePercent+"%)";
+      let sign = this.stockInfo.stockChange < 0 ? '' : '+';
+      return (sign + this.stockInfo.stockChange + "("+ this.stockInfo.stockChangePercent+"%)");
     }
     return '';
   }

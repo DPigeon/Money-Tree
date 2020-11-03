@@ -14,7 +14,7 @@ export class StockService {
     companyName: 'Air Canada',
     industry: 'Transportation',
     volatility: 'High',
-    stockChange: 4.27,
+    stockChange: -4.27,
     stockChangePercent: 1.68,
     stockValue: 16.36,
   }
