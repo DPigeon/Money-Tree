@@ -55,12 +55,12 @@ public class AlpacaController extends ApiController {
     /**
      * Get a Portfolio timeseries endpoint.
      * Endpoint example: api/alpaca/portfolio/period=1&unit=WEEK&timeframe=FIFTEEN_MINUTE&dateend=2007-12-03&extended=false
-     * @param periodLength
-     * @param periodUnit
-     * @param timeFrame
-     * @param dateEnd
-     * @param extendedHours
-     * @return
+     * @param periodLength Period needed for the timeseries
+     * @param periodUnit Either day (D), week (W), month (M) or year (A).
+     * @param timeFrame Resolution of the time window (1Min, 5Min, 15Min, 1H, 1D)
+     * @param dateEnd Date data is returned up to.
+     * @param extendedHours Includes extended hours in result. Works only for timeframe less than 1D.
+     * @return A PortfolioHistory of timeseries
      */
     @GetMapping("/portfolio/period={periodLength}&unit={periodUnit}&timeframe={timeFrame}&dateend={dateEnd}&extended={extendedHours}")
     public ResponseEntity<PortfolioHistory> getPortfolio(
