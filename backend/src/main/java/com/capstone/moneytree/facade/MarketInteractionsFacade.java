@@ -2,7 +2,6 @@ package com.capstone.moneytree.facade;
 
 import net.jacobpeterson.alpaca.AlpacaAPI;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,9 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class MarketInteractionsFacade {
 
-   private final AlpacaAPI alpacaAPI = new AlpacaAPI();
+   // private final AlpacaAPI alpacaAPI = new AlpacaAPI(); To use in the future.
 
-   @Autowired
-   public MarketInteractionsFacade(){}
+
+   public MarketInteractionsFacade(){/* Empty for now*/}
 
 }
