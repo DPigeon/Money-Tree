@@ -15,7 +15,10 @@ const stockInfo: Stock = {
 describe('Selectors', () => {
   it('should select the currently loaded stock', () => {
     let appState = appReducers.initialState;
-    appState.currentStockLoaded = stockInfo
+    appState.currentStockLoaded = stockInfo;
+    // we have our selector (selectCurrentStock) 
+    // we pass in the state we want to test it with (appState)
+    // we look for the result (stockInfo) 
     expect(appSelectors.selectCurrentStock.projector(appState)).toBe(stockInfo)
   });
 });

@@ -17,16 +17,18 @@ describe('StoreFacadeService', () => {
     service = TestBed.inject(StoreFacadeService);
   });
 
-  it('should dispatch load stock action', () =>{
-    const spy = jest.spyOn(store, 'dispatch');
-    service.loadCurrentStock('AC');
-    expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith(
-      appActions.loadStockInfo({stockTicker: 'AC'})
-    )
-  })
-
+  // integration test
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  // unit test
+  it('should dispatch load stock action', () =>{
+    const spy = jest.spyOn(store, 'dispatch');
+    service.loadCurrentStock('TESLA');
+    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith(
+      appActions.loadStockInfo({stockTicker: 'TESLA'})
+    )
+  })
 });

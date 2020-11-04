@@ -30,15 +30,17 @@ describe('Effects', () => {
     effects = TestBed.inject(Effects);
   });
 
-  it('should load the data for the stock', (done) =>{
-    actions$ = of(appActions.loadStockInfo({stockTicker: 'AC'}));
-    effects.getStock$.subscribe((res) => {
-      expect(res['stock']).toEqual(stockInfo);
-      done();
-    })
-  })
-
+  // integration test
   it('should be created', () => {
     expect(effects).toBeTruthy();
   });
+
+  // unit test
+  it('should load the data for the stock', (done) =>{ // done says that this test is asyncronous 
+    actions$ = of(appActions.loadStockInfo({stockTicker: 'AC'})); // call the action of the effect we want to test
+    effects.getStock$.subscribe((res) => { // subscribe to the observable / variable we want to test
+      expect(res['stock']).toEqual(stockInfo); // we do our assertions
+      done(); // we say that the asyncronous test is finished
+    })
+  })
 });

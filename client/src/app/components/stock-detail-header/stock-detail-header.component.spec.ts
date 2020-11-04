@@ -3,6 +3,7 @@ import { Stock } from '../../interfaces/stock';
 import { StockDetailHeaderComponent } from './stock-detail-header.component';
 import { MATERIAL_MODULE_DEPENDENCIES } from '../../shared.module';
 
+// integration tests
 describe('StockDetailHeaderComponent', () => {
   let component: StockDetailHeaderComponent;
   let fixture: ComponentFixture<StockDetailHeaderComponent>;
@@ -36,6 +37,7 @@ const stockInfo: Stock = {
   stockValue: 16.36,
 }
 
+// unit tests
 describe('StockDetailHeader', () => {
   let component: StockDetailHeaderComponent;
 
