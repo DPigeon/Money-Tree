@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/alpaca")
@@ -37,8 +38,9 @@ public class AlpacaController extends ApiController {
     @GetMapping("/account")
     public ResponseEntity<Account> getAccount() {
         Account account = marketInteractionsFacade.getAccount();
+        Optional<Account> optional = Optional.of(account);
 
-        return ResponseEntity.ok(account);
+        return ResponseEntity.of(optional);
     }
 
     /**
@@ -48,8 +50,9 @@ public class AlpacaController extends ApiController {
     @GetMapping("/positions")
     public ResponseEntity<ArrayList<Position>> getPositions() {
         ArrayList<Position> positions = marketInteractionsFacade.getOpenPositions();
+        Optional<ArrayList<Position>> optional = Optional.of(positions);
 
-        return ResponseEntity.ok(positions);
+        return ResponseEntity.of(optional);
     }
 
     /**
@@ -69,13 +72,41 @@ public class AlpacaController extends ApiController {
             @PathVariable(name = "timeFrame") @Valid @NotBlank String timeFrame,
             @PathVariable(name = "dateEnd") @Valid @NotBlank LocalDate dateEnd,
             @PathVariable(name = "extendedHours") @Valid @NotBlank String extendedHours) {
-        PortfolioHistory portfolioHistory = marketInteractionsFacade.getPortfolioHistory(
-                periodLength,
-                periodUnit,
-                timeFrame,
-                dateEnd,
-                Boolean.parseBoolean(extendedHours));
+        if (validatePositiveInt(periodLength) && validateString(periodUnit) && validateString(timeFrame) && dateEnd != null && validateString(extendedHours)) {
+            PortfolioHistory portfolioHistory = marketInteractionsFacade.getPortfolioHistory(
+                    periodLength,
+                    periodUnit,
+                    timeFrame,
+                    dateEnd,
+                    Boolean.parseBoolean(extendedHours));
 
-        return ResponseEntity.ok(portfolioHistory);
+            return ResponseEntity.ok(portfolioHistory);
+        } else {
+            return ResponseEntity.of(Optional.empty()); // TODO: Error Handling in another story using Optionals
+        }
+    }
+
+    // TODO: move these methods into a validation class later?
+    public static boolean validatePositiveInt(int number) {
+        boolean valid = false;
+        try {
+            if (number > 0) {
+                valid = true;
+            }
+            Integer.valueOf(number);
+        } catch (NumberFormatException e) {
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    public static boolean validateString(String string) {
+        boolean valid = false;
+        if (string != null && !string.isEmpty()) {
+            valid = true;
+        }
+
+        return valid;
     }
 }

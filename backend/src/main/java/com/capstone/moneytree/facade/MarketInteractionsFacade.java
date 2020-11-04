@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -72,9 +74,11 @@ public class MarketInteractionsFacade {
     * @param extendedHours Includes extended hours in result. Works only for timeframe less than 1D.
     * @return A PortfolioHistory of timeseries
     */
-   public PortfolioHistory getPortfolioHistory(int periodLength, String periodUnit,
-                                               String timeFrame, LocalDate dateEnd,
-                                               boolean extendedHours) {
+   public PortfolioHistory getPortfolioHistory(@NotNull @NotBlank int periodLength,
+                                               @NotNull @NotBlank String periodUnit,
+                                               @NotNull @NotBlank String timeFrame,
+                                               @NotNull @NotBlank LocalDate dateEnd,
+                                               @NotNull @NotBlank boolean extendedHours) {
       PortfolioHistory portfolioHistory = null;
       PortfolioPeriodUnit portfolioPeriodUnit = PortfolioPeriodUnit.valueOf(periodUnit);
       PortfolioTimeFrame portfolioTimeFrame = PortfolioTimeFrame.valueOf(timeFrame);
