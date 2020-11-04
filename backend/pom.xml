@@ -130,7 +130,7 @@
             </plugin>
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
-                <artifactId>gmavenplus-plugin</artifactId>
+                <artifactId>gmaven-plugin</artifactId>
                 <version>1.5</version>
                 <executions>
                     <execution>
