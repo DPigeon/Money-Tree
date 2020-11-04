@@ -1,11 +1,19 @@
-import { browser, by, element } from 'protractor';
+import { browser, by, element, ElementFinder } from 'protractor';
 
 export class AppPage {
-  navigateTo(): Promise<unknown> {
-    return browser.get(browser.baseUrl) as Promise<unknown>;
+  navigateToStockDetailPage(ticker: string): Promise<unknown> {
+    return browser.get(browser.baseUrl+"/stock-detail/"+ticker) as Promise<unknown>;
   }
 
-  getTitleText(): Promise<string> {
-    return element(by.css('app-root .content span')).getText() as Promise<string>;
+  getStockPrice(): Promise<string> {
+    return element(by.css('.stock-value')).getText() as Promise<string>;
+  }
+
+  getStockPriceValue(): Promise<number> {
+    return element(by.css('.stock-change')).getText().then(res => Number(res.replace(/[^0-9.-]+/g,""))) as Promise<number>;
+  }
+
+  getStockPriceChange(): ElementFinder {
+    return element(by.css('.stock-change'));
   }
 }

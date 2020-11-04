@@ -8,11 +8,29 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('sample e2e ', () => {
-    let x = 4;
-    x += 8;
-    expect(x).toEqual(12);
-  });
+  it('should display stock price', () => {
+    page.navigateToStockDetailPage('AC');
+    let stockPrice = page.getStockPrice();
+    // stock value
+    expect(!!stockPrice).toBeTruthy(); // assures the value exists and is not 0
+    expect(stockPrice).toMatch(/^\$[0-9]+(\.[0-9][0-9])?$/); // assures that the value is in format '$xxx.xx'
+
+    //stock change
+    let stockChange = page.getStockPriceChange();
+    page.getStockPriceValue().then(value =>{
+      let regEx;
+      let expectedString;
+      if( value > 0 ) {
+        regEx = new RegExp(/^\+[0-9]+(\.[0-9][0-9])?\([0-9]+(\.[0-9][0-9])?\%\)/); // assure that the value is '-xxx.xx(x.xx%)
+        expectedString = 'stock-change positive-change';
+      } else {
+        regEx = new RegExp(/^\-[0-9]+(\.[0-9][0-9])?\([0-9]+(\.[0-9][0-9])?\%\)/);
+        expectedString = 'stock-change negative-change';
+      }
+      expect(stockChange.getAttribute('class')).toBe(expectedString);
+      expect(stockChange.getText()).toMatch(regEx);
+    })
+  })
 
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser
