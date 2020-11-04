@@ -1,0 +1,33 @@
+@startuml
+
+package controller {
+    abstract class AbstractController {
+        -{static} final Logger LOG
+    }
+
+    class UserController extends AbstractController {
+        -final UserService userService
+        +UserController(UserService userService)
+        ~List<User> all()
+        ~User createUser( User user)
+        ~User getUser( Long id)
+    }
+
+    class StockController extends AbstractController {
+        -final StockService stockService
+        +StockController(StockService stockService)
+        ~List<Stock> all()
+        ~Stock createUser( Stock stock)
+        ~Stock getStock( Long id)
+    }
+
+    class TransactionController extends AbstractController {
+        -final TransactionService transactionService
+        +TransactionController(TransactionService transactionService)
+        ~List<Transaction> all()
+        ~Transaction createTransaction(Transaction transaction)
+        ~Transaction getTransaction(Long id)
+    }
+}
+
+@enduml
