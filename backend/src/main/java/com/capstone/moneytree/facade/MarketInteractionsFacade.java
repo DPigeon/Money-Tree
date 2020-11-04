@@ -1,7 +1,6 @@
 package com.capstone.moneytree.facade;
 
 import net.jacobpeterson.alpaca.AlpacaAPI;
-
 import net.jacobpeterson.alpaca.enums.PortfolioPeriodUnit;
 import net.jacobpeterson.alpaca.enums.PortfolioTimeFrame;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
@@ -29,7 +28,6 @@ public class MarketInteractionsFacade {
    private static final Logger LOGGER = LoggerFactory.getLogger(MarketInteractionsFacade.class);
    private final AlpacaAPI alpacaAPI;
 
-   @Autowired
    public MarketInteractionsFacade() {
       alpacaAPI = new AlpacaAPI();
    }
