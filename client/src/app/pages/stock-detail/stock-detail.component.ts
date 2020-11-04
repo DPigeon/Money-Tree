@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Stock } from '../../interfaces/stock';
 import { StoreFacadeService } from '../../store/store-facade.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-stock-detail',
@@ -10,10 +10,11 @@ import { StoreFacadeService } from '../../store/store-facade.service';
 export class StockDetailComponent implements OnInit {
   stockInfo$ = this.storeFacade.currentStockLoaded$;
 
-  constructor(private storeFacade: StoreFacadeService) { }
+  constructor(private storeFacade: StoreFacadeService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.storeFacade.loadCurrentStock('AC');
+    const ticker = this.route.snapshot.paramMap.get('ticker');
+    this.storeFacade.loadCurrentStock(ticker);
   }
 
 }
