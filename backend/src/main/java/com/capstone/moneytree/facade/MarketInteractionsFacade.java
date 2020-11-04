@@ -28,6 +28,7 @@ public class MarketInteractionsFacade {
    private static final Logger LOGGER = LoggerFactory.getLogger(MarketInteractionsFacade.class);
    private final AlpacaAPI alpacaAPI;
 
+   @Autowired
    public MarketInteractionsFacade() {
       alpacaAPI = new AlpacaAPI();
    }
