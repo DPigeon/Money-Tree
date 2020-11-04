@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class UserController {
+public class UserController extends ApiController{
 
     private final UserService userService;
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);

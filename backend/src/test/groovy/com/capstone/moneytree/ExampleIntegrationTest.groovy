@@ -83,7 +83,7 @@ class ExampleIntegrationTest extends Specification {
         given: "empty list"
         def newList = []
         when: "capitalize all group names"
-        def users = USER_GROUPS.forEach({ user -> newList.add(user.toUpperCase())})
+        def users = USER_GROUPS.forEach({ user -> newList.add(user.toUpperCase()) })
 
         /* Groovy has closures (similarly to javascript) which you can pass in functions instead of using for loops
         * There are many utiliy functions for dealing with collections. */
