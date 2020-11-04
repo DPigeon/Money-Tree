@@ -1,6 +1,5 @@
 package com.capstone.moneytree
 
-
 import org.junit.Test
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
