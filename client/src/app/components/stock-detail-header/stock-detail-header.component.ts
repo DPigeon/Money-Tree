@@ -4,27 +4,35 @@ import { Stock } from './../../interfaces/stock';
 @Component({
   selector: 'app-stock-detail-header',
   templateUrl: './stock-detail-header.component.html',
-  styleUrls: ['./stock-detail-header.component.scss']
+  styleUrls: ['./stock-detail-header.component.scss'],
 })
 export class StockDetailHeaderComponent {
   @Input() stockInfo: Stock;
-  constructor() { }
+  constructor() {}
 
-  get stockValue() {
+  get stockValue(): number {
     return this.stockInfo ? this.stockInfo.stockValue : 0;
   }
 
-  stockChangeColor() {
-    if(this.stockInfo) {
-      return this.stockInfo.stockChange < 0 ? 'negative-change' : 'positive-change';
+  stockChangeColor(): string {
+    if (this.stockInfo) {
+      return this.stockInfo.stockChange < 0
+        ? 'negative-change'
+        : 'positive-change';
     }
     return '';
   }
 
-  stockInfoFormatter() {
-    if(this.stockInfo) {
-      let sign = this.stockInfo.stockChange < 0 ? '' : '+';
-      return (sign + this.stockInfo.stockChange + "("+ this.stockInfo.stockChangePercent+"%)");
+  stockInfoFormatter(): string {
+    if (this.stockInfo) {
+      const sign = this.stockInfo.stockChange < 0 ? '' : '+';
+      return (
+        sign +
+        this.stockInfo.stockChange +
+        '(' +
+        this.stockInfo.stockChangePercent +
+        '%)'
+      );
     }
     return '';
   }

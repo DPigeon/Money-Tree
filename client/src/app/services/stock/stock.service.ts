@@ -4,10 +4,9 @@ import { Stock } from 'src/app/interfaces/stock';
 import { ApiService } from '../api/api.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StockService {
-
   // To be deleted
   stockInfo: Stock = {
     tickerSymbol: 'AC',
@@ -17,12 +16,12 @@ export class StockService {
     stockChange: -4.27,
     stockChangePercent: 1.68,
     stockValue: 16.36,
-  }
+  };
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService) {}
 
-  loadStockInfo(stockTicker: string):Observable<Stock>{
-    //http call
+  loadStockInfo(stockTicker: string): Observable<Stock> {
+    // http call
     return of(this.stockInfo);
   }
 }

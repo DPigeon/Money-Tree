@@ -7,16 +7,18 @@ import { Observable } from 'rxjs';
 import { Stock } from '../interfaces/stock';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StoreFacadeService {
   currentStockLoaded$: Observable<Stock>;
-  
-  constructor(private store: Store<{appState: State}>) { 
-    this.currentStockLoaded$ = this.store.select(appSelectors.selectCurrentStock);
+
+  constructor(private store: Store<{ appState: State }>) {
+    this.currentStockLoaded$ = this.store.select(
+      appSelectors.selectCurrentStock
+    );
   }
 
-  loadCurrentStock(ticker: string) {
-    this.store.dispatch(appActions.loadStockInfo({stockTicker: ticker}));
+  loadCurrentStock(ticker: string): void {
+    this.store.dispatch(appActions.loadStockInfo({ stockTicker: ticker }));
   }
 }

@@ -11,9 +11,8 @@ describe('StockDetailHeaderComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: MATERIAL_MODULE_DEPENDENCIES,
-      declarations: [ StockDetailHeaderComponent ]
-    })
-    .compileComponents();
+      declarations: [StockDetailHeaderComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -35,7 +34,7 @@ const stockInfo: Stock = {
   stockChange: 4.27,
   stockChangePercent: 1.68,
   stockValue: 16.36,
-}
+};
 
 // unit tests
 describe('StockDetailHeader', () => {
@@ -50,27 +49,27 @@ describe('StockDetailHeader', () => {
     expect(component.stockValue).toBe(component.stockInfo.stockValue);
     component.stockInfo = null;
     expect(component.stockValue).toBe(0);
-  })
+  });
 
   it('should display correct stock class', () => {
     component.stockInfo = stockInfo;
     expect(component.stockChangeColor()).toBe('positive-change');
-    component.stockInfo.stockChange = -4.00;
+    component.stockInfo.stockChange = -4.0;
     expect(component.stockChangeColor()).toBe('negative-change');
-    component.stockInfo = null; 
+    component.stockInfo = null;
     expect(component.stockChangeColor()).toBe('');
-  })
+  });
 
-  it('should display the correct stock presentation format', () =>{
+  it('should display the correct stock presentation format', () => {
     component.stockInfo = stockInfo;
-    component.stockInfo.stockChange = 4.27 //needed otherwise jest rounds down to 4
-    let expectedPositiveOutput = '+4.27(1.68%)';
-    let expectedNegativeOuput = '-1.32(1.68%)';
-    expect(component.stockInfo.stockChange).toBe(4.27)
+    component.stockInfo.stockChange = 4.27; // needed otherwise jest rounds down to 4
+    const expectedPositiveOutput = '+4.27(1.68%)';
+    const expectedNegativeOuput = '-1.32(1.68%)';
+    expect(component.stockInfo.stockChange).toBe(4.27);
     expect(component.stockInfoFormatter()).toBe(expectedPositiveOutput);
     component.stockInfo.stockChange = -1.32;
     expect(component.stockInfoFormatter()).toBe(expectedNegativeOuput);
     component.stockInfo = null;
     expect(component.stockInfoFormatter()).toBe('');
-  })
-})
+  });
+});

@@ -10,21 +10,23 @@ import { map, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class Effects {
-
-  constructor(private actions$: Actions,
+  constructor(
+    private actions$: Actions,
     private stockService: StockService,
     private transactionService: TransactionService,
-    private userService: UserService) { }
+    private userService: UserService
+  ) {}
 
   getStock$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
       ofType(appActions.loadStockInfo),
-      switchMap(action =>{
-        return this.stockService.loadStockInfo(action.stockTicker).pipe(
-          map((data) => appActions.stockInfoLoadSuccess({stock: data}))
-        )
+      switchMap((action) => {
+        return this.stockService
+          .loadStockInfo(action.stockTicker)
+          .pipe(
+            map((data) => appActions.stockInfoLoadSuccess({ stock: data }))
+          );
       })
     )
-  )
-
+  );
 }

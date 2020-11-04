@@ -13,8 +13,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { Effects } from './store/effects/app.effects';
 import { StockDetailComponent } from './pages/stock-detail/stock-detail.component';
 import { StockDetailHeaderComponent } from './components/stock-detail-header/stock-detail-header.component';
-import { MatCardModule } from '@angular/material/card'; 
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatCardModule } from '@angular/material/card';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 
 

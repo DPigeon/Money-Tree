@@ -10,7 +10,7 @@ describe('StoreFacadeService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [NGRX_STORE_MODULE]
+      providers: [NGRX_STORE_MODULE],
     });
 
     store = TestBed.inject(MockStore);
@@ -23,12 +23,12 @@ describe('StoreFacadeService', () => {
   });
 
   // unit test
-  it('should dispatch load stock action', () =>{
+  it('should dispatch load stock action', () => {
     const spy = jest.spyOn(store, 'dispatch');
     service.loadCurrentStock('TESLA');
     expect(spy).toHaveBeenCalled();
     expect(spy).toHaveBeenCalledWith(
-      appActions.loadStockInfo({stockTicker: 'TESLA'})
-    )
-  })
+      appActions.loadStockInfo({ stockTicker: 'TESLA' })
+    );
+  });
 });

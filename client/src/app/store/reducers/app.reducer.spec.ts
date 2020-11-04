@@ -10,7 +10,7 @@ const stockInfo: Stock = {
   stockChange: -4.27,
   stockChangePercent: 1.68,
   stockValue: 16.36,
-}
+};
 
 describe('Reducer Reducer', () => {
   describe('an unknown action', () => {
@@ -21,9 +21,9 @@ describe('Reducer Reducer', () => {
     });
 
     it('should return the state with loaded stock', () => {
-      const action = appActions.stockInfoLoadSuccess({stock: stockInfo});
+      const action = appActions.stockInfoLoadSuccess({ stock: stockInfo });
       const state = reducer(initialState, action);
       expect(state.currentStockLoaded).toEqual(stockInfo);
-    })
+    });
   });
 });
