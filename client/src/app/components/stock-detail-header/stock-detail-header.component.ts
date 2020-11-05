@@ -15,16 +15,22 @@ export class StockDetailHeaderComponent {
   }
 
   stockChangeColor() {
-    if(this.stockInfo) {
-      return this.stockInfo.stockChange < 0 ? 'negative-change' : 'positive-change';
+    if (this.stockInfo) {
+      const changeValue = this.stockInfo.stockChange;
+      if (changeValue === 0) {
+        return '';
+      }
+      else {
+        return changeValue < 0 ? 'negative-change' : 'positive-change';
+      }
     }
     return '';
   }
 
   stockInfoFormatter() {
-    if(this.stockInfo) {
-      let sign = this.stockInfo.stockChange < 0 ? '' : '+';
-      return (sign + this.stockInfo.stockChange + "("+ this.stockInfo.stockChangePercent+"%)");
+    if (this.stockInfo) {
+      let sign = this.stockInfo.stockChange <= 0 ? '' : '+';
+      return (sign + this.stockInfo.stockChange + "(" + this.stockInfo.stockChangePercent + "%)");
     }
     return '';
   }
