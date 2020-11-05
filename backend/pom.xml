@@ -59,7 +59,7 @@
         <dependency>
             <groupId>net.jacobpeterson</groupId>
             <artifactId>alpaca-java</artifactId>
-            <version>5.4</version>
+            <version>6.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -156,7 +156,6 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.7.1</version>
             </plugin>
-
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>

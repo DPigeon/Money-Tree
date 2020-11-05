@@ -7,5 +7,4 @@ import net.jacobpeterson.domain.alpaca.order.Order;
 public abstract class OrderDecorator extends Order {
 
    public abstract void decorate();
-
 }
