@@ -1,7 +1,6 @@
 package com.capstone.moneytree.facade;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,109 +27,96 @@ import java.util.List;
 @Component
 public class StockMarketDataFacade {
 
-   private final IEXCloudClient stockMarketDataClient;
-   private static final Logger LOG = LoggerFactory.getLogger(StockMarketDataFacade.class);
+    private final IEXCloudClient stockMarketDataClient;
 
-   @Autowired
-   public StockMarketDataFacade(@Value("${IEXCloud.publishable.token}") String PUBLISH_TOKEN, @Value("${IEXCloud.secret.token}") String SECRET_TOKEN) {
-      stockMarketDataClient = IEXTradingClient.create(IEXTradingApiVersion.IEX_CLOUD_V1,
-              new IEXCloudTokenBuilder()
-                      .withPublishableToken(PUBLISH_TOKEN)
-                      .withSecretToken(SECRET_TOKEN)
+    @Autowired
+    public StockMarketDataFacade(@Value("${IEXCloud.publishable.token}") String pToken, @Value("${IEXCloud.secret.token}") String sToken) {
+        stockMarketDataClient = IEXTradingClient.create(IEXTradingApiVersion.IEX_CLOUD_V1,
+                new IEXCloudTokenBuilder()
+                        .withPublishableToken(pToken)
+                        .withSecretToken(sToken)
+                        .build());
+    }
+
+    public BatchStocks getBatchStocksBySymbol(String symbol) {
+        return stockMarketDataClient.executeRequest(new BatchStocksRequestBuilder()
+                .withSymbol(symbol)
+                .addType(BatchStocksType.BOOK)
+                .addType(BatchStocksType.COMPANY)
+                .addType(BatchStocksType.NEWS).withLast(10)
+                .addType(BatchStocksType.KEY_STATS)
+                .addType(BatchStocksType.LOGO)
+                .addType(BatchStocksType.CHART)
+                .build()
+        );
+    }
+
+    public Book getBook(String symbol) {
+        return stockMarketDataClient.executeRequest(new BookRequestBuilder()
+                .withSymbol(symbol)
                 .build());
-   }
+    }
 
-   public BatchStocks getBatchStocksBySymbol(String symbol) {
-      final BatchStocks batchStocks = stockMarketDataClient.executeRequest(new BatchStocksRequestBuilder()
-              .withSymbol(symbol)
-              .addType(BatchStocksType.BOOK)
-              .addType(BatchStocksType.COMPANY)
-              .addType(BatchStocksType.NEWS).withLast(10)
-              .addType(BatchStocksType.KEY_STATS)
-              .addType(BatchStocksType.LOGO)
-              .addType(BatchStocksType.CHART)
-              .build()
-      );
+    public Quote getQuote(String symbol) {
+        return stockMarketDataClient.executeRequest(new QuoteRequestBuilder()
+                .withSymbol(symbol)
+                .build());
+    }
 
-      LOG.info("Fetch batch: {}", batchStocks.toString());
-      return batchStocks;
-   }
+    public Company getCompanyInfo(String symbol) {
+        return stockMarketDataClient.executeRequest(new CompanyRequestBuilder()
+                .withSymbol(symbol)
+                .build());
+    }
 
-   public Book getBook(String symbol) {
-      final Book book = stockMarketDataClient.executeRequest(new BookRequestBuilder()
-              .withSymbol(symbol)
-              .build());
+    public List<News> getLastNNews(String symbol, int lastN) {
+        return stockMarketDataClient.executeRequest(new NewsRequestBuilder()
+                .withSymbol(symbol)
+                .withLast(lastN)
+                .build());
+    }
 
-      LOG.info("Fetched book: {}", book.toString());
-      return book;
-   }
+    public KeyStats getKeyStats(String symbol) {
+        return stockMarketDataClient.executeRequest(new KeyStatsRequestBuilder()
+                .withSymbol(symbol)
+                .build());
+    }
 
-   public Quote getQuote(String symbol) {
-      final Quote quote = stockMarketDataClient.executeRequest(new QuoteRequestBuilder()
-              .withSymbol(symbol)
-              .build());
+    public List<Chart> getChart(String symbol, String range) {
 
-      LOG.info("Fetched quote: {}", quote.toString());
-      return quote;
-   }
+        if (StringUtils.isBlank(range)) {
+            return stockMarketDataClient.executeRequest(new ChartRequestBuilder()
+                    .withSymbol(symbol)
+                    .withChartRange(ChartRange.YEAR_TO_DATE)
+                    .build());
+        }
+        ChartRange chartRange;
+        switch (range) {
+            case "DAY":
+                chartRange = ChartRange.ONE_DAY;
+                break;
+            case "WEEK":
+                chartRange = ChartRange.FIVE_DAYS;
+                break;
+            case "MONTH":
+                chartRange = ChartRange.ONE_MONTH;
+                break;
+            case "YEAR":
+                chartRange = ChartRange.ONE_YEAR;
+                break;
+            default:
+                chartRange = ChartRange.YEAR_TO_DATE;
+        }
 
-   public Company getCompanyInfo(String symbol) {
-      final Company company = stockMarketDataClient.executeRequest(new CompanyRequestBuilder()
-         .withSymbol(symbol)
-         .build());
+        return stockMarketDataClient.executeRequest(new ChartRequestBuilder()
+                .withSymbol(symbol)
+                .withChartRange(chartRange)
+                .build());
+    }
 
-      LOG.info("Fetched company: {}", company.toString());
-      return company;
-   }
-
-   public List<News> getLastNNews(String symbol, int lastN) {
-      final List<News> news = stockMarketDataClient.executeRequest(new NewsRequestBuilder()
-              .withSymbol(symbol)
-              .withLast(lastN)
-              .build());
-
-      for (News n : news) {
-         LOG.info("Fetched news: {}", n.toString());
-      }
-      return news;
-   }
-
-   public KeyStats getKeyStats(String symbol) {
-      final KeyStats keyStats = stockMarketDataClient.executeRequest(new KeyStatsRequestBuilder()
-         .withSymbol(symbol)
-         .build());
-
-      LOG.info("Fetched key stats: {}", keyStats.toString());
-      return keyStats;
-   }
-
-   public List<Chart> getChart(String symbol, String range) {
-
-      ChartRange chartRange = ChartRange.YEAR_TO_DATE;
-      if (range.equals("DAY"))
-         chartRange = ChartRange.ONE_DAY;
-      else if (range.equals("WEEK"))
-         chartRange = ChartRange.FIVE_DAYS;
-      else if (range.equals("MONTH"))
-         chartRange = ChartRange.ONE_MONTH;
-      else if (range.equals("YEAR"))
-         chartRange = ChartRange.ONE_YEAR;
-
-      final List<Chart> charts = stockMarketDataClient.executeRequest(new ChartRequestBuilder()
-              .withSymbol(symbol)
-              .withChartRange(chartRange)
-              .build());
-
-      LOG.info("Fetched charts: {}", charts.toString());
-      return charts;
-   }
-
-   public Logo getLogo(String symbol) {
-      final Logo logo = stockMarketDataClient.executeRequest(new LogoRequestBuilder()
-              .withSymbol(symbol)
-              .build());
-
-      LOG.info("Fetched logo: {}", logo.toString());
-      return logo;
-   }
+    public Logo getLogo(String symbol) {
+        return stockMarketDataClient.executeRequest(new LogoRequestBuilder()
+                .withSymbol(symbol)
+                .build());
+    }
 }
