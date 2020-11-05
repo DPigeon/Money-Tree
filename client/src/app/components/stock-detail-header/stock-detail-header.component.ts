@@ -8,14 +8,14 @@ import { Stock } from './../../interfaces/stock';
 })
 export class StockDetailHeaderComponent {
   @Input() stockInfo: Stock;
-  constructor() {}
+  constructor() { }
 
   get stockValue(): number {
     return this.stockInfo ? this.stockInfo.stockValue : 0;
   }
 
   stockChangeColor(): string {
-    if (this.stockInfo) {
+    if (this.stockInfo && this.stockInfo.stockChange !== 0) {
       return this.stockInfo.stockChange < 0
         ? 'negative-change'
         : 'positive-change';
@@ -25,7 +25,7 @@ export class StockDetailHeaderComponent {
 
   stockInfoFormatter(): string {
     if (this.stockInfo) {
-      const sign = this.stockInfo.stockChange < 0 ? '' : '+';
+      const sign = this.stockInfo.stockChange <= 0 ? '' : '+';
       return (
         sign +
         this.stockInfo.stockChange +

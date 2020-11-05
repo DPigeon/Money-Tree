@@ -56,6 +56,8 @@ describe('StockDetailHeader', () => {
     expect(component.stockChangeColor()).toBe('positive-change');
     component.stockInfo.stockChange = -4.0;
     expect(component.stockChangeColor()).toBe('negative-change');
+    component.stockInfo.stockChange = 0;
+    expect(component.stockChangeColor()).toBe('');
     component.stockInfo = null;
     expect(component.stockChangeColor()).toBe('');
   });
@@ -65,10 +67,13 @@ describe('StockDetailHeader', () => {
     component.stockInfo.stockChange = 4.27; // needed otherwise jest rounds down to 4
     const expectedPositiveOutput = '+4.27(1.68%)';
     const expectedNegativeOuput = '-1.32(1.68%)';
-    expect(component.stockInfo.stockChange).toBe(4.27);
+    const expectedZeroOutput = '0(0%)';
     expect(component.stockInfoFormatter()).toBe(expectedPositiveOutput);
     component.stockInfo.stockChange = -1.32;
     expect(component.stockInfoFormatter()).toBe(expectedNegativeOuput);
+    component.stockInfo.stockChangePercent = 0;
+    component.stockInfo.stockChange = 0;
+    expect(component.stockInfoFormatter()).toBe(expectedZeroOutput);
     component.stockInfo = null;
     expect(component.stockInfoFormatter()).toBe('');
   });

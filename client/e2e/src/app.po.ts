@@ -14,10 +14,17 @@ export class AppPage {
   getStockPriceValue(): Promise<number> {
     return element(by.css('.stock-change'))
       .getText()
-      .then((res) => Number(res.replace(/[^0-9.-]+/g, ''))) as Promise<number>;
+      .then((res) => Number(res.match(/^([+]|[-])?[0-9]+\.[0-9][0-9]|^0/g))) as Promise<number>;
+      // This regex matches a signed number or 0 only
   }
 
   getStockPriceChange(): ElementFinder {
     return element(by.css('.stock-change'));
+  }
+  getArrowUp(): ElementFinder {
+    return element(by.css('#up-arrow'));
+  }
+  getArrowDown(): ElementFinder {
+    return element(by.css('#down-arrow'));
   }
 }
