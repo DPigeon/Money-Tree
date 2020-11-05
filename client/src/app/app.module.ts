@@ -11,19 +11,30 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { Effects } from './store/effects/app.effects';
+import { StockDetailComponent } from './pages/stock-detail/stock-detail.component';
+import { StockDetailHeaderComponent } from './components/stock-detail-header/stock-detail-header.component';
+import { MatCardModule } from '@angular/material/card';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatIconModule } from '@angular/material/icon';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    StockDetailComponent,
+    StockDetailHeaderComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot(reducer),
+    StoreModule.forRoot({appState: reducer}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([Effects])
+    EffectsModule.forRoot([Effects]),
+    MatCardModule,
+    FlexLayoutModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
