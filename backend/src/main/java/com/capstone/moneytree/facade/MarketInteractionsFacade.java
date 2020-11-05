@@ -10,6 +10,7 @@ import net.jacobpeterson.domain.alpaca.position.Position;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotBlank;
@@ -29,8 +30,12 @@ public class MarketInteractionsFacade {
    private final AlpacaAPI alpacaAPI;
 
    @Autowired
-   public MarketInteractionsFacade() {
-      alpacaAPI = new AlpacaAPI();
+   public MarketInteractionsFacade(@Value("${alpaca.api.version}") String apiVersion,
+                                   @Value("${alpaca.key.id}") String keyId,
+                                   @Value("${alpaca.secret}") String secretKey,
+                                   @Value("${alpaca.base.api.url}") String baseApiUrl,
+                                   @Value("${alpaca.base.data.url}") String baseDataUrl) {
+      alpacaAPI = new AlpacaAPI(apiVersion, keyId, secretKey, baseApiUrl, baseDataUrl);
    }
 
    /**

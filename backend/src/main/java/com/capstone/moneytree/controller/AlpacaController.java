@@ -6,6 +6,7 @@ import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
 import net.jacobpeterson.domain.alpaca.position.Position;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,8 @@ import java.util.Optional;
 public class AlpacaController extends ApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StockController.class);
+
+    @Autowired
     private final MarketInteractionsFacade marketInteractionsFacade;
 
     public AlpacaController(MarketInteractionsFacade marketInteractionsFacade) {

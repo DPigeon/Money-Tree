@@ -20,6 +20,13 @@ import java.time.LocalDate
 @SpringBootTest
 class AlpacaControllerIntegrationTest extends Specification {
 
+    // TODO: Replace this later
+    private static final String apiVersion = "v2"
+    private static final String keyId = "PKZJK3IXQ4JZAWCBDSRX"
+    private static final String secret = "SA5sYIYR58AukN8NKpdGkQZSCvOCoTXYgyjuaoUe"
+    private static final String baseApiUrl = "https://paper-api.alpaca.markets"
+    private static final String baseDataUrl = "https://data.alpaca.markets"
+
     @Shared
     def alpacaController
 
@@ -27,8 +34,8 @@ class AlpacaControllerIntegrationTest extends Specification {
     def marketInteractionsFacade;
 
     def setupSpec() {
-        marketInteractionsFacade = new MarketInteractionsFacade();
-        alpacaController = new AlpacaController(marketInteractionsFacade);
+        marketInteractionsFacade = new MarketInteractionsFacade(apiVersion, keyId, secret, baseApiUrl, baseDataUrl)
+        alpacaController = new AlpacaController(marketInteractionsFacade)
     }
 
     @Test
