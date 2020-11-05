@@ -10,6 +10,18 @@ export class StockDetailHeaderComponent {
   @Input() stockInfo: Stock;
   constructor() { }
 
+  get companyLogo(): string {
+    return this.stockInfo ? 'url(' + this.stockInfo.logo +')': '';
+  }
+
+  get companySymbol(): string {
+    return this.stockInfo ? this.stockInfo.tickerSymbol : '';
+  }
+
+  get companyName(): string{
+    return this.stockInfo ? this.stockInfo.companyName : '';
+  }
+
   get stockValue(): number {
     return this.stockInfo ? this.stockInfo.stockValue : 0;
   }
@@ -29,8 +41,8 @@ export class StockDetailHeaderComponent {
       return (
         sign +
         this.stockInfo.stockChange +
-        '(' +
-        this.stockInfo.stockChangePercent +
+        ' (' +
+        this.stockInfo.stockChangePercent.toFixed(2) +
         '%)'
       );
     }

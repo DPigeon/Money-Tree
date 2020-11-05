@@ -1,6 +1,6 @@
 <div class="company-title">
-    <div class="company-logo"></div>
-    <h1><span class="ticker">AC</span> Air Canada</h1>
+    <div class="company-logo" [style.background-image]='companyLogo'></div>
+    <h1><span class="ticker">{{ companySymbol }}</span> {{ companyName }}</h1>
 </div>
 <mat-card>
     <div class="stock-pricing">
