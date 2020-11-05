@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable, of } from 'rxjs';
 import * as appActions from '../actions/app.actions';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Effects } from './app.effects';
 
 const stockInfo = {
@@ -21,6 +21,7 @@ describe('Effects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [Effects, provideMockActions(() => actions$)],
     });
 
@@ -36,6 +37,7 @@ describe('Effects', () => {
   it('should load the data for the stock', (done) => {
     // done says that this test is asyncronous
     actions$ = of(appActions.loadStockInfo({ stockTicker: 'AC' })); // call the action of the effect we want to test
+    
     effects.getStock$.subscribe((res) => {
       // subscribe to the observable / variable we want to test
       const key = 'stock';

@@ -34,6 +34,7 @@ const stockInfo: Stock = {
   stockChange: 4.27,
   stockChangePercent: 1.68,
   stockValue: 16.36,
+  logo: 'https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0021/6847/brand.gif?itok=u0iVoArk'
 };
 
 // unit tests
@@ -65,9 +66,9 @@ describe('StockDetailHeader', () => {
   it('should display the correct stock presentation format', () => {
     component.stockInfo = stockInfo;
     component.stockInfo.stockChange = 4.27; // needed otherwise jest rounds down to 4
-    const expectedPositiveOutput = '+4.27(1.68%)';
-    const expectedNegativeOuput = '-1.32(1.68%)';
-    const expectedZeroOutput = '0(0%)';
+    const expectedPositiveOutput = '+4.27 (1.68%)';
+    const expectedNegativeOuput = '-1.32 (1.68%)';
+    const expectedZeroOutput = '0 (0.00%)';
     expect(component.stockInfoFormatter()).toBe(expectedPositiveOutput);
     component.stockInfo.stockChange = -1.32;
     expect(component.stockInfoFormatter()).toBe(expectedNegativeOuput);
