@@ -6,4 +6,5 @@ export interface Stock {
     stockChange: number;
     stockChangePercent: number;
     stockValue: number;
+    logo: string;
 }
