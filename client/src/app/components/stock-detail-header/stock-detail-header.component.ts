@@ -8,10 +8,22 @@ import { Stock } from './../../interfaces/stock';
 })
 export class StockDetailHeaderComponent {
   @Input() stockInfo: Stock;
-  constructor() { }
+  constructor() {}
 
-  get stockValue(): number {
-    return this.stockInfo ? this.stockInfo.stockValue : 0;
+  get companyLogo(): string {
+    return this.stockInfo ? 'url(' + this.stockInfo.logo + ')' : '';
+  }
+
+  get companySymbol(): string {
+    return this.stockInfo ? this.stockInfo.tickerSymbol : '';
+  }
+
+  get companyName(): string {
+    return this.stockInfo ? this.stockInfo.companyName : '';
+  }
+
+  get stockValue(): string {
+    return this.stockInfo ? this.stockInfo.stockValue.toFixed(2) : '';
   }
 
   stockChangeColor(): string {
@@ -28,9 +40,9 @@ export class StockDetailHeaderComponent {
       const sign = this.stockInfo.stockChange <= 0 ? '' : '+';
       return (
         sign +
-        this.stockInfo.stockChange +
-        '(' +
-        this.stockInfo.stockChangePercent +
+        this.stockInfo.stockChange.toFixed(2) +
+        ' (' +
+        this.stockInfo.stockChangePercent.toFixed(2) +
         '%)'
       );
     }

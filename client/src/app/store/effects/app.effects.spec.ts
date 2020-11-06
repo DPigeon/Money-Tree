@@ -2,7 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable, of } from 'rxjs';
 import * as appActions from '../actions/app.actions';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { StockService } from '../../services/stock/stock.service';
 import { Effects } from './app.effects';
 
 const stockInfo = {
@@ -18,10 +19,18 @@ const stockInfo = {
 describe('Effects', () => {
   let actions$: Observable<any> = new Observable();
   let effects: Effects;
+  const mockStockService = {
+    loadStockInfo: jest.fn(() => of(stockInfo)),
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [Effects, provideMockActions(() => actions$)],
+      imports: [HttpClientTestingModule],
+      providers: [
+        Effects,
+        provideMockActions(() => actions$),
+        { provide: StockService, useValue: mockStockService },
+      ],
     });
 
     effects = TestBed.inject(Effects);
@@ -36,6 +45,7 @@ describe('Effects', () => {
   it('should load the data for the stock', (done) => {
     // done says that this test is asyncronous
     actions$ = of(appActions.loadStockInfo({ stockTicker: 'AC' })); // call the action of the effect we want to test
+
     effects.getStock$.subscribe((res) => {
       // subscribe to the observable / variable we want to test
       const key = 'stock';

@@ -10,6 +10,7 @@ const stockInfo: Stock = {
   stockChange: -4.27,
   stockChangePercent: 1.68,
   stockValue: 16.36,
+  logo: ''
 };
 
 describe('Selectors', () => {
