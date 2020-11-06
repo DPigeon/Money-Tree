@@ -22,32 +22,32 @@ describe('StockService', () => {
     company: {
       symbol: 'AC',
       companyName: 'Air Canada',
-      industry: 'Travel'
+      industry: 'Travel',
     },
     book: {
       quote: {
         change: 4,
         changePercent: 0.03,
-        latestPrice: 16.34
-      }
+        latestPrice: 16.34,
+      },
     },
     logo: {
-      url: 'sampleurl'
-    }
-  }
+      url: 'sampleurl',
+    },
+  };
 
-  const expectedStock: Stock ={
+  const expectedStock: Stock = {
     tickerSymbol: iexSampleResponse.company.symbol,
     companyName: iexSampleResponse.company.companyName,
     industry: iexSampleResponse.company.industry,
     volatility: 'low',
     stockChange: iexSampleResponse.book.quote.change,
-    stockChangePercent: iexSampleResponse.book.quote.changePercent *100,
+    stockChangePercent: iexSampleResponse.book.quote.changePercent * 100,
     stockValue: iexSampleResponse.book.quote.latestPrice,
     logo: iexSampleResponse.logo.url,
-  }
+  };
 
-  it('should convert iex data to frontend model', () =>{
+  it('should convert iex data to frontend model', () => {
     const transformedData = service.IEXtoModel(iexSampleResponse);
     expect(transformedData).toEqual(expectedStock);
   });

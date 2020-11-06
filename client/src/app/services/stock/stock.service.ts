@@ -18,7 +18,7 @@ export class StockService {
 
   // This will need to be discussed: formatting responses frontend vs backend, same models?
   IEXtoModel(iex: any): Stock {
-    let stock: Stock = {
+    const stock: Stock = {
       tickerSymbol: iex.company.symbol,
       companyName: iex.company.companyName,
       industry: iex.company.industry,

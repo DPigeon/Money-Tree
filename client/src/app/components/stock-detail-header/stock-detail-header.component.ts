@@ -8,17 +8,17 @@ import { Stock } from './../../interfaces/stock';
 })
 export class StockDetailHeaderComponent {
   @Input() stockInfo: Stock;
-  constructor() { }
+  constructor() {}
 
   get companyLogo(): string {
-    return this.stockInfo ? 'url(' + this.stockInfo.logo +')': '';
+    return this.stockInfo ? 'url(' + this.stockInfo.logo + ')' : '';
   }
 
   get companySymbol(): string {
     return this.stockInfo ? this.stockInfo.tickerSymbol : '';
   }
 
-  get companyName(): string{
+  get companyName(): string {
     return this.stockInfo ? this.stockInfo.companyName : '';
   }
 

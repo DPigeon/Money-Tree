@@ -19,17 +19,17 @@ const stockInfo = {
 describe('Effects', () => {
   let actions$: Observable<any> = new Observable();
   let effects: Effects;
-  let mockStockService = {
-    loadStockInfo: jest.fn(()=> of(stockInfo))
+  const mockStockService = {
+    loadStockInfo: jest.fn(() => of(stockInfo)),
   };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        Effects, 
+        Effects,
         provideMockActions(() => actions$),
-        {provide: StockService, useValue: mockStockService}
+        { provide: StockService, useValue: mockStockService },
       ],
     });
 
@@ -45,7 +45,7 @@ describe('Effects', () => {
   it('should load the data for the stock', (done) => {
     // done says that this test is asyncronous
     actions$ = of(appActions.loadStockInfo({ stockTicker: 'AC' })); // call the action of the effect we want to test
-    
+
     effects.getStock$.subscribe((res) => {
       // subscribe to the observable / variable we want to test
       const key = 'stock';
