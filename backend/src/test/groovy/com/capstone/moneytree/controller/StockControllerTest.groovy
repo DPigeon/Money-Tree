@@ -11,8 +11,8 @@ import spock.lang.Specification
 
 class StockControllerTest extends Specification {
 
-    private static final String PUBLISH_TOKEN = "pk_a91bb5a4faf6401da964db6bd96d087e"
-    private static final String SECRET_TOKEN = "sk_25c6140713724699acd73260f29154c0"
+    private static final String PUBLISH_TOKEN = "pk_71edf0e1cf87481f8d42687a5b6f312a"
+    private static final String SECRET_TOKEN = "sk_27495df2289f49cfb56e94df5e1ca73c"
 
     StockMarketDataFacade stockMarketDataFacade = new StockMarketDataFacade(PUBLISH_TOKEN, SECRET_TOKEN)
     StockMarketDataService stockMarketDataService = new DefaultStockMarketDataService(stockMarketDataFacade: stockMarketDataFacade)
