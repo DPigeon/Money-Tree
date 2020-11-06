@@ -12,6 +12,8 @@ COPY ./ ./
 RUN ng build --prod
 # Get nginx to host on production
 FROM nginx:1.17-alpine
+# Copy the nginx config to nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Copy dist to nginx
 COPY --from=ng /home/node/dist/client/ /usr/share/nginx/html
 # Start nginx
