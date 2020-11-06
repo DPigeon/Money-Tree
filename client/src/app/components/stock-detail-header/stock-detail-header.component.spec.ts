@@ -47,9 +47,9 @@ describe('StockDetailHeader', () => {
 
   it('should display correct stock values', () => {
     component.stockInfo = stockInfo;
-    expect(component.stockValue).toBe(component.stockInfo.stockValue);
+    expect(component.stockValue).toBe(component.stockInfo.stockValue.toFixed(2));
     component.stockInfo = null;
-    expect(component.stockValue).toBe(0);
+    expect(component.stockValue).toBe('');
   });
 
   it('should display correct stock class', () => {
@@ -68,7 +68,7 @@ describe('StockDetailHeader', () => {
     component.stockInfo.stockChange = 4.27; // needed otherwise jest rounds down to 4
     const expectedPositiveOutput = '+4.27 (1.68%)';
     const expectedNegativeOuput = '-1.32 (1.68%)';
-    const expectedZeroOutput = '0 (0.00%)';
+    const expectedZeroOutput = '0.00 (0.00%)';
     expect(component.stockInfoFormatter()).toBe(expectedPositiveOutput);
     component.stockInfo.stockChange = -1.32;
     expect(component.stockInfoFormatter()).toBe(expectedNegativeOuput);

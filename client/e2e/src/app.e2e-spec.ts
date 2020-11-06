@@ -9,7 +9,7 @@ describe('workspace-project App', () => {
   });
 
   it('should display stock price', () => {
-    page.navigateToStockDetailPage('AC');
+    page.navigateToStockDetailPage('AAPL');
     const stockPrice = page.getStockPrice();
     // stock value
     expect(!!stockPrice).toBeTruthy(); // assures the value exists and is not 0
@@ -30,18 +30,14 @@ describe('workspace-project App', () => {
         expectedString = 'stock-change positive-change';
         expectedArrowUpDisplay = 'block';
         expectedArrowDownDisplay = 'none';
-      }
-      else if (value === 0) {
-        regEx = new RegExp(
-          /0\\s(0\%\)/gm
-        ); // assure that the value is '0 (0%)'
+      } else if (value === 0) {
+        regEx = new RegExp(/0\s\(0\%\)/gm); // assure that the value is '0 (0%)'
         expectedString = 'stock-change';
         expectedArrowUpDisplay = 'none';
         expectedArrowDownDisplay = 'none';
-      }
-      else if (value < 0) {
+      } else if (value < 0) {
         regEx = new RegExp(
-          /^\-[0-9]+(\.[0-9][0-9])?\s\([0-9]+(\.[0-9][0-9])?\%\)/
+          /^\-[0-9]+(\.[0-9][0-9])?\s\(-[0-9]+(\.[0-9][0-9])?\%\)/
         );
         expectedString = 'stock-change negative-change';
         expectedArrowUpDisplay = 'none';
@@ -51,7 +47,6 @@ describe('workspace-project App', () => {
       expect(stockChange.getText()).toMatch(regEx);
       expect(arrowDisplayUp).toMatch(expectedArrowUpDisplay);
       expect(arrowDisplayDown).toMatch(expectedArrowDownDisplay);
-
     });
   });
 

@@ -22,8 +22,8 @@ export class StockDetailHeaderComponent {
     return this.stockInfo ? this.stockInfo.companyName : '';
   }
 
-  get stockValue(): number {
-    return this.stockInfo ? this.stockInfo.stockValue : 0;
+  get stockValue(): string {
+    return this.stockInfo ? this.stockInfo.stockValue.toFixed(2) : '';
   }
 
   stockChangeColor(): string {
@@ -40,7 +40,7 @@ export class StockDetailHeaderComponent {
       const sign = this.stockInfo.stockChange <= 0 ? '' : '+';
       return (
         sign +
-        this.stockInfo.stockChange +
+        this.stockInfo.stockChange.toFixed(2) +
         ' (' +
         this.stockInfo.stockChangePercent.toFixed(2) +
         '%)'
