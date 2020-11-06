@@ -3,6 +3,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable, of } from 'rxjs';
 import * as appActions from '../actions/app.actions';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { StockService } from '../../services/stock/stock.service';
 import { Effects } from './app.effects';
 
 const stockInfo = {
@@ -18,11 +19,18 @@ const stockInfo = {
 describe('Effects', () => {
   let actions$: Observable<any> = new Observable();
   let effects: Effects;
+  let mockStockService = {
+    loadStockInfo: jest.fn(()=> of(stockInfo))
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [Effects, provideMockActions(() => actions$)],
+      providers: [
+        Effects, 
+        provideMockActions(() => actions$),
+        {provide: StockService, useValue: mockStockService}
+      ],
     });
 
     effects = TestBed.inject(Effects);

@@ -25,23 +25,23 @@ describe('workspace-project App', () => {
       let expectedArrowDownDisplay;
       if (value > 0) {
         regEx = new RegExp(
-          /^\+[0-9]+(\.[0-9][0-9])?\([0-9]+(\.[0-9][0-9])?\%\)/
-        ); // assure that the value is '-xxx.xx(x.xx%)
+          /^\+[0-9]+(\.[0-9][0-9])?\s\([0-9]+(\.[0-9][0-9])?\%\)/
+        ); // assure that the value is '-xxx.xx (x.xx%)
         expectedString = 'stock-change positive-change';
         expectedArrowUpDisplay = 'block';
         expectedArrowDownDisplay = 'none';
       }
       else if (value === 0) {
         regEx = new RegExp(
-          /0\(0\%\)/gm
-        ); // assure that the value is '0(0%)'
+          /0\\s(0\%\)/gm
+        ); // assure that the value is '0 (0%)'
         expectedString = 'stock-change';
         expectedArrowUpDisplay = 'none';
         expectedArrowDownDisplay = 'none';
       }
       else if (value < 0) {
         regEx = new RegExp(
-          /^\-[0-9]+(\.[0-9][0-9])?\([0-9]+(\.[0-9][0-9])?\%\)/
+          /^\-[0-9]+(\.[0-9][0-9])?\s\([0-9]+(\.[0-9][0-9])?\%\)/
         );
         expectedString = 'stock-change negative-change';
         expectedArrowUpDisplay = 'none';
