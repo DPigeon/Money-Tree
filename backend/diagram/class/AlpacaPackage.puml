@@ -1,0 +1,36 @@
+@startuml
+
+package MarketInteractions {
+    class MarketInteractionsFacade {
+        +final AlpacaService
+
+        +Order createOrder(Order order)
+        +Account getAccount()
+        +ArrayList<AccountActivity> getAccountActivities()
+        +AccountConfiguration getAccountConfiguration()
+        +AccountConfiguration setAccountConfiguration(AccountConfiguration accountConfiguration)
+        +ArrayList<Order> getOrders()
+        +Order getOrder(String orderID, Boolean nested)
+        +Order getOrderByClientID(String clientOrderId)
+        +Order replaceOrder()
+        +ArrayList<CancelledOrder> cancelAllOrders()
+        +boolean cancelOrder(String orderId)
+        +ArrayList<Position> getOpenPositions()
+        +Position getOpenPositionBySymbol(String symbol)
+        +ArrayList<ClosePositionOrder> closeAllPositions()
+        +Order closePosition(String symbol)
+        +ArrayList<Asset> getAssets(AssetStatus assetStatus, String assetClass)
+        +Asset getAssetBySymbol(String symbolOrAssetID)
+        +Watchlist removeSymbolFromWatchlist(String watchlistID, String symbol)
+        +PortfolioHistory getPortfolioHistory(PortfolioHistory portfolioHistory)
+    }
+
+    class AlpacaService {
+
+    }
+
+}
+
+MarketInteractionsFacade *-- AlpacaService
+
+@enduml

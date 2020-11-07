@@ -51,3 +51,12 @@ To run the application locally you can run `mvn spring-boot:run` or run it from 
 1. To run tests, run this command `./mvnw clean test`
 
 2. Report will be generated in /target/spock-reports folder
+
+
+### Test Coverage
+
+1. Before you get started, add this to your `.m2/settings.xml` file so you can reference Clover by its short name clover.
+
+2. The quickest and easiest way to try Clover is from the command line, for example: `mvn clean clover:setup test clover:aggregate clover:clover`
+
+3. Then navigate to Money-Tree/backend/target/site/clover/index.html to look at the coverage report.

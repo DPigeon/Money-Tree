@@ -3,4 +3,8 @@ export interface Stock {
     companyName: string;
     industry: string;
     volatility: string;
+    stockChange: number;
+    stockChangePercent: number;
+    stockValue: number;
+    logo: string;
 }

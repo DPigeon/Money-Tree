@@ -1,0 +1,68 @@
+@import '../../../styles.scss';
+
+.company-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h1 {
+        margin: 0;
+        font-size: 30px;
+
+        .ticker {
+            font-size: 36px;
+            text-decoration: underline;
+            color: $primary-color;
+            margin-right: 10px;
+        }
+    }
+
+    .company-logo {
+        border: 1px solid black;
+        height: 50px;
+        width: 80px;
+        background-size: cover;
+        background-position: center;
+        margin-right: 10px;
+    }
+}
+
+.stock-pricing {
+    margin-left: 1rem;
+    display: flex;
+    align-items: center;
+
+    .stock-value {
+        font-size: 24px;
+        color: $primary-color;
+        margin-right: 10px;
+    }
+
+    .stock-change {
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+    }
+
+    #up-arrow, #down-arrow {
+        display: none;
+    }
+
+    .positive-change{
+        color: $mt-green;
+        
+        #up-arrow {
+            display: block;
+        }
+    }
+    
+    .negative-change{
+        color: $mt-red;
+        
+        #down-arrow {
+            display: block;
+        }
+    }
+
+}
+

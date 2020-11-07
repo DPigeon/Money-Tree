@@ -1,0 +1,87 @@
+@startuml
+
+package service {
+
+    package MarketInteractions {
+        class MarketInteractionsFacade
+        hide MarketInteractionsFacade methods
+        hide MarketInteractionsFacade fields
+
+        class OrderDecorator extends MarketInteractionsFacade {
+            -Order order
+        }
+
+        class MarketOrderDecorator extends OrderDecorator {
+
+        }
+
+        class LimitOrderDecorator extends OrderDecorator {
+
+        }
+
+        class StopOrderDecorator extends OrderDecorator {
+            -Order order;
+            == @Override ==
+            +String decorator()
+        }
+
+        class StopLimitOrderDecorator extends OrderDecorator {
+
+        }
+    }
+
+    package api {
+        interface UserService {
+            ~Iterable<User> getAllUsers()
+            ~User getUserById(Long id)
+            ~User createUser(User user)
+        }
+
+        interface StockService {
+            ~Iterable<Stock> getAllStocks()
+            ~Stock getStockById(Long id)
+            ~Stock createStock(Stock stock)
+        }
+
+        interface TransactionService {
+            ~Iterable<Transaction> getAllTransactions()
+            ~Transaction getTransactionById(Long id)
+            ~Transaction createTransaction(Transaction transaction)
+        }
+    }
+
+    package imp {
+        abstract class AbstractService {
+            -{static} final Logger LOG
+        }
+
+        class DefaultUserService extends AbstractService implements UserService {
+            -final UserDao userDao
+            +DefaultUserService(UserDao userDao)
+            -- @Override --
+            +Iterable<User> getAllUsers()
+            +User getUserById(Long id)
+            +User createUser(User user)
+        }
+
+        class DefaultStockService extends AbstractService implements StockService {
+            -final StockDao stockDao
+            +DefaultStockService(StockDao stockDao)
+            -- @Override --
+            +Iterable<Stock> getAllStocks()
+            +Stock getStockById(Long id)
+            +Stock createStock(Stock stock)
+        }
+
+        class DefaultTransactionService extends AbstractService implements TransactionService {
+            -final TransactionDao transactionDao
+            +DefaultTransactionService(TransactionDao transactionDao)
+            -- @Override --
+            +Iterable<Transaction> getAllTransactions()
+            +Stock getTransactionById(Long id)
+            +Stock createTransaction(Transaction transaction)
+        }
+    }
+}
+
+@enduml
