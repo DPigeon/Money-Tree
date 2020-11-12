@@ -4,26 +4,36 @@
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    justify-content: space-between;
+    align-items: center;
+    
+    span { 
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        h1 {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin: 0;
+            font-size: 30px;
 
-    h1 {
-        margin: 0;
-        font-size: 30px;
-
-        .ticker {
-            font-size: 36px;
-            text-decoration: underline;
-            color: $primary-color;
-            margin-right: 10px;
+            .ticker {
+                font-size: 36px;
+                text-decoration: underline;
+                color: $primary-color;
+                margin-right: 10px;
+            }
         }
-    }
 
-    .company-logo {
-        border: 1px solid black;
-        height: 50px;
-        width: 80px;
-        background-size: cover;
-        background-position: center;
-        margin-right: 10px;
+        .company-logo {
+            border: 1px solid black;
+            height: 50px;
+            width: 80px;
+            background-size: cover;
+            background-position: center;
+            margin-right: 10px;
+        } 
     }
 }
 

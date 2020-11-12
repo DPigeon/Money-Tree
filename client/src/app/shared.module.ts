@@ -2,12 +2,14 @@
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { initialState } from './store/reducers/app.reducer';
 import { provideMockStore } from '@ngrx/store/testing';
 
 export const MATERIAL_MODULE_DEPENDENCIES = [
     MatIconModule,
-    MatCardModule
+    MatCardModule,
+    MatChipsModule
 ];
 
 export const NGRX_STORE_MODULE = provideMockStore({ initialState });

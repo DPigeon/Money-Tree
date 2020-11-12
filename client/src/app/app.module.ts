@@ -16,6 +16,7 @@ import { StockDetailHeaderComponent } from './components/stock-detail-header/sto
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
+import {MatChipsModule} from '@angular/material/chips';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { MatIconModule } from '@angular/material/icon';
     EffectsModule.forRoot([Effects]),
     MatCardModule,
     FlexLayoutModule,
-    MatIconModule
+    MatIconModule,
+    MatChipsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
