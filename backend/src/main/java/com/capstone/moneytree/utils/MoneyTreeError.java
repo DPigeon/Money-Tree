@@ -47,6 +47,9 @@ public class MoneyTreeError {
    }
 
    static MoneyTreeError createError(HttpStatus status, String message) {
-      return MoneyTreeError.builder().message(message).status(status).build();
+      return MoneyTreeError.builder()
+              .message(message)
+              .status(status)
+              .build();
    }
 }

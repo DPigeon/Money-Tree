@@ -73,18 +73,14 @@ public class AlpacaController extends ApiController {
             @PathVariable(name = "timeFrame") @Valid @NotBlank String timeFrame,
             @PathVariable(name = "dateEnd") @Valid @NotBlank LocalDate dateEnd,
             @PathVariable(name = "extendedHours") @Valid @NotBlank String extendedHours) {
-        if (validatePositiveInt(periodLength) && validateString(periodUnit) && validateString(timeFrame) && dateEnd != null && validateString(extendedHours)) {
-            PortfolioHistory portfolioHistory = marketInteractionsFacade.getPortfolioHistory(
-                    periodLength,
-                    periodUnit,
-                    timeFrame,
-                    dateEnd,
-                    Boolean.parseBoolean(extendedHours));
+        PortfolioHistory portfolioHistory = marketInteractionsFacade.getPortfolioHistory(
+                periodLength,
+                periodUnit,
+                timeFrame,
+                dateEnd,
+                Boolean.parseBoolean(extendedHours));
 
-            return ResponseEntity.ok(portfolioHistory);
-        } else {
-            return ResponseEntity.of(Optional.empty()); // TODO: Error Handling in another story using Optionals
-        }
+        return ResponseEntity.ok(portfolioHistory);
     }
 
     // TODO: move these methods into a validation class later?
