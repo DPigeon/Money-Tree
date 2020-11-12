@@ -20,7 +20,6 @@ import java.time.LocalDate
 @SpringBootTest
 class AlpacaControllerIntegrationTest extends Specification {
 
-   // TODO: Replace this later
    private static final String API_VERSION = "v2"
    private static final String KEY_ID = System.getenv().get("ALPACA_KEY_ID")
    private static final String SECRET = System.getenv().get("ALPACA_SECRET_ID")
