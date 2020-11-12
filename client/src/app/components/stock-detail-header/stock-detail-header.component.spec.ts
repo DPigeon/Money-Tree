@@ -68,7 +68,7 @@ describe('StockDetailHeader', () => {
     expect(component.stockChangeColor()).toBe('');
     component.stockInfo = null;
     expect(component.stockChangeColor()).toBe('');
-  }); 
+  });
 
   it('should display the correct stock presentation format', () => {
     component.stockInfo = stockInfo;
