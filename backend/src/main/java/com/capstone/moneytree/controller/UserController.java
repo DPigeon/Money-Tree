@@ -1,12 +1,9 @@
 package com.capstone.moneytree.controller;
 
-import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.handler.ExceptionMessage;
 import com.capstone.moneytree.handler.exception.UserAlreadyExistsException;
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.service.api.UserService;
-import org.apache.commons.lang.StringUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,67 +13,42 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-@MoneyTreeController
-@RequestMapping
-public class UserController {
+@RestController
+public class UserController extends ApiController {
 
-   private final UserService userService;
-   private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+    private final UserService userService;
+    private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
-   @Autowired
-   public UserController(UserService userService) {
-      this.userService = userService;
-   }
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-   @GetMapping("/users")
-   List<User> all() {
-      List<User> users = new ArrayList<>();
+    @GetMapping("/users")
+    List<User> all() {
+        List<User> users = new ArrayList<>();
 
-      userService.getAllUsers().forEach(users::add);
+        userService.getAllUsers().forEach(users::add);
 
-      LOG.info("Returning {} users", users.size());
+        LOG.info("Returning {} users", users.size());
 
-      return users;
-   }
+        return users;
+    }
 
-    /**
-     * A POST method that receives a user JSON object and registers it
-     * @param user The JSON object body
-     * @return A proper response with message
-     */
     @PostMapping("/create-user")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    ResponseEntity<User> createUser(@RequestBody User user) {
         ResponseEntity<User> response = null;
         HttpStatus status = validateUserCreation(user);
 
         if (status == HttpStatus.OK) {
             User createdUser = userService.createUser(user);
-            response = ResponseEntity.ok(createdUser);
+            Optional<User> optional = Optional.of(createdUser);
+            response = ResponseEntity.of(optional);
         }
 
         return response;
-    }
-
-    /**
-     * A method that updates a user with a new Alpaca key. This should be done only once at beginning
-     * @param id The user ID sent from the frontend
-     * @param key The Alpaca API key sent from the frontend
-     * @return The new updated user from the database
-     */
-    @PostMapping("/register-alpaca-key/{id}/{key}")
-    public ResponseEntity<User> registerAlpacaApiKey(@PathVariable Long id, @PathVariable String key) {
-        // TODO: Refactor this into a validation class validateString method to validate strings & message class too
-        if (StringUtils.isBlank(key)) {
-            throw new IllegalArgumentException();
-        }
-        User updatedUser = userService.registerAlpacaApiKey(id, key);
-
-        if (updatedUser == null) {
-            throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage());
-        }
-
-        return ResponseEntity.ok(updatedUser);
     }
 
     HttpStatus validateUserCreation(User user) {
@@ -87,8 +59,11 @@ public class UserController {
         String lastName = user.getLastName();
 
         // TODO: Refactor this into a validation class validateString method to validate strings & message class too
-        if (StringUtils.isBlank(email) || StringUtils.isBlank(username) || StringUtils.isBlank(password) ||
-                StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName)) {
+        if (email.isEmpty() || email.isBlank() ||
+                username.isEmpty() || username.isBlank() ||
+                password.isEmpty() || password.isBlank() ||
+                firstName.isEmpty() || firstName.isBlank() ||
+                lastName.isEmpty() || lastName.isBlank()) {
             throw new IllegalArgumentException();
         } else if (userService.userExists(email, username)) {
             throw new UserAlreadyExistsException(ExceptionMessage.USER_ALREADY_EXISTS.getMessage());
@@ -97,8 +72,8 @@ public class UserController {
         return HttpStatus.OK;
     }
 
-   @GetMapping("/users/{id}")
-   User getUser(@PathVariable Long id) {
-      return userService.getUserById(id);
+    @GetMapping("/users/{id}")
+    User getUser(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 }

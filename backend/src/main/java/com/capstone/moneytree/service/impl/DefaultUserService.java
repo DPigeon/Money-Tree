@@ -107,4 +107,27 @@ public class DefaultUserService implements UserService {
     public boolean compareDigests(String plainPassword, String encryptedPassword) {
         return passwordEncryption.checkPassword(plainPassword, encryptedPassword);
     }
+
+    /**
+     * Method to look if user exists with unique email and username.
+     * @param email The email coming from the frontend.
+     * @param username The username coming from the frontend.
+     * @return boolean if exists or not.
+     */
+    @Override
+    public boolean userExists(String email, String username) {
+        boolean exists = false;
+        Iterable<User> userList = userDao.findAll();
+
+        for (User user : userList) {
+            String dataEmail = user.getEmail();
+            String dataUsername = user.getUsername();
+            if (dataEmail.equalsIgnoreCase(email) || dataUsername.equalsIgnoreCase(username)) {
+                exists = true;
+                break;
+            }
+        }
+
+        return exists;
+    }
 }
