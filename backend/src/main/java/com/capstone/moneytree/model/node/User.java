@@ -31,7 +31,7 @@ public class User extends Entity {
 
     float balance;
 
-    String password;
+    String password; // Must be encrypted
 
     @Relationship(type = "FOLLOWS", direction = Relationship.INCOMING)
     Set<User> followers;
