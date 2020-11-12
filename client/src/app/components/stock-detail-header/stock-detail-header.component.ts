@@ -26,7 +26,7 @@ export class StockDetailHeaderComponent {
     return this.stockInfo ? this.stockInfo.stockValue.toFixed(2) : '';
   }
   get stockIndustry(): string {
-    return this.stockIndustry ? this.stockInfo.industry : '';
+    return this.stockInfo ? this.stockInfo.industry : '';
   }
 
   stockChangeColor(): string {
