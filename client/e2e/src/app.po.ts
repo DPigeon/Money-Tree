@@ -27,4 +27,8 @@ export class AppPage {
   getArrowDown(): ElementFinder {
     return element(by.css('#down-arrow'));
   }
+
+  getStockIndustry() {
+    return by.tagName("mat-chip").toString();
+  }
 }

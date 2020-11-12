@@ -50,6 +50,11 @@ describe('workspace-project App', () => {
     });
   });
 
+  it('should display stock industry', () => {
+    page.navigateToStockDetailPage('AAPL');
+    expect(page.getStockIndustry()).toBeTruthy();
+  })
+
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);
