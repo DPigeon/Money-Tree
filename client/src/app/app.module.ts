@@ -16,7 +16,7 @@ import { StockDetailHeaderComponent } from './components/stock-detail-header/sto
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
-import {MatChipsModule} from '@angular/material/chips';
+import { MatChipsModule } from '@angular/material/chips';
 
 
 @NgModule({
