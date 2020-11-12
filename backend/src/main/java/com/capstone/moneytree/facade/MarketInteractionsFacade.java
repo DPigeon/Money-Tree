@@ -62,6 +62,7 @@ public class MarketInteractionsFacade {
       ArrayList<Position> positions = null;
       try {
          positions = alpacaAPI.getOpenPositions();
+         LOGGER.info("Get positions: {}", positions);
       } catch (AlpacaAPIRequestException e) {
          e.printStackTrace();
       }
@@ -93,6 +94,7 @@ public class MarketInteractionsFacade {
                  portfolioTimeFrame,
                  dateEnd,
                  extendedHours);
+         LOGGER.info("Get portfolio: {}", portfolioHistory);
       } catch (AlpacaAPIRequestException e) {
          e.printStackTrace();
       }

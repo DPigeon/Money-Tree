@@ -58,6 +58,7 @@ class AlpacaControllerIntegrationTest extends Specification {
 
     @Test
     def "Should retrieve a Portfolio successfully"() {
+        given:
         int period = 1;
         String unit = "WEEK"
         String timeFrame = "FIFTEEN_MINUTE"
@@ -78,73 +79,35 @@ class AlpacaControllerIntegrationTest extends Specification {
     }
 
     @Test
-    def "Invalid period length for retrieving a Portfolio"() {
-        when: "Getting the portfolio with invalid period"
-        int period = -1;
-        String unit = "WEEK"
-        String timeFrame = "FIFTEEN_MINUTE"
-        LocalDate localDate = LocalDate.now();
-        String extended = "false";
-
-        then: "Should not retrieve a portfolio with negative period length"
-        ResponseEntity<PortfolioHistory> response = createPortfolioRequest(period, unit, timeFrame, localDate, extended)
-        assert response == ResponseEntity.of(Optional.empty());
-    }
-
-    @Test
     def "Invalid unit for retrieving a Portfolio"() {
-        when: "Getting the portfolio with invalid unit"
+        given:
         int period = 1;
         String unit = null
         String timeFrame = "FIFTEEN_MINUTE"
         LocalDate localDate = LocalDate.now();
         String extended = "false";
 
+        when: "Getting the portfolio with invalid unit"
+        createPortfolioRequest(period, unit, timeFrame, localDate, extended)
+
         then: "Should not retrieve a portfolio with null unit"
-        ResponseEntity<PortfolioHistory> response = createPortfolioRequest(period, unit, timeFrame, localDate, extended)
-        assert response == ResponseEntity.of(Optional.empty());
+        thrown(NullPointerException)
     }
 
     @Test
     def "Invalid timeFrame for retrieving a Portfolio"() {
-        when: "Getting the portfolio with invalid time frame"
+        given:
         int period = 1;
         String unit = "WEEK"
         String timeFrame = null
         LocalDate localDate = LocalDate.now();
         String extended = "false";
 
+        when: "Getting the portfolio with invalid time frame"
+        createPortfolioRequest(period, unit, timeFrame, localDate, extended)
+
         then: "Should not retrieve a portfolio with null time frame"
-        ResponseEntity<PortfolioHistory> response = createPortfolioRequest(period, unit, timeFrame, localDate, extended)
-        assert response == ResponseEntity.of(Optional.empty());
-    }
-
-    @Test
-    def "Invalid local date for retrieving a Portfolio"() {
-        when: "Getting the portfolio with invalid local date"
-        int period = 1;
-        String unit = "WEEK"
-        String timeFrame = "FIFTEEN_MINUTE"
-        LocalDate localDate = null
-        String extended = "false";
-
-        then: "Should not retrieve a portfolio with null local date"
-        ResponseEntity<PortfolioHistory> response = createPortfolioRequest(period, unit, timeFrame, localDate, extended)
-        assert response == ResponseEntity.of(Optional.empty());
-    }
-
-    @Test
-    def "Invalid extended parameter for retrieving a Portfolio"() {
-        when: "Getting the portfolio with invalid extended parameter"
-        int period = 1;
-        String unit = "WEEK"
-        String timeFrame = "FIFTEEN_MINUTE"
-        LocalDate localDate = LocalDate.now();
-        String extended = null
-
-        then: "Should not retrieve a portfolio with null extended parameter"
-        ResponseEntity<PortfolioHistory> response = createPortfolioRequest(period, unit, timeFrame, localDate, extended)
-        assert response == ResponseEntity.of(Optional.empty());
+        thrown(NullPointerException)
     }
 
     // TODO: Make a class later that creates and encapsulates our requests with methods like this one below to be reusable
