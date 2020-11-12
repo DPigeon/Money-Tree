@@ -14,8 +14,10 @@ export class AppPage {
   getStockPriceValue(): Promise<number> {
     return element(by.css('.stock-change'))
       .getText()
-      .then((res) => Number(res.match(/^([+]|[-])?[0-9]+\.[0-9][0-9]|^0/g))) as Promise<number>;
-      // This regex matches a signed number or 0 only
+      .then((res) =>
+        Number(res.match(/^([+]|[-])?[0-9]+\.[0-9][0-9]|^0/g))
+      ) as Promise<number>;
+    // This regex matches a signed number or 0 only
   }
 
   getStockPriceChange(): ElementFinder {
@@ -26,5 +28,9 @@ export class AppPage {
   }
   getArrowDown(): ElementFinder {
     return element(by.css('#down-arrow'));
+  }
+
+  getStockIndustry(): string {
+    return by.tagName('mat-chip').toString();
   }
 }
