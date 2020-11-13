@@ -17,3 +17,7 @@
 config.json
 
 client/test-report.xml
+
+# env files
+.env
+.envrc
