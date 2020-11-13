@@ -23,8 +23,6 @@ public class MoneyTreeSecureString {
         return encryptor;
     }
 
-    public MoneyTreeSecureString() {}
-
     /**
      * Method to encrypt the value before it is persisted to Neo4j
      * @param text The string value

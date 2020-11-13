@@ -5,6 +5,7 @@ import com.capstone.moneytree.handler.ExceptionMessage;
 import com.capstone.moneytree.handler.exception.UserAlreadyExistsException;
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.service.api.UserService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,11 @@ public class UserController extends ApiController {
         return users;
     }
 
+    /**
+     * A POST method that receives a user JSON object and registers it
+     * @param user The JSON object body
+     * @return A proper response with message
+     */
     @PostMapping("/create-user")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         ResponseEntity<User> response = null;
@@ -56,10 +62,11 @@ public class UserController extends ApiController {
      * @return The new updated user from the database
      */
     @PostMapping("/register-alpaca-key")
-    @ModelAttribute
     public ResponseEntity<User> registerAlpacaApiKey(@RequestBody User userWithKey) {
         String key = userWithKey.getAlpacaApiKey();
-        if (key.isEmpty() || key.isBlank()) {
+
+        // TODO: Refactor this into a validation class validateString method to validate strings & message class too
+        if (StringUtils.isEmpty(key) || StringUtils.isBlank(key)) {
             throw new IllegalArgumentException();
         }
         User updatedUser = userService.registerAlpacaApiKey(userWithKey);
@@ -79,11 +86,11 @@ public class UserController extends ApiController {
         String lastName = user.getLastName();
 
         // TODO: Refactor this into a validation class validateString method to validate strings & message class too
-        if (email.isEmpty() || email.isBlank() ||
-                username.isEmpty() || username.isBlank() ||
-                password.isEmpty() || password.isBlank() ||
-                firstName.isEmpty() || firstName.isBlank() ||
-                lastName.isEmpty() || lastName.isBlank()) {
+        if (StringUtils.isEmpty(email) || StringUtils.isBlank(email) ||
+                StringUtils.isEmpty(username) || StringUtils.isBlank(username) ||
+                StringUtils.isEmpty(password) || StringUtils.isBlank(password) ||
+                StringUtils.isEmpty(firstName) || StringUtils.isBlank(firstName) ||
+                StringUtils.isEmpty(lastName) || StringUtils.isBlank(lastName)) {
             throw new IllegalArgumentException();
         } else if (userService.userExists(email, username)) {
             throw new UserAlreadyExistsException(ExceptionMessage.USER_ALREADY_EXISTS.getMessage());

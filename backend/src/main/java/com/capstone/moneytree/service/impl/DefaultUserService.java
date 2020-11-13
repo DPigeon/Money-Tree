@@ -79,18 +79,12 @@ public class DefaultUserService implements UserService {
     @Override
     public boolean userExists(String email, String username) {
         boolean exists = false;
-        List<User> userList = userDao.findAll();
+        User user = userDao.findUserByEmailAndUsername(email, username);
 
-        for (User user : userList) {
-            String dataEmail = user.getEmail();
-            String dataUsername = user.getUsername();
-            if (dataEmail.equalsIgnoreCase(email) || dataUsername.equalsIgnoreCase(username)) {
-                exists = true;
-                LOG.info("User already exists.");
-                break;
-            }
+        if (user != null) {
+            exists = true;
+            LOG.info("User already exists.");
         }
-
         return exists;
     }
 
