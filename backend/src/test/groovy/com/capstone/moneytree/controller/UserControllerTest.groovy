@@ -23,7 +23,7 @@ class UserControllerTest extends Specification {
     private UserDao userDaoMock
 
     def setup() {
-        userDaoMock = Stub(UserDao.class)
+        userDaoMock = Mock()
         defaultUserService = new DefaultUserService(userDaoMock)
         userController = new UserController(defaultUserService)
     }
@@ -84,7 +84,7 @@ class UserControllerTest extends Specification {
         User user = createUser(email, username, password, firstName, lastName, null);
 
         and: "mock the database with some users already registered"
-        userDaoMock.findAll() >> createUsersInMockedDatabase()
+        userDaoMock.findUserByEmailAndUsername(email, username) >> user
 
         when: "creating a user"
         userController.createUser(user)
@@ -104,7 +104,7 @@ class UserControllerTest extends Specification {
         User user = createUser(email, username, password, firstName, lastName, null);
 
         and: "mock the database with some users already registered"
-        userDaoMock.findAll() >> createUsersInMockedDatabase()
+        userDaoMock.findUserByEmailAndUsername(email, username) >> user
 
         when: "creating a user"
         userController.createUser(user)
