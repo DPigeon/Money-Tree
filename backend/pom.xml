@@ -97,6 +97,12 @@
             <type>pom</type>
             <scope>test</scope>
         </dependency>
+        <dependency> <!-- enables mocking of classes with Spock (in addition to interfaces) -->
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.6.5</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.athaydes</groupId>
             <artifactId>spock-reports</artifactId>
