@@ -51,7 +51,7 @@ class UserControllerTest extends Specification {
         assert response.statusCode == HttpStatus.OK
         assert response.body.email == email
         assert response.body.username == username
-        assert response.body.password == password
+        assert defaultUserService.decryptData(response.body.password) == password
         assert response.body.firstName == firstName
         assert response.body.lastName == lastName
     }
