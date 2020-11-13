@@ -38,7 +38,7 @@ public class UserController extends ApiController {
     }
 
     @PostMapping("/create-user")
-    ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         ResponseEntity<User> response = null;
         HttpStatus status = validateUserCreation(user);
 
@@ -57,7 +57,7 @@ public class UserController extends ApiController {
      */
     @PostMapping("/register-alpaca-key")
     @ModelAttribute
-    ResponseEntity<User> registerAlpacaApiKey(@RequestBody User userWithKey) {
+    public ResponseEntity<User> registerAlpacaApiKey(@RequestBody User userWithKey) {
         String key = userWithKey.getAlpacaApiKey();
         if (key.isEmpty() || key.isBlank()) {
             throw new IllegalArgumentException();
