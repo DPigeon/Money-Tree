@@ -66,7 +66,7 @@ public class UserController extends ApiController {
         String key = userWithKey.getAlpacaApiKey();
 
         // TODO: Refactor this into a validation class validateString method to validate strings & message class too
-        if (StringUtils.isEmpty(key) || StringUtils.isBlank(key)) {
+        if (StringUtils.isBlank(key)) {
             throw new IllegalArgumentException();
         }
         User updatedUser = userService.registerAlpacaApiKey(userWithKey);
@@ -86,11 +86,8 @@ public class UserController extends ApiController {
         String lastName = user.getLastName();
 
         // TODO: Refactor this into a validation class validateString method to validate strings & message class too
-        if (StringUtils.isEmpty(email) || StringUtils.isBlank(email) ||
-                StringUtils.isEmpty(username) || StringUtils.isBlank(username) ||
-                StringUtils.isEmpty(password) || StringUtils.isBlank(password) ||
-                StringUtils.isEmpty(firstName) || StringUtils.isBlank(firstName) ||
-                StringUtils.isEmpty(lastName) || StringUtils.isBlank(lastName)) {
+        if (StringUtils.isBlank(email) || StringUtils.isBlank(username) || StringUtils.isBlank(password) ||
+                StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName)) {
             throw new IllegalArgumentException();
         } else if (userService.userExists(email, username)) {
             throw new UserAlreadyExistsException(ExceptionMessage.USER_ALREADY_EXISTS.getMessage());
