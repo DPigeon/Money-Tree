@@ -6,14 +6,11 @@ import net.jacobpeterson.domain.alpaca.account.Account;
 import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
 import net.jacobpeterson.domain.alpaca.position.Position;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -25,8 +22,6 @@ import java.util.Optional;
 @MoneyTreeController
 @RequestMapping("/api/alpaca")
 public class AlpacaController {
-
-   private static final Logger LOGGER = LoggerFactory.getLogger(StockController.class);
 
    @Autowired
    private final MarketInteractionsFacade marketInteractionsFacade;
@@ -87,29 +82,5 @@ public class AlpacaController {
               Boolean.parseBoolean(extendedHours));
 
       return ResponseEntity.ok(portfolioHistory);
-   }
-
-   // TODO: move these methods into a validation class later?
-   public static boolean validatePositiveInt(int number) {
-      boolean valid = false;
-      try {
-         if (number > 0) {
-            valid = true;
-         }
-         Integer.valueOf(number);
-      } catch (NumberFormatException e) {
-         valid = false;
-      }
-
-      return valid;
-   }
-
-   public static boolean validateString(String string) {
-      boolean valid = false;
-      if (string != null && !string.isEmpty()) {
-         valid = true;
-      }
-
-      return valid;
    }
 }

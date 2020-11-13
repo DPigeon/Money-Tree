@@ -8,7 +8,7 @@ on:
       - dev
 
 env:
-  ALPACA_KEY_ID:  ${{ secrets.ALPACA_KEY_ID }}
+  ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
   ALPACA_SECRET_ID: ${{ secrets.ALPACA_SECRET_ID }}
   IEXCLOUD_PUBLISHABLE_TOKEN_PROD: ${{ secrets.IEXCLOUD_PUBLISHABLE_TOKEN_PROD }}
   IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX: ${{ secrets.IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX }}
@@ -106,7 +106,7 @@ jobs:
       - name: Install Backend Dependencies
         working-directory: ./backend
         if: steps.maven-dependencies.outputs.cache-hit != 'true' # Checks if maven has dependencies as cache already
-        run: bash ./mvnw install
+        run: bash ./mvnw install -Dmaven.test.skip=true
 
       - name: Backend Tests
         working-directory: ./backend
@@ -114,7 +114,7 @@ jobs:
 
       - name: Backend Package
         working-directory: ./backend
-        run: bash ./mvnw package
+        run: bash ./mvnw package -Dmaven.test.skip=true
 
       - name: Backend Run
         working-directory: ./backend
