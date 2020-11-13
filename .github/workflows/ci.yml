@@ -114,7 +114,7 @@ jobs:
 
       - name: Backend Package
         working-directory: ./backend
-        run: bash ./mvnw package -Dmaven.test.skip=true
+        run: bash ./mvnw verify -Dmaven.test.skip=true
 
       - name: Backend Run
         working-directory: ./backend
