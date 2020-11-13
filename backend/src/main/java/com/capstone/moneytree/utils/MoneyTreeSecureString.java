@@ -6,7 +6,7 @@ import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 
 public class MoneyTreeSecureString {
 
-    private static final String ENCRYPTION_PASSWORD = "test"; // TODO: replace with System.getenv().get("ENCRYPTION_PASSWORD");
+    private static final String ENCRYPTION_PASSWORD = "test"; // TODO: replace with System.getenv().get("ENCRYPTION_PASSWORD") for better security using secrets
 
     public StringEncryptor stringEncryptor() {
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
