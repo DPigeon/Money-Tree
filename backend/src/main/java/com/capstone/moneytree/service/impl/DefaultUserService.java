@@ -48,7 +48,7 @@ public class DefaultUserService implements UserService {
         for (User user : userList) {
             if (email.equalsIgnoreCase(user.getEmail()) && username.equalsIgnoreCase(user.getUsername())) {
                 userToFind = user;
-                LOG.info("Found user with ID {}", user.getId());
+                LOG.info("Found user with email {}", user.getEmail());
                 break;
             }
         }
@@ -94,9 +94,11 @@ public class DefaultUserService implements UserService {
         String email = userWithKey.getEmail();
         String username = userWithKey.getUsername();
         User userToUpdate = userDao.findUserByEmailAndUsername(email, username);
-        userToUpdate.setAlpacaApiKey(key);
-        userDao.save(userToUpdate);
-        LOG.info("Registered Alpaca key for user ID {}", userToUpdate.getId());
+        if (userToUpdate != null) {
+            userToUpdate.setAlpacaApiKey(key);
+            userDao.save(userToUpdate);
+            LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
+        }
 
         return userToUpdate;
     }

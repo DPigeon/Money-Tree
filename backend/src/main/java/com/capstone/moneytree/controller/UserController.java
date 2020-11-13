@@ -59,12 +59,8 @@ public class UserController extends ApiController {
     @ModelAttribute
     ResponseEntity<User> registerAlpacaApiKey(@RequestBody User userWithKey) {
         String key = userWithKey.getAlpacaApiKey();
-        String email = userWithKey.getEmail();
-        String username = userWithKey.getUsername();
         if (key.isEmpty() || key.isBlank()) {
             throw new IllegalArgumentException();
-        } else if (!userService.userExists(email, username)) {
-            throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage());
         }
         User updatedUser = userService.registerAlpacaApiKey(userWithKey);
 

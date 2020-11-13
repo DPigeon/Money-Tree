@@ -1,6 +1,7 @@
 package com.capstone.moneytree.controller
 
 import com.capstone.moneytree.dao.UserDao
+import com.capstone.moneytree.exception.EntityNotFoundException
 import com.capstone.moneytree.handler.exception.UserAlreadyExistsException
 import com.capstone.moneytree.model.node.User
 import com.capstone.moneytree.service.impl.DefaultUserService
@@ -11,11 +12,11 @@ import org.springframework.http.HttpStatus
 import spock.lang.Specification
 
 /**
- * Integration Tests for the User Controller.
+ * Unit Tests for the User Controller.
  */
 
 @SpringBootTest
-class UserControllerIntegrationTest extends Specification {
+class UserControllerTest extends Specification {
 
     private UserController userController
     private DefaultUserService defaultUserService
@@ -35,7 +36,7 @@ class UserControllerIntegrationTest extends Specification {
         String password = "encrypted"
         String firstName = "John"
         String lastName = "Doe"
-        User user = createUser(email, username, password, firstName, lastName);
+        User user = createUser(email, username, password, firstName, lastName, null);
 
         and: "mock the database with some users already registered"
         userDaoMock.findAll() >> createUsersInMockedDatabase()
@@ -63,7 +64,7 @@ class UserControllerIntegrationTest extends Specification {
         String password = "encrypted"
         String firstName = ""
         String lastName = "Doe"
-        User user = createUser(email, username, password, firstName, lastName);
+        User user = createUser(email, username, password, firstName, lastName, null);
 
         when: "creating a user"
         userController.createUser(user)
@@ -80,7 +81,7 @@ class UserControllerIntegrationTest extends Specification {
         String password = "encrypted"
         String firstName = "Katherine"
         String lastName = "Jill"
-        User user = createUser(email, username, password, firstName, lastName);
+        User user = createUser(email, username, password, firstName, lastName, null);
 
         and: "mock the database with some users already registered"
         userDaoMock.findAll() >> createUsersInMockedDatabase()
@@ -100,7 +101,7 @@ class UserControllerIntegrationTest extends Specification {
         String password = "encrypted"
         String firstName = "Caterine"
         String lastName = "Hoyes"
-        User user = createUser(email, username, password, firstName, lastName);
+        User user = createUser(email, username, password, firstName, lastName, null);
 
         and: "mock the database with some users already registered"
         userDaoMock.findAll() >> createUsersInMockedDatabase()
@@ -112,20 +113,90 @@ class UserControllerIntegrationTest extends Specification {
         thrown(UserAlreadyExistsException)
     }
 
-    User createUser(String email, String username, String password, String firstName, String lastName) {
+    @Test
+    def "Should register an Alpaca key to a user successfully"() {
+        given: "A registered user with an Alpaca key"
+        String email = "moneytree@test.com"
+        String username = "Billy"
+        String password = "encrypted"
+        String firstName = "Billy"
+        String lastName = "Bob"
+        String alpacaApiKey = "RYFERH6ET5etETGTE6"
+        User user = createUser(email, username, password, firstName, lastName, alpacaApiKey);
+
+        and: "mock the database with the same user already registered"
+        userDaoMock.findUserByEmailAndUsername(email, username) >> user
+
+        and: "mock the database with to save the user"
+        userDaoMock.save(user) >> user
+
+        when: "registering a key to a user"
+        def response = userController.registerAlpacaApiKey(user)
+
+        then: "should register a key"
+        assert response.statusCode == HttpStatus.OK
+        assert response.body.email == email
+        assert response.body.username == username
+        assert response.body.password == password
+        assert response.body.firstName == firstName
+        assert response.body.lastName == lastName
+        assert response.body.alpacaApiKey == alpacaApiKey
+    }
+
+    @Test
+    def "Should not register an Alpaca key to the user if key is empty"() {
+        given: "A registered user with an empty key"
+        String email = "moneytree@test.com"
+        String username = "Billy"
+        String password = "encrypted"
+        String firstName = "Billy"
+        String lastName = "Bob"
+        String alpacaApiKey = ""
+        User user = createUser(email, username, password, firstName, lastName, alpacaApiKey);
+
+        when: "registering a key to a user"
+        userController.registerAlpacaApiKey(user)
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    @Test
+    def "Should not register an Alpaca key to the user if user does not exists"() {
+        given: "A registered user with an Alpaca key"
+        String email = "moneytree@test.com"
+        String username = "Billy"
+        String password = "encrypted"
+        String firstName = "Billy"
+        String lastName = "Bob"
+        String alpacaApiKey = "RYFERH6ET5etETGTE6"
+        User user = createUser(email, username, password, firstName, lastName, alpacaApiKey);
+
+        and: "mock the database with a user that's not found in the database"
+        userDaoMock.findUserByEmailAndUsername(email, username) >> null
+
+        when: "registering a key to a user"
+        userController.registerAlpacaApiKey(user)
+
+        then: "should throw EntityNotFoundException"
+        thrown(EntityNotFoundException)
+    }
+
+    User createUser(String email, String username, String password, String firstName, String lastName, String alpacaApiKey) {
         return User.builder()
                 .email(email)
                 .username(username)
                 .password(password)
                 .firstName(firstName)
                 .lastName(lastName)
+                .alpacaApiKey(alpacaApiKey)
                 .build();
     }
 
     def createUsersInMockedDatabase() {
-        User user1 = createUser("yuu@test.com", "yury1", "hello1", "Yury", "Krystler")
-        User user2 = createUser("cath@test.com", "Cath", "hello2", "Catherine", "Kole")
-        User user3 = createUser("joe@test.com", "Joe", "hello3", "Joe", "Wert")
+        User user1 = createUser("yuu@test.com", "yury1", "hello1", "Yury", "Krystler", null)
+        User user2 = createUser("cath@test.com", "Cath", "hello2", "Catherine", "Kole", null)
+        User user3 = createUser("joe@test.com", "Joe", "hello3", "Joe", "Wert", null)
         return Lists.asList(user1, user2, user3)
     }
 }
