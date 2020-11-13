@@ -3,6 +3,7 @@ package com.capstone.moneytree.service.impl;
 import com.capstone.moneytree.dao.UserDao;
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.service.api.UserService;
+import com.capstone.moneytree.utils.MoneyTreeSecureString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,13 @@ import java.util.List;
 public class DefaultUserService implements UserService {
 
     private final UserDao userDao;
+    private final MoneyTreeSecureString secureString;
     private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
 
     @Autowired
     public DefaultUserService(UserDao userDao) {
         this.userDao = userDao;
+        this.secureString = new MoneyTreeSecureString();
     }
 
     @Override
@@ -58,6 +61,9 @@ public class DefaultUserService implements UserService {
 
     @Override
     public User createUser(User user) {
+        String password = user.getPassword();
+        String encryptedPassword = encryptData(password);
+        user.setPassword(encryptedPassword);
         userDao.save(user);
         LOG.info("Created user: {}", user.getFirstName());
 
@@ -101,5 +107,13 @@ public class DefaultUserService implements UserService {
         }
 
         return userToUpdate;
+    }
+
+    public String encryptData(String text) {
+        return secureString.toGraphProperty(text);
+    }
+
+    public String decryptData(String text) {
+        return secureString.toEntityAttribute(text);
     }
 }
