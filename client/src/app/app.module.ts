@@ -22,6 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { LoginFormComponent } from './components/login-form/login-form.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { MatChipsModule } from '@angular/material/chips';
     StockDetailComponent,
     StockDetailHeaderComponent,
     LoginSignupComponent,
-    SignupFormComponent
+    SignupFormComponent,
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,
