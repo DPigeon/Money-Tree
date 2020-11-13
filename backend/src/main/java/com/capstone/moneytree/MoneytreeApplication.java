@@ -10,7 +10,5 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 public class MoneytreeApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(MoneytreeApplication.class, args);
-    }
+    public static void main(String[] args) { SpringApplication.run(MoneytreeApplication.class, args); }
 }

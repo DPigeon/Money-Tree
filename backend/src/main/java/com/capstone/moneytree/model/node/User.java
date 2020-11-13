@@ -33,6 +33,8 @@ public class User extends Entity {
 
     String password; // Must be encrypted
 
+    String alpacaApiKey;
+
     @Relationship(type = "FOLLOWS", direction = Relationship.INCOMING)
     Set<User> followers;
 

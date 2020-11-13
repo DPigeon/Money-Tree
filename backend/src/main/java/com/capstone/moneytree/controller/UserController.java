@@ -1,5 +1,6 @@
 package com.capstone.moneytree.controller;
 
+import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.handler.ExceptionMessage;
 import com.capstone.moneytree.handler.exception.UserAlreadyExistsException;
 import com.capstone.moneytree.model.node.User;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class UserController extends ApiController {
@@ -48,6 +48,31 @@ public class UserController extends ApiController {
         }
 
         return response;
+    }
+
+    /**
+     * A method that updates a user with a new Alpaca key. This should be done only once at beginning
+     * @param userWithKey User with the Alpaca key
+     * @return The new updated user from the database
+     */
+    @PostMapping("/register-alpaca-key")
+    @ModelAttribute
+    ResponseEntity<User> registerAlpacaApiKey(@RequestBody User userWithKey) {
+        String key = userWithKey.getAlpacaApiKey();
+        String email = userWithKey.getEmail();
+        String username = userWithKey.getUsername();
+        if (key.isEmpty() || key.isBlank()) {
+            throw new IllegalArgumentException();
+        } else if (!userService.userExists(email, username)) {
+            throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage());
+        }
+        User updatedUser = userService.registerAlpacaApiKey(userWithKey);
+
+        if (updatedUser == null) {
+            throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage());
+        }
+
+        return ResponseEntity.ok(updatedUser);
     }
 
     HttpStatus validateUserCreation(User user) {
