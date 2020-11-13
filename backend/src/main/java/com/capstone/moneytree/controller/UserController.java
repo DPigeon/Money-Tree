@@ -44,8 +44,7 @@ public class UserController extends ApiController {
 
         if (status == HttpStatus.OK) {
             User createdUser = userService.createUser(user);
-            Optional<User> optional = Optional.of(createdUser);
-            response = ResponseEntity.of(optional);
+            response = ResponseEntity.ok(createdUser);
         }
 
         return response;

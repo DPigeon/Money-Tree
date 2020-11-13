@@ -13,5 +13,4 @@ public class MoneytreeApplication {
     public static void main(String[] args) {
         SpringApplication.run(MoneytreeApplication.class, args);
     }
-
 }

@@ -9,7 +9,7 @@ import pl.zankowski.iextrading4j.api.exception.IEXTradingException
 import spock.lang.Specification
 
 
-class StockControllerTest extends Specification {
+class StockControllerIntegrationTest extends Specification {
 
     private static final String PUBLISH_TOKEN = "Tpk_41cea3476f55437aa0a7ff89162ea9c4"
     private static final String SECRET_TOKEN = "Tsk_072d4c09f38148a9b68b748b38fad53c"
@@ -232,6 +232,4 @@ class StockControllerTest extends Specification {
         then: "We get an exception"
         thrown(IEXTradingException)
     }
-
-
 }

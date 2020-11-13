@@ -31,7 +31,7 @@ class AlpacaControllerIntegrationTest extends Specification {
     def alpacaController
 
     @Shared
-    def marketInteractionsFacade;
+    def marketInteractionsFacade
 
     def setupSpec() {
         marketInteractionsFacade = new MarketInteractionsFacade(apiVersion, keyId, secret, baseApiUrl, baseDataUrl)
@@ -41,7 +41,7 @@ class AlpacaControllerIntegrationTest extends Specification {
     @Test
     def "Should retrieve an Alpaca account successfully"() {
         when: "Getting an Alpaca account"
-        ResponseEntity<Account> response = alpacaController.getAccount();
+        ResponseEntity<Account> response = alpacaController.getAccount()
 
         then: "The account should be retrieved"
         assert response.statusCode == HttpStatus.OK
@@ -50,7 +50,7 @@ class AlpacaControllerIntegrationTest extends Specification {
     @Test
     def "Should retrieve a list of positions successfully"() {
         when: "Getting a list of positions"
-        ResponseEntity<ArrayList<Position>> response = alpacaController.getPositions();
+        ResponseEntity<ArrayList<Position>> response = alpacaController.getPositions()
 
         then: "The positions should be retrieved"
         assert response.statusCode == HttpStatus.OK
@@ -59,11 +59,11 @@ class AlpacaControllerIntegrationTest extends Specification {
     @Test
     def "Should retrieve a Portfolio successfully"() {
         given:
-        int period = 1;
+        int period = 1
         String unit = "WEEK"
         String timeFrame = "FIFTEEN_MINUTE"
-        LocalDate localDate = LocalDate.now();
-        String extended = "false";
+        LocalDate localDate = LocalDate.now()
+        String extended = "false"
 
         when: "Getting the portfolio"
         ResponseEntity<PortfolioHistory> response = alpacaController.getPortfolio(
@@ -72,7 +72,7 @@ class AlpacaControllerIntegrationTest extends Specification {
                 timeFrame,
                 localDate,
                 extended
-        );
+        )
 
         then: "The portfolio should be retrieved"
         assert response.statusCode == HttpStatus.OK
@@ -81,11 +81,11 @@ class AlpacaControllerIntegrationTest extends Specification {
     @Test
     def "Invalid unit for retrieving a Portfolio"() {
         given:
-        int period = 1;
+        int period = 1
         String unit = null
         String timeFrame = "FIFTEEN_MINUTE"
-        LocalDate localDate = LocalDate.now();
-        String extended = "false";
+        LocalDate localDate = LocalDate.now()
+        String extended = "false"
 
         when: "Getting the portfolio with invalid unit"
         createPortfolioRequest(period, unit, timeFrame, localDate, extended)
@@ -97,11 +97,11 @@ class AlpacaControllerIntegrationTest extends Specification {
     @Test
     def "Invalid timeFrame for retrieving a Portfolio"() {
         given:
-        int period = 1;
+        int period = 1
         String unit = "WEEK"
         String timeFrame = null
-        LocalDate localDate = LocalDate.now();
-        String extended = "false";
+        LocalDate localDate = LocalDate.now()
+        String extended = "false"
 
         when: "Getting the portfolio with invalid time frame"
         createPortfolioRequest(period, unit, timeFrame, localDate, extended)
@@ -118,8 +118,8 @@ class AlpacaControllerIntegrationTest extends Specification {
                 timeFrame,
                 localDate,
                 extended
-        );
+        )
 
-        return response;
+        return response
     }
 }

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class DefaultUserService implements UserService {
@@ -33,12 +35,10 @@ public class DefaultUserService implements UserService {
 
     @Override
     public User createUser(User user) {
+        userDao.save(user);
+        LOG.info("Created user: {}", user.getFirstName());
 
-        User createdUser = userDao.save(user);
-
-        LOG.info("Created user: {}", createdUser.getFirstName());
-
-        return createdUser;
+        return user;
     }
 
     /**
@@ -50,7 +50,7 @@ public class DefaultUserService implements UserService {
     @Override
     public boolean userExists(String email, String username) {
         boolean exists = false;
-        Iterable<User> userList = userDao.findAll();
+        List<User> userList = userDao.findAll();
 
         for (User user : userList) {
             String dataEmail = user.getEmail();

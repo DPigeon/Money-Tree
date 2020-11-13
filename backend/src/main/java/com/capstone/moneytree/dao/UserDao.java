@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * User Data Access extending from our Neo4jRepository Database
+ */
 @Repository
 public interface UserDao extends Neo4jRepository<User, Long> {
 
