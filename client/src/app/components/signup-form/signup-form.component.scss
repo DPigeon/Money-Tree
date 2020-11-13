@@ -1,0 +1,26 @@
+@import '../../../styles.scss';
+
+
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .example-full-width {
+    width: 100%;
+  }
+  
+  td {
+    padding-right: 8px;
+  }
+
+.sign-up-form{
+    padding: 10px;
+}
+
+.mat-flat-button{
+    background-color: $action-color;
+    color: black;
+    font-weight: bold;
+}

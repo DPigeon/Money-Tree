@@ -16,25 +16,39 @@ import { StockDetailHeaderComponent } from './components/stock-detail-header/sto
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
+import { LoginSignupComponent } from './pages/login-signup/login-signup.component';
+import { SignupFormComponent } from './components/signup-form/signup-form.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+
+
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
     StockDetailComponent,
-    StockDetailHeaderComponent
+    StockDetailHeaderComponent,
+    LoginSignupComponent,
+    SignupFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot({appState: reducer}),
+    StoreModule.forRoot({ appState: reducer }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([Effects]),
     MatCardModule,
     FlexLayoutModule,
-    MatIconModule
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]
