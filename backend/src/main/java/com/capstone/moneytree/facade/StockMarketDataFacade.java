@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import pl.zankowski.iextrading4j.api.stocks.*;
 import pl.zankowski.iextrading4j.api.stocks.v1.KeyStats;
-import pl.zankowski.iextrading4j.api.stocks.v1.BatchStocks;
 import pl.zankowski.iextrading4j.api.stocks.v1.News;
+import pl.zankowski.iextrading4j.api.stocks.v1.BatchStocks;
 import pl.zankowski.iextrading4j.client.IEXCloudClient;
 import pl.zankowski.iextrading4j.client.IEXCloudTokenBuilder;
 import pl.zankowski.iextrading4j.client.IEXTradingApiVersion;
@@ -31,7 +31,7 @@ public class StockMarketDataFacade {
 
     @Autowired
     public StockMarketDataFacade(@Value("${IEXCloud.publishable.token}") String pToken, @Value("${IEXCloud.secret.token}") String sToken) {
-        stockMarketDataClient = IEXTradingClient.create(IEXTradingApiVersion.IEX_CLOUD_V1,
+        stockMarketDataClient = IEXTradingClient.create(IEXTradingApiVersion.IEX_CLOUD_STABLE_SANDBOX,
                 new IEXCloudTokenBuilder()
                         .withPublishableToken(pToken)
                         .withSecretToken(sToken)

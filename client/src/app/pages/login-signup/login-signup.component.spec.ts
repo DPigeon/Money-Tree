@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { LoginSignupComponent } from './login-signup.component';
+import { SignupFormComponent } from '../../components/signup-form/signup-form.component';
+import { MATERIAL_MODULE_DEPENDENCIES } from '../../shared.module';
 
 describe('LoginSignupComponent', () => {
   let component: LoginSignupComponent;
@@ -8,9 +9,10 @@ describe('LoginSignupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoginSignupComponent ]
+      imports: MATERIAL_MODULE_DEPENDENCIES,
+      declarations: [LoginSignupComponent, SignupFormComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -21,9 +21,7 @@ import { SignupFormComponent } from './components/signup-form/signup-form.compon
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-
-
-
+import { MatChipsModule } from '@angular/material/chips';
 
 
 @NgModule({
@@ -48,7 +46,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-
+    MatChipsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
