@@ -30,7 +30,30 @@ public class DefaultUserService implements UserService {
 
     @Override
     public User getUserById(Long id) {
+        LOG.info("Retrieved user ID {}", id);
         return userDao.findUserById(id);
+    }
+
+    /**
+     * Find a unique User with email and username
+     * @param email The email of the user
+     * @param username The username of the user
+     * @return The User in the database
+     */
+    @Override
+    public User getUserByEmailAndUsername(String email, String username) {
+        List<User> userList = userDao.findAll();
+        User userToFind = null;
+
+        for (User user : userList) {
+            if (email.equalsIgnoreCase(user.getEmail()) && username.equalsIgnoreCase(user.getUsername())) {
+                userToFind = user;
+                LOG.info("Found user with ID {}", user.getId());
+                break;
+            }
+        }
+
+        return userToFind;
     }
 
     @Override
@@ -57,10 +80,24 @@ public class DefaultUserService implements UserService {
             String dataUsername = user.getUsername();
             if (dataEmail.equalsIgnoreCase(email) || dataUsername.equalsIgnoreCase(username)) {
                 exists = true;
+                LOG.info("User already exists.");
                 break;
             }
         }
 
         return exists;
+    }
+
+    @Override
+    public User registerAlpacaApiKey(User userWithKey) {
+        String key = userWithKey.getAlpacaApiKey();
+        String email = userWithKey.getEmail();
+        String username = userWithKey.getUsername();
+        User userToUpdate = userDao.findUserByEmailAndUsername(email, username);
+        userToUpdate.setAlpacaApiKey(key);
+        userDao.save(userToUpdate);
+        LOG.info("Registered Alpaca key for user ID {}", userToUpdate.getId());
+
+        return userToUpdate;
     }
 }
