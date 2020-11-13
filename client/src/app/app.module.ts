@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { LoginSignupComponent } from './pages/login-signup/login-signup.component';
 import { SignupFormComponent } from './components/signup-form/signup-form.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { LoginFormComponent } from './components/login-form/login-form.component';
 
 // Component imports:
 import { AppComponent } from './app.component';
@@ -38,7 +39,8 @@ import { reducer } from './store/reducers/app.reducer';
     HeaderComponent,
     LeaderboardComponent,
     LoginSignupComponent,
-    SignupFormComponent
+    SignupFormComponent,
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,
