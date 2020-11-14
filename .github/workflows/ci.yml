@@ -118,7 +118,8 @@ jobs:
 
       - name: Backend Run
         working-directory: ./backend
-        run: |
+        run:
+          | # can we inject spring profil as so: (java -jar  -Dspring.profiles.active=dev target/moneytree-*.jar)
           nohup java -jar target/moneytree-*.jar &
           sleep 20
           sh backend_endpoints.sh
