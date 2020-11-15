@@ -3,7 +3,7 @@ package com.capstone.moneytree.service.impl;
 import com.capstone.moneytree.dao.UserDao;
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.service.api.UserService;
-import com.capstone.moneytree.utils.MoneyTreeSecureString;
+import com.capstone.moneytree.utils.MoneyTreePasswordEncryption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +17,13 @@ import java.util.List;
 public class DefaultUserService implements UserService {
 
     private final UserDao userDao;
-    private final MoneyTreeSecureString secureString;
+    private final MoneyTreePasswordEncryption passwordEncryption;
     private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
 
     @Autowired
     public DefaultUserService(UserDao userDao) {
         this.userDao = userDao;
-        this.secureString = new MoneyTreeSecureString();
+        this.passwordEncryption = new MoneyTreePasswordEncryption();
     }
 
     @Override
@@ -49,7 +49,7 @@ public class DefaultUserService implements UserService {
         User userToFind = null;
 
         for (User user : userList) {
-            if (email.equalsIgnoreCase(user.getEmail()) && username.equalsIgnoreCase(user.getUsername())) {
+            if (email.equalsIgnoreCase(user.getEmail()) || username.equalsIgnoreCase(user.getUsername())) {
                 userToFind = user;
                 LOG.info("Found user with email {}", user.getEmail());
                 break;
@@ -104,10 +104,10 @@ public class DefaultUserService implements UserService {
     }
 
     public String encryptData(String text) {
-        return secureString.toGraphProperty(text);
+        return passwordEncryption.toGraphProperty(text);
     }
 
-    public String decryptData(String text) {
-        return secureString.toEntityAttribute(text);
+    public boolean compareDigests(String plainPassword, String encryptedPassword) {
+        return passwordEncryption.checkPassword(plainPassword, encryptedPassword);
     }
 }
