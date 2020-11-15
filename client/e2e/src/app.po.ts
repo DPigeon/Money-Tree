@@ -23,9 +23,11 @@ export class AppPage {
   getStockPriceChange(): ElementFinder {
     return element(by.css('.stock-change'));
   }
+
   getArrowUp(): ElementFinder {
     return element(by.css('#up-arrow'));
   }
+
   getArrowDown(): ElementFinder {
     return element(by.css('#down-arrow'));
   }
@@ -33,7 +35,34 @@ export class AppPage {
   getStockIndustry(): string {
     return by.tagName('mat-chip').toString();
   }
-  getStockStat(): string {
-    return by.className('row-stat').toString();
+  getStockStatOpen(): string {
+    return by.id('statOpen').toString();
+  }
+
+  getStockStatHigh(): string {
+    return by.id('statHigh').toString();
+  }
+
+  getStockStatLow(): string {
+    return by.id('statLow').toString();
+  }
+  getStockStatVol(): string {
+    return by.id('statVol').toString();
+  }
+
+  getStockStatMktCap(): string {
+    return by.id('statMktCap').toString();
+  }
+
+  getStockStatWl(): string {
+    return by.id('statWl').toString();
+  }
+
+  getStockStatWh(): string {
+    return by.id('statWh').toString();
+  }
+  
+  getStockStatAvgVol(): string {
+    return by.id('statAvgVol').toString();
   }
 }
