@@ -16,6 +16,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.utils.MoneyTreeError;
 
+import javax.security.auth.login.CredentialNotFoundException;
+
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -76,6 +78,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
               .status(BAD_REQUEST)
               .debugMessage(ex.getMessage())
               .message(USER_ALREADY_EXISTS.getMessage())
+              .build();
+      return buildResponseEntity(apiError);
+   }
+
+   /**
+    * Exception Handler for CredentialNotFoundException
+    * @param ex A CredentialNotFoundException
+    * @return 404 NOT FOUND
+    */
+   @ExceptionHandler(CredentialNotFoundException.class)
+   protected ResponseEntity<MoneyTreeError> handleCredentialNotFound(CredentialNotFoundException ex) {
+      MoneyTreeError apiError = MoneyTreeError.builder()
+              .status(NOT_FOUND)
+              .debugMessage(ex.getMessage())
+              .message(NOT_FOUND.getReasonPhrase())
               .build();
       return buildResponseEntity(apiError);
    }

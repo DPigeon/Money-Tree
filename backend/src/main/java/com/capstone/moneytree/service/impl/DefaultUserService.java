@@ -100,6 +100,21 @@ public class DefaultUserService implements UserService {
         return userToUpdate;
     }
 
+    /**
+     * A method to verify given credentials against existing user records
+     * @param credentials A User object with email and unencrypted password
+     * @return The full User object from the database if login is successful, null otherwise
+     */
+    @Override
+    public User login(User credentials) {
+        User user = userDao.findUserByEmail(credentials.getEmail());
+        if(compareDigests(credentials.getPassword(), user.getPassword())){
+            return user;
+        }else{
+            return null;
+        }
+    }
+
     public String encryptData(String text) {
         return passwordEncryption.toGraphProperty(text);
     }

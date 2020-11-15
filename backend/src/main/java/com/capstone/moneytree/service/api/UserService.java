@@ -15,4 +15,6 @@ public interface UserService {
     boolean userExists(String email, String username);
 
     User registerAlpacaApiKey(Long id, String key);
+
+    User login(User credentials);
 }
