@@ -55,6 +55,11 @@ describe('workspace-project App', () => {
     expect(page.getStockIndustry()).toBeTruthy();
   });
 
+  it('should display stock stats', () => {
+    page.navigateToStockDetailPage('AAPL');
+    expect(page.getStockStat()).toBeTruthy();
+  });
+
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);

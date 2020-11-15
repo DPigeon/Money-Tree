@@ -33,4 +33,7 @@ export class AppPage {
   getStockIndustry(): string {
     return by.tagName('mat-chip').toString();
   }
+  getStockStat(): string {
+    return by.tagName('row-stat').toString();
+  }
 }

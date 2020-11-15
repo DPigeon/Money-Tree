@@ -34,7 +34,8 @@ const stockInfo: Stock = {
   stockChange: 4.27,
   stockChangePercent: 1.68,
   stockValue: 16.36,
-  logo: 'https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0021/6847/brand.gif?itok=u0iVoArk'
+  logo: 'https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0021/6847/brand.gif?itok=u0iVoArk',
+  stats: null
 };
 
 // unit tests
