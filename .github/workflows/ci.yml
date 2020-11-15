@@ -7,6 +7,16 @@ on:
       - "*"
       - dev
 
+env:
+  ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
+  ALPACA_SECRET_ID: ${{ secrets.ALPACA_SECRET_ID }}
+  IEXCLOUD_PUBLISHABLE_TOKEN_PROD: ${{ secrets.IEXCLOUD_PUBLISHABLE_TOKEN_PROD }}
+  IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX: ${{ secrets.IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX }}
+  IEXCLOUD_SECRET_TOKEN_PROD: ${{ secrets.IEXCLOUD_SECRET_TOKEN_PROD }}
+  IEXCLOUD_SECRET_TOKEN_SANDBOX: ${{ secrets.IEXCLOUD_SECRET_TOKEN_SANDBOX }}
+  NEO4J_PASSWORD: ${{ secrets.NEO4J_PASSWORD }}
+  NEO4J_USERNAME: ${{ secrets.NEO4J_USERNAME }}
+
 jobs:
   job_1:
     name: Integration
@@ -96,7 +106,7 @@ jobs:
       - name: Install Backend Dependencies
         working-directory: ./backend
         if: steps.maven-dependencies.outputs.cache-hit != 'true' # Checks if maven has dependencies as cache already
-        run: bash ./mvnw install
+        run: bash ./mvnw install -Dmaven.test.skip=true
 
       - name: Backend Tests
         working-directory: ./backend
@@ -104,11 +114,12 @@ jobs:
 
       - name: Backend Package
         working-directory: ./backend
-        run: bash ./mvnw verify
+        run: bash ./mvnw verify -Dmaven.test.skip=true
 
       - name: Backend Run
         working-directory: ./backend
-        run: |
+        run:
+          | # can we inject spring profil as so: (java -jar  -Dspring.profiles.active=dev target/moneytree-*.jar)
           nohup java -jar target/moneytree-*.jar &
           sleep 20
           sh backend_endpoints.sh
