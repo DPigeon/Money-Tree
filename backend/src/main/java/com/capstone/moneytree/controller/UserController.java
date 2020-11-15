@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
-public class UserController extends ApiController {
+@MoneyTreeController
+@RequestMapping("/users")
+public class UserController {
 
     private final UserService userService;
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
@@ -27,7 +28,7 @@ public class UserController extends ApiController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping
     List<User> all() {
         List<User> users = new ArrayList<>();
 
@@ -96,7 +97,7 @@ public class UserController extends ApiController {
         return HttpStatus.OK;
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     User getUser(@PathVariable Long id) {
         return userService.getUserById(id);
     }
