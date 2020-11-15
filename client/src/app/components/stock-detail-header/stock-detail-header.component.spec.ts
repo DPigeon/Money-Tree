@@ -52,6 +52,13 @@ describe('StockDetailHeader', () => {
     expect(component.stockValue).toBe('');
   });
 
+  it('should display correct stock industry', () => {
+    component.stockInfo = stockInfo;
+    expect(component.stockIndustry).toBe(component.stockInfo.industry);
+    component.stockInfo = null;
+    expect(component.stockIndustry).toBe('');
+  });
+
   it('should display correct stock class', () => {
     component.stockInfo = stockInfo;
     expect(component.stockChangeColor()).toBe('positive-change');
