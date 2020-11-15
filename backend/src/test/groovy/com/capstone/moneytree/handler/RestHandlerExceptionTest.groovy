@@ -1,5 +1,6 @@
 package com.capstone.moneytree.handler
 
+import com.capstone.moneytree.handler.exception.UserAlreadyExistsException
 import javassist.NotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -42,7 +43,7 @@ class RestHandlerExceptionTest extends Specification {
 
    def "When a NotFoundException ex is thrown, handler is called"() {
       given: "A custom exception message"
-      def errorMessage = "error message"
+      def errorMessage = "not found"
 
       when:
       ResponseEntity<MoneyTreeError> apiError = exceptionHandler.handleNotFound(new NotFoundException(errorMessage)) as ResponseEntity<MoneyTreeError>
@@ -55,13 +56,26 @@ class RestHandlerExceptionTest extends Specification {
 
    def "When a NullPointerException ex is thrown, handler is called"() {
       given: "A custom exception message"
-      def errorMessage = "error message"
+      def errorMessage = "null pointer in result"
 
       when:
       ResponseEntity<MoneyTreeError> apiError = exceptionHandler.handleNullPointer(new NullPointerException(errorMessage)) as ResponseEntity<MoneyTreeError>
 
       then:
       apiError.getBody().getMessage() == ExceptionMessage.NULL_POINTER.getMessage()
+      apiError.getBody().getStatus() == HttpStatus.BAD_REQUEST
+      apiError.getBody().getDebugMessage() == errorMessage
+   }
+
+   def "When a UserAlreadyExistsException ex is thrown, handler is called"() {
+      given: "A custom exception message"
+      def errorMessage = "user already exists"
+
+      when:
+      ResponseEntity<MoneyTreeError> apiError = exceptionHandler.handleUserAlreadyExists(new UserAlreadyExistsException(errorMessage)) as ResponseEntity<MoneyTreeError>
+
+      then:
+      apiError.getBody().getMessage() == ExceptionMessage.USER_ALREADY_EXISTS.getMessage()
       apiError.getBody().getStatus() == HttpStatus.BAD_REQUEST
       apiError.getBody().getDebugMessage() == errorMessage
    }

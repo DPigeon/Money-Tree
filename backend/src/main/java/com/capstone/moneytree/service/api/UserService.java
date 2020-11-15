@@ -8,5 +8,11 @@ public interface UserService {
 
     User getUserById(Long id);
 
+    User getUserByEmailAndUsername(String email, String username);
+
     User createUser(User user);
+
+    boolean userExists(String email, String username);
+
+    User registerAlpacaApiKey(Long id, String key);
 }

@@ -1,8 +1,6 @@
 package com.capstone.moneytree.controller
 
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
-
 import com.capstone.moneytree.facade.StockMarketDataFacade
 import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.impl.DefaultStockMarketDataService
@@ -11,8 +9,9 @@ import org.springframework.http.HttpStatus
 import pl.zankowski.iextrading4j.api.exception.IEXTradingException
 import spock.lang.Specification
 
+
 /**
- * Integration Tests for the Stock Controller. Tests the StockMarketDataFacade as well.
+ * Tests for the Stock Controller. Tests the StockMarketDataFacade as well.
  * */
 @SpringBootTest
 class StockControllerTest extends Specification {
@@ -238,6 +237,4 @@ class StockControllerTest extends Specification {
       then: "We get an exception"
       thrown(IEXTradingException)
    }
-
-
 }
