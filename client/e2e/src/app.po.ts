@@ -34,6 +34,6 @@ export class AppPage {
     return by.tagName('mat-chip').toString();
   }
   getStockStat(): string {
-    return by.tagName('row-stat').toString();
+    return by.className('row-stat').toString();
   }
 }
