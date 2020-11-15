@@ -4,6 +4,7 @@ import static com.capstone.moneytree.handler.ExceptionMessage.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+import com.capstone.moneytree.exception.MissingMandatoryFieldException;
 import com.capstone.moneytree.handler.exception.UserAlreadyExistsException;
 import javassist.NotFoundException;
 import org.springframework.core.Ordered;
@@ -24,7 +25,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
       return new ResponseEntity<>(apiError, apiError.getStatus());
    }
 
-   // Other exception handlers below
    @ExceptionHandler(EntityNotFoundException.class)
    protected ResponseEntity<MoneyTreeError> handleEntityNotFound(
            EntityNotFoundException ex) {
@@ -76,6 +76,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
               .status(BAD_REQUEST)
               .debugMessage(ex.getMessage())
               .message(USER_ALREADY_EXISTS.getMessage())
+              .build();
+      return buildResponseEntity(apiError);
+   }
+
+   @ExceptionHandler(MissingMandatoryFieldException.class)
+   protected ResponseEntity<MoneyTreeError> handleMissingMandatoryField(
+           MissingMandatoryFieldException ex) {
+      MoneyTreeError apiError = MoneyTreeError.builder()
+              .status(BAD_REQUEST)
+              .debugMessage(ex.getMessage())
+              .message(MISSING_FIELDS.getMessage())
               .build();
       return buildResponseEntity(apiError);
    }

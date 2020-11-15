@@ -6,7 +6,7 @@ public enum ExceptionMessage {
     REQUEST_NOT_FOUND("Request was not found"),
     NULL_POINTER("Arguments are null"),
     USER_ALREADY_EXISTS("Email or username already exists!"),
-    ;
+    MISSING_FIELDS("The entity is missing fields!");
 
     private final String message;
 
