@@ -10,5 +10,35 @@ export class StockStatsComponent {
   @Input() stockInfo: Stock;
   constructor() {}
 
-  
+  get open(): string | number {
+    return this.stockInfo ? this.stockInfo.stats.open : '';
+  }
+
+  get high(): string | number {
+    return this.stockInfo ? this.stockInfo.stats.high : '';
+  }
+
+  get low(): string | number {
+    return this.stockInfo ? this.stockInfo.stats.low : '';
+  }
+
+  get volume(): string | number {
+    return this.stockInfo ? this.stockInfo.stats.volume : '';
+  }
+
+  get mktCap(): string | number {
+    return this.stockInfo ? this.stockInfo.stats.mktCap : '';
+  }
+
+  get wh(): string | number {
+    return this.stockInfo ? this.stockInfo.stats.wh : '';
+  }
+
+  get wl(): string | number {
+    return this.stockInfo ? this.stockInfo.stats.wl : '';
+  }
+
+  get avgVolume(): string | number {
+    return this.stockInfo ? this.stockInfo.stats.avgVolume : '';
+  }
 }
