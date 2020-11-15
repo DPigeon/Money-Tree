@@ -60,18 +60,17 @@ public class UserController {
 
     /**
      * A method that updates a user with a new Alpaca key. This should be done only once at beginning
-     * @param userWithKey User with the Alpaca key
+     * @param id The user ID sent from the frontend
+     * @param key The Alpaca API key sent from the frontend
      * @return The new updated user from the database
      */
-    @PostMapping("/register-alpaca-key")
-    public ResponseEntity<User> registerAlpacaApiKey(@RequestBody User userWithKey) {
-        String key = userWithKey.getAlpacaApiKey();
-
+    @PostMapping("/register-alpaca-key/{id}/{key}")
+    public ResponseEntity<User> registerAlpacaApiKey(@PathVariable Long id, @PathVariable String key) {
         // TODO: Refactor this into a validation class validateString method to validate strings & message class too
         if (StringUtils.isBlank(key)) {
             throw new IllegalArgumentException();
         }
-        User updatedUser = userService.registerAlpacaApiKey(userWithKey);
+        User updatedUser = userService.registerAlpacaApiKey(id, key);
 
         if (updatedUser == null) {
             throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage());

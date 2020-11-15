@@ -89,11 +89,8 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public User registerAlpacaApiKey(User userWithKey) {
-        String key = userWithKey.getAlpacaApiKey();
-        String email = userWithKey.getEmail();
-        String username = userWithKey.getUsername();
-        User userToUpdate = userDao.findUserByEmailAndUsername(email, username);
+    public User registerAlpacaApiKey(Long id, String key) {
+        User userToUpdate = userDao.findUserById(id);
         if (userToUpdate != null) {
             userToUpdate.setAlpacaApiKey(key);
             userDao.save(userToUpdate);

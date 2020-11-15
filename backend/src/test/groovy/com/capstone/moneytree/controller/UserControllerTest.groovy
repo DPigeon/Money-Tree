@@ -125,13 +125,13 @@ class UserControllerTest extends Specification {
         User user = createUser(email, username, password, firstName, lastName, alpacaApiKey);
 
         and: "mock the database with the same user already registered"
-        userDaoMock.findUserByEmailAndUsername(email, username) >> user
+        userDaoMock.findUserById(user.getId()) >> user
 
         and: "mock the database with to save the user"
         userDaoMock.save(user) >> user
 
         when: "registering a key to a user"
-        def response = userController.registerAlpacaApiKey(user)
+        def response = userController.registerAlpacaApiKey(user.getId(), alpacaApiKey)
 
         then: "should register a key"
         assert response.statusCode == HttpStatus.OK
@@ -155,7 +155,7 @@ class UserControllerTest extends Specification {
         User user = createUser(email, username, password, firstName, lastName, alpacaApiKey);
 
         when: "registering a key to a user"
-        userController.registerAlpacaApiKey(user)
+        userController.registerAlpacaApiKey(user.getId(), alpacaApiKey)
 
         then:
         thrown(IllegalArgumentException)
@@ -176,7 +176,7 @@ class UserControllerTest extends Specification {
         userDaoMock.findUserByEmailAndUsername(email, username) >> null
 
         when: "registering a key to a user"
-        userController.registerAlpacaApiKey(user)
+        userController.registerAlpacaApiKey(user.getId(), alpacaApiKey)
 
         then: "should throw EntityNotFoundException"
         thrown(EntityNotFoundException)
