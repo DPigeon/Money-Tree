@@ -108,7 +108,7 @@ public class DefaultUserService implements UserService {
     @Override
     public User login(User credentials) {
         User user = userDao.findUserByEmail(credentials.getEmail());
-        if(compareDigests(credentials.getPassword(), user.getPassword())){
+        if(user != null && compareDigests(credentials.getPassword(), user.getPassword())){
             return user;
         }else{
             return null;

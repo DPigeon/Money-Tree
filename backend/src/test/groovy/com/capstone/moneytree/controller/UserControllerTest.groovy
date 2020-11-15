@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import spock.lang.Specification
 
+import javax.security.auth.login.CredentialNotFoundException;
+
 /**
  * Unit Tests for the User Controller.
  */
@@ -198,5 +200,55 @@ class UserControllerTest extends Specification {
         User user2 = createUser("cath@test.com", "Cath", "hello2", "Catherine", "Kole", null)
         User user3 = createUser("joe@test.com", "Joe", "hello3", "Joe", "Wert", null)
         return Lists.asList(user1, user2, user3)
+    }
+
+    @Test
+    def "Login Test"(){
+        given: "A registeredUser"
+        String password = "password123"
+        User registeredUser = User.builder()
+                .email("user.user@money-tree.tech")
+                .username("usr")
+                .firstName("user")
+                .lastName("user")
+                .password(password)
+                .build()
+        //encrypts the password
+        userController.createUser(registeredUser)
+        //mock userDao.findUserByEmail()
+        userDaoMock.findUserByEmail(registeredUser.getEmail()) >> registeredUser
+
+        and: "A set credentialsOk"
+        User credentialsOk = User.builder()
+                .email(registeredUser.getEmail())
+                .password(password)
+                .build()
+
+        and: "A set of credentialsUnregisteredUser"
+        User credentialsUnregisteredUser = User.builder()
+                .email("tamvanum@money-tree.tech")
+                .password("tamvanum")
+                .build()
+
+        and: "A set of credentialsWrongPassword"
+        User credentialsWrongPassword = User.builder()
+                .email(registeredUser.getEmail())
+                .password("tamvanum")
+                .build()
+
+        when: "Attempt login with credentialsOk"
+        User attempt0 = userController.login(credentialsOk)
+        then: "Should return registeredUser"
+        attempt0 == registeredUser
+
+        when: "Attempt login with credentialsUnregisteredUser"
+        userController.login(credentialsUnregisteredUser)
+        then: "Should throw CredentialsNotFoundException"
+        thrown(CredentialNotFoundException)
+
+        when: "Attempt login with credentialsWrongPassword"
+        userController.login(credentialsWrongPassword)
+        then: "Should throw CredentialsNotFoundException"
+        thrown(CredentialNotFoundException)
     }
 }

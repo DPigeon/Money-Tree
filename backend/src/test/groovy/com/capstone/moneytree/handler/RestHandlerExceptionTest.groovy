@@ -10,6 +10,8 @@ import com.capstone.moneytree.utils.MoneyTreeError
 
 import spock.lang.Specification
 
+import javax.security.auth.login.CredentialNotFoundException
+
 
 class RestHandlerExceptionTest extends Specification {
 
@@ -78,5 +80,18 @@ class RestHandlerExceptionTest extends Specification {
       apiError.getBody().getMessage() == ExceptionMessage.USER_ALREADY_EXISTS.getMessage()
       apiError.getBody().getStatus() == HttpStatus.BAD_REQUEST
       apiError.getBody().getDebugMessage() == errorMessage
+   }
+
+   def "When a CredentialNotFoundException ex is thrown, handler is called"() {
+      given: "A custom exception message"
+      def errorMessage = "credential not found"
+
+      when:
+      ResponseEntity<MoneyTreeError> apiError = exceptionHandler.handleCredentialNotFound(new CredentialNotFoundException(errorMessage)) as ResponseEntity<MoneyTreeError>
+
+      then:
+      apiError.getBody().getStatus() == HttpStatus.NOT_FOUND
+      apiError.getBody().getDebugMessage() == errorMessage
+      apiError.getBody().getMessage() == HttpStatus.NOT_FOUND.getReasonPhrase()
    }
 }
