@@ -6,9 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login-signup.component.scss']
 })
 export class LoginSignupComponent implements OnInit {
-investors: string = "for investors.";
+  logo: string = '../../assets/logo.svg';
   constructor() { }
-
+ 
   ngOnInit(): void {
   }
 
