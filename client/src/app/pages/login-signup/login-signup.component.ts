@@ -8,9 +8,9 @@ import { SignupFormComponent } from '../../components/signup-form/signup-form.co
   styleUrls: ['./login-signup.component.scss']
 })
 export class LoginSignupComponent implements OnInit {
-investors: string = "for investors.";
+  logo: string = '../../assets/logo.svg';
   constructor() { }
-
+ 
   ngOnInit(): void {
   }
 
