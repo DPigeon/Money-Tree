@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatMenuModule } from '@angular/material/menu';
 
 // Component imports:
 import { AppComponent } from './app.component';
@@ -44,7 +45,8 @@ import { reducer } from './store/reducers/app.reducer';
     MatCardModule,
     FlexLayoutModule,
     MatIconModule,
-    MatChipsModule
+    MatChipsModule,
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

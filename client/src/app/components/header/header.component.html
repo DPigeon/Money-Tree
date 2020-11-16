@@ -1,3 +1,4 @@
+<span *ngIf="!isInMobileMode">
 <div class='logo-and-text'>
     <figure>
         <img id='logo' src="../../../assets/Logo.png" alt="Money-Tree logo">
@@ -14,3 +15,73 @@
     <mat-icon inline="true">leaderboard</mat-icon>
     <a id='log-out-link' href="">Log out</a>
 </div>
+</span>
+
+
+<!-- when user is browsing on a mobile device -->
+<span *ngIf="isInMobileMode">
+    <p> in mobile</p>
+    <div class = 'menu-mobile'>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon id='menu-icon'>menu</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <div class="mat-menu-style">
+                    <figure>
+                        <img id='user-photo' src="../../../assets/user-photo.png" alt="user-photo"> 
+                        <figcaption class='figcaption-mobile'>
+                            Hello Laurence <br>
+                            <span id='score'>Score:</span><span id='score-value'> 260</span>
+                        </figcaption>
+                    </figure>
+            
+                <button mat-menu-item>
+              <mat-icon id='menu-icon'>home</mat-icon>
+              <span>Home</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon id='menu-icon'>leaderboard</mat-icon>
+              <span>LeaderBoard</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon id='menu-icon'>edit</mat-icon>
+              <span>Edit Profile</span>
+            </button>
+            <button mat-menu-item>
+                <mat-icon id='menu-icon'>trending_up</mat-icon>
+                <span>Your Profile</span>
+              </button>
+              <button mat-menu-item>
+                <a id='log-out-mobile' href="">Log out</a>
+              </button>
+            </div>
+            </mat-menu>
+
+
+    </div>
+    <div class='logo-and-text-mobile'>
+        <figure>
+            <img id='logo' src="../../../assets/Logo.png" alt="Money-Tree logo">
+            <figcaption> Money Tree</figcaption>
+        </figure>
+    </div>
+    
+
+</span>
+<!--    
+<div class='logo-and-text'>
+        <figure>
+            <img id='logo' src="../../../assets/Logo.png" alt="Money-Tree logo">
+            <figcaption> Money Tree</figcaption>
+        </figure>
+    </div>
+    
+    <div class='search'>
+            <input id='searchbox' type="text" placeholder="  Search for stocks ...">
+    </div>
+    <div class='right-side-buttons'>
+        
+        <mat-icon inline="true">home</mat-icon>
+        <mat-icon inline="true">leaderboard</mat-icon>
+        <a id='log-out-link' href="">Log out</a>
+    </div> -->
