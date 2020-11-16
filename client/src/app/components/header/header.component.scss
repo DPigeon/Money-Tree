@@ -1,47 +1,102 @@
-.logo-and-text, .search, .right-side-buttons {
+.logo-and-text,
+.search,
+.right-side-buttons {
   background-color: #07367c;
   height: 20%;
   float: left;
   align-items: center;
   justify-content: center;
-  display:flex;
+  display: flex;
 }
 
-.logo-and-text, .right-side-buttons{
-    width: 25%;
+.logo-and-text,
+.right-side-buttons {
+  width: 25%;
 }
-.search{
-    width: 50%;
+.search {
+  width: 50%;
 }
-.right-side-buttons{
-    padding:0;
+.right-side-buttons {
+  padding: 0;
 }
 #logo {
   max-height: 70%;
   width: auto;
 }
 figure {
-    display: inline-block;
-    height: 80%;
+  display: inline-block;
+  height: 80%;
 }
-figure figcaption{
-    text-align: center;
-    color: white;
-    font-size: 1.5vw;
-    font-weight: 500;
+figcaption {
+  text-align: center;
+  color: white;
+  font-size: 1.5vw;
+  font-weight: 500;
 }
-#searchbox{
-width: 90%;
-height: 28px;
+#searchbox {
+  width: 90%;
+  height: 28px;
 }
-mat-icon{
-    color: white;
-    font-size: 2.5vw !important;
-    // zoom: 3.5; // this would be an alternative for changing the icon size
-
+mat-icon {
+  color: white;
+  font-size: 2.5vw !important;
+  // zoom: 3.5; // this would be an alternative for changing the icon size
 }
 #log-out-link {
-    color: white;
-    font-size: 1vw;
-    font-weight: 500;
+  color: white;
+  font-size: 1vw;
+  font-weight: 500;
+}
+
+.menu-mobile,
+.logo-and-text-mobile {
+  background-color: #07367c;
+  height: 20%;
+  float: left;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+.menu-mobile {
+  width: 10%;
+}
+.logo-and-text-mobile {
+  width: 90%;
+}
+#menu-icon {
+  color: #07367c;
+  font-size: 5vw !important;
+  text-align: center;
+}
+.mat-menu-style {
+  width: 300px;
+  height: 400px;
+}
+
+#user-photo {
+  display: inline-flex;
+  height: 70%;
+}
+.figcaption-mobile {
+  text-align: center;
+  color: #282224;
+  font-size: 3.5vw;
+  font-weight: 500;
+  text-shadow: 0.25px 0.25px #282224;
+
+  #score {
+    color: #af6060;
+    font-size: 2.5vw;
+  }
+  #score-value {
+    color: #07367c;
+    font-size: 2.5vw;
+  }
+}
+#log-out-mobile {
+  color: #07367c;
+  text-align: center;
+  font-size: 3.5vw;
+  font-weight: 500;
+  display: block;
 }

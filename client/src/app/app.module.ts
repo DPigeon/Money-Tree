@@ -10,6 +10,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 
 // Component imports:
 import { AppComponent } from './app.component';
@@ -42,7 +43,8 @@ import { reducer } from './store/reducers/app.reducer';
     EffectsModule.forRoot([Effects]),
     MatCardModule,
     FlexLayoutModule,
-    MatIconModule
+    MatIconModule,
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
