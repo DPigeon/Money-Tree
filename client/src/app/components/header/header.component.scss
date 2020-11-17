@@ -1,70 +1,112 @@
-.logo-and-text,
-.search,
-.right-side-buttons {
-  background-color: #07367c;
-  height: 20%;
-  float: left;
-  align-items: center;
-  justify-content: center;
+.header-container {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #07367c;
+
+  .logo-and-text,
+  .right-side-buttons {
+    width: 25%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
+
+  .search-box-container {
+    width: 50%;
+  }
+
+  .right-side-buttons {
+    padding: 0;
+  }
+
+  #logo {
+    max-height: 56px;
+    width: auto;
+  }
+
+  figcaption {
+    text-align: center;
+    color: white;
+    font-size: 19px;
+    font-weight: bold;
+  }
+
+  #searchbox {
+    width: 90%;
+    height: 28px;
+  }
+
+  mat-icon {
+    color: white;
+    height: 50px !important;
+    width: 50px !important;
+    font-size: 50px !important;;
+    margin-right: 10%;
+  }
+  #log-out-link {
+    color: white;
+    font-size: 22px;
+    margin-right: 10px;
+  }
 }
 
-.logo-and-text,
-.right-side-buttons {
-  width: 25%;
-}
-.search {
-  width: 50%;
-}
-.right-side-buttons {
-  padding: 0;
-}
-#logo {
-  max-height: 70%;
-  width: auto;
-}
-figure {
-  display: inline-block;
-  height: 80%;
-}
-figcaption {
-  text-align: center;
-  color: white;
-  font-size: 1.5vw;
-  font-weight: 500;
-}
-#searchbox {
-  width: 90%;
-  height: 28px;
-}
-mat-icon {
-  color: white;
-  font-size: 2.5vw !important;
-  // zoom: 3.5; // this would be an alternative for changing the icon size
-}
-#log-out-link {
-  color: white;
-  font-size: 1vw;
-  font-weight: 500;
-}
-
-.menu-mobile,
-.logo-and-text-mobile {
+.header-container-mobile{
+  width: 100%;
   background-color: #07367c;
-  height: 20%;
-  float: left;
-  align-items: center;
-  justify-content: center;
   display: flex;
+  align-items: center;
+  height: 100px;
+
+  .menu-btn {
+    position: absolute;
+    left: 15px;
+    background-color: none;
+    border:none;
+  }
+
+  .logo-and-text-mobile {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+
+    #logo {
+      max-height: 48px;
+      width: auto;
+    }
+
+    figcaption {
+      text-align: center;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+
+  .mobile-menu-container {
+    width: 100vw;
+    height: calc(100vh - 100px);
+    position: absolute;
+    top: 100px;
+    background: white;
+  }
 }
-.menu-mobile {
-  width: 10%;
-}
-.logo-and-text-mobile {
-  width: 90%;
-}
+// .menu-mobile,
+// .logo-and-text-mobile {
+//   background-color: #07367c;
+//   height: 20%;
+//   float: left;
+//   align-items: center;
+//   justify-content: center;
+//   display: flex;
+//   width: 100%;
+// }
+
+
 #menu-icon {
-  color: #07367c;
+  color:white;
   font-size: 5vw !important;
   text-align: center;
 }
