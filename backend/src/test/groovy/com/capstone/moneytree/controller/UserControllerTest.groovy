@@ -195,6 +195,13 @@ class UserControllerTest extends Specification {
                 .build();
     }
 
+    User createCredential(String email, String password) {
+        return User.builder()
+                .email(email)
+                .password(password)
+                .build();
+    }
+
     def createUsersInMockedDatabase() {
         User user1 = createUser("yuu@test.com", "yury1", "hello1", "Yury", "Krystler", null)
         User user2 = createUser("cath@test.com", "Cath", "hello2", "Catherine", "Kole", null)
@@ -206,49 +213,34 @@ class UserControllerTest extends Specification {
     def "Login Test"(){
         given: "A registeredUser"
         String password = "password123"
-        User registeredUser = User.builder()
-                .email("user.user@money-tree.tech")
-                .username("usr")
-                .firstName("user")
-                .lastName("user")
-                .password(password)
-                .build()
+        User registeredUser = createUser("user.user@money-tree.tech", "usr", password, "user", "user", null);
         //encrypts the password
         userController.createUser(registeredUser)
         //mock userDao.findUserByEmail()
         userDaoMock.findUserByEmail(registeredUser.getEmail()) >> registeredUser
 
-        and: "A set credentialsOk"
-        User credentialsOk = User.builder()
-                .email(registeredUser.getEmail())
-                .password(password)
-                .build()
+        and: "A set credentialOk"
+        User credentialOk = createCredential(registeredUser.getEmail(), password)
 
-        and: "A set of credentialsUnregisteredUser"
-        User credentialsUnregisteredUser = User.builder()
-                .email("tamvanum@money-tree.tech")
-                .password("tamvanum")
-                .build()
+        and: "A set of credentialUnregisteredUser"
+        User credentialUnregisteredUser = createCredential("tamvanum@money-tree.tech", "tamvanum")
 
-        and: "A set of credentialsWrongPassword"
-        User credentialsWrongPassword = User.builder()
-                .email(registeredUser.getEmail())
-                .password("tamvanum")
-                .build()
+        and: "A set of credentialWrongPassword"
+        User credentialWrongPassword = createCredential(registeredUser.getEmail(), "tamvanum")
 
-        when: "Attempt login with credentialsOk"
-        User attempt0 = userController.login(credentialsOk)
+        when: "Attempt login with credentialOk"
+        User attempt0 = userController.login(credentialOk)
         then: "Should return registeredUser"
         attempt0 == registeredUser
 
-        when: "Attempt login with credentialsUnregisteredUser"
-        userController.login(credentialsUnregisteredUser)
+        when: "Attempt login with credentialUnregisteredUser"
+        userController.login(credentialUnregisteredUser)
         then: "Should throw CredentialsNotFoundException"
         thrown(CredentialNotFoundException)
 
-        when: "Attempt login with credentialsWrongPassword"
-        userController.login(credentialsWrongPassword)
-        then: "Should throw CredentialsNotFoundException"
+        when: "Attempt login with credentialWrongPassword"
+        userController.login(credentialWrongPassword)
+        then: "Should throw CredentialNotFoundException"
         thrown(CredentialNotFoundException)
     }
 }

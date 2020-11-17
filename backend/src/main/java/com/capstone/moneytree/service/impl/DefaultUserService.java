@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.security.auth.login.CredentialNotFoundException;
 import java.util.List;
 
 @Service
@@ -106,12 +107,12 @@ public class DefaultUserService implements UserService {
      * @return The full User object from the database if login is successful, null otherwise
      */
     @Override
-    public User login(User credentials) {
+    public User login(User credentials) throws CredentialNotFoundException {
         User user = userDao.findUserByEmail(credentials.getEmail());
         if(user != null && compareDigests(credentials.getPassword(), user.getPassword())){
             return user;
         }else{
-            return null;
+            throw new CredentialNotFoundException();
         }
     }
 

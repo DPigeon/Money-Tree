@@ -110,10 +110,6 @@ public class UserController {
      */
     @PostMapping("/login")
     public User login(@RequestBody User credentials) throws CredentialNotFoundException {
-        User user = userService.login(credentials);
-        if(user == null){
-            throw new CredentialNotFoundException();
-        }
-        return user;
+        return userService.login(credentials);
     }
 }
