@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.CredentialNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,5 +101,15 @@ public class UserController {
    @GetMapping("/users/{id}")
    User getUser(@PathVariable Long id) {
       return userService.getUserById(id);
+    }
+
+    /**
+     * /login POST endpoint to authenticate a user
+     * @param credentials A User object with email and unencrypted password
+     * @return The full User object from the database if login is successful with 200 OK, 404 NOT_FOUND otherwise
+     */
+    @PostMapping("/login")
+    public User login(@RequestBody User credentials) throws CredentialNotFoundException {
+        return userService.login(credentials);
     }
 }

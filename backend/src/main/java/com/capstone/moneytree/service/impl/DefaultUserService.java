@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.security.auth.login.CredentialNotFoundException;
 import java.util.List;
 
 @Service
@@ -98,6 +99,21 @@ public class DefaultUserService implements UserService {
         }
 
         return userToUpdate;
+    }
+
+    /**
+     * A method to verify given credentials against existing user records
+     * @param credentials A User object with email and unencrypted password
+     * @return The full User object from the database if login is successful, null otherwise
+     */
+    @Override
+    public User login(User credentials) throws CredentialNotFoundException {
+        User user = userDao.findUserByEmail(credentials.getEmail());
+        if(user != null && compareDigests(credentials.getPassword(), user.getPassword())){
+            return user;
+        }else{
+            throw new CredentialNotFoundException();
+        }
     }
 
     public String encryptData(String text) {
