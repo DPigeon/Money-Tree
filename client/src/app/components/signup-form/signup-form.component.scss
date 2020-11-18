@@ -1,26 +1,31 @@
-@import '../../../styles.scss';
+@import "../../../styles.scss";
 
+.container {
+  padding: 5em;
+  width: 530px;
 
-.example-form {
-    min-width: 150px;
-    max-width: 500px;
-    width: 100%;
+  .half {
+    width: calc(50% - 10px);
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 5px;
   }
-  
-  .example-full-width {
-    width: 100%;
+  .full{
+    width: calc(100% - 10px);
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 5px;
   }
-  
-  td {
-    padding-right: 8px;
-  }
-
-.sign-up-form{
-    padding: 10px;
-}
-
-.mat-flat-button{
+  .mat-flat-button {
     background-color: $action-color;
     color: black;
-    font-weight: bold;
+    font-size: 16px;
+    height: 42px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 5px;
+  }
+  .semi-title{
+    font-size: 48px;
+    margin-bottom: 1em;
+  }
 }
