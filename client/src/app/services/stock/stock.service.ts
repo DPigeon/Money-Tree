@@ -32,7 +32,7 @@ export class StockService {
         high: iex.book.quote.high,
         low: iex.book.quote.low,
         volume: iex.book.quote.volume,
-        mktCap: iex.book.quote.low,
+        mktCap: iex.book.quote.marketCap,
         wh: iex.book.quote.week52High,
         wl: iex.book.quote.week52Low,
         avgVolume: iex.book.quote.avgTotalVolume,

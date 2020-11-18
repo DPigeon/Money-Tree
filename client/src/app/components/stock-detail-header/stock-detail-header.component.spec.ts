@@ -35,7 +35,16 @@ const stockInfo: Stock = {
   stockChangePercent: 1.68,
   stockValue: 16.36,
   logo: 'https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0021/6847/brand.gif?itok=u0iVoArk',
-  stats: null
+  stats: {
+    open: 100.50,
+    high: 200.20,
+    low: 516510,
+    volume: 151515,
+    mktCap: 51651,
+    wh: 455,
+    wl: 123,
+    avgVolume: 199410,
+  },
 };
 
 // unit tests

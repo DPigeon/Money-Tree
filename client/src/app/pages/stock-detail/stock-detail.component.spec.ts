@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StockDetailComponent } from './stock-detail.component';
 import { StockDetailHeaderComponent } from '../../components/stock-detail-header/stock-detail-header.component';
+import { StockStatsComponent } from '../../components/stock-stats/stock-stats.component';
 import { StoreFacadeService } from '../../store/store-facade.service';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
@@ -25,7 +26,7 @@ describe('StockDetailComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: MATERIAL_MODULE_DEPENDENCIES,
-      declarations: [StockDetailComponent, StockDetailHeaderComponent],
+      declarations: [StockDetailComponent, StockDetailHeaderComponent, StockStatsComponent],
       providers: [
         StoreFacadeService,
         { provide: ActivatedRoute, useValue: fakeActivatedRoute },
