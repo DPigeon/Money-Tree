@@ -1,11 +1,24 @@
 @import "../../../styles.scss";
 
 .container {
-    width: 100vw;
-    height: 100vh;
+    // width: 100vw;
+    // height: 100vh;
     background-image: url("../../../assets/backgroung-shape.svg");
+    height: 100%;
+    background-position: center ;
+    background-repeat: no-repeat;
+    background-size: cover;
     position: relative;
     color: $mt-dark;
+    .logo{
+        background-image: url('../../../assets/logo.svg');
+        position: absolute;
+        top: 2em;
+        left: 5em;
+        height: 125px;
+        width: 20%;
+        background-repeat: no-repeat;
+    }
     .app-login-position {
         position: absolute;
         top: 0;
@@ -17,8 +30,9 @@
         left: 0;
     }
     .money-tree-position {
-        top: 0;
-        left: 0;
+        position: absolute;
+        top: 12em;
+        left: 5em;
     }
     .second-line {
         font-weight: 500;
@@ -31,4 +45,5 @@
     .negative-text {
         color: $mt-white;
     }
+    
 }

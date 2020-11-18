@@ -1,21 +1,36 @@
-<h1> Sign Up</h1>
-<form>
+<div class="container">
+    <h1 class="semi-title"> Sign Up</h1>
+    <div class="sign-up-form-position">
+        <form class="">
 
-    <mat-label>First Name</mat-label>
-    <input matInput>
+            <mat-form-field class="half" appearance="outline" color="accent">
+                <input matInput placeholder="First Name">
+            </mat-form-field>
 
-    <mat-label>Last Name</mat-label>
-    <input matInput>
+            <mat-form-field class="half" appearance="outline" color="accent">
 
-    <mat-label>Email</mat-label>
-    <input matInput type='email'>
+                <input matInput placeholder="Last Name">
+            </mat-form-field>
 
-    <mat-label>Password</mat-label>
-    <input matInput placeholder="Password" type="password">
+            <mat-form-field class="full" appearance="outline" color="accent">
 
-    <mat-label>Last Name</mat-label>
-    <input matInput placeholder="Confirm Password" type="password">
+                <input matInput placeholder="Email" type='email'>
+            </mat-form-field>
 
-    <button mat-flat-button>SIGN UP</button>
+            <mat-form-field class="half" appearance="outline" color="accent">
 
-</form>
+                <input matInput placeholder="Password" type="password">
+            </mat-form-field>
+
+
+            <mat-form-field class="half" appearance="outline" color="accent">
+
+                <input matInput placeholder="Confirm Password" type="password">
+            </mat-form-field>
+
+
+            <button class="full" mat-flat-button>SIGN UP</button>
+
+        </form>
+    </div>
+</div>
