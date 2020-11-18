@@ -18,7 +18,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-import { StockStatsComponent } from './components/stock-stats/stock-stats.component'
+import { StockStatsComponent } from './components/stock-stats/stock-stats.component';
 
 @NgModule({
   declarations: [

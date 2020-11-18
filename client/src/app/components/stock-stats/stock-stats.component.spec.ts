@@ -34,10 +34,11 @@ const stockInfo: Stock = {
   stockChange: 4.27,
   stockChangePercent: 1.68,
   stockValue: 16.36,
-  logo: 'https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0021/6847/brand.gif?itok=u0iVoArk',
+  logo:
+    'https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0021/6847/brand.gif?itok=u0iVoArk',
   stats: {
-    open: 100.50,
-    high: 200.20,
+    open: 100.5,
+    high: 200.2,
     low: 516510,
     volume: 151515,
     mktCap: 51651,
@@ -90,9 +91,13 @@ describe('StockStats', () => {
 
   it('should display correct stock volume stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.volume).toBe(component.stockInfo.stats.volume.toPrecision(3));
+    expect(component.volume).toBe(
+      component.stockInfo.stats.volume.toPrecision(3)
+    );
     component.stockInfo.stats.volume = stockInfo.stats.volume;
-    expect(component.volume).toBe(component.stockInfo.stats.volume.toPrecision(3));
+    expect(component.volume).toBe(
+      component.stockInfo.stats.volume.toPrecision(3)
+    );
     component.stockInfo.stats.volume = null;
     expect(component.volume).toBe('');
     component.stockInfo = null;
@@ -112,9 +117,9 @@ describe('StockStats', () => {
 
   it('should display correct stock wl stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.wl ).toBe(component.stockInfo.stats.wl.toFixed(2));
+    expect(component.wl).toBe(component.stockInfo.stats.wl.toFixed(2));
     component.stockInfo.stats.wl = stockInfo.stats.wl;
-    expect(component.wl ).toBe(component.stockInfo.stats.wl.toFixed(2));
+    expect(component.wl).toBe(component.stockInfo.stats.wl.toFixed(2));
     component.stockInfo.stats.wl = null;
     expect(component.wl).toBe('');
     component.stockInfo = null;
@@ -126,7 +131,7 @@ describe('StockStats', () => {
     expect(component.wh).toBe(component.stockInfo.stats.wh.toFixed(2));
     component.stockInfo.stats.wh = stockInfo.stats.wh;
     expect(component.wh).toBe(component.stockInfo.stats.wh.toFixed(2));
-    component.stockInfo.stats.wh= null;
+    component.stockInfo.stats.wh = null;
     expect(component.wh).toBe('');
     component.stockInfo = null;
     expect(component.wh).toBe('');
@@ -134,13 +139,16 @@ describe('StockStats', () => {
 
   it('should display correct stock avg volume stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.avgVolume).toBe(component.stockInfo.stats.avgVolume.toPrecision(3));
+    expect(component.avgVolume).toBe(
+      component.stockInfo.stats.avgVolume.toPrecision(3)
+    );
     component.stockInfo.stats.avgVolume = stockInfo.stats.avgVolume;
-    expect(component.avgVolume).toBe(component.stockInfo.stats.avgVolume.toPrecision(3));
+    expect(component.avgVolume).toBe(
+      component.stockInfo.stats.avgVolume.toPrecision(3)
+    );
     component.stockInfo.stats.avgVolume = null;
     expect(component.avgVolume).toBe('');
     component.stockInfo = null;
     expect(component.avgVolume).toBe('');
   });
-
 });

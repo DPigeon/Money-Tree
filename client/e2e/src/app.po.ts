@@ -61,7 +61,7 @@ export class AppPage {
   getStockStatWh(): string {
     return by.id('statWh').toString();
   }
-  
+
   getStockStatAvgVol(): string {
     return by.id('statAvgVol').toString();
   }

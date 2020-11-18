@@ -26,7 +26,11 @@ describe('StockDetailComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: MATERIAL_MODULE_DEPENDENCIES,
-      declarations: [StockDetailComponent, StockDetailHeaderComponent, StockStatsComponent],
+      declarations: [
+        StockDetailComponent,
+        StockDetailHeaderComponent,
+        StockStatsComponent,
+      ],
       providers: [
         StoreFacadeService,
         { provide: ActivatedRoute, useValue: fakeActivatedRoute },

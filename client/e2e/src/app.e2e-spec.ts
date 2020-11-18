@@ -64,7 +64,7 @@ describe('workspace-project App', () => {
     expect(page.getStockStatWh()).toBeTruthy();
     expect(page.getStockStatWl()).toBeTruthy();
     expect(page.getStockStatAvgVol()).toBeTruthy();
-  })
+  });
 
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser

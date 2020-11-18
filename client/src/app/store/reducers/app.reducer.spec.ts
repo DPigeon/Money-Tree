@@ -12,8 +12,8 @@ const stockInfo: Stock = {
   stockValue: 16.36,
   logo: '',
   stats: {
-    open: 100.50,
-    high: 200.20,
+    open: 100.5,
+    high: 200.2,
     low: 516510,
     volume: 151515,
     mktCap: 51651,
