@@ -1,0 +1,8 @@
+.mt-input-field {
+    width: calc(100% - 10px);
+    margin: 5px;
+
+    &.half {
+      width: calc(50% - 10px);
+    }
+}
