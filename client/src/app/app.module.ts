@@ -11,6 +11,8 @@ import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 // Component imports:
 import { AppComponent } from './app.component';
@@ -23,7 +25,6 @@ import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component'
 import { Effects } from './store/effects/app.effects';
 import { environment } from '../environments/environment';
 import { reducer } from './store/reducers/app.reducer';
-
 
 @NgModule({
   declarations: [
@@ -38,15 +39,17 @@ import { reducer } from './store/reducers/app.reducer';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot({appState: reducer}),
+    StoreModule.forRoot({ appState: reducer }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([Effects]),
     MatCardModule,
     FlexLayoutModule,
     MatIconModule,
     MatMenuModule,
+    MatButtonModule,
+    MatInputModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

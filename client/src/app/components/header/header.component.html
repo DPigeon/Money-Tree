@@ -1,4 +1,4 @@
-<div *ngIf="!isInMobileMode" class="header-container">
+<div class="header-container">
   <div class="logo-and-text">
     <figure>
       <img id="logo" src="../../../assets/Logo.png" alt="Money-Tree logo" />
@@ -11,73 +11,54 @@
   </div>
 
   <div class="right-side-buttons">
-    <mat-icon>home</mat-icon>
-    <mat-icon>leaderboard</mat-icon>
-    <a id="log-out-link" href="">Log out</a>
+    <mat-icon routerLink="/" routerLinkActive="active" routerLinkActive="active">home</mat-icon>
+    <mat-icon routerLink="/leaderboard" routerLinkActive="active" routerLinkActive="active">leaderboard</mat-icon>
+    <a id="log-out-link" routerLink="/home" routerLinkActive="active">Log out</a>
   </div>
 </div>
 
 <!-- when user is browsing on a mobile device -->
-<div *ngIf="isInMobileMode" class="header-container-mobile">
+<div class="header-container-mobile">
   <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn">
-      <mat-icon id="menu-icon">menu</mat-icon>
+    <mat-icon id="menu-btn-icon">menu</mat-icon>
   </button>
   <div class="logo-and-text-mobile">
     <figure>
       <img id="logo" src="../../../assets/Logo.png" alt="Money-Tree logo" />
-      <figcaption>Money Treee</figcaption>
+      <figcaption>Money Tree</figcaption>
     </figure>
   </div>
-  <mat-menu #menu="matMenu" class="mobile-menu-container">
-    <div class="mat-menu-style">
-      <figure>
-        <img
-          id="user-photo"
-          src="../../../assets/user-photo.png"
-          alt="user-photo"
-        />
-        <figcaption class="figcaption-mobile">
-          Hello Laurence <br />
-          <span id="score">Score:</span><span id="score-value"> 260</span>
-        </figcaption>
-      </figure>
 
-      <button mat-menu-item>
-        <mat-icon id="menu-icon">home</mat-icon>
+  <mat-menu #menu="matMenu" class="mobile-menu-container">
+    <figure>
+      <img id= 'user-photo' src="../../../assets/user-photo.png" alt="user-photo" />
+      <figcaption class="figcaption-in-menu">
+        Hello Laurence! <br>
+        <!-- TODO: Change 'laurence' to the username of the user who logged in-->
+        <span id="score">Score:</span><span id="score-value">260</span>
+      </figcaption>
+    </figure>
+    <div class="menu-items">
+      <button mat-menu-item routerLink="/" routerLinkActive="active" routerLinkActive="active">
+        <mat-icon id="menu-item-icon" >home</mat-icon>
         <span>Home</span>
       </button>
-      <button mat-menu-item>
-        <mat-icon id="menu-icon">leaderboard</mat-icon>
+      <button mat-menu-item routerLink="/leaderboard" routerLinkActive="active" routerLinkActive="active">
+        <mat-icon id="menu-item-icon">
+          leaderboard</mat-icon>
         <span>LeaderBoard</span>
       </button>
       <button mat-menu-item>
-        <mat-icon id="menu-icon">edit</mat-icon>
+        <mat-icon id="menu-item-icon">edit</mat-icon>
         <span>Edit Profile</span>
       </button>
       <button mat-menu-item>
-        <mat-icon id="menu-icon">trending_up</mat-icon>
+        <mat-icon id="menu-item-icon">trending_up</mat-icon>
         <span>Your Profile</span>
       </button>
-      <button mat-menu-item>
-        <a id="log-out-mobile" href="">Log out</a>
+      <button mat-menu-item routerLink="/home" routerLinkActive="active">
+        <a id="log-out-mobile">Log out</a>
       </button>
     </div>
   </mat-menu>
 </div>
-<!--    
-<div class='logo-and-text'>
-        <figure>
-            <img id='logo' src="../../../assets/Logo.png" alt="Money-Tree logo">
-            <figcaption> Money Tree</figcaption>
-        </figure>
-    </div>
-    
-    <div class='search'>
-            <input id='searchbox' type="text" placeholder="  Search for stocks ...">
-    </div>
-    <div class='right-side-buttons'>
-        
-        <mat-icon inline="true">home</mat-icon>
-        <mat-icon inline="true">leaderboard</mat-icon>
-        <a id='log-out-link' href="">Log out</a>
-    </div> -->
