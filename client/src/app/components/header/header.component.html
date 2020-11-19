@@ -1,7 +1,9 @@
 <div class="header-container">
   <div class="logo-and-text">
     <figure>
-      <img id="logo" src="../../../assets/Logo.png" alt="Money-Tree logo" />
+      <a routerLink="/" routerLinkActive="active">
+        <img id="logo" src="../../../assets/Logo.png" alt="Money-Tree logo"
+      /></a>
       <figcaption>Money Tree</figcaption>
     </figure>
   </div>
@@ -11,9 +13,16 @@
   </div>
 
   <div class="right-side-buttons">
-    <mat-icon routerLink="/" routerLinkActive="active" routerLinkActive="active">home</mat-icon>
-    <mat-icon routerLink="/leaderboard" routerLinkActive="active" routerLinkActive="active">leaderboard</mat-icon>
-    <a id="log-out-link" routerLink="/home" routerLinkActive="active">Log out</a>
+    <button mat-icon-button routerLink="/" routerLinkActive="active">
+      <mat-icon>home</mat-icon>
+    </button>
+    <button mat-icon-button routerLink="/leaderboard" routerLinkActive="active">
+      <mat-icon>leaderboard</mat-icon>
+    </button>
+
+    <button mat-icon-button routerLink="/home" routerLinkActive="active">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
   </div>
 </div>
 
@@ -24,29 +33,42 @@
   </button>
   <div class="logo-and-text-mobile">
     <figure>
-      <img id="logo" src="../../../assets/Logo.png" alt="Money-Tree logo" />
-      <figcaption>Money Tree</figcaption>
+      <a routerLink="/" routerLinkActive="active">
+        <img id="logo" src="../../../assets/Logo.png" alt="Money-Tree logo"
+      /></a>
     </figure>
   </div>
 
-  <mat-menu #menu="matMenu" class="mobile-menu-container">
+  <mat-menu #menu="matMenu">
     <figure>
-      <img id= 'user-photo' src="../../../assets/user-photo.png" alt="user-photo" />
+      <img
+        id="user-photo"
+        src="../../../assets/user-photo.png"
+        alt="user-photo"
+      />
       <figcaption class="figcaption-in-menu">
-        Hello Laurence! <br>
-        <!-- TODO: Change 'laurence' to the username of the user who logged in-->
+        Hello Laurence! <br />
         <span id="score">Score:</span><span id="score-value">260</span>
       </figcaption>
     </figure>
     <div class="menu-items">
-      <button mat-menu-item routerLink="/" routerLinkActive="active" routerLinkActive="active">
-        <mat-icon id="menu-item-icon" >home</mat-icon>
+      <button
+        mat-menu-item
+        routerLink="/"
+        routerLinkActive="active"
+        routerLinkActive="active"
+      >
+        <mat-icon id="menu-item-icon">home</mat-icon>
         <span>Home</span>
       </button>
-      <button mat-menu-item routerLink="/leaderboard" routerLinkActive="active" routerLinkActive="active">
-        <mat-icon id="menu-item-icon">
-          leaderboard</mat-icon>
-        <span>LeaderBoard</span>
+      <button
+        mat-menu-item
+        routerLink="/leaderboard"
+        routerLinkActive="active"
+        routerLinkActive="active"
+      >
+        <mat-icon id="menu-item-icon"> leaderboard</mat-icon>
+        <span>Leaderboard</span>
       </button>
       <button mat-menu-item>
         <mat-icon id="menu-item-icon">edit</mat-icon>
@@ -57,7 +79,8 @@
         <span>Your Profile</span>
       </button>
       <button mat-menu-item routerLink="/home" routerLinkActive="active">
-        <a id="log-out-mobile">Log out</a>
+        <mat-icon id="menu-item-icon">exit_to_app</mat-icon>
+        <span>Log out</span>
       </button>
     </div>
   </mat-menu>

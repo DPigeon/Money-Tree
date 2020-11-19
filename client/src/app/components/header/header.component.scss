@@ -20,6 +20,15 @@
 
   .right-side-buttons {
     padding: 0;
+    Button,
+    mat-icon {
+      color: white;
+      height: 40px;
+      width: 40px;
+      font-size: 40px;
+      margin-right: 10%;
+      margin-top: 5px;
+    }
   }
 
   #logo {
@@ -39,13 +48,6 @@
     height: 28px;
   }
 
-  mat-icon {
-    color: white;
-    height: 50px !important;
-    width: 50px !important;
-    font-size: 50px !important;
-    margin-right: 10%;
-  }
   #log-out-link {
     color: white;
     font-size: 22px;
@@ -60,18 +62,7 @@
   background-color: #07367c;
   display: none;
   align-items: center;
-  height: 100px;
-
-  figure {
-    margin-bottom: 30px;
-
-    figcaption {
-      text-align: center;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-    }
-  }
+  height: 5rem;
 
   .menu-btn {
     position: absolute;
@@ -98,37 +89,13 @@
     }
   }
 }
-#user-photo {
-  display: block;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  margin-right: auto;
-  margin-left: auto;
-  height: 150px;
-  width: 150px;
-}
-::ng-deep .cdk-overlay-connected-position-bounding-box {
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-}
-
-::ng-deep .mat-menu-panel {
-  max-width: none !important;
-  // border-radius: 0 !important;
-  width: 100vw !important;
-  height: calc(100vh - 100px) !important;
-  position: absolute !important;
-  top: 100px !important;
-  background: white;
-}
 
 .figcaption-in-menu {
   text-align: center;
   color: #282224;
   font-size: 22px;
   text-shadow: 0.15px 0.15px #282224;
-  margin-bottom: 50px;
+  margin-bottom: 2vh;
 
   #score {
     color: #af6060;
@@ -139,17 +106,41 @@
     font-size: 16px;
   }
 }
+#user-photo {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-right: auto;
+  margin-left: auto;
+  height: 6rem;
+  width: 6rem;
+}
+::ng-deep .cdk-overlay-connected-position-bounding-box {
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+}
+
+::ng-deep .mat-menu-panel {
+  overflow: hidden;
+  max-width: none !important;
+  width: 100vw !important;
+  height: calc(100vh - 5rem) !important;
+  position: absolute !important;
+  top: 5rem !important;
+  background: white;
+}
 
 .menu-items {
   align-items: center;
 
   button {
-    padding: 0 25%;
+    padding-left: 25%;
     margin-bottom: 10px;
   }
 
   span {
-    font-size: 22px;
+    font-size: 1.3rem;
     color: #07367c;
     text-decoration: underline;
   }
@@ -160,15 +151,6 @@
     height: 34px !important;
     font-size: 34px !important;
   }
-}
-
-#log-out-mobile {
-  color: #07367c;
-  text-align: center;
-  font-size: 22px;
-  text-decoration: underline;
-  display: block;
-  margin-top: 10px;
 }
 
 // triggers if the screen is less than 600px
