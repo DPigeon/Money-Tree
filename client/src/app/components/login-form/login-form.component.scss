@@ -3,18 +3,9 @@
 .container {
   width: 530px;
   padding: 3em;
-
-  .email-input {
-    width: calc(100% - 10px);
-    margin: 5px;
+  .login-text-hint {
+    display: none;
   }
-
-  .password-input,
-  .login-submit {
-    width: calc(50% - 10px);
-    margin: 5px;
-  }
-
   .mat-form-field {
     font-size: 16px;
   }
@@ -28,3 +19,15 @@
   }
 }
 
+@media only screen and (max-width: 600px) {
+  .container {
+    width: initial;
+    padding: 16px;
+    text-align: center;
+
+    .login-text-hint {
+      color: red;
+      display: unset;
+    }
+  }
+}

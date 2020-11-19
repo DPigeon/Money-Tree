@@ -4,18 +4,11 @@
   padding: 5em;
   width: 530px;
 
-  .half {
-    width: calc(50% - 10px);
-    margin-bottom: 10px;
-    margin-top: 10px;
-    padding: 5px;
+  .signup-title {
+    font-size: 48px;
+    margin-bottom: 1em;
   }
-  .full{
-    width: calc(100% - 10px);
-    margin-bottom: 10px;
-    margin-top: 10px;
-    padding: 5px;
-  }
+
   .mat-flat-button {
     background-color: $action-color;
     color: black;
@@ -24,8 +17,17 @@
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     margin-left: 5px;
   }
-  .semi-title{
-    font-size: 48px;
-    margin-bottom: 1em;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    width: initial;
+    padding: 16px;
+
+    .signup-title {
+      text-align: center;
+      margin-bottom: 16px;
+      font-size: 30px;
+    }
   }
 }
