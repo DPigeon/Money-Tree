@@ -62,7 +62,7 @@ describe('StockStats', () => {
     component.stockInfo.stats.open = stockInfo.stats.open;
     expect(component.open).toBe(component.stockInfo.stats.open.toFixed(2));
     component.stockInfo.stats.open = null;
-    expect(component.open).toBe('');
+    expect(component.open).toBe('N/A');
     component.stockInfo = null;
     expect(component.open).toBe('');
   });
@@ -73,7 +73,7 @@ describe('StockStats', () => {
     component.stockInfo.stats.high = stockInfo.stats.high;
     expect(component.high).toBe(component.stockInfo.stats.high.toFixed(2));
     component.stockInfo.stats.high = null;
-    expect(component.high).toBe('');
+    expect(component.high).toBe('N/A');
     component.stockInfo = null;
     expect(component.high).toBe('');
   });
@@ -84,7 +84,7 @@ describe('StockStats', () => {
     component.stockInfo.stats.low = stockInfo.stats.low;
     expect(component.low).toBe(component.stockInfo.stats.low.toFixed(2));
     component.stockInfo.stats.low = null;
-    expect(component.low).toBe('');
+    expect(component.low).toBe('N/A');
     component.stockInfo = null;
     expect(component.low).toBe('');
   });
@@ -99,7 +99,7 @@ describe('StockStats', () => {
       component.stockInfo.stats.volume.toPrecision(3)
     );
     component.stockInfo.stats.volume = null;
-    expect(component.volume).toBe('');
+    expect(component.volume).toBe('N/A');
     component.stockInfo = null;
     expect(component.volume).toBe('');
   });
@@ -110,29 +110,37 @@ describe('StockStats', () => {
     component.stockInfo.stats.mktCap = stockInfo.stats.mktCap;
     expect(component.mktCap).toBe(component.stockInfo.stats.mktCap.toFixed(2));
     component.stockInfo.stats.mktCap = null;
-    expect(component.mktCap).toBe('');
+    expect(component.mktCap).toBe('N/A');
     component.stockInfo = null;
     expect(component.mktCap).toBe('');
   });
 
   it('should display correct stock stock52weekLow stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.stock52weekLow).toBe(component.stockInfo.stats.stock52weekLow.toFixed(2));
+    expect(component.stock52weekLow).toBe(
+      component.stockInfo.stats.stock52weekLow.toFixed(2)
+    );
     component.stockInfo.stats.stock52weekLow = stockInfo.stats.stock52weekLow;
-    expect(component.stock52weekLow).toBe(component.stockInfo.stats.stock52weekLow.toFixed(2));
+    expect(component.stock52weekLow).toBe(
+      component.stockInfo.stats.stock52weekLow.toFixed(2)
+    );
     component.stockInfo.stats.stock52weekLow = null;
-    expect(component.stock52weekLow).toBe('');
+    expect(component.stock52weekLow).toBe('N/A');
     component.stockInfo = null;
     expect(component.stock52weekLow).toBe('');
   });
 
   it('should display correct stock stock52weekHigh stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.stock52weekHigh).toBe(component.stockInfo.stats.stock52weekHigh.toFixed(2));
+    expect(component.stock52weekHigh).toBe(
+      component.stockInfo.stats.stock52weekHigh.toFixed(2)
+    );
     component.stockInfo.stats.stock52weekHigh = stockInfo.stats.stock52weekHigh;
-    expect(component.stock52weekHigh).toBe(component.stockInfo.stats.stock52weekHigh.toFixed(2));
+    expect(component.stock52weekHigh).toBe(
+      component.stockInfo.stats.stock52weekHigh.toFixed(2)
+    );
     component.stockInfo.stats.stock52weekHigh = null;
-    expect(component.stock52weekHigh).toBe('');
+    expect(component.stock52weekHigh).toBe('N/A');
     component.stockInfo = null;
     expect(component.stock52weekHigh).toBe('');
   });
@@ -147,7 +155,7 @@ describe('StockStats', () => {
       component.stockInfo.stats.avgVolume.toPrecision(3)
     );
     component.stockInfo.stats.avgVolume = null;
-    expect(component.avgVolume).toBe('');
+    expect(component.avgVolume).toBe('N/A');
     component.stockInfo = null;
     expect(component.avgVolume).toBe('');
   });
