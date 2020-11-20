@@ -9,15 +9,16 @@
     background-size: cover;
     position: relative;
     color: $mt-dark;
-    
+
+    .sharedHeader {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
     .logo {
-        background-image: url("../../../assets/logo.svg");
         position: absolute;
         top: 2em;
         left: 5em;
-        height: 125px;
-        width: 20%;
-        background-repeat: no-repeat;
     }
     .app-login-position {
         position: absolute;
@@ -44,6 +45,7 @@
         mix-blend-mode: difference;
         color: $mt-white;
         margin-top: 26px;
+        line-height: 100%;
     }
     .money-tree {
         font-weight: 900;
@@ -91,7 +93,6 @@
             margin: auto;
             padding-top: 1em;
             mix-blend-mode: unset;
-        
         }
     }
 }

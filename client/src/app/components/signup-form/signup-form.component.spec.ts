@@ -1,14 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SignupFormComponent } from './signup-form.component';
 import { MATERIAL_MODULE_DEPENDENCIES } from '../../shared.module';
 
-import { SignupFormComponent } from './signup-form.component';
-
+// integration test
 describe('SignupFormComponent', () => {
   let component: SignupFormComponent;
   let fixture: ComponentFixture<SignupFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: MATERIAL_MODULE_DEPENDENCIES,
       declarations: [ SignupFormComponent ]
     })
     .compileComponents();
