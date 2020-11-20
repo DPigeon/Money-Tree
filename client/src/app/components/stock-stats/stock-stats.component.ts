@@ -10,35 +10,99 @@ export class StockStatsComponent {
   @Input() stockInfo: Stock;
   constructor() {}
 
-  get open(): string  {
-    return this.stockInfo ? this.stockInfo.stats.open ? this.stockInfo.stats.open.toFixed(2) : '' : '';
+  get open(): string {
+    if (!!this.stockInfo) {
+      if (!!this.stockInfo.stats.open) {
+        return this.stockInfo.stats.open.toFixed(2);
+      } else {
+        return 'N/A';
+      }
+    } else {
+      return '';
+    }
   }
 
-  get high(): string  {
-    return this.stockInfo ? this.stockInfo.stats.high ? this.stockInfo.stats.high.toFixed(2) : '' : '';
+  get high(): string {
+    if (!!this.stockInfo) {
+      if (!!this.stockInfo.stats.high) {
+        return this.stockInfo.stats.high.toFixed(2);
+      } else {
+        return 'N/A';
+      }
+    } else {
+      return '';
+    }
   }
 
-  get low(): string  {
-    return this.stockInfo ? this.stockInfo.stats.low ? this.stockInfo.stats.low.toFixed(2) : '' : '';
+  get low(): string {
+    if (!!this.stockInfo) {
+      if (!!this.stockInfo.stats.low) {
+        return this.stockInfo.stats.low.toFixed(2);
+      } else {
+        return 'N/A';
+      }
+    } else {
+      return '';
+    }
   }
 
-  get volume(): string  {
-    return this.stockInfo ?  this.stockInfo.stats.volume ? this.stockInfo.stats.volume.toPrecision(3) : '' : '';
+  get volume(): string {
+    if (!!this.stockInfo) {
+      if (!!this.stockInfo.stats.volume) {
+        return this.stockInfo.stats.volume.toFixed(2);
+      } else {
+        return 'N/A';
+      }
+    } else {
+      return '';
+    }
   }
 
-  get mktCap(): string  {
-    return this.stockInfo ? this.stockInfo.stats.mktCap ? this.stockInfo.stats.mktCap.toFixed(2) : '' : '';
+  get mktCap(): string {
+    if (!!this.stockInfo) {
+      if (!!this.stockInfo.stats.mktCap) {
+        return this.stockInfo.stats.mktCap.toFixed(2);
+      } else {
+        return 'N/A';
+      }
+    } else {
+      return '';
+    }
   }
 
-  get stock52weekHigh(): string  {
-    return this.stockInfo ? this.stockInfo.stats.stock52weekHigh ? this.stockInfo.stats.stock52weekHigh.toFixed(2) : '' : '';
+  get stock52weekHigh(): string {
+    if (!!this.stockInfo) {
+      if (!!this.stockInfo.stats.stock52weekHigh) {
+        return this.stockInfo.stats.stock52weekHigh.toFixed(2);
+      } else {
+        return 'N/A';
+      }
+    } else {
+      return '';
+    }
   }
 
-  get stock52weekLow(): string  {
-    return this.stockInfo ? this.stockInfo.stats.stock52weekLow ? this.stockInfo.stats.stock52weekLow.toFixed(2) : '' : '';
+  get stock52weekLow(): string {
+    if (!!this.stockInfo) {
+      if (!!this.stockInfo.stats.stock52weekLow) {
+        return this.stockInfo.stats.stock52weekLow.toFixed(2);
+      } else {
+        return 'N/A';
+      }
+    } else {
+      return '';
+    }
   }
 
-  get avgVolume(): string  {
-    return this.stockInfo ? this.stockInfo.stats.avgVolume ? this.stockInfo.stats.avgVolume.toPrecision(3) : '' : '';
+  get avgVolume(): string {
+    if (!!this.stockInfo) {
+      if (!!this.stockInfo.stats.avgVolume) {
+        return this.stockInfo.stats.avgVolume.toFixed(2);
+      } else {
+        return 'N/A';
+      }
+    } else {
+      return '';
+    }
   }
 }
