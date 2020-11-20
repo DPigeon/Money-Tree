@@ -17,8 +17,8 @@ const stockInfo: Stock = {
     low: 516510,
     volume: 151515,
     mktCap: 51651,
-    wh: 455,
-    wl: 123,
+    stock52weekHigh: 455,
+    stock52weekLow: 123,
     avgVolume: 199410,
   },
 };

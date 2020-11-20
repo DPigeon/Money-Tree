@@ -13,8 +13,8 @@ export interface Stock {
     low: number;
     volume: number;
     mktCap: number;
-    wh: number;
-    wl: number;
+    stock52weekHigh: number;
+    stock52weekLow: number;
     avgVolume: number;
   };
 }

@@ -36,33 +36,33 @@ export class AppPage {
     return by.tagName('mat-chip').toString();
   }
   getStockStatOpen(): string {
-    return by.id('statOpen').toString();
+    return by.id('stat-open').toString();
   }
 
   getStockStatHigh(): string {
-    return by.id('statHigh').toString();
+    return by.id('stat-high').toString();
   }
 
   getStockStatLow(): string {
-    return by.id('statLow').toString();
+    return by.id('stat-low').toString();
   }
   getStockStatVol(): string {
-    return by.id('statVol').toString();
+    return by.id('stat-vol').toString();
   }
 
   getStockStatMktCap(): string {
-    return by.id('statMktCap').toString();
+    return by.id('stat-mkt-cap').toString();
   }
 
-  getStockStatWl(): string {
-    return by.id('statWl').toString();
+  getStockStat52weekLow(): string {
+    return by.id('stat-week-low').toString();
   }
 
-  getStockStatWh(): string {
-    return by.id('statWh').toString();
+  getStockStat52weekHigh(): string {
+    return by.id('stat-week-high').toString();
   }
 
   getStockStatAvgVol(): string {
-    return by.id('statAvgVol').toString();
+    return by.id('stat-avg-Vol').toString();
   }
 }

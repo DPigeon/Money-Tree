@@ -42,8 +42,8 @@ const stockInfo: Stock = {
     low: 516510,
     volume: 151515,
     mktCap: 51651,
-    wh: 455,
-    wl: 123,
+    stock52weekHigh: 455,
+    stock52weekLow: 123,
     avgVolume: 199410,
   },
 };
@@ -115,26 +115,26 @@ describe('StockStats', () => {
     expect(component.mktCap).toBe('');
   });
 
-  it('should display correct stock wl stat', () => {
+  it('should display correct stock stock52weekLow stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.wl).toBe(component.stockInfo.stats.wl.toFixed(2));
-    component.stockInfo.stats.wl = stockInfo.stats.wl;
-    expect(component.wl).toBe(component.stockInfo.stats.wl.toFixed(2));
-    component.stockInfo.stats.wl = null;
-    expect(component.wl).toBe('');
+    expect(component.stock52weekLow).toBe(component.stockInfo.stats.stock52weekLow.toFixed(2));
+    component.stockInfo.stats.stock52weekLow = stockInfo.stats.stock52weekLow;
+    expect(component.stock52weekLow).toBe(component.stockInfo.stats.stock52weekLow.toFixed(2));
+    component.stockInfo.stats.stock52weekLow = null;
+    expect(component.stock52weekLow).toBe('');
     component.stockInfo = null;
-    expect(component.wl).toBe('');
+    expect(component.stock52weekLow).toBe('');
   });
 
-  it('should display correct stock wh stat', () => {
+  it('should display correct stock stock52weekHigh stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.wh).toBe(component.stockInfo.stats.wh.toFixed(2));
-    component.stockInfo.stats.wh = stockInfo.stats.wh;
-    expect(component.wh).toBe(component.stockInfo.stats.wh.toFixed(2));
-    component.stockInfo.stats.wh = null;
-    expect(component.wh).toBe('');
+    expect(component.stock52weekHigh).toBe(component.stockInfo.stats.stock52weekHigh.toFixed(2));
+    component.stockInfo.stats.stock52weekHigh = stockInfo.stats.stock52weekHigh;
+    expect(component.stock52weekHigh).toBe(component.stockInfo.stats.stock52weekHigh.toFixed(2));
+    component.stockInfo.stats.stock52weekHigh = null;
+    expect(component.stock52weekHigh).toBe('');
     component.stockInfo = null;
-    expect(component.wh).toBe('');
+    expect(component.stock52weekHigh).toBe('');
   });
 
   it('should display correct stock avg volume stat', () => {

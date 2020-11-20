@@ -30,12 +30,12 @@ export class StockStatsComponent {
     return this.stockInfo ? this.stockInfo.stats.mktCap ? this.stockInfo.stats.mktCap.toFixed(2) : '' : '';
   }
 
-  get wh(): string  {
-    return this.stockInfo ? this.stockInfo.stats.wh ? this.stockInfo.stats.wh.toFixed(2) : '' : '';
+  get stock52weekHigh(): string  {
+    return this.stockInfo ? this.stockInfo.stats.stock52weekHigh ? this.stockInfo.stats.stock52weekHigh.toFixed(2) : '' : '';
   }
 
-  get wl(): string  {
-    return this.stockInfo ? this.stockInfo.stats.wl ? this.stockInfo.stats.wl.toFixed(2) : '' : '';
+  get stock52weekLow(): string  {
+    return this.stockInfo ? this.stockInfo.stats.stock52weekLow ? this.stockInfo.stats.stock52weekLow.toFixed(2) : '' : '';
   }
 
   get avgVolume(): string  {

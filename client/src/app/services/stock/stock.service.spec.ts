@@ -59,8 +59,8 @@ describe('StockService', () => {
       low: iexSampleResponse.book.quote.low,
       volume: iexSampleResponse.book.quote.volume,
       mktCap: iexSampleResponse.book.quote.marketCap,
-      wh: iexSampleResponse.book.quote.week52High,
-      wl: iexSampleResponse.book.quote.week52Low,
+      stock52weekHigh: iexSampleResponse.book.quote.week52High,
+      stock52weekLow: iexSampleResponse.book.quote.week52Low,
       avgVolume: iexSampleResponse.book.quote.avgTotalVolume,
     },
   };

@@ -61,18 +61,18 @@ describe('workspace-project App', () => {
     expect(page.getStockStatLow()).toBeTruthy();
     expect(page.getStockStatVol()).toBeTruthy();
     expect(page.getStockStatMktCap()).toBeTruthy();
-    expect(page.getStockStatWh()).toBeTruthy();
-    expect(page.getStockStatWl()).toBeTruthy();
+    expect(page.getStockStat52weekHigh()).toBeTruthy();
+    expect(page.getStockStat52weekLow()).toBeTruthy();
     expect(page.getStockStatAvgVol()).toBeTruthy();
   });
 
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);
-    // expect(logs).not.toContain(
-    //   jasmine.objectContaining({
-    //     level: logging.Level.SEVERE,
-    //   } as logging.Entry)
-    // );
+    expect(logs).not.toContain(
+      jasmine.objectContaining({
+        level: logging.Level.SEVERE,
+      } as logging.Entry)
+    );
   });
 });
