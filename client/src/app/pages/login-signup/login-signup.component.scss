@@ -70,25 +70,28 @@
         }
         .app-signup-position {
             position: absolute;
-            top: 12em;
+            top: 9em;
             bottom: unset;
             left: unset;
         }
         .money-tree-position {
             align-self: center;
             position: unset;
+            margin-top: 20px;
         }
         .money-tree {
             display: none;
         }
         .sub-header {
-            color: $mt-dark;
+            color: $mt-white;
             text-transform: lowercase;
             font-size: 25px;
             text-align: center;
             width: 250px;
             margin: auto;
-            padding-top: 2em;
+            padding-top: 1em;
+            mix-blend-mode: unset;
+        
         }
     }
 }
