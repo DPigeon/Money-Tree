@@ -33,6 +33,7 @@
         position: absolute;
         top: 12em;
         left: 5em;
+        margin-top: 35px;
     }
     .login-text-hint {
         display: none;
@@ -41,7 +42,8 @@
         font-weight: 500;
         font-size: 46px;
         mix-blend-mode: difference;
-        color: $mt-dark;
+        color: $mt-white;
+        margin-top: 26px;
     }
     .money-tree {
         font-weight: 900;
