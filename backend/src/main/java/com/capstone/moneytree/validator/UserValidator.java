@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
 
 import com.capstone.moneytree.dao.UserDao;
 import com.capstone.moneytree.exception.MissingMandatoryFieldException;
@@ -29,20 +30,11 @@ public class UserValidator implements Validator {
       return User.class.equals(aClass);
    }
 
-   /**
-    * Checks if all fields are valide and that the username or email does not exist.
-    * Otherwise, throws an error if one of the two validations are not respected.
-    */
    @Override
    public void validate(Object var1) {
       User userToValidate = (User) var1;
       validateEmptyFields(userToValidate);
       validateEmailAndUsername(userToValidate);
-   }
-
-   @Override
-   public boolean isValid(Object var1) {
-      return false;
    }
 
    public void validateEmailAndUsername(User user) {
