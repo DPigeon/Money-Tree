@@ -8,20 +8,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.capstone.moneytree.dao.UserDao;
 import com.capstone.moneytree.exception.MissingMandatoryFieldException;
 import com.capstone.moneytree.handler.exception.UserAlreadyExistsException;
 import com.capstone.moneytree.model.node.User;
-import com.capstone.moneytree.service.api.UserService;
 
 @Component
 public class UserValidator implements Validator {
-
    private static final Logger LOG = LoggerFactory.getLogger(UserValidator.class);
-   private UserService userService;
+
+   private final UserDao userDao;
 
    @Autowired
-   public UserValidator(UserService userService) {
-      this.userService = userService;
+   public UserValidator(UserDao userDao) {
+      this.userDao = userDao;
    }
 
    @Override
@@ -32,7 +32,7 @@ public class UserValidator implements Validator {
    /**
     * Checks if all fields are valide and that the username or email does not exist.
     * Otherwise, throws an error if one of the two validations are not respected.
-    * */
+    */
    @Override
    public void validate(Object var1) {
       User userToValidate = (User) var1;
@@ -65,11 +65,16 @@ public class UserValidator implements Validator {
 
    /**
     * Method to look if user exists with unique email and username.
+    *
     * @param user User from front end.
     * @return boolean if exists or not.
     */
    private boolean userAlreadyExists(User user) {
-      return Objects.nonNull(userService.
-              getUserByEmailAndUsername(user.getEmail(), user.getUsername()));
+      return Objects.nonNull(getUserDao().
+              findUserByEmailAndUsername(user.getEmail(), user.getUsername()));
+   }
+
+   public UserDao getUserDao() {
+      return userDao;
    }
 }

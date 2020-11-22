@@ -4,15 +4,18 @@ import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.handler.ExceptionMessage;
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.service.api.UserService;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.Valid;
 
 
 @MoneyTreeController
@@ -27,6 +30,10 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * A GET method that fetches all users present within the database
+     * @return A proper response with a list of users
+     */
     @GetMapping
     List<User> all() {
         List<User> users = new ArrayList<>();
@@ -41,27 +48,28 @@ public class UserController {
     /**
      * A POST method that receives a user JSON object and registers it
      * @param user The JSON object body
-     * @return A proper response with message
+     * @return A proper response with the URI of the newly created user
      */
     @PostMapping("/create-user")
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.createUser(user));
+        User createdUser = userService.createUser(user);
+
+        URI userURI = ServletUriComponentsBuilder.fromCurrentContextPath().
+                path("/users/{id}").
+                buildAndExpand(createdUser.getId()).toUri();
+
+        return ResponseEntity.created(userURI).build();
     }
 
     /**
      * A method that updates a user with a new Alpaca key. This should be done only once at beginning
-     * @param userWithKey User with the Alpaca key
+     * @param id The user ID sent from the frontend
+     * @param key The Alpaca API key sent from the frontend
      * @return The new updated user from the database
      */
-    @PostMapping("/register-alpaca-key")
-    public ResponseEntity<User> registerAlpacaApiKey(@RequestBody User userWithKey) {
-        String key = userWithKey.getAlpacaApiKey();
-
-        // TODO: Refactor this into a validation class validateString method to validate strings & message class too
-        if (StringUtils.isBlank(key)) {
-            throw new IllegalArgumentException();
-        }
-        User updatedUser = userService.registerAlpacaApiKey(userWithKey);
+    @PostMapping("/{id}/register-alpaca-key/{key}")
+    public ResponseEntity<User> registerAlpacaApiKey(@Valid @PathVariable Long id, @Valid @PathVariable String key) {
+        User updatedUser = userService.registerAlpacaApiKey(id, key);
 
         if (updatedUser == null) {
             throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage());

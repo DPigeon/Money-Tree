@@ -28,7 +28,7 @@ public interface UserService {
 
    User createUser(User user);
 
-   User registerAlpacaApiKey(User userWithKey);
+   User registerAlpacaApiKey(Long id, String key);
 
    UserValidator getUserValidator();
 }

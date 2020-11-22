@@ -20,23 +20,14 @@ import java.time.LocalDate
 @SpringBootTest
 class AlpacaControllerIntegrationTest extends Specification {
 
-    // TODO: Replace this later
-    private static final String apiVersion = "v2"
-    private static final String keyId = "PKZJK3IXQ4JZAWCBDSRX"
-    private static final String secret = "SA5sYIYR58AukN8NKpdGkQZSCvOCoTXYgyjuaoUe"
-    private static final String baseApiUrl = "https://paper-api.alpaca.markets"
-    private static final String baseDataUrl = "https://data.alpaca.markets"
+    private static final String API_VERSION = "v2"
+    private static final String KEY_ID = System.getenv().get("ALPACA_KEY_ID")
+    private static final String SECRET = System.getenv().get("ALPACA_SECRET_ID")
+    private static final String BASE_API_URL = "https://paper-api.alpaca.markets"
+    private static final String BASE_DATA_URL = "https://data.alpaca.markets"
 
-    @Shared
-    def alpacaController
-
-    @Shared
-    def marketInteractionsFacade
-
-    def setupSpec() {
-        marketInteractionsFacade = new MarketInteractionsFacade(apiVersion, keyId, secret, baseApiUrl, baseDataUrl)
-        alpacaController = new AlpacaController(marketInteractionsFacade)
-    }
+    def marketInteractionsFacade = new MarketInteractionsFacade(API_VERSION, KEY_ID, SECRET, BASE_API_URL, BASE_DATA_URL)
+    def alpacaController = new AlpacaController(marketInteractionsFacade)
 
     @Test
     def "Should retrieve an Alpaca account successfully"() {

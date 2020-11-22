@@ -1,6 +1,5 @@
 package com.capstone.moneytree.service.impl;
 
-import java.util.LinkedHashMap;
 
 import com.capstone.moneytree.dao.UserDao;
 import com.capstone.moneytree.exception.EntityNotFoundException;
@@ -78,16 +77,16 @@ public class DefaultUserService implements UserService {
    }
 
    @Override
-   public User registerAlpacaApiKey(User userWithKey) {
-      String key = userWithKey.getAlpacaApiKey();
-      String email = userWithKey.getEmail();
-      String username = userWithKey.getUsername();
-      User userToUpdate = userDao.findUserByEmailAndUsername(email, username);
-      if (userToUpdate != null) {
-         userToUpdate.setAlpacaApiKey(key);
-         userDao.save(userToUpdate);
-         LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
+   public User registerAlpacaApiKey(Long id, String key) {
+      User userToUpdate = userDao.findUserById(id);
+      if (userToUpdate == null) {
+         throw new EntityNotFoundException(String.format("User with id %s not found", id));
       }
+      userToUpdate.setAlpacaApiKey(key);
+      userDao.save(userToUpdate);
+
+      LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
+
       return userToUpdate;
    }
 
