@@ -29,4 +29,14 @@ class MoneyTreeTestUtils {
       User user3 = createUser("joe@test.com", "Joe", "hello3", "Joe", "Wert", null)
       return Arrays.asList(user1, user2, user3)
    }
+
+   /**
+    * Utility method to create credentials and return a user
+    * */
+   static User createCredential(String email, String password) {
+      return User.builder()
+              .email(email)
+              .password(password)
+              .build()
+   }
 }

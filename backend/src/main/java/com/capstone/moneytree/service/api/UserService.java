@@ -33,8 +33,6 @@ public interface UserService {
    User registerAlpacaApiKey(Long id, String key);
 
    UserValidator getUserValidator();
-  
-   User registerAlpacaApiKey(Long id, String key);
 
    User login(User credentials) throws CredentialNotFoundException;
 }

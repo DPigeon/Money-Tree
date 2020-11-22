@@ -17,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
-import java.util.List;
-
 /**
  * {@inheritDoc}
  */
@@ -92,21 +90,24 @@ public class DefaultUserService implements UserService {
 
       return userToUpdate;
    }
-  
-     /**
-     * A method to verify given credentials against existing user records
-     * @param credentials A User object with email and unencrypted password
-     * @return The full User object from the database if login is successful, null otherwise
-     */
-    @Override
-    public User login(User credentials) throws CredentialNotFoundException {
-        User user = userDao.findUserByEmail(credentials.getEmail());
-        if(user != null && compareDigests(credentials.getPassword(), user.getPassword())){
-            return user;
-        }else{
-            throw new CredentialNotFoundException();
-        }
-    }
+
+   /**
+    * A method to verify given credentials against existing user records
+    *
+    * @param credentials A User object with email and unencrypted password
+    * @return The full User object from the database if login is successful, null otherwise
+    */
+   @Override
+   public User login(User credentials)
+           throws
+           CredentialNotFoundException {
+      User user = userDao.findUserByEmail(credentials.getEmail());
+      if (user != null && compareDigests(credentials.getPassword(), user.getPassword())) {
+         return user;
+      } else {
+         throw new CredentialNotFoundException();
+      }
+   }
 
    @Override
    public UserValidator getUserValidator() {

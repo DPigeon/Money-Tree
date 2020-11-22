@@ -1,7 +1,8 @@
 package com.capstone.moneytree.controller
 
-import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUsersInMockedDatabase
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createCredential
 
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.web.context.request.RequestContextHolder
@@ -21,7 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import spock.lang.Specification
 
-import javax.security.auth.login.CredentialNotFoundException;
+import javax.security.auth.login.CredentialNotFoundException
 
 /**
  * Unit Tests for the User Controller.
@@ -200,39 +201,39 @@ class UserControllerTest extends Specification {
       then: "should throw EntityNotFoundException"
       thrown(EntityNotFoundException)
    }
-  
-     @Test
-    def "Login Test"(){
-        given: "A registeredUser"
-        String password = "password123"
-        User registeredUser = createUser("user.user@money-tree.tech", "usr", password, "user", "user", null);
-        //encrypts the password
-        userController.createUser(registeredUser)
-        //mock userDao.findUserByEmail()
-        userDaoMock.findUserByEmail(registeredUser.getEmail()) >> registeredUser
 
-        and: "A set credentialOk"
-        User credentialOk = createCredential(registeredUser.getEmail(), password)
+   @Test
+   def "Login Test"() {
+      given: "A registeredUser"
+      String password = "password123"
+      User registeredUser = createUser("user.user@money-tree.tech", "usr", password, "user", "user", null)
+      //encrypts the password
+      userController.createUser(registeredUser)
+      //mock userDao.findUserByEmail()
+      userDao.findUserByEmail(registeredUser.getEmail()) >> registeredUser
 
-        and: "A set of credentialUnregisteredUser"
-        User credentialUnregisteredUser = createCredential("tamvanum@money-tree.tech", "tamvanum")
+      and: "A set credentialOk"
+      User credentialOk = createCredential(registeredUser.getEmail(), password)
 
-        and: "A set of credentialWrongPassword"
-        User credentialWrongPassword = createCredential(registeredUser.getEmail(), "tamvanum")
+      and: "A set of credentialUnregisteredUser"
+      User credentialUnregisteredUser = createCredential("tamvanum@money-tree.tech", "tamvanum")
 
-        when: "Attempt login with credentialOk"
-        User attempt0 = userController.login(credentialOk)
-        then: "Should return registeredUser"
-        attempt0 == registeredUser
+      and: "A set of credentialWrongPassword"
+      User credentialWrongPassword = createCredential(registeredUser.getEmail(), "tamvanum")
 
-        when: "Attempt login with credentialUnregisteredUser"
-        userController.login(credentialUnregisteredUser)
-        then: "Should throw CredentialsNotFoundException"
-        thrown(CredentialNotFoundException)
+      when: "Attempt login with credentialOk"
+      User attempt0 = userController.login(credentialOk)
+      then: "Should return registeredUser"
+      attempt0 == registeredUser
 
-        when: "Attempt login with credentialWrongPassword"
-        userController.login(credentialWrongPassword)
-        then: "Should throw CredentialNotFoundException"
-        thrown(CredentialNotFoundException)
-    }
+      when: "Attempt login with credentialUnregisteredUser"
+      userController.login(credentialUnregisteredUser)
+      then: "Should throw CredentialsNotFoundException"
+      thrown(CredentialNotFoundException)
+
+      when: "Attempt login with credentialWrongPassword"
+      userController.login(credentialWrongPassword)
+      then: "Should throw CredentialNotFoundException"
+      thrown(CredentialNotFoundException)
+   }
 }

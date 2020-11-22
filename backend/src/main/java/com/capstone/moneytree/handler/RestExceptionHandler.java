@@ -6,7 +6,9 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.capstone.moneytree.exception.MissingMandatoryFieldException;
 import com.capstone.moneytree.handler.exception.UserAlreadyExistsException;
+
 import javassist.NotFoundException;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
@@ -95,6 +97,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
    /**
     * Exception Handler for CredentialNotFoundException
+    *
     * @param ex A CredentialNotFoundException
     * @return 404 NOT FOUND
     */
