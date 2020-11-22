@@ -1,22 +1,38 @@
 package com.capstone.moneytree.service.api;
 
 import com.capstone.moneytree.model.node.User;
+import com.capstone.moneytree.validator.UserValidator;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
+/**
+ * User service for all user based interactions and business logic
+ */
 public interface UserService {
 
-    Iterable<User> getAllUsers();
+   /**
+    * Gets all users from the database.
+    *
+    * @return the list of users. Empty list if none.
+    */
+   Iterable<User> getAllUsers();
 
-    User getUserById(Long id);
+   User getUserById(Long id);
 
-    User getUserByEmailAndUsername(String email, String username);
+   /**
+    * Find a unique User with email and username
+    *
+    * @param email    The email of the user
+    * @param username The username of the user
+    * @return The User in the database
+    */
+   User getUserByEmailAndUsername(String email, String username);
 
-    User createUser(User user);
+   User createUser(User user);
 
-    boolean userExists(String email, String username);
+   User registerAlpacaApiKey(Long id, String key);
 
-    User registerAlpacaApiKey(Long id, String key);
+   UserValidator getUserValidator();
 
-    User login(User credentials) throws CredentialNotFoundException;
+   User login(User credentials) throws CredentialNotFoundException;
 }

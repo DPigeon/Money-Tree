@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @MoneyTreeController
-@RequestMapping("/api/alpaca")
+@RequestMapping("/alpaca")
 public class AlpacaController {
 
    @Autowired
