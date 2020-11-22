@@ -3,6 +3,8 @@ package com.capstone.moneytree.service.api;
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.validator.UserValidator;
 
+import javax.security.auth.login.CredentialNotFoundException;
+
 /**
  * User service for all user based interactions and business logic
  */
@@ -31,4 +33,8 @@ public interface UserService {
    User registerAlpacaApiKey(Long id, String key);
 
    UserValidator getUserValidator();
+  
+   User registerAlpacaApiKey(Long id, String key);
+
+   User login(User credentials) throws CredentialNotFoundException;
 }
