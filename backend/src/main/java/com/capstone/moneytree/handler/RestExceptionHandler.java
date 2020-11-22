@@ -1,10 +1,10 @@
 package com.capstone.moneytree.handler;
 
 import static com.capstone.moneytree.handler.ExceptionMessage.*;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 import com.capstone.moneytree.exception.MissingMandatoryFieldException;
+import com.capstone.moneytree.exception.FailedUploadImageS3Exception;
 import com.capstone.moneytree.handler.exception.UserAlreadyExistsException;
 
 import javassist.NotFoundException;
@@ -27,6 +27,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
    private ResponseEntity<MoneyTreeError> buildResponseEntity(MoneyTreeError apiError) {
       return new ResponseEntity<>(apiError, apiError.getStatus());
+   }
+
+   @ExceptionHandler(FailedUploadImageS3Exception.class)
+   protected ResponseEntity<MoneyTreeError> handleFailedUploadImageS3(
+           FailedUploadImageS3Exception ex) {
+      MoneyTreeError apiError = MoneyTreeError.builder()
+              .status(INTERNAL_SERVER_ERROR)
+              .debugMessage(ex.getMessage())
+              .message(FAILED_TO_UPLOAD_S3.getMessage())
+              .build();
+      return buildResponseEntity(apiError);
    }
 
    @ExceptionHandler(EntityNotFoundException.class)

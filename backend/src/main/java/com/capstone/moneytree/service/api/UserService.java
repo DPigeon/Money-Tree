@@ -2,6 +2,7 @@ package com.capstone.moneytree.service.api;
 
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.validator.UserValidator;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
@@ -35,4 +36,6 @@ public interface UserService {
    UserValidator getUserValidator();
 
    User login(User credentials) throws CredentialNotFoundException;
+
+   User editUserProfile(Long id, MultipartFile imageFile);
 }

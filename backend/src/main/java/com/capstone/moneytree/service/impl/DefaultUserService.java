@@ -4,6 +4,7 @@ package com.capstone.moneytree.service.impl;
 import com.capstone.moneytree.dao.UserDao;
 import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.model.node.User;
+import com.capstone.moneytree.service.api.AmazonS3Service;
 import com.capstone.moneytree.service.api.UserService;
 import com.capstone.moneytree.utils.MoneyTreePasswordEncryption;
 import com.capstone.moneytree.validator.UserValidator;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
@@ -30,12 +32,14 @@ public class DefaultUserService implements UserService {
    private final ValidatorFactory validatorFactory;
    private final MoneyTreePasswordEncryption passwordEncryption;
    private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
+   private final AmazonS3Service amazonS3Service;
 
    @Autowired
-   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory) {
+   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service) {
       this.userDao = userDao;
       this.validatorFactory = validatorFactory;
       this.passwordEncryption = new MoneyTreePasswordEncryption();
+      this.amazonS3Service = amazonS3Service;
    }
 
    @Override
@@ -75,6 +79,23 @@ public class DefaultUserService implements UserService {
       LOG.info("Created user: {}", user.getFirstName());
 
       return user;
+   }
+
+   @Override
+   public User editUserProfile(Long id, MultipartFile imageFile) {
+      //verify user exists
+      User userToUpdate = userDao.findUserById(id);
+      if (userToUpdate == null) {
+         throw new EntityNotFoundException(String.format("User with id %s not found", id));
+      }
+      //since user exists, we can now upload image to s3 and save imageUrl into db
+      String imageUrl = this.amazonS3Service.uploadImageToS3Bucket(imageFile, "moneytree-profile-pictures");
+
+      userToUpdate.setAvatarURL(imageUrl);
+      userDao.save(userToUpdate);
+
+      LOG.info("Edited user profile {}", userToUpdate.getEmail());
+      return userToUpdate;
    }
 
    @Override

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -101,5 +102,16 @@ public class UserController {
            throws
            CredentialNotFoundException {
       return userService.login(credentials);
+   }
+
+   @PutMapping("/{id}/editprofile")
+   ResponseEntity<User> editUserProfile(@PathVariable Long id,
+                                        @RequestParam(required = false) MultipartFile imageFile) {
+      if (imageFile != null) {
+         return ResponseEntity.ok(this.userService.editUserProfile(id, imageFile));
+      }
+      else {
+         return ResponseEntity.badRequest().body(null);
+      }
    }
 }
