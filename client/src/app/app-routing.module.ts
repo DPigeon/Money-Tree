@@ -7,7 +7,7 @@ import { LoginSignupComponent } from '../app/pages/login-signup/login-signup.com
 const routes: Routes = [
   { path: 'stock-detail/:ticker', component: StockDetailComponent },
   { path: 'leaderboard', component: LeaderboardComponent },
-  { path: 'home', component: LoginSignupComponent} // TO DO: choose adequate path for landing page
+  { path: '', component: LoginSignupComponent} // TO DO: choose adequate path for landing page
 ];
 
 @NgModule({
