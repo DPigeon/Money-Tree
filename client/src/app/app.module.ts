@@ -14,6 +14,10 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { LoginSignupComponent } from './pages/login-signup/login-signup.component';
+import { SignupFormComponent } from './components/signup-form/signup-form.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { LoginFormComponent } from './components/login-form/login-form.component';
 
 // Component imports:
 import { AppComponent } from './app.component';
@@ -34,6 +38,9 @@ import { reducer } from './store/reducers/app.reducer';
     StockDetailHeaderComponent,
     HeaderComponent,
     LeaderboardComponent,
+    LoginSignupComponent,
+    SignupFormComponent,
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +57,7 @@ import { reducer } from './store/reducers/app.reducer';
     MatMenuModule,
     MatButtonModule,
     MatInputModule,
+    MatFormFieldModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
