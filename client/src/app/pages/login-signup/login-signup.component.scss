@@ -1,7 +1,6 @@
 @import "../../../styles.scss";
 
 .container {
-    mix-blend-mode: screen;
     background-image: url("../../../assets/backgroung-shape.svg");
     height: 100%;
     background-position: center;
@@ -61,7 +60,6 @@
         }
         .app-login-position {
             position: absolute;
-            bottom: 0;
             top: unset;
             bottom: 5vh;
         }
