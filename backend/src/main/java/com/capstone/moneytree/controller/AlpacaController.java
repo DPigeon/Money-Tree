@@ -83,4 +83,9 @@ public class AlpacaController {
 
       return ResponseEntity.ok(portfolioHistory);
    }
+
+   @GetMapping("/trade-updates")
+   public void registerToTradeUpdates() {
+      marketInteractionsFacade.listenToTradeUpdates();
+   }
 }

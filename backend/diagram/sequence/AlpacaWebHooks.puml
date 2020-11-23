@@ -1,0 +1,46 @@
+@startuml
+
+participant "AlpacaAPI" #FFAAAA
+database Neo4j #lightgreen
+participant "Backend" #beige
+participant "Client" #lightblue
+actor User
+
+activate Client
+Client -> Client : WSClient (listening)
+
+AlpacaAPI -> AlpacaAPI : onStreamUpdate()
+activate AlpacaAPI
+
+activate Backend
+Backend -> Backend : WSServer (listening)
+AlpacaAPI -> Backend : connect()
+AlpacaAPI <-- Backend : connectionEstablished
+AlpacaAPI -> Backend : streams: "trade_updates" (fulfilled)
+
+Backend -> Neo4j : create/updateTransaction()
+activate Neo4j
+Backend <-- Neo4j : transaction
+deactivate Neo4j
+Backend -> Neo4j : updateScore()
+
+activate Neo4j
+Backend <-- Neo4j : score
+deactivate Neo4j
+
+Backend <- Client : connect()
+Backend --> Client : connectionEstablished
+Backend <- Client : getTradeUpdates()
+Backend --> Client : data
+Client -> User : notification
+activate User
+Backend --> AlpacaAPI : OK
+
+Client <-- User : dismiss(click)
+deactivate User
+
+deactivate Client
+deactivate Backend
+deactivate AlpacaAPI
+
+@enduml

@@ -1,12 +1,19 @@
 package com.capstone.moneytree.facade;
 
+import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.enums.PortfolioPeriodUnit;
 import net.jacobpeterson.alpaca.enums.PortfolioTimeFrame;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
+import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListenerAdapter;
+import net.jacobpeterson.alpaca.websocket.broker.message.AlpacaStreamMessageType;
 import net.jacobpeterson.domain.alpaca.account.Account;
 import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
 import net.jacobpeterson.domain.alpaca.position.Position;
+import net.jacobpeterson.domain.alpaca.streaming.AlpacaStreamMessage;
+import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate;
+import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdateMessage;
+import org.eclipse.jetty.io.FillInterest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,5 +107,38 @@ public class MarketInteractionsFacade {
       }
 
       return portfolioHistory;
+   }
+
+   /**
+    * A stream listener to receive trade updates
+    * https://alpaca.markets/docs/api-documentation/api-v2/streaming/
+    */
+   public void listenToTradeUpdates() {
+      try {
+         AlpacaStreamListenerAdapter tradeListener = createStreamListenerAdapter(AlpacaStreamMessageType.TRADE_UPDATES);
+         alpacaAPI.addAlpacaStreamListener(tradeListener);
+      } catch (WebsocketException e) {
+         e.printStackTrace();
+      }
+   }
+
+   /**
+    * Creates a streamListenerAdapter for stream listeners
+    * @param messageType A list of AlpacaStreamMessageType
+    * @return An AlpacaStreamListenerAdapter
+    */
+   private AlpacaStreamListenerAdapter createStreamListenerAdapter(AlpacaStreamMessageType... messageType) {
+      return new AlpacaStreamListenerAdapter(messageType) {
+         @Override
+         public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
+            if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES) {
+               TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
+               TradeUpdate tradeUpdate = tradeMessage.getData();
+               if (tradeUpdate.getEvent().equals("fill")) {
+                  LOGGER.info("A trade has been fulfilled with key: {}", tradeUpdate);
+               }
+            }
+         }
+      };
    }
 }
