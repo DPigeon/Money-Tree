@@ -2,7 +2,9 @@
 
 .container {
   width: 530px;
-  padding: 3em;
+  padding-right: 3em;
+  max-width: 50vw;
+
   .login-text-hint {
     display: none;
   }
@@ -24,6 +26,7 @@
     width: initial;
     padding: 16px;
     text-align: center;
+    max-width: none;
 
     .login-text-hint {
       color: $mt-dark;
