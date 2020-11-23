@@ -13,6 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Retention(RetentionPolicy.RUNTIME)
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin(value = "http://localhost")
+@CrossOrigin(origins = "http://127.0.0.1")
 public @interface MoneyTreeController {
 }
