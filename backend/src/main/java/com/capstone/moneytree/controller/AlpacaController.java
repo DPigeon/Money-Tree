@@ -2,12 +2,14 @@ package com.capstone.moneytree.controller;
 
 import com.capstone.moneytree.facade.MarketInteractionsFacade;
 
+import com.capstone.moneytree.model.node.User;
 import net.jacobpeterson.domain.alpaca.account.Account;
 import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
 import net.jacobpeterson.domain.alpaca.position.Position;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,8 +86,8 @@ public class AlpacaController {
       return ResponseEntity.ok(portfolioHistory);
    }
 
-   @GetMapping("/trade-updates")
-   public void registerToTradeUpdates() {
-      marketInteractionsFacade.listenToTradeUpdates();
+   @MessageMapping("/secured/trade-updates")
+   public void registerToTradeUpdates(User user) {
+      marketInteractionsFacade.listenToTradeUpdates(user);
    }
 }
