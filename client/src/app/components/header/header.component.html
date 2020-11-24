@@ -1,0 +1,87 @@
+<div class="header-container">
+  <div class="logo-and-text">
+    <figure>
+      <a routerLink="/" routerLinkActive="active">
+        <img id="logo" src="../../../assets/Logo.png" alt="Money-Tree logo"
+      /></a>
+      <figcaption>Money Tree</figcaption>
+    </figure>
+  </div>
+
+  <div class="search-box-container">
+    <input id="searchbox" type="text" placeholder="Search for stocks ..." />
+  </div>
+
+  <div class="right-side-buttons">
+    <button mat-icon-button routerLink="/" routerLinkActive="active">
+      <mat-icon>home</mat-icon>
+    </button>
+    <button mat-icon-button routerLink="/leaderboard" routerLinkActive="active">
+      <mat-icon>leaderboard</mat-icon>
+    </button>
+
+    <button mat-icon-button routerLink="/home" routerLinkActive="active">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
+  </div>
+</div>
+
+<!-- when user is browsing on a mobile device -->
+<div class="header-container-mobile">
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn">
+    <mat-icon id="menu-btn-icon">menu</mat-icon>
+  </button>
+  <div class="logo-and-text-mobile">
+    <figure>
+      <a routerLink="/" routerLinkActive="active">
+        <img id="logo" src="../../../assets/Logo.png" alt="Money-Tree logo"
+      /></a>
+    </figure>
+  </div>
+
+  <mat-menu #menu="matMenu">
+    <figure>
+      <img
+        id="user-photo"
+        src="../../../assets/user-photo.png"
+        alt="user-photo"
+      />
+      <figcaption class="figcaption-in-menu">
+        Hello Laurence! <br />
+        <span id="score">Score:</span><span id="score-value">260</span>
+      </figcaption>
+    </figure>
+    <div class="menu-items">
+      <button
+        mat-menu-item
+        routerLink="/"
+        routerLinkActive="active"
+        routerLinkActive="active"
+      >
+        <mat-icon id="menu-item-icon">home</mat-icon>
+        <span>Home</span>
+      </button>
+      <button
+        mat-menu-item
+        routerLink="/leaderboard"
+        routerLinkActive="active"
+        routerLinkActive="active"
+      >
+        <mat-icon id="menu-item-icon"> leaderboard</mat-icon>
+        <span>Leaderboard</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon id="menu-item-icon">edit</mat-icon>
+        <span>Edit Profile</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon id="menu-item-icon">trending_up</mat-icon>
+        <span>Your Profile</span>
+      </button>
+      <button mat-menu-item routerLink="/home" routerLinkActive="active">
+        <mat-icon id="menu-item-icon">exit_to_app</mat-icon>
+        <span>Log out</span>
+      </button>
+    </div>
+  </mat-menu>
+</div>
