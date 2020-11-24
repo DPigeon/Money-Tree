@@ -126,3 +126,9 @@ export class SignupFormComponent implements OnInit {
     }
   }
 }
+// custom validator for password match:
+// function pwd2Validator(control: FormControl): { [s: string]: boolean } {
+//   if (!control.value === getPwd2()) {
+//     return { invalidPwd2: true };
+//   }
+// }
