@@ -1,26 +1,40 @@
 <div class="container">
+    
+    
+    
     <h1 class="signup-title"> Sign Up</h1>
-    <form>
+
+    
+    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit(signUpForm.value)">
+    
+        <!-- Error messages: -->
+        <h3 *ngIf="!signUpForm.valid && isSubmitted" id="form-error-message">Please check the errors!</h3>
+        <h3 *ngIf="firstName.touched  && firstName.hasError('required')" id="form-error-message">Username should not be empty.</h3>
+        <h3 *ngIf="!pwd2.valid && pwd2.touched" id="form-error-message">yo.</h3>
+        <!-- <h3 *ngIf="pwd2.touched  && pwd2.hasError('invalidPwd2')" id="form-error-message">Passwords should match.</h3> -->
+        <!-- <h3 *ngIf="pwd2.touched  && !pwd.value.match(pwd2.value)" id="form-error-message">Passwords s match.</h3> -->
+
+    
         <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
-            <input matInput placeholder="First Name">
+            <input matInput placeholder="First Name" type="text" [formControl]="firstName">
         </mat-form-field>
 
         <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
-            <input matInput placeholder="Last Name">
+            <input matInput placeholder="Last Name" type="text" [formControl]="lastName">
         </mat-form-field>
 
         <mat-form-field class="mt-input-field" appearance="outline" color="accent">
-            <input matInput placeholder="Email" type='email'>
+            <input matInput placeholder="Email" type='email' [formControl]="email">
         </mat-form-field>
 
         <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
-            <input matInput placeholder="Password" type="password">
+            <input matInput placeholder="Password" type="password" [formControl]="pwd">
         </mat-form-field>
 
         <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
-            <input matInput placeholder="Confirm Password" type="password">
+            <input matInput placeholder="Confirm Password" type="password" [formControl]="pwd2">
         </mat-form-field>
 
-        <button class="mt-input-field" mat-flat-button>SIGN UP</button>
+        <button class="mt-input-field" mat-flat-button type="submit">SIGN UP</button>
     </form>
 </div>
