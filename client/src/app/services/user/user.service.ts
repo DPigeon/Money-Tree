@@ -1,9 +1,18 @@
 import { Injectable } from '@angular/core';
+import { User } from 'src/app/interfaces/user';
 import { ApiService } from '../api/api.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private api: ApiService) {}
+
+  constructor(private api: ApiService) { }
+
+  createNewUser(user: User): Observable<User>  {
+    return this.api
+      .post('users/create-user', user);
+  }
 }

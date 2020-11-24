@@ -11,3 +11,13 @@ export const selectCurrentStock = createSelector(
   selectAppState,
   (appState: State) => appState.currentStockLoaded
 );
+
+export const selectCurrentUser = createSelector(
+  selectAppState,
+  (appState: State) => appState.user
+);
+
+export const selectAppError = createSelector(
+  selectAppState,
+  (appState: State) => appState.errorMessage
+);

@@ -13,4 +13,5 @@ export interface User {
     followers: User[];
     portfolio: Stock[];
     transactionsMade: Transaction[];
+    password: string;
 }

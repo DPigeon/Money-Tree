@@ -7,6 +7,8 @@ import {
   AbstractControl,
   FormControl,
 } from '@angular/forms';
+import { User } from 'src/app/interfaces/user';
+import { StoreFacadeService } from '../../store/store-facade.service';
 
 @Component({
   selector: 'app-signup-form',
@@ -45,7 +47,15 @@ export class SignupFormComponent implements OnInit {
     // --
   };
 
-  constructor(fb: FormBuilder) {
+  constructor(fb: FormBuilder, private storeFacade: StoreFacadeService) {
+    this.storeFacade.currentUser$.subscribe(val => {
+      console.log('the user has been created', val);
+    });
+
+    this.storeFacade.appError$.subscribe(val => {
+      console.log('error', val);
+    });
+
     this.signUpForm = fb.group({
       firstName: [
         '',
@@ -82,7 +92,7 @@ export class SignupFormComponent implements OnInit {
       ],
       pwd2: ['', Validators.compose([Validators.required])],
     });
-    
+
     this.firstName = this.signUpForm.controls['firstName'];
     this.lastName = this.signUpForm.controls['lastName'];
     this.email = this.signUpForm.controls['email'];
@@ -91,9 +101,18 @@ export class SignupFormComponent implements OnInit {
     // this.errorMessages = this.errMsgCreator();
   }
 
-  onSubmit(value: string): void {
+  onSubmit(value: any): void {
     this.isSubmitted = true;
     console.log('you submitted value:', value);
+    if(this.signUpForm.valid) {
+      const newUser: any = {
+        firstName: this.firstName.value,
+        lastName: this.lastName.value,
+        password: this.pwd.value,
+        email: this.email.value,
+      };
+      this.storeFacade.createNewUser(newUser);
+    }
   }
   ngOnInit(): void {}
 }
