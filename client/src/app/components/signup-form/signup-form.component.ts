@@ -62,7 +62,7 @@ export class SignupFormComponent implements OnInit {
       ],
       pwd2: ['', Validators.compose([Validators.required])],
     });
-    
+
     this.firstName = this.signUpForm.controls['firstName'];
     this.lastName = this.signUpForm.controls['lastName'];
     this.email = this.signUpForm.controls['email'];
