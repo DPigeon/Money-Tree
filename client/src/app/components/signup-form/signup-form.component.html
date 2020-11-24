@@ -1,20 +1,33 @@
 <div class="container">
-    
-    
-    
+
+
+
     <h1 class="signup-title"> Sign Up</h1>
 
-    
-    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit(signUpForm.value)">
-    
-        <!-- Error messages: -->
-        <h3 *ngIf="!signUpForm.valid && isSubmitted" id="form-error-message">Please check the errors!</h3>
-        <h3 *ngIf="firstName.touched  && firstName.hasError('required')" id="form-error-message">Username should not be empty.</h3>
-        <h3 *ngIf="!pwd2.valid && pwd2.touched" id="form-error-message">yo.</h3>
-        <!-- <h3 *ngIf="pwd2.touched  && pwd2.hasError('invalidPwd2')" id="form-error-message">Passwords should match.</h3> -->
-        <!-- <h3 *ngIf="pwd2.touched  && !pwd.value.match(pwd2.value)" id="form-error-message">Passwords s match.</h3> -->
 
-    
+    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit(signUpForm.value)">
+
+        <div class="form-error-messages">
+            <!-- <h2 *ngIf="!signUpForm.valid && isSubmitted">Please fix the errors!</h2> -->
+
+            <h3 *ngIf="firstName.touched  && firstName.hasError('required')">{{errTemplates.reqFirstName}}</h3>
+            <h3 *ngIf="firstName.touched  && firstName.hasError('minlength')">{{errTemplates.minLengthFirstName}}</h3>
+            <h3 *ngIf="firstName.touched  && firstName.hasError('maxlength')">{{errTemplates.maxLengthFirstName}}</h3>
+            <h3 *ngIf="firstName.touched  && firstName.hasError('pattern')">{{errTemplates.patternFirstName}}</h3>
+
+            <h3 *ngIf="lastName.touched  && lastName.hasError('required')">{{errTemplates.reqLastName}}</h3>
+            <h3 *ngIf="lastName.touched  && lastName.hasError('minlength')">{{errTemplates.minLengthLastName}}</h3>
+            <h3 *ngIf="lastName.touched  && lastName.hasError('maxlength')">{{errTemplates.maxLengthLastName}}</h3>
+            <h3 *ngIf="lastName.touched  && lastName.hasError('pattern')">{{errTemplates.patternLastName}}</h3>
+
+            <h3 *ngIf="email.touched  && email.hasError('required')">{{errTemplates.reqEmail}}</h3>
+            <h3 *ngIf="email.touched  && email.hasError('email')">{{errTemplates.emailFormat}}</h3>
+
+            <h3 *ngIf="pwd.touched  && pwd.hasError('required')">{{errTemplates.reqPwd}}</h3>
+            <h3 *ngIf="pwd.touched  && pwd.hasError('pattern')">{{errTemplates.patternPwd}}</h3>
+        </div>
+
+
         <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
             <input matInput placeholder="First Name" type="text" [formControl]="firstName">
         </mat-form-field>

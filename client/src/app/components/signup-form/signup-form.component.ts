@@ -1,3 +1,4 @@
+import { templateJitUrl } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -21,23 +22,26 @@ export class SignupFormComponent implements OnInit {
   email: AbstractControl;
   pwd: AbstractControl;
   pwd2: AbstractControl;
+  // errorMessages: string[];
 
-  errMsg = {
+  errTemplates = {
+    // -- camelCase
+    reqFirstName: 'First name cannot be empty.',
+    reqLastName: 'Last name cannot be empty.',
+    reqPwd: 'Password cannot be empty.',
     // --
-    required_fn: 'First name cannot be empty.',
-    required_ln: 'Last name cannot be empty.',
-    pwd_required: 'Password cannot be empty.',
+    minLengthFirstName: 'First name has to be at least 3 characters.',
+    minLengthLastName: 'Last name has to be at least 3 characters.',
     // --
-    min_length_fn: 'First name has to be at least 3 characters.',
-    min_length_ln: 'Last name has to be at least 3 characters.',
-    min_length_pwd: 'Passwords have to be at least 8 characters.',
+    maxLengthFirstName: 'First name cannot contain more than 20 characters.',
+    maxLengthLastName: 'Last name cannot contain more than 20 characters.',
     // --
-    max_length_fn: 'First name cannot contain more than 20 characters.',
-    max_length_ln: 'Last name cannot contain more than 20 characters.',
-    max_length_pwd: 'Passwords cannot contain more than 20 characters.',
+    reqEmail: 'Email cannot be empty.',
+    emailFormat: 'Email is not valid.' ,
     // --
-    start_fn: 'First name cannot start with blank space or numbers',
-    start_ln: 'Last name cannot start with blank space or numbers',
+    patternFirstName: 'First name cannot contain numbers or space.',
+    patternLastName: 'Last name cannot contain numbers or space.',
+    patternPwd: 'Password must be at least 8 characters including at least one number, one letter and one special character.'
     // --
   };
 
@@ -70,28 +74,27 @@ export class SignupFormComponent implements OnInit {
         '',
         Validators.compose([
           Validators.required,
-          Validators.minLength(8),
-          Validators.maxLength(20),
           Validators.pattern(
             /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/u
+            // at least 8 characters, with one number, one letter and one symbol
           ),
         ]),
       ],
       pwd2: ['', Validators.compose([Validators.required])],
     });
-
+    
     this.firstName = this.signUpForm.controls['firstName'];
     this.lastName = this.signUpForm.controls['lastName'];
     this.email = this.signUpForm.controls['email'];
     this.pwd = this.signUpForm.controls['pwd'];
     this.pwd2 = this.signUpForm.controls['pwd2'];
+    // this.errorMessages = this.errMsgCreator();
   }
 
   onSubmit(value: string): void {
     this.isSubmitted = true;
     console.log('you submitted value:', value);
   }
-
   ngOnInit(): void {}
 }
 // custom validator for password match:
