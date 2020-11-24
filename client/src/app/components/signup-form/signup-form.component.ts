@@ -1,3 +1,4 @@
+import { templateJitUrl } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -22,6 +23,7 @@ export class SignupFormComponent implements OnInit {
   email: AbstractControl;
   pwd: AbstractControl;
   pwd2: AbstractControl;
+  // errorMessages: string[];
 
   constructor(fb: FormBuilder, private storeFacade: StoreFacadeService) {
     this.storeFacade.currentUser$.subscribe((val) => {
@@ -54,17 +56,19 @@ export class SignupFormComponent implements OnInit {
           Validators.required,
           Validators.pattern(
             /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/u
+            // at least 8 characters, with one number, one letter and one symbol
           ),
         ]),
       ],
       pwd2: ['', Validators.compose([Validators.required])],
     });
-
+    
     this.firstName = this.signUpForm.controls['firstName'];
     this.lastName = this.signUpForm.controls['lastName'];
     this.email = this.signUpForm.controls['email'];
     this.pwd = this.signUpForm.controls['pwd'];
     this.pwd2 = this.signUpForm.controls['pwd2'];
+    // this.errorMessages = this.errMsgCreator();
   }
 
   onSubmit(value: any): void {
