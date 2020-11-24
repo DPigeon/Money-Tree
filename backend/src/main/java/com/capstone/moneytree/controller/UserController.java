@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 
 @MoneyTreeController
@@ -104,14 +105,13 @@ public class UserController {
       return userService.login(credentials);
    }
 
-   @PutMapping("/{id}/editprofile")
+   @PutMapping("/{id}")
    ResponseEntity<User> editUserProfile(@PathVariable Long id,
                                         @RequestParam(required = false) MultipartFile imageFile) {
-      if (imageFile != null) {
-         return ResponseEntity.ok(this.userService.editUserProfile(id, imageFile));
+      User userToUpdate = this.userService.getUserById(id);
+      if (imageFile != null && !imageFile.isEmpty()) {
+         this.userService.editUserProfilePicture(userToUpdate, imageFile);
       }
-      else {
-         return ResponseEntity.badRequest().body(null);
-      }
+      return ResponseEntity.ok(userToUpdate);
    }
 }

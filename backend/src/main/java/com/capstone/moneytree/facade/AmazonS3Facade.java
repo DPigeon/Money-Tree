@@ -4,16 +4,13 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.event.ProgressListener;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.*;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.services.s3.transfer.Upload;
 import com.capstone.moneytree.exception.FailedUploadImageS3Exception;
-import com.capstone.moneytree.service.impl.DefaultUserService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +27,7 @@ public class AmazonS3Facade {
     private static final Logger LOG = LoggerFactory.getLogger(AmazonS3Facade.class);
     private AmazonS3 amazonS3;
 
-    public AmazonS3Facade(@Value("${access.key.id}") String s3AccessKey, @Value("${secret.access.key}") String s3SecretKey) {
+    public AmazonS3Facade(@Value("${aws.access.key.id}") String s3AccessKey, @Value("${aws.secret.access.key}") String s3SecretKey) {
         AWSCredentials credentials = new BasicAWSCredentials(
                 s3AccessKey,
                 s3SecretKey
@@ -83,7 +80,7 @@ public class AmazonS3Facade {
             System.out.println("Converted file successfully!");
         }
         catch (Exception e) {
-            throw new FailedUploadImageS3Exception("Failed when converting file");
+            throw new FailedUploadImageS3Exception("Failed to convert file");
         }
         return convFile;
     }

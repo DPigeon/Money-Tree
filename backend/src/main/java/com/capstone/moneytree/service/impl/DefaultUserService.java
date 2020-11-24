@@ -82,20 +82,15 @@ public class DefaultUserService implements UserService {
    }
 
    @Override
-   public User editUserProfile(Long id, MultipartFile imageFile) {
-      //verify user exists
-      User userToUpdate = userDao.findUserById(id);
-      if (userToUpdate == null) {
-         throw new EntityNotFoundException(String.format("User with id %s not found", id));
-      }
+   public User editUserProfilePicture(User user, MultipartFile imageFile) {
       //since user exists, we can now upload image to s3 and save imageUrl into db
       String imageUrl = this.amazonS3Service.uploadImageToS3Bucket(imageFile, "moneytree-profile-pictures");
 
-      userToUpdate.setAvatarURL(imageUrl);
-      userDao.save(userToUpdate);
+      user.setAvatarURL(imageUrl);
+      userDao.save(user);
 
-      LOG.info("Edited user profile {}", userToUpdate.getEmail());
-      return userToUpdate;
+      LOG.info("Edited profile picture of {}", user.getEmail());
+      return user;
    }
 
    @Override

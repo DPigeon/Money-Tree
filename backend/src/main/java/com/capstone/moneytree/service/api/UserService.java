@@ -37,5 +37,5 @@ public interface UserService {
 
    User login(User credentials) throws CredentialNotFoundException;
 
-   User editUserProfile(Long id, MultipartFile imageFile);
+   User editUserProfilePicture(User user, MultipartFile imageFile);
 }
