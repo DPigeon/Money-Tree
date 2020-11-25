@@ -44,7 +44,7 @@ export class SignupFormComponent implements OnInit {
         '',
         Validators.compose([
           Validators.required,
-          Validators.pattern(/^[a-zA-Z]{3,20}$/u), 
+          Validators.pattern(/^[a-zA-Z]{3,20}$/u),
         ]),
       ],
       email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -84,6 +84,10 @@ export class SignupFormComponent implements OnInit {
   ngOnInit(): void {}
 
   getFirstErrorMessage(): string {
+    // creating pattern (pwd match) validator for confirm password field only if password is already have a value and not null
+    if (this.pwd.value) {
+      this.pwd2.setValidators([Validators.required, Validators.pattern(new RegExp(this.pwd.value))]);
+    }
     // Only 1 error msg is shown at a time, the first input field error is prior to second, and same for next ones
     if (this.signUpForm.touched && this.signUpForm.invalid) {
       // tslint:disable-next-line:forin
@@ -102,7 +106,8 @@ export class SignupFormComponent implements OnInit {
   showErrorMessage(): string {
     const failedValidator = this.getFirstErrorMessage();
 
-    if (failedValidator) { // to go around null errors in console for when we dont have any failed validators.
+    if (failedValidator) {
+      // to go around null errors in console for when we dont have any failed validators.
       switch (failedValidator) {
         case 'firstName,required':
         case 'lastName,required':
@@ -120,6 +125,9 @@ export class SignupFormComponent implements OnInit {
 
         case 'pwd,pattern':
           return 'Password must be at least 8 characters, with one number, one letter and one symbol.';
+
+        case 'pwd2,pattern':
+          return 'Passwords do not match, please check.';
         default:
           return '';
       }
