@@ -1,11 +1,9 @@
-import { templateJitUrl } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   Validators,
   AbstractControl,
-  FormControl,
 } from '@angular/forms';
 import { User } from 'src/app/interfaces/user';
 import { StoreFacadeService } from '../../store/store-facade.service';
@@ -24,35 +22,13 @@ export class SignupFormComponent implements OnInit {
   email: AbstractControl;
   pwd: AbstractControl;
   pwd2: AbstractControl;
-  // errorMessages: string[];
-
-  errTemplates = {
-    // -- camelCase
-    reqFirstName: 'First name cannot be empty.',
-    reqLastName: 'Last name cannot be empty.',
-    reqPwd: 'Password cannot be empty.',
-    // --
-    minLengthFirstName: 'First name has to be at least 3 characters.',
-    minLengthLastName: 'Last name has to be at least 3 characters.',
-    // --
-    maxLengthFirstName: 'First name cannot contain more than 20 characters.',
-    maxLengthLastName: 'Last name cannot contain more than 20 characters.',
-    // --
-    reqEmail: 'Email cannot be empty.',
-    emailFormat: 'Email is not valid.' ,
-    // --
-    patternFirstName: 'First name cannot contain numbers or space.',
-    patternLastName: 'Last name cannot contain numbers or space.',
-    patternPwd: 'Password must be at least 8 characters including at least one number, one letter and one special character.'
-    // --
-  };
 
   constructor(fb: FormBuilder, private storeFacade: StoreFacadeService) {
-    this.storeFacade.currentUser$.subscribe(val => {
+    this.storeFacade.currentUser$.subscribe((val) => {
       console.log('the user has been created', val);
     });
 
-    this.storeFacade.appError$.subscribe(val => {
+    this.storeFacade.appError$.subscribe((val) => {
       console.log('error', val);
     });
 
@@ -61,22 +37,14 @@ export class SignupFormComponent implements OnInit {
         '',
         Validators.compose([
           Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(20),
-          Validators.pattern(
-            /^[a-z][a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u
-          ),
+          Validators.pattern(/^[a-zA-Z]{3,20}$/u), // validate the pattern to match this regex
         ]),
       ],
       lastName: [
         '',
         Validators.compose([
           Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(20),
-          Validators.pattern(
-            /^[a-z][a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u
-          ),
+          Validators.pattern(/^[a-zA-Z]{3,20}$/u), 
         ]),
       ],
       email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -86,7 +54,6 @@ export class SignupFormComponent implements OnInit {
           Validators.required,
           Validators.pattern(
             /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/u
-            // at least 8 characters, with one number, one letter and one symbol
           ),
         ]),
       ],
@@ -98,13 +65,12 @@ export class SignupFormComponent implements OnInit {
     this.email = this.signUpForm.controls['email'];
     this.pwd = this.signUpForm.controls['pwd'];
     this.pwd2 = this.signUpForm.controls['pwd2'];
-    // this.errorMessages = this.errMsgCreator();
   }
 
   onSubmit(value: any): void {
     this.isSubmitted = true;
     console.log('you submitted value:', value);
-    if(this.signUpForm.valid) {
+    if (this.signUpForm.valid) {
       const newUser: any = {
         firstName: this.firstName.value,
         lastName: this.lastName.value,
@@ -115,10 +81,47 @@ export class SignupFormComponent implements OnInit {
     }
   }
   ngOnInit(): void {}
+
+  getFirstErrorMessage(): string {
+    // Only 1 error msg is shown at a time, the first input field error is prior to second, and same for next ones
+    if (this.signUpForm.touched && this.signUpForm.invalid) {
+      // tslint:disable-next-line:forin
+      for (const field in this.signUpForm.controls) {
+        const control = this.signUpForm.get(field);
+        if (control.invalid && control.touched) {
+          // all failed validators are available in control.errors which is an object
+          // and to get the names of failed validators we need the keys in errors Object
+          const allErrorNames = Object.keys(control.errors);
+          const result = field + ',' + allErrorNames[0]; // the resslt would be for example "firstName,required"
+          return result;
+        }
+      }
+    }
+  }
+  showErrorMessage(): string {
+    const failedValidator = this.getFirstErrorMessage();
+
+    if (failedValidator) { // to go around null errors in console for when we dont have any failed validators.
+      switch (failedValidator) {
+        case 'firstName,required':
+        case 'lastName,required':
+        case 'pwd,required':
+        case 'email,required':
+        case 'pwd2,required':
+          return 'Please fill out all the required fields.';
+
+        case 'firstName,pattern':
+        case 'lastName,pattern':
+          return 'First/Last name should be of length 3-20 characters with no numbers/spaces.';
+
+        case 'email,email':
+          return 'Email is not in the valid format.';
+
+        case 'pwd,pattern':
+          return 'Password must be at least 8 characters, with one number, one letter and one symbol.';
+        default:
+          return '';
+      }
+    }
+  }
 }
-// custom validator for password match:
-// function pwd2Validator(control: FormControl): { [s: string]: boolean } {
-//   if (!control.value === getPwd2()) {
-//     return { invalidPwd2: true };
-//   }
-// }
