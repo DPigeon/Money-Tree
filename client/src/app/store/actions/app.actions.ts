@@ -26,3 +26,19 @@ export const createNewUserFailure = createAction(
   '[User] Create new user failure',
   props<{ errorMessage: any }>()
 );
+
+
+export const userLogin = createAction(
+  '[User] User login',
+  props<{ user: User }>()
+);
+
+export const userLoginSuccess = createAction(
+  '[User] User login success',
+  props<{ user: User }>()
+);
+
+export const userLoginFailure = createAction(
+  '[User] User login failure',
+  props<{ errorMessage: any }>()
+);

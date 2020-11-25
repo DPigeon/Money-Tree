@@ -34,4 +34,7 @@ export class StoreFacadeService {
   createNewUser(user: User): void {
     this.store.dispatch(appActions.createNewUser({ user: user }));
   }
+  findUser(user: User): any {
+    this.store.dispatch(aooActions.userLogin({user: user}));
+  }
 }

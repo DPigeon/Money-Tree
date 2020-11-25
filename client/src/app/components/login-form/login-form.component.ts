@@ -28,7 +28,11 @@ export class LoginFormComponent implements OnInit {
   }
   onSubmit(value: any): void {
     if (this.logInForm.valid) {
-      console.log('log in clicked');
+      const userCredentials: User ={
+        email: this.email.value,
+        password: this.pwd.value,
+      };
+      this.storeFacade.findUser(userCredentials);
     }
   }
   ngOnInit(): void {}

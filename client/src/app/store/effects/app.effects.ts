@@ -42,4 +42,20 @@ export class Effects {
       })
     )
   );
+
+  userLogin$: Observable<Action> = createEffect(() =>
+  this.actions$.pipe(
+    ofType(appActions.userLogin),
+    switchMap((action) => {
+      return this.userService.userLogin(action.user)
+      .pipe(
+        map((data) => appActions.createNewUserSuccess({ user: data })),
+        catchError((data) => of(appActions.createNewUserFailure({errorMessage: data})))
+      );
+    })
+  )
+  );
 }
+
+
+

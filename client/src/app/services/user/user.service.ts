@@ -22,4 +22,9 @@ export class UserService {
     console.log(response.headers.get('Location'));
     return null
   }
+  userLogin(user: User): Observable<User>  {
+    return this.api
+      .post('users/login', user)
+      .pipe(map((res: Response) => this.userFormatter(res)));
+  }
 }
