@@ -20,8 +20,8 @@
   .form-error-messages h3 {
     color: $mt-red;
     font-size: 14px;
-    font-weight: 450; 
-  } 
+    font-weight: 450;
+  }
 }
 
 @media only screen and (max-width: 600px) {
@@ -36,4 +36,8 @@
       color: $mt-white;
     }
   }
+}
+
+.btn-opacity-disabled {
+  opacity: 0.7;
 }

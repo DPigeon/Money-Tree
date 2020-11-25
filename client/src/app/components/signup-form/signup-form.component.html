@@ -32,6 +32,7 @@
             <input matInput placeholder="Confirm Password" type="password" [formControl]="pwd2">
         </mat-form-field>
 
-        <button class="mt-input-field" mat-flat-button type="submit" [disabled]="!signUpForm.valid">SIGN UP</button>
+        <button class="mt-input-field" mat-flat-button type="submit" [class.btn-opacity-disabled]="signUpForm.invalid"
+            [disabled]="!signUpForm.valid">SIGN UP</button>
     </form>
 </div>

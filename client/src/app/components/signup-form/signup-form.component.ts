@@ -15,8 +15,6 @@ import { StoreFacadeService } from '../../store/store-facade.service';
 })
 export class SignupFormComponent implements OnInit {
   signUpForm: FormGroup;
-  isSubmitted = false;
-  // this will help to have controllers as simple as possible in template, otherwise it would be: signUpForm.controls['firstName']
   firstName: AbstractControl;
   lastName: AbstractControl;
   userName: AbstractControl;
@@ -77,7 +75,6 @@ export class SignupFormComponent implements OnInit {
   }
 
   onSubmit(value: any): void {
-    this.isSubmitted = true;
     console.log('you submitted value:', value);
     if (this.signUpForm.valid) {
       const newUser: any = {
@@ -85,7 +82,7 @@ export class SignupFormComponent implements OnInit {
         lastName: this.lastName.value,
         password: this.pwd.value,
         email: this.email.value,
-        username: 'alex56'
+        username: 'alex56',
       };
       this.storeFacade.createNewUser(newUser);
     }
@@ -118,8 +115,8 @@ export class SignupFormComponent implements OnInit {
   showErrorMessage(): string {
     const failedValidator = this.getFirstErrorMessage();
 
+    // to go around null errors in console for when we dont have any failed validators.
     if (failedValidator) {
-      // to go around null errors in console for when we dont have any failed validators.
       switch (failedValidator) {
         case 'firstName,required':
         case 'lastName,required':
@@ -144,8 +141,6 @@ export class SignupFormComponent implements OnInit {
 
         case 'pwd2,pattern':
           return 'Passwords do not match, please check.';
-        default:
-          return '';
       }
     }
   }

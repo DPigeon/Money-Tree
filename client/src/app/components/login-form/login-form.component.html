@@ -1,13 +1,20 @@
 <div class="container">
   <h2 class="login-text-hint">Already have an account?</h2>
-  <mat-form-field class="mt-input-field" appearance="outline" color="accent">
-    <input matInput type="email" placeholder="Email" />
-  </mat-form-field>
 
-  <div class="password-login-position">
-    <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
-      <input matInput type="password" placeholder="Password" />
-    </mat-form-field>
-    <button mat-flat-button class="mt-input-field half">LOGIN</button>
+  <div class="form-error-messages">
+    <h3 *ngIf="logInForm.invalid">{{showErrorMessage()}}</h3>
   </div>
+
+  <form [formGroup]="logInForm" (ngSubmit)="onSubmit(logInForm.value)">
+    <mat-form-field class="mt-input-field" appearance="outline" color="accent">
+      <input matInput type="email" placeholder="Email" [formControl]="email" />
+    </mat-form-field>
+
+    <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+      <input matInput type="password" placeholder="Password" [formControl]="pwd" />
+    </mat-form-field>
+    <button mat-flat-button class="mt-input-field half" [class.btn-opacity-disabled]="logInForm.invalid"
+      [disabled]="logInForm.invalid">LOGIN</button>
+  </form>
+
 </div>
