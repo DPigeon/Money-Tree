@@ -76,6 +76,7 @@ export class SignupFormComponent implements OnInit {
         lastName: this.lastName.value,
         password: this.pwd.value,
         email: this.email.value,
+        username: 'alex56'
       };
       this.storeFacade.createNewUser(newUser);
     }
