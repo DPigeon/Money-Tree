@@ -19,6 +19,7 @@ export class SignupFormComponent implements OnInit {
   // this will help to have controllers as simple as possible in template, otherwise it would be: signUpForm.controls['firstName']
   firstName: AbstractControl;
   lastName: AbstractControl;
+  userName: AbstractControl;
   email: AbstractControl;
   pwd: AbstractControl;
   pwd2: AbstractControl;
@@ -47,6 +48,13 @@ export class SignupFormComponent implements OnInit {
           Validators.pattern(/^[a-zA-Z]{3,20}$/u),
         ]),
       ],
+      userName: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern(/^[a-zA-Z]\w{5,20}$/u),
+        ]),
+      ],
       email: ['', Validators.compose([Validators.required, Validators.email])],
       pwd: [
         '',
@@ -62,6 +70,7 @@ export class SignupFormComponent implements OnInit {
 
     this.firstName = this.signUpForm.controls['firstName'];
     this.lastName = this.signUpForm.controls['lastName'];
+    this.userName = this.signUpForm.controls['userName'];
     this.email = this.signUpForm.controls['email'];
     this.pwd = this.signUpForm.controls['pwd'];
     this.pwd2 = this.signUpForm.controls['pwd2'];
@@ -86,7 +95,10 @@ export class SignupFormComponent implements OnInit {
   getFirstErrorMessage(): string {
     // creating pattern (pwd match) validator for confirm password field only if password is already have a value and not null
     if (this.pwd.value) {
-      this.pwd2.setValidators([Validators.required, Validators.pattern(new RegExp(this.pwd.value))]);
+      this.pwd2.setValidators([
+        Validators.required,
+        Validators.pattern(new RegExp(this.pwd.value)),
+      ]);
     }
     // Only 1 error msg is shown at a time, the first input field error is prior to second, and same for next ones
     if (this.signUpForm.touched && this.signUpForm.invalid) {
@@ -111,14 +123,18 @@ export class SignupFormComponent implements OnInit {
       switch (failedValidator) {
         case 'firstName,required':
         case 'lastName,required':
-        case 'pwd,required':
+        case 'userName,required':
         case 'email,required':
+        case 'pwd,required':
         case 'pwd2,required':
           return 'Please fill out all the required fields.';
 
         case 'firstName,pattern':
         case 'lastName,pattern':
           return 'First/Last name should be of length 3-20 characters with no numbers/spaces.';
+
+        case 'userName,pattern':
+          return 'Username has to be at least 6 characters starting with an alphabet.';
 
         case 'email,email':
           return 'Email is not in the valid format.';
