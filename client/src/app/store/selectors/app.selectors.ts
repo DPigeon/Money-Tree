@@ -31,3 +31,8 @@ export const isUserLoggedIn = createSelector(
   selectAppState,
   (appState: State) => (!!appState.user && !!appState.user.alpacaApiKey)
 )
+
+export const selectAuthenticationInformation = createSelector(
+  selectAppState,
+  (appState: State) => ({userExists: !!appState.user, hasAlpacaCode: !!(appState.user && appState.user.alpacaApiKey)})
+)

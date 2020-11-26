@@ -35,7 +35,7 @@ export class Effects {
       ofType(appActions.createNewUser),
       switchMap((action) => {
         return this.userService.createNewUser(action.user).pipe(
-          map((data) => appActions.setUser({ user: data })),
+          map((data) => appActions.setCurrentUser({ user: data })),
           catchError((data) =>
             of(appActions.setAppError({ errorMessage: data }))
           )
@@ -50,7 +50,21 @@ export class Effects {
       switchMap((action) => {
         // This function will be changed when the backend refactos
         return this.userService.updateAlpacaCode(action.user.id, action.user.alpacaApiKey).pipe(
-          map((data) => appActions.setUser({ user: data })),
+          map((data) => appActions.setCurrentUser({ user: data })),
+          catchError((data) =>
+            of(appActions.setAppError({ errorMessage: data }))
+          )
+        );
+      })
+    )
+  );
+
+  getCurrentUser$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.getCurrentUser),
+      switchMap((action) => {
+        return this.userService.getUser(action.id).pipe(
+          map((data) => appActions.setCurrentUser({ user: data })),
           catchError((data) =>
             of(appActions.setAppError({ errorMessage: data }))
           )
@@ -64,7 +78,7 @@ export class Effects {
       ofType(appActions.userLogin),
       switchMap((action) => {
         return this.userService.userLogin(action.user).pipe(
-          map((data) => appActions.setUser({ user: data })),
+          map((data) => appActions.setCurrentUser({ user: data })),
           catchError((data) =>
             of(appActions.setAppError({ errorMessage: data }))
           )

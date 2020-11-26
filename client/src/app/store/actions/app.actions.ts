@@ -17,6 +17,11 @@ export const createNewUser = createAction(
   props<{ user: User }>()
 );
 
+export const getCurrentUser = createAction(
+  '[User] Get new user',
+  props<{ id: number }>()
+);
+
 export const userLogin = createAction(
   '[User] User login',
   props<{ user: User }>()
@@ -27,12 +32,16 @@ export const upadateUser = createAction(
   props<{ user: User }>()
 )
 
-export const setUser = createAction(
+export const setCurrentUser = createAction(
   '[User] New value for current user',
   props<{ user: User }>()
 )
 
+export const logCurrentUserOut = createAction(
+  '[User] Log user out'
+)
+
 export const setAppError = createAction(
-  '[User] Update user failure',
+  '[User] App Error',
   props<{ errorMessage: any }>()
 )

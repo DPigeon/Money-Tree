@@ -19,8 +19,20 @@ export class UserService {
   // This will be removed for a more generic update function
   updateAlpacaCode(userId: number, alpacaCode: string): Observable<User> {
     return this.api
-    .post('users/' + userId + '/register-alpaca-key/' + alpacaCode, {})
-    .pipe(map((res: Response) => this.userFormatter(res.body)));
+      .post('users/' + userId + '/register-alpaca-key/' + alpacaCode, {})
+      .pipe(map((res: Response) => this.userFormatter(res.body)));
+  }
+
+  getUser(id: number) {
+    return this.api
+      .get('users/' + id)
+      .pipe(map((res: Response) => this.userFormatter(res.body)));
+  }
+
+  userLogin(user: User): Observable<User> {
+    return this.api
+      .post('users/login', user)
+      .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 
   userFormatter(response: any) {
@@ -42,10 +54,5 @@ export class UserService {
       transactions: response['transactions'],
     };
     return formattedUser;
-  }
-  userLogin(user: User): Observable<User> {
-    return this.api
-      .post('users/login', user)
-      .pipe(map((res: Response) => this.userFormatter(res)));
   }
 }
