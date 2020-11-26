@@ -46,7 +46,7 @@ export class Effects {
 
   userLogin$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
-      ofType(appActions.userLogin),
+      ofType(appActions.userLogin),s
       switchMap((action) => {
         return this.userService.userLogin(action.user).pipe(
           map((data) => appActions.userLoginSuccess({ user: data })),

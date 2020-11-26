@@ -17,7 +17,7 @@ export class SignupFormComponent implements OnInit {
   signUpForm: FormGroup;
   firstName: AbstractControl;
   lastName: AbstractControl;
-  userName: AbstractControl;s
+  userName: AbstractControl;
   email: AbstractControl;
   pwd: AbstractControl;
   pwd2: AbstractControl;
@@ -140,7 +140,7 @@ export class SignupFormComponent implements OnInit {
           return 'Password must be at least 8 characters, with one number, one letter and one symbol.';
 
         case 'pwd2,pattern':
-          return 'Passwords do not match, please check.';
+          retusrn 'Passwords do not match, please check.';
       }
     }
   }

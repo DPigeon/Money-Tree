@@ -1,4 +1,4 @@
-import { userLogin } from './../../store/actions/app.actions';
+import { Router, RouterModule } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -19,7 +19,7 @@ export class LoginFormComponent implements OnInit {
   pwd: AbstractControl;
   loginFailed: boolean;
 
-  constructor(fb: FormBuilder, private storeFacade: StoreFacadeService) {
+  constructor(fb: FormBuilder, private storeFacade: StoreFacadeService, private router: Router) {
     this.storeFacade.currentUser$.subscribe((val) => {
       if (val) {
         this.loginFailed = false;
@@ -30,6 +30,7 @@ export class LoginFormComponent implements OnInit {
           val.username,
           ' has been signed in successfully.'
         );
+        router.navigate(['/home']);
       }
     });
 

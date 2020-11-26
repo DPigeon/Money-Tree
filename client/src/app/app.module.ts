@@ -32,6 +32,8 @@ import { StockStatsComponent } from './components/stock-stats/stock-stats.compon
 import { LoginSignupComponent } from './pages/login-signup/login-signup.component';
 import { SignupFormComponent } from './components/signup-form/signup-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
+import { HomeComponent } from './pages/home/home.component';
+
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
@@ -48,7 +50,8 @@ import { reducer } from './store/reducers/app.reducer';
     LeaderboardComponent,
     LoginSignupComponent,
     SignupFormComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
