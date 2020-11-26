@@ -13,7 +13,7 @@ export class StockService {
   loadStockInfo(stockTicker: string): Observable<Stock> {
     return this.api
       .get('stockmarket/batch/' + stockTicker.toUpperCase())
-      .pipe(map((res: any) => this.IEXtoModel(res)));
+      .pipe(map((res: Response) => this.IEXtoModel(res.body)));
   }
 
   // This will need to be discussed: formatting responses frontend vs backend, same models?
