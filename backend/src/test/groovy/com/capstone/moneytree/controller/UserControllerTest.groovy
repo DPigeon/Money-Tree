@@ -71,9 +71,8 @@ class UserControllerTest extends Specification {
       def response = userController.createUser(user)
 
       then: "should create a user"
-      response.statusCode == HttpStatus.CREATED
-      response.getHeaders().getLocation().toString() == new URI(URL_LOCATION.concat(user.getId() as String)).toString()
-
+      response.statusCode == HttpStatus.OK
+      response.getBody() == user
    }
 
    @Test

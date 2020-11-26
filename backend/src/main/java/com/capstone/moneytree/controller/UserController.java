@@ -64,7 +64,7 @@ public class UserController {
               path("/users/{id}").
               buildAndExpand(createdUser.getId()).toUri();
 
-      return ResponseEntity.created(userURI).build();
+      return ResponseEntity.ok(createdUser);
    }
 
    /**
