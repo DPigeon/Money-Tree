@@ -13,7 +13,9 @@ import { User } from '../interfaces/user';
 export class StoreFacadeService {
   currentStockLoaded$: Observable<Stock>;
   currentUser$: Observable<User>;
-  appError$: Observable<any>; // to be changed
+  appError$: Observable<any>; // the any should be changed to an Error standard
+  shouldAlpacaRedirect$: Observable<boolean>;
+  isUserLoggedIn$: Observable<boolean>;
 
   constructor(private store: Store<{ appState: State }>) {
     this.currentStockLoaded$ = this.store.select(
@@ -21,6 +23,8 @@ export class StoreFacadeService {
     );
     this.currentUser$ = this.store.select(appSelectors.selectCurrentUser);
     this.appError$ = this.store.select(appSelectors.selectAppError);
+    this.shouldAlpacaRedirect$ = this.store.select(appSelectors.selectShouldAlpacaRedirect);
+    this.isUserLoggedIn$ = this.store.select(appSelectors.isUserLoggedIn);
   }
 
   loadCurrentStock(ticker: string): void {
@@ -30,7 +34,12 @@ export class StoreFacadeService {
   createNewUser(user: User): void {
     this.store.dispatch(appActions.createNewUser({ user: user }));
   }
-  userLogin(user: User): any {
+
+  userLogin(user: User): void {
     this.store.dispatch(appActions.userLogin({ user: user }));
+  }
+
+  updateUser(user: User): void {
+    this.store.dispatch(appActions.upadateUser({user: user}));
   }
 }

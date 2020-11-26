@@ -21,3 +21,13 @@ export const selectAppError = createSelector(
   selectAppState,
   (appState: State) => appState.errorMessage
 );
+
+export const selectShouldAlpacaRedirect = createSelector(
+  selectAppState,
+  (appState: State) => (!!appState.user && !appState.user.alpacaApiKey)
+)
+
+export const isUserLoggedIn = createSelector(
+  selectAppState,
+  (appState: State) => (!!appState.user && !!appState.user.alpacaApiKey)
+)

@@ -13,28 +13,35 @@ export class UserService {
   createNewUser(user: User): Observable<User> {
     return this.api
       .post('users/create-user', user)
-      .pipe(map((res: Response) => this.userFormatter(res)));
+      .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 
-  userFormatter(response: Response) {
-    let cuurentUser: User = {
-      id: response.body['id'],
-      firstName: response.body['firstName'],
-      lastName: response.body['lastName'],
-      username: response.body['username'],
-      avatarUrl: response.body['avatarUrl'],
-      email: response.body['email'],
-      score: response.body['score'],
-      rank: response.body['rank'],
-      balance: response.body['balance'],
-      // password: for security we don't want to get the password
-      alpacaApiKey: response.body['alpacaApiKey'],
-      // follows: User[]; // should this be added to backend?,
-      followers: response.body['followers'],
-      portfolio: response.body['portfolio'],
-      transactions: response.body['transactions'],
+  // This will be removed for a more generic update function
+  updateAlpacaCode(userId: number, alpacaCode: string): Observable<User> {
+    return this.api
+    .post('users/' + userId + '/register-alpaca-key/' + alpacaCode, {})
+    .pipe(map((res: Response) => this.userFormatter(res.body)));
+  }
+
+  userFormatter(response: any) {
+    console.log('user', response);
+    let formattedUser: User = {
+      id: response['id'],
+      firstName: response['firstName'],
+      lastName: response['lastName'],
+      username: response['username'],
+      avatarUrl: response['avatarUrl'],
+      email: response['email'],
+      score: response['score'],
+      rank: response['rank'],
+      balance: response['balance'],
+      alpacaApiKey: response['alpacaApiKey'],
+      follows: response['follows'],
+      followers: response['followers'],
+      portfolio: response['portfolio'],
+      transactions: response['transactions'],
     };
-    return cuurentUser;
+    return formattedUser;
   }
   userLogin(user: User): Observable<User> {
     return this.api

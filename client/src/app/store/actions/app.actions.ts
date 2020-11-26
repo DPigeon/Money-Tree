@@ -17,28 +17,22 @@ export const createNewUser = createAction(
   props<{ user: User }>()
 );
 
-export const createNewUserSuccess = createAction(
-  '[User] Create new user success',
-  props<{ user: User }>()
-);
-
-export const createNewUserFailure = createAction(
-  '[User] Create new user failure',
-  props<{ errorMessage: any }>()
-);
-
-
 export const userLogin = createAction(
   '[User] User login',
   props<{ user: User }>()
 );
 
-export const userLoginSuccess = createAction(
-  '[User] User login success',
+export const upadateUser = createAction(
+  '[User] Update user',
   props<{ user: User }>()
-);
+)
 
-export const userLoginFailure = createAction(
-  '[User] User login failure',
+export const setUser = createAction(
+  '[User] New value for current user',
+  props<{ user: User }>()
+)
+
+export const setAppError = createAction(
+  '[User] Update user failure',
   props<{ errorMessage: any }>()
-);
+)
