@@ -5,7 +5,6 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
-import { User } from 'src/app/interfaces/user';
 import { StoreFacadeService } from '../../store/store-facade.service';
 
 @Component({
@@ -23,13 +22,6 @@ export class SignupFormComponent implements OnInit {
   pwd2: AbstractControl;
 
   constructor(fb: FormBuilder, private storeFacade: StoreFacadeService) {
-    this.storeFacade.currentUser$.subscribe((val) => {
-      // console.log('the user has been signed up and created', val);
-    });
-
-    this.storeFacade.appError$.subscribe((val) => {
-      // console.log('error', val);
-    });
 
     this.signUpForm = fb.group({
       firstName: [
