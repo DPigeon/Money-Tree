@@ -17,10 +17,12 @@ export class LoginFormComponent implements OnInit {
   logInForm: FormGroup;
   email: AbstractControl;
   pwd: AbstractControl;
+  loginFailed: boolean;
 
   constructor(fb: FormBuilder, private storeFacade: StoreFacadeService) {
     this.storeFacade.currentUser$.subscribe((val) => {
       if (val) {
+        this.loginFailed = false;
         console.log(
           'The user with firstname: ',
           val.firstName,
@@ -34,7 +36,8 @@ export class LoginFormComponent implements OnInit {
     this.storeFacade.appError$.subscribe((val) => {
       if (val) {
         // we don't want to show an error message on our console before user clicked on login
-        console.log('Userjan could not be found.');
+        console.log('User could not be found.');
+        this.loginFailed = true;
       }
     });
 
@@ -77,7 +80,7 @@ export class LoginFormComponent implements OnInit {
     const failedValidator = this.getFirstErrorMessage();
 
     // to go around null errors in console for when we dont have any failed validators.
-    if (failedValidator) {
+    if (failedValidator && !this.loginFailed) {
       switch (failedValidator) {
         case 'email,required':
         case 'pwd,required':

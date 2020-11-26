@@ -2,7 +2,8 @@
   <h2 class="login-text-hint">Already have an account?</h2>
 
   <div class="form-error-messages">
-    <h3 *ngIf="logInForm.invalid">{{showErrorMessage()}}</h3>
+    <h2 *ngIf="loginFailed"> A user with this credentials could not be found!</h2>
+    <h3 *ngIf="logInForm.invalid">{{ showErrorMessage() }}</h3>
   </div>
 
   <form [formGroup]="logInForm" (ngSubmit)="onSubmit(logInForm.value)">
