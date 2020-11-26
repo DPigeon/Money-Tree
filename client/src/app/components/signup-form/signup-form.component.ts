@@ -140,7 +140,7 @@ export class SignupFormComponent implements OnInit {
           return 'Password must be at least 8 characters, with one number, one letter and one symbol.';
 
         case 'pwd2,pattern':
-          retusrn 'Passwords do not match, please check.';
+          return 'Passwords do not match, please check.';
       }
     }
   }
