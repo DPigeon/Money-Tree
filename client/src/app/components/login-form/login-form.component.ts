@@ -6,7 +6,7 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
-import { User } from '../../interfaces/user';
+import { User } from 'src/app/interfaces/user';
 import { StoreFacadeService } from '../../store/store-facade.service';
 @Component({
   selector: 'app-login-form',
@@ -20,23 +20,11 @@ export class LoginFormComponent implements OnInit {
   loginFailed: boolean;
 
   constructor(fb: FormBuilder, private storeFacade: StoreFacadeService, private router: Router) {
-    this.storeFacade.currentUser$.subscribe((val) => {
-      if (val) {
-        this.loginFailed = false;
-        console.log(
-          'The user with firstname: ',
-          val.firstName,
-          ' and username: ',
-          val.username,
-          ' has been signed in successfully.'
-        );
-        router.navigate(['/home']);
-      }
-    });
 
     this.storeFacade.appError$.subscribe((val) => {
       if (val) {
         // we don't want to show an error message on our console before user clicked on login
+        console.log(val);
         console.log('User could not be found.');
         this.loginFailed = true;
       }
