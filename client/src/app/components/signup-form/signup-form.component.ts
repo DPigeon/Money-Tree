@@ -17,7 +17,7 @@ export class SignupFormComponent implements OnInit {
   signUpForm: FormGroup;
   firstName: AbstractControl;
   lastName: AbstractControl;
-  userName: AbstractControl;
+  username: AbstractControl;
   email: AbstractControl;
   pwd: AbstractControl;
   pwd2: AbstractControl;
@@ -68,7 +68,7 @@ export class SignupFormComponent implements OnInit {
 
     this.firstName = this.signUpForm.controls['firstName'];
     this.lastName = this.signUpForm.controls['lastName'];
-    this.userName = this.signUpForm.controls['userName'];
+    this.username = this.signUpForm.controls['userName'];
     this.email = this.signUpForm.controls['email'];
     this.pwd = this.signUpForm.controls['pwd'];
     this.pwd2 = this.signUpForm.controls['pwd2'];
@@ -82,7 +82,7 @@ export class SignupFormComponent implements OnInit {
         lastName: this.lastName.value,
         password: this.pwd.value,
         email: this.email.value,
-        username: this.userName.value,
+        username: this.username.value,
       };
       this.storeFacade.createNewUser(newUser);
     }
