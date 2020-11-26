@@ -34,28 +34,27 @@ export class Effects {
     this.actions$.pipe(
       ofType(appActions.createNewUser),
       switchMap((action) => {
-        return this.userService.createNewUser(action.user)
-        .pipe(
+        return this.userService.createNewUser(action.user).pipe(
           map((data) => appActions.createNewUserSuccess({ user: data })),
-          catchError((data) => of(appActions.createNewUserFailure({errorMessage: data})))
+          catchError((data) =>
+            of(appActions.createNewUserFailure({ errorMessage: data }))
+          )
         );
       })
     )
   );
 
   userLogin$: Observable<Action> = createEffect(() =>
-  this.actions$.pipe(
-    ofType(appActions.userLogin),
-    switchMap((action) => {
-      return this.userService.userLogin(action.user)
-      .pipe(
-        map((data) => appActions.createNewUserSuccess({ user: data })),
-        catchError((data) => of(appActions.createNewUserFailure({errorMessage: data})))
-      );
-    })
-  )
+    this.actions$.pipe(
+      ofType(appActions.userLogin),
+      switchMap((action) => {
+        return this.userService.userLogin(action.user).pipe(
+          map((data) => appActions.userLoginSuccess({ user: data })),
+          catchError((data) =>
+            of(appActions.userLoginFailure({ errorMessage: data }))
+          )
+        );
+      })
+    )
   );
 }
-
-
-

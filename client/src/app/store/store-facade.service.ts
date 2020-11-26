@@ -19,12 +19,8 @@ export class StoreFacadeService {
     this.currentStockLoaded$ = this.store.select(
       appSelectors.selectCurrentStock
     );
-    this.currentUser$ = this.store.select(
-      appSelectors.selectCurrentUser
-    );
-    this.appError$ = this.store.select(
-      appSelectors.selectAppError
-    );
+    this.currentUser$ = this.store.select(appSelectors.selectCurrentUser);
+    this.appError$ = this.store.select(appSelectors.selectAppError);
   }
 
   loadCurrentStock(ticker: string): void {
@@ -34,7 +30,7 @@ export class StoreFacadeService {
   createNewUser(user: User): void {
     this.store.dispatch(appActions.createNewUser({ user: user }));
   }
-  findUser(user: User): any {
-    this.store.dispatch(aooActions.userLogin({user: user}));
+  userLogin(user: User): any {
+    this.store.dispatch(appActions.userLogin({ user: user }));
   }
 }

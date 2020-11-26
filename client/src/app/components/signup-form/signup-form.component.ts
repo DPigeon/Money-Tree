@@ -17,18 +17,18 @@ export class SignupFormComponent implements OnInit {
   signUpForm: FormGroup;
   firstName: AbstractControl;
   lastName: AbstractControl;
-  userName: AbstractControl;
+  userName: AbstractControl;s
   email: AbstractControl;
   pwd: AbstractControl;
   pwd2: AbstractControl;
 
   constructor(fb: FormBuilder, private storeFacade: StoreFacadeService) {
     this.storeFacade.currentUser$.subscribe((val) => {
-      console.log('the user has been created', val);
+      // console.log('the user has been signed up and created', val);
     });
 
     this.storeFacade.appError$.subscribe((val) => {
-      console.log('error', val);
+      // console.log('error', val);
     });
 
     this.signUpForm = fb.group({

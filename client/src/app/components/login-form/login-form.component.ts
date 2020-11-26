@@ -1,3 +1,4 @@
+import { userLogin } from './../../store/actions/app.actions';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -5,7 +6,7 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
-import { User } from 'src/app/interfaces/user';
+import { User } from '../../interfaces/user';
 import { StoreFacadeService } from '../../store/store-facade.service';
 @Component({
   selector: 'app-login-form',
@@ -18,6 +19,25 @@ export class LoginFormComponent implements OnInit {
   pwd: AbstractControl;
 
   constructor(fb: FormBuilder, private storeFacade: StoreFacadeService) {
+    this.storeFacade.currentUser$.subscribe((val) => {
+      if (val) {
+        console.log(
+          'The user with firstname: ',
+          val.firstName,
+          ' and username: ',
+          val.username,
+          ' has been signed in successfully.'
+        );
+      }
+    });
+
+    this.storeFacade.appError$.subscribe((val) => {
+      if (val) {
+        // we don't want to show an error message on our console before user clicked on login
+        console.log('Userjan could not be found.');
+      }
+    });
+
     this.logInForm = fb.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
       pwd: ['', Validators.compose([Validators.required])],
@@ -28,11 +48,12 @@ export class LoginFormComponent implements OnInit {
   }
   onSubmit(value: any): void {
     if (this.logInForm.valid) {
-      const userCredentials: User ={
+      const userCredentials: User = {
         email: this.email.value,
         password: this.pwd.value,
       };
-      this.storeFacade.findUser(userCredentials);
+
+      this.storeFacade.userLogin(userCredentials);
     }
   }
   ngOnInit(): void {}
