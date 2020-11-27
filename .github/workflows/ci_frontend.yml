@@ -1,1 +1,82 @@
+name: CI Frontend Pipeline
 
+on:
+  pull_request:
+    paths:
+      - 'client/**'
+  push:
+    paths:
+      - 'client/**'
+    branches: 
+      - dev
+      - master
+
+jobs:
+  job_1:
+    name: Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v1.4.4
+        with:
+          node-version: "12.x"
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache Node Modules
+        id: node-modules
+        uses: actions/cache@v2.1.1
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          # Used to create a place to store node_modules to reuse it in other steps
+          path: ~/.npm
+          key: ${{ runner.OS }}-nodejs-frontend-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-nodejs-frontend-
+            ${{ runner.OS }}-nodejs-
+            
+      - name: Install Frontend Dependencies
+        working-directory: ./client
+        if: steps.node-modules.outputs.cache-hit != 'true' # Checks if node has modules as cache already
+        run: npm i
+
+      # Note: to interact with ng on the VM (when building the app for example), @angular/cli & @angular-devkit/build-angular must be installed
+      # It is the case here with the linter
+      - name: Frontend Lint
+        working-directory: ./client
+        run: npm i -g @angular/cli &&
+          npm i --save-dev @angular-devkit/build-angular &&
+          npm run lint
+
+      - name: Frontend Tests
+        working-directory: ./client
+        run: npm test
+
+      - name: Frontend Package
+        working-directory: ./client
+        run: npm run build
+
+      - name: Frontend Run
+        working-directory: ./client
+        run: |
+          nohup npx http-server dist/client -p 4200 &
+          sleep 20
+          sh frontend_endpoints.sh
+
+      - name: Frontend SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: ./client
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
