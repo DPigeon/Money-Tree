@@ -6,7 +6,7 @@
 
 ## JAVA
 
-You need java 11 to run the application. You can check you java version by running this command in your terminal: `java -version`.
+You need Java 11 to run the application. You can check you java version by running this command in your terminal: `java -version`.
 
 ## MAVEN
 There is a maven executable for unix-base dos in the backend repo called mvnw. To execute it, run `./mvnw <comands>`
