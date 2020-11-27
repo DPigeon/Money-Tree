@@ -1,6 +1,5 @@
 [![SonarCloud][sonar-shield]][sonar-url]
 
-[![CI Pipeline][ci-shield]][ci-url]
 [![CD Pipeline][cd-shield]][cd-url]
 
 
@@ -8,6 +7,8 @@
 # Welcome
 
 Money-Tree by Soft-Investors
+
+![logo][logo-url]
 
 This project is a Capstone Software Engineering Design Project. It is a project for final year software engineering undergraduates at Concordia University (course codes ENGR 490 & SOEN 490). Students work in teams of 7 to 8 members to construct a significant software application. The class meets at regular intervals. Team members will give a presentation of their contribution to the project.
 
@@ -98,18 +99,13 @@ Follow these steps to get a working version of our application
 
 ### Installation
 
-1. Get a free Alpaca API Key at [https://app.alpaca.markets/signup](https://app.alpaca.markets/signup)
-2. Get a free IEX Cloud API Key at [https://iexcloud.io/cloud-login#/register](https://iexcloud.io/cloud-login#/register)
-2. Clone the repo
+1. Clone the repo
 ```sh
 git clone https://github.com/DPigeon/Money-Tree.git
 ```
-4. Enter your API in `/backend/application.properties`
-```XML
-alpaca_token='ENTER YOUR API KEY'
-iex_token='ENTER YOU API KEY'
-```
-5. Run the Docker Container (from the root folder of the project)
+2. Get the secrets from the slack #secret-sharing and store them in your environment
+
+3. Run the Docker Container (from the root folder of the project)
 ```sh
 docker compose up
 ```
@@ -153,6 +149,7 @@ See [License](/.github/LICENSE.md)
 [cd-shield]: https://github.com/DPigeon/Money-Tree/workflows/CD%20Pipeline/badge.svg
 [cd-url]: https://github.com/DPigeon/Money-Tree/actions
 [docker-url]: https://www.docker.com/
+[logo-url]: client/src/assets/Logo.png
 
 ## FAQ And Special Configurations
 
