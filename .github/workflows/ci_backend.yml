@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI Backend Pipeline
 
 on:
   pull_request:
