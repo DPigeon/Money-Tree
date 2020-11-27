@@ -47,16 +47,11 @@ jobs:
             
       - name: Install Frontend Dependencies
         working-directory: ./client
-        if: steps.node-modules.outputs.cache-hit != 'true' # Checks if node has modules as cache already
-        run: npm i
+        run: npm ci
 
-      # Note: to interact with ng on the VM (when building the app for example), @angular/cli & @angular-devkit/build-angular must be installed
-      # It is the case here with the linter
       - name: Frontend Lint
         working-directory: ./client
-        run: npm i -g @angular/cli &&
-          npm i --save-dev @angular-devkit/build-angular &&
-          npm run lint
+        run: npm run lint
 
       - name: Frontend Tests
         working-directory: ./client
