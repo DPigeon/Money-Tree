@@ -50,7 +50,7 @@ docker-compose up
 
 OR
 
-3. B. Alternatively to 3A, you can run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+2. B. Alternatively to 2A, you can run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 
 <!-- USAGE EXAMPLES -->
