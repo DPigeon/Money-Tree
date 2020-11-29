@@ -1,0 +1,18 @@
+services:
+  backend:
+    build: .
+    restart: on-failure
+    ports:
+      - 8080:8080
+    links:
+      - neo4j
+    depends_on:
+      - neo4j
+  neo4j:
+    image: neo4j
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - /home/neo4j/data:/data
+      - /home/neo4j/logs:/logs
