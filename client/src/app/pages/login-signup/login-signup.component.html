@@ -10,7 +10,6 @@
     </div>
 
     <div class="app-signup-position">
-        <app-signup-form></app-signup-form>
+        <app-signup-form [appError]="hasAppError | async" (userSignup)="handleUserSignup($event)"></app-signup-form>
     </div>
-
 </div>

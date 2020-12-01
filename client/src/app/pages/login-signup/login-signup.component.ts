@@ -73,4 +73,7 @@ export class LoginSignupComponent implements OnInit {
   handleUserLogin(userCredentials: User) {
     this.storeFacade.userLogin(userCredentials);
   }
+  handleUserSignup(newUser: User){
+    this.storeFacade.createNewUser(newUser);
+  }
 }

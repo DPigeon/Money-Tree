@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,13 +6,15 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { StoreFacadeService } from '../../store/store-facade.service';
-
+import { User } from 'src/app/interfaces/user';
 @Component({
   selector: 'app-signup-form',
   templateUrl: './signup-form.component.html',
   styleUrls: ['./signup-form.component.scss'],
 })
 export class SignupFormComponent implements OnInit {
+  @Output() userSignup: EventEmitter<User> = new EventEmitter();
+  @Input() appError: boolean;
   signUpForm: FormGroup;
   firstName: AbstractControl;
   lastName: AbstractControl;
@@ -76,7 +78,7 @@ export class SignupFormComponent implements OnInit {
         email: this.email.value,
         username: this.username.value,
       };
-      this.storeFacade.createNewUser(newUser);
+      this.userSignup.emit(newUser);
     }
   }
   ngOnInit(): void {}
