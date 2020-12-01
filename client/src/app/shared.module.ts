@@ -10,6 +10,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { initialState } from './store/reducers/app.reducer';
 import { provideMockStore } from '@ngrx/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 export const MATERIAL_MODULE_DEPENDENCIES = [
   MatIconModule,
@@ -24,3 +25,8 @@ export const MATERIAL_MODULE_DEPENDENCIES = [
 ];
 
 export const NGRX_STORE_MODULE = provideMockStore({ initialState });
+
+export const FORM_MODULE_DPENDENCEIES = [
+  FormsModule,
+  ReactiveFormsModule
+]

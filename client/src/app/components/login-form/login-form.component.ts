@@ -1,4 +1,3 @@
-import { Router, RouterModule } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -19,7 +18,7 @@ export class LoginFormComponent implements OnInit {
   pwd: AbstractControl;
   loginFailed: boolean;
 
-  constructor(fb: FormBuilder, private storeFacade: StoreFacadeService, private router: Router) {
+  constructor(fb: FormBuilder, private storeFacade: StoreFacadeService) {
 
     this.storeFacade.appError$.subscribe((val) => {
       if (val) {
