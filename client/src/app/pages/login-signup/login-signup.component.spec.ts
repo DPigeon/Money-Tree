@@ -12,7 +12,12 @@ const fakeActivatedRoute = {
 
 const fakeRoute = {
   navigate: jest.fn()
-}
+} as any;
+
+const mockStoreFacade = {
+  userLogin: jest.fn(),
+  updateUser: jest.fn()
+} as any;
 
 describe('LoginSignupComponent', () => {
   let component: LoginSignupComponent;
@@ -41,3 +46,54 @@ describe('LoginSignupComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+describe('LoginSignupComponent Unit Test', () => {
+  let component: LoginSignupComponent;
+
+  beforeEach(() => {
+    component = new LoginSignupComponent(mockStoreFacade, fakeActivatedRoute, fakeRoute);
+  });
+
+  it('should call the handle user login', () =>{
+    spyOn(mockStoreFacade, 'userLogin').and.callThrough();
+    const fakeUser = {email: "hi@gmail.com", password: "Hunter2"}
+    component.handleUserLogin(fakeUser)
+    expect(mockStoreFacade.userLogin).toHaveBeenCalledWith(fakeUser);
+  })
+
+  it('should handle if alpaca redirects or not', () =>{
+    spyOn(component, 'registerWithAlpaca');
+    component.hasAlpacaCode = false;
+    component.handleAlpacaRedirectResponse(false);
+    expect(component.registerWithAlpaca).toHaveBeenCalledTimes(0);
+    component.hasAlpacaCode = true;
+    component.handleAlpacaRedirectResponse(false);
+    expect(component.registerWithAlpaca).toHaveBeenCalledTimes(0);
+    component.hasAlpacaCode = true;
+    component.handleAlpacaRedirectResponse(true);
+    expect(component.registerWithAlpaca).toHaveBeenCalledTimes(0);
+    component.hasAlpacaCode = false;
+    component.handleAlpacaRedirectResponse(true);
+    expect(component.registerWithAlpaca).toHaveBeenCalledTimes(1);
+  })
+
+  it('should handle if the user login status changes', () =>{
+    spyOn(fakeRoute, 'navigate').and.callThrough();
+    component.handleLoginRedirect(false);
+    expect(fakeRoute.navigate).toHaveBeenCalledTimes(0);
+    component.handleLoginRedirect(true);
+    expect(fakeRoute.navigate).toHaveBeenCalledTimes(1);
+  })
+
+  it('should handle route data', () => {
+    spyOn(mockStoreFacade, 'updateUser').and.callThrough();
+    component.handleRouteData(null);
+    expect(mockStoreFacade.updateUser).toHaveBeenCalledTimes(0);
+    component.handleRouteData({code: "123-456-789"})
+    const userParams = {
+      id: 0,
+      alpacaApiKey: "123-456-789",
+    };
+    expect(mockStoreFacade.updateUser).toHaveBeenCalledWith(userParams);
+  })
+})
