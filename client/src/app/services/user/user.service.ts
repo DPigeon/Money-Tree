@@ -36,7 +36,6 @@ export class UserService {
   }
 
   userFormatter(response: any) {
-    console.log('user', response);
     let formattedUser: User = {
       id: response['id'],
       firstName: response['firstName'],
