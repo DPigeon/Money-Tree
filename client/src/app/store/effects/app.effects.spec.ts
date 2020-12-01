@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import * as appActions from '../actions/app.actions';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { StockService } from '../../services/stock/stock.service';
 import { Effects } from './app.effects';
+import { UserService } from 'src/app/services/user/user.service';
 
 const stockInfo = {
   tickerSymbol: 'AC',
@@ -26,12 +27,37 @@ const stockInfo = {
   },
 };
 
+const userInfo = {
+  id: 1,
+  firstName: "John",
+  lastName: "Doe",
+  username: "john1",
+  avatarUrl: "",
+  email: "john1@gmail.com",
+  score: 12,
+  rank: 10000,
+  balance: 223,
+  alpacaApiKey: null,
+  follows: [],
+  followers: [],
+  portfolio: [],
+  transactions: []
+}
+
+// Missing error handling cases
 describe('Effects', () => {
   let actions$: Observable<any> = new Observable();
   let effects: Effects;
   const mockStockService = {
     loadStockInfo: jest.fn(() => of(stockInfo)),
-  };
+  } as any;
+
+  const mockUserService = {
+    createNewUser: jest.fn(() => of(userInfo)),
+    updateAlpacaCode: jest.fn(() => of(userInfo)),
+    getUser: jest.fn(() => of(userInfo)),
+    userLogin: jest.fn(() => of(userInfo))
+  } as any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -40,10 +66,12 @@ describe('Effects', () => {
         Effects,
         provideMockActions(() => actions$),
         { provide: StockService, useValue: mockStockService },
+        { provide: UserService, useValue: mockUserService },
       ],
     });
 
     effects = TestBed.inject(Effects);
+
   });
 
   // integration test
@@ -61,6 +89,39 @@ describe('Effects', () => {
       const key = 'stock';
       expect(res[key]).toEqual(stockInfo); // we do our assertions
       done(); // we say that the asyncronous test is finished
+    });
+  });
+
+  it('should return user when creating a new user', (done) => {
+    actions$ = of(appActions.createNewUser({ user: userInfo }));
+    effects.createNewUser$.subscribe((res) => {
+      expect(res['user']).toEqual(userInfo); 
+      done();
+    });
+  });
+
+  // this test will change
+  it('should return user when updating user', (done) => {
+    actions$ = of(appActions.upadateUser({ user: userInfo }));
+    effects.updateUser$.subscribe((res) => {
+      expect(res['user']).toEqual(userInfo); 
+      done();
+    });
+  });
+
+  it('should get current user if user get is requested', (done) => {
+    actions$ = of(appActions.getCurrentUser({ id: userInfo.id }));
+    effects.getCurrentUser$.subscribe((res) => {
+      expect(res['user']).toEqual(userInfo); 
+      done();
+    });
+  });
+
+  it('should get current user if user logsin', (done) => {
+    actions$ = of(appActions.userLogin({ user: userInfo }));
+    effects.userLogin$.subscribe((res) => {
+      expect(res['user']).toEqual(userInfo); 
+      done();
     });
   });
 });
