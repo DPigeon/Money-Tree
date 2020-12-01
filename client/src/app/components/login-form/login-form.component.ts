@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -12,7 +12,7 @@ import { User } from 'src/app/interfaces/user';
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss'],
 })
-export class LoginFormComponent implements OnInit {
+export class LoginFormComponent {
   @Output() userLogin: EventEmitter<User> = new EventEmitter();
   @Input() appError: boolean;
   logInForm: FormGroup;
@@ -28,7 +28,8 @@ export class LoginFormComponent implements OnInit {
     this.email = this.logInForm.controls['email'];
     this.pwd = this.logInForm.controls['pwd'];
   }
-  onSubmit(value: any): void {
+
+  onSubmit(): void {
     if (this.logInForm.valid) {
       const userCredentials: User = {
         email: this.email.value,
@@ -37,23 +38,24 @@ export class LoginFormComponent implements OnInit {
       this.userLogin.emit(userCredentials);
     }
   }
-  ngOnInit(): void {}
+
   getFirstErrorMessage(): string {
     // Only 1 error msg is shown at a time, the first input field error is prior to second, and same for next ones
     if (this.logInForm.touched && this.logInForm.invalid) {
-      // tslint:disable-next-line:forin
       for (const field in this.logInForm.controls) {
         const control = this.logInForm.get(field);
         if (control.invalid && control.touched) {
           // all failed validators are available in control.errors which is an object
           // and to get the names of failed validators we need the keys in errors Object
           const allErrorNames = Object.keys(control.errors);
-          const result = field + ',' + allErrorNames[0]; // the resslt would be for example "firstName,required"
+          const result = field + ',' + allErrorNames[0]; // the result would be for example "firstName,required"
           return result;
         }
       }
     }
+    return '';
   }
+
   showErrorMessage(): string {
     const failedValidator = this.getFirstErrorMessage();
 
@@ -71,5 +73,6 @@ export class LoginFormComponent implements OnInit {
           return '';
       }
     }
+    return '';
   }
 }

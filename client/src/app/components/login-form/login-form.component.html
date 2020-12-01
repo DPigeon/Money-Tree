@@ -2,11 +2,11 @@
   <h2 class="login-text-hint">Already have an account?</h2>
 
   <div class="form-error-messages">
-    <h2 *ngIf="loginFailed"> A user with this credentials could not be found!</h2>
+    <h3 *ngIf="loginFailed"> A user with this credentials could not be found!</h3>
     <h3 *ngIf="logInForm.invalid">{{ showErrorMessage() }}</h3>
   </div>
 
-  <form [formGroup]="logInForm" (ngSubmit)="onSubmit(logInForm.value)">
+  <form [formGroup]="logInForm" (ngSubmit)="onSubmit()">
     <mat-form-field class="mt-input-field" appearance="outline" color="accent">
       <input matInput type="email" placeholder="Email" [formControl]="email" />
     </mat-form-field>
