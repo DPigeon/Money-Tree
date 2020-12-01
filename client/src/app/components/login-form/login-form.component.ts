@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,29 +6,20 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { User } from 'src/app/interfaces/user';
-import { StoreFacadeService } from '../../store/store-facade.service';
+
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent implements OnInit {
+  @Output() userLogin: EventEmitter<User> = new EventEmitter();
+  @Input() appError: boolean;
   logInForm: FormGroup;
   email: AbstractControl;
   pwd: AbstractControl;
-  loginFailed: boolean;
 
-  constructor(fb: FormBuilder, private storeFacade: StoreFacadeService) {
-
-    this.storeFacade.appError$.subscribe((val) => {
-      if (val) {
-        // we don't want to show an error message on our console before user clicked on login
-        console.log(val);
-        console.log('User could not be found.');
-        this.loginFailed = true;
-      }
-    });
-
+  constructor(fb: FormBuilder) {
     this.logInForm = fb.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
       pwd: ['', Validators.compose([Validators.required])],
@@ -43,8 +34,7 @@ export class LoginFormComponent implements OnInit {
         email: this.email.value,
         password: this.pwd.value,
       };
-
-      this.storeFacade.userLogin(userCredentials);
+      this.userLogin.emit(userCredentials);
     }
   }
   ngOnInit(): void {}
@@ -68,7 +58,7 @@ export class LoginFormComponent implements OnInit {
     const failedValidator = this.getFirstErrorMessage();
 
     // to go around null errors in console for when we dont have any failed validators.
-    if (failedValidator && !this.loginFailed) {
+    if (failedValidator && !this.appError) {
       switch (failedValidator) {
         case 'email,required':
         case 'pwd,required':

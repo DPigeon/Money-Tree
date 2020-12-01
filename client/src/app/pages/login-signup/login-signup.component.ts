@@ -9,8 +9,8 @@ import { StoreFacadeService } from '../../store/store-facade.service';
   styleUrls: ['./login-signup.component.scss']
 })
 export class LoginSignupComponent implements OnInit {
-  logo = '../../assets/logo.svg';
   hasAlpacaCode: boolean = false;
+  hasAppError = this.storeFacade.appError$;
 
   constructor(private storeFacade: StoreFacadeService, private route: ActivatedRoute, private router: Router) {
 
@@ -46,5 +46,9 @@ export class LoginSignupComponent implements OnInit {
     const clientId = '198903d0d2f523a25e4dce65837bbf0d';//EnvironmentVariables.ALPACA_CLIENT_ID;
     const alpacaUrl = 'https://app.alpaca.markets/oauth/authorize?response_type=code&client_id='+clientId+'&redirect_uri='+redirectUri+'&scope=trading'
     window.location.href = alpacaUrl;
+  }
+
+  handleUserLogin(userCredentials: User) {
+    this.storeFacade.userLogin(userCredentials);
   }
 }
