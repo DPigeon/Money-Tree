@@ -19,13 +19,14 @@
     height: 42px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   }
-  .form-error-messages {
-    color: $mt-red;
-    font-size: 14px;
-    font-weight: 450;
-  }
+
   .btn-opacity-disabled {
     opacity: 0.7;
+  }
+  .form-error-messages h3 {
+    color: $mt-red;
+    font-size: 18px;
+    font-weight: 500;
   }
 }
 
@@ -40,6 +41,8 @@
       color: $mt-dark;
       display: unset;
     }
+    .form-error-messages h3 {
+      font-size: 16px;
+    }
   }
 }
-
