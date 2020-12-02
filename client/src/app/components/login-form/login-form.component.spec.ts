@@ -34,10 +34,10 @@ describe('LoginFormComponent', () => {
 
   it('should emit login event for valid creditential format', () => {
     spyOn(component.userLogin, 'emit');
-    component.logInForm.controls['email'].setValue(userCredentials.email);
-    component.logInForm.controls['pwd'].setValue(userCredentials.password);
-    component.logInForm.controls['email'].markAsTouched();
-    component.logInForm.controls['pwd'].markAllAsTouched();
+    component.email.setValue(userCredentials.email);
+    component.pwd.setValue(userCredentials.password);
+    component.email.markAsTouched();
+    component.pwd.markAllAsTouched();
     fixture.detectChanges();
     component.onSubmit();
     expect(component.userLogin.emit).toHaveBeenCalledWith(userCredentials);
@@ -46,19 +46,19 @@ describe('LoginFormComponent', () => {
 
   it('should display the correct form error messages', () => {
     spyOn(component.userLogin, 'emit');
-    component.logInForm.controls['email'].markAsTouched();
-    component.logInForm.controls['pwd'].markAllAsTouched();
+    component.email.markAsTouched();
+    component.pwd.markAllAsTouched();
     fixture.detectChanges();
     component.onSubmit();
     expect(component.showErrorMessage()).toBe(
       'Please fill out all the required fields.'
     );
-    component.logInForm.controls['pwd'].setValue(userCredentials.password);
+    component.pwd.setValue(userCredentials.password);
     fixture.detectChanges();
     expect(component.showErrorMessage()).toBe(
       'Please fill out all the required fields.'
     );
-    component.logInForm.controls['email'].setValue('bademailformat@..');
+    component.email.setValue('bademailformat@..');
     fixture.detectChanges();
     expect(component.showErrorMessage()).toBe(
       'Email is not in the valid format.'
