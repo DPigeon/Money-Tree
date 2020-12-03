@@ -110,4 +110,15 @@ describe('SignupFormComponent', () => {
       'Please fill out all the required fields.'
     );
   });
+  it('should show an error if the passwords do not match', () => {
+    component.pwd.setValue('qwer@123');
+    fixture.detectChanges();
+    component.pwd2.setValue('anotherPassword@@');
+    component.pwd.markAsTouched();
+    component.pwd2.markAsTouched();
+    fixture.detectChanges();
+    expect(component.showErrorMessage()).toBe(
+      'Passwords do not match, please check.'
+    );
+  });
 });
