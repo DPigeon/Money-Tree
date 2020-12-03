@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/interfaces/user';
 import { StoreFacadeService } from '../../store/store-facade.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login-signup',
@@ -60,9 +61,8 @@ export class LoginSignupComponent implements OnInit {
   }
 
   registerWithAlpaca(): void {
-    // TODO: This values need to be hidden / updated
-    const redirectUri = 'http://localhost:4200/'; // EnvironmentVariables.ALPACA_REDIRECT_URL;
-    const clientId = '198903d0d2f523a25e4dce65837bbf0d'; // EnvironmentVariables.ALPACA_CLIENT_ID;
+    const redirectUri = environment.alpacaRedirectURL;
+    const clientId = '198903d0d2f523a25e4dce65837bbf0d';
     const alpacaUrl =
       'https://app.alpaca.markets/oauth/authorize?response_type=code&client_id=' +
       clientId +
