@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { StoreFacadeService } from '../../store/store-facade.service';
 
 @Component({
@@ -6,10 +6,8 @@ import { StoreFacadeService } from '../../store/store-facade.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   constructor(private storeFacade: StoreFacadeService) {}
-
-  ngOnInit(): void {}
 
   logout(): void {
     this.storeFacade.logCurrentUserOut();

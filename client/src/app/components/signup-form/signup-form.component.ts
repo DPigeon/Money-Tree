@@ -5,7 +5,6 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
-import { StoreFacadeService } from '../../store/store-facade.service';
 import { User } from 'src/app/interfaces/user';
 @Component({
   selector: 'app-signup-form',
@@ -23,7 +22,7 @@ export class SignupFormComponent implements OnInit {
   pwd: AbstractControl;
   pwd2: AbstractControl;
 
-  constructor(fb: FormBuilder, private storeFacade: StoreFacadeService) {
+  constructor(fb: FormBuilder) {
     this.signUpForm = fb.group({
       firstName: [
         '',

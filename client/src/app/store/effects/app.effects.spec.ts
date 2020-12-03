@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import * as appActions from '../actions/app.actions';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { StockService } from '../../services/stock/stock.service';
@@ -71,6 +71,7 @@ describe('Effects', () => {
     });
 
     effects = TestBed.inject(Effects);
+    const key = 'user';
   });
 
   // integration test
@@ -94,8 +95,8 @@ describe('Effects', () => {
   it('should return user when creating a new user', (done) => {
     actions$ = of(appActions.createNewUser({ user: userInfo }));
     effects.createNewUser$.subscribe((res) => {
-      // tslint:disable-next-line:no-string-literal
-      expect(res['user']).toEqual(userInfo);
+      const key = 'user';
+      expect(res[key]).toEqual(userInfo);
       done();
     });
   });
@@ -104,8 +105,8 @@ describe('Effects', () => {
   it('should return user when updating user', (done) => {
     actions$ = of(appActions.upadateUser({ user: userInfo }));
     effects.updateUser$.subscribe((res) => {
-      // tslint:disable-next-line:no-string-literal
-      expect(res['user']).toEqual(userInfo);
+      const key = 'user';
+      expect(res[key]).toEqual(userInfo);
       done();
     });
   });
@@ -113,8 +114,8 @@ describe('Effects', () => {
   it('should get current user if user get is requested', (done) => {
     actions$ = of(appActions.getCurrentUser({ id: userInfo.id }));
     effects.getCurrentUser$.subscribe((res) => {
-      // tslint:disable-next-line:no-string-literal
-      expect(res['user']).toEqual(userInfo);
+      const key = 'user';
+      expect(res[key]).toEqual(userInfo);
       done();
     });
   });
@@ -122,8 +123,8 @@ describe('Effects', () => {
   it('should get current user if user logsin', (done) => {
     actions$ = of(appActions.userLogin({ user: userInfo }));
     effects.userLogin$.subscribe((res) => {
-      // tslint:disable-next-line:no-string-literal
-      expect(res['user']).toEqual(userInfo);
+      const key = 'user';
+      expect(res[key]).toEqual(userInfo);
       done();
     });
   });
