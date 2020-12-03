@@ -29,4 +29,4 @@ export const NGRX_STORE_MODULE = provideMockStore({ initialState });
 export const FORM_MODULE_DPENDENCEIES = [
   FormsModule,
   ReactiveFormsModule
-]
+];

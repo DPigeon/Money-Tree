@@ -59,12 +59,12 @@ export class SignupFormComponent implements OnInit {
       pwd2: ['', Validators.compose([Validators.required])],
     });
 
-    this.firstName = this.signUpForm.controls['firstName'];
-    this.lastName = this.signUpForm.controls['lastName'];
-    this.username = this.signUpForm.controls['userName'];
-    this.email = this.signUpForm.controls['email'];
-    this.pwd = this.signUpForm.controls['pwd'];
-    this.pwd2 = this.signUpForm.controls['pwd2'];
+    this.firstName = this.signUpForm.controls.firstName;
+    this.lastName = this.signUpForm.controls.lastName;
+    this.username = this.signUpForm.controls.userName;
+    this.email = this.signUpForm.controls.email;
+    this.pwd = this.signUpForm.controls.pwd;
+    this.pwd2 = this.signUpForm.controls.pwd2;
   }
 
   onSubmit(value: any): void {

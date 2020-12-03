@@ -25,8 +25,8 @@ export class LoginFormComponent {
       pwd: ['', Validators.compose([Validators.required])],
     });
 
-    this.email = this.logInForm.controls['email'];
-    this.pwd = this.logInForm.controls['pwd'];
+    this.email = this.logInForm.controls.email;
+    this.pwd = this.logInForm.controls.pwd;
   }
 
   onSubmit(): void {
@@ -42,6 +42,7 @@ export class LoginFormComponent {
   getFirstErrorMessage(): string {
     // Only 1 error msg is shown at a time, the first input field error is prior to second, and same for next ones
     if (this.logInForm.touched && this.logInForm.invalid) {
+      // tslint:disable-next-line:forin
       for (const field in this.logInForm.controls) {
         const control = this.logInForm.get(field);
         if (control.invalid && control.touched) {

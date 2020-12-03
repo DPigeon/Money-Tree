@@ -14,19 +14,27 @@ export interface State {
 export const initialState: State = {
   user: null,
   currentStockLoaded: null,
-  errorMessage: null
+  errorMessage: null,
 };
 
 export const reducer = createReducer(
   initialState,
-  on(appActions.stockInfoLoadSuccess, (state, {stock}) => ({...state, currentStockLoaded: stock})),
-  on(appActions.setCurrentUser, (state, {user}) => {
-    if(user.id) localStorage.setItem('userId', String(user.id));
-    return ({...state, user: user})
+  on(appActions.stockInfoLoadSuccess, (state, { stock }) => ({
+    ...state,
+    currentStockLoaded: stock,
+  })),
+  on(appActions.setCurrentUser, (state, { user }) => {
+    if (user.id) {
+      localStorage.setItem('userId', String(user.id));
+    }
+    return { ...state, user };
   }),
-  on(appActions.setAppError, (state, {errorMessage}) => ({...state, errorMessage: errorMessage})),
+  on(appActions.setAppError, (state, { errorMessage }) => ({
+    ...state,
+    errorMessage,
+  })),
   on(appActions.logCurrentUserOut, (state) => {
     localStorage.removeItem('userId');
-    return ({...state, user: null})
-  }),
+    return { ...state, user: null };
+  })
 );

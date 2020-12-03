@@ -23,7 +23,7 @@ export class UserService {
       .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 
-  getUser(id: number) {
+  getUser(id: number): Observable<User> {
     return this.api
       .get('users/' + id)
       .pipe(map((res: Response) => this.userFormatter(res.body)));
@@ -35,22 +35,22 @@ export class UserService {
       .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 
-  userFormatter(response: any) {
-    let formattedUser: User = {
-      id: response['id'],
-      firstName: response['firstName'],
-      lastName: response['lastName'],
-      username: response['username'],
-      avatarUrl: response['avatarUrl'],
-      email: response['email'],
-      score: response['score'],
-      rank: response['rank'],
-      balance: response['balance'],
-      alpacaApiKey: response['alpacaApiKey'],
-      follows: response['follows'],
-      followers: response['followers'],
-      portfolio: response['portfolio'],
-      transactions: response['transactions'],
+  userFormatter(response: any): User {
+    const formattedUser: User = {
+      id: response.id,
+      firstName: response.firstName,
+      lastName: response.lastName,
+      username: response.username,
+      avatarUrl: response.avatarUrl,
+      email: response.email,
+      score: response.score,
+      rank: response.rank,
+      balance: response.balance,
+      alpacaApiKey: response.alpacaApiKey,
+      follows: response.follows,
+      followers: response.followers,
+      portfolio: response.portfolio,
+      transactions: response.transactions,
     };
     return formattedUser;
   }

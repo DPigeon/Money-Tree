@@ -11,7 +11,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  logout() {
+  logout(): void {
     this.storeFacade.logCurrentUserOut();
   }
 }

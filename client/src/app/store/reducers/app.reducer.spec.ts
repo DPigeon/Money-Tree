@@ -26,11 +26,11 @@ const stockInfo: Stock = {
 
 const userInfo: User = {
   id: 1,
-  firstName: "John",
-  lastName: "Doe",
-  username: "john1",
-  avatarUrl: "",
-  email: "john1@gmail.com",
+  firstName: 'John',
+  lastName: 'Doe',
+  username: 'john1',
+  avatarUrl: '',
+  email: 'john1@gmail.com',
   score: 12,
   rank: 10000,
   balance: 223,
@@ -38,8 +38,8 @@ const userInfo: User = {
   follows: [],
   followers: [],
   portfolio: [],
-  transactions: []
-}
+  transactions: [],
+};
 
 describe('Reducer Reducer', () => {
   describe('an unknown action', () => {
@@ -62,9 +62,9 @@ describe('Reducer Reducer', () => {
     });
 
     it('should return the state with error message', () => {
-      const action = appActions.setAppError({ errorMessage: "error" });
+      const action = appActions.setAppError({ errorMessage: 'error' });
       const state = reducer(initialState, action);
-      expect(state.errorMessage).toEqual("error");
+      expect(state.errorMessage).toEqual('error');
     });
 
     it('should return a null user state when logged out', () => {

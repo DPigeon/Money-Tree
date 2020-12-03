@@ -29,11 +29,11 @@ const stockInfo = {
 
 const userInfo = {
   id: 1,
-  firstName: "John",
-  lastName: "Doe",
-  username: "john1",
-  avatarUrl: "",
-  email: "john1@gmail.com",
+  firstName: 'John',
+  lastName: 'Doe',
+  username: 'john1',
+  avatarUrl: '',
+  email: 'john1@gmail.com',
   score: 12,
   rank: 10000,
   balance: 223,
@@ -41,8 +41,8 @@ const userInfo = {
   follows: [],
   followers: [],
   portfolio: [],
-  transactions: []
-}
+  transactions: [],
+};
 
 // Missing error handling cases
 describe('Effects', () => {
@@ -56,7 +56,7 @@ describe('Effects', () => {
     createNewUser: jest.fn(() => of(userInfo)),
     updateAlpacaCode: jest.fn(() => of(userInfo)),
     getUser: jest.fn(() => of(userInfo)),
-    userLogin: jest.fn(() => of(userInfo))
+    userLogin: jest.fn(() => of(userInfo)),
   } as any;
 
   beforeEach(() => {
@@ -71,7 +71,6 @@ describe('Effects', () => {
     });
 
     effects = TestBed.inject(Effects);
-
   });
 
   // integration test
@@ -95,7 +94,8 @@ describe('Effects', () => {
   it('should return user when creating a new user', (done) => {
     actions$ = of(appActions.createNewUser({ user: userInfo }));
     effects.createNewUser$.subscribe((res) => {
-      expect(res['user']).toEqual(userInfo); 
+      // tslint:disable-next-line:no-string-literal
+      expect(res['user']).toEqual(userInfo);
       done();
     });
   });
@@ -104,7 +104,8 @@ describe('Effects', () => {
   it('should return user when updating user', (done) => {
     actions$ = of(appActions.upadateUser({ user: userInfo }));
     effects.updateUser$.subscribe((res) => {
-      expect(res['user']).toEqual(userInfo); 
+      // tslint:disable-next-line:no-string-literal
+      expect(res['user']).toEqual(userInfo);
       done();
     });
   });
@@ -112,7 +113,8 @@ describe('Effects', () => {
   it('should get current user if user get is requested', (done) => {
     actions$ = of(appActions.getCurrentUser({ id: userInfo.id }));
     effects.getCurrentUser$.subscribe((res) => {
-      expect(res['user']).toEqual(userInfo); 
+      // tslint:disable-next-line:no-string-literal
+      expect(res['user']).toEqual(userInfo);
       done();
     });
   });
@@ -120,7 +122,8 @@ describe('Effects', () => {
   it('should get current user if user logsin', (done) => {
     actions$ = of(appActions.userLogin({ user: userInfo }));
     effects.userLogin$.subscribe((res) => {
-      expect(res['user']).toEqual(userInfo); 
+      // tslint:disable-next-line:no-string-literal
+      expect(res['user']).toEqual(userInfo);
       done();
     });
   });

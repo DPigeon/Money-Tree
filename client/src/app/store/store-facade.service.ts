@@ -16,7 +16,10 @@ export class StoreFacadeService {
   appError$: Observable<any>; // the any should be changed to an Error standard
   shouldAlpacaRedirect$: Observable<boolean>;
   isUserLoggedIn$: Observable<boolean>;
-  authenticationInformation$: Observable<{userExists: boolean, hasAlpacaCode: boolean}>
+  authenticationInformation$: Observable<{
+    userExists: boolean;
+    hasAlpacaCode: boolean;
+  }>;
 
   constructor(private store: Store<{ appState: State }>) {
     this.currentStockLoaded$ = this.store.select(
@@ -24,9 +27,13 @@ export class StoreFacadeService {
     );
     this.currentUser$ = this.store.select(appSelectors.selectCurrentUser);
     this.appError$ = this.store.select(appSelectors.selectAppError);
-    this.shouldAlpacaRedirect$ = this.store.select(appSelectors.selectShouldAlpacaRedirect);
+    this.shouldAlpacaRedirect$ = this.store.select(
+      appSelectors.selectShouldAlpacaRedirect
+    );
     this.isUserLoggedIn$ = this.store.select(appSelectors.isUserLoggedIn);
-    this.authenticationInformation$ = this.store.select(appSelectors.selectAuthenticationInformation);
+    this.authenticationInformation$ = this.store.select(
+      appSelectors.selectAuthenticationInformation
+    );
   }
 
   loadCurrentStock(ticker: string): void {
@@ -34,19 +41,19 @@ export class StoreFacadeService {
   }
 
   createNewUser(user: User): void {
-    this.store.dispatch(appActions.createNewUser({ user: user }));
+    this.store.dispatch(appActions.createNewUser({ user }));
   }
 
   userLogin(user: User): void {
-    this.store.dispatch(appActions.userLogin({ user: user }));
+    this.store.dispatch(appActions.userLogin({ user }));
   }
 
   updateUser(user: User): void {
-    this.store.dispatch(appActions.upadateUser({user: user}));
+    this.store.dispatch(appActions.upadateUser({ user }));
   }
 
   getCurrentUser(userId: number): void {
-    this.store.dispatch(appActions.getCurrentUser({id: userId}));
+    this.store.dispatch(appActions.getCurrentUser({ id: userId }));
   }
 
   logCurrentUserOut(): void {

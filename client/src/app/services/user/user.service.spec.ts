@@ -5,11 +5,11 @@ import { User } from 'src/app/interfaces/user';
 
 const fakeReponse: User = {
   id: 1,
-  firstName: "John",
-  lastName: "Doe",
-  username: "john1",
-  avatarUrl: "",
-  email: "john1@gmail.com",
+  firstName: 'John',
+  lastName: 'Doe',
+  username: 'john1',
+  avatarUrl: '',
+  email: 'john1@gmail.com',
   score: 12,
   rank: 10000,
   balance: 223,
@@ -17,8 +17,8 @@ const fakeReponse: User = {
   follows: [],
   followers: [],
   portfolio: [],
-  transactions: []
-}
+  transactions: [],
+};
 
 describe('UserService', () => {
   let service: UserService;
@@ -37,5 +37,5 @@ describe('UserService', () => {
   it('should format the user to the expected User model', () => {
     const transformedResponse = service.userFormatter(fakeReponse);
     expect(transformedResponse).toEqual(fakeReponse);
-  })
+  });
 });
