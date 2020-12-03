@@ -17,7 +17,6 @@ services:
       - AWS_PROFILE_PICTURES_BUCKET=${AWS_PROFILE_PICTURES_BUCKET}
       - NEO4J_USERNAME=${NEO4J_USERNAME}
       - NEO4J_PASSWORD=${NEO4J_PASSWORD}
-      - APP_VERSION=${APP_VERSION}
     links:
       - neo4j
     depends_on:
