@@ -1,9 +1,23 @@
+version: "3"
 services:
   backend:
-    build: .
+    image: money-tree_backend
     restart: on-failure
     ports:
       - 8080:8080
+    environment:
+      - ALPACA_KEY_ID=${ALPACA_KEY_ID}
+      - ALPACA_SECRET_ID=${ALPACA_SECRET_ID}
+      - IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX=${IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX}
+      - IEXCLOUD_SECRET_TOKEN_SANDBOX=${IEXCLOUD_SECRET_TOKEN_SANDBOX}
+      - IEXCLOUD_PUBLISHABLE_TOKEN_PROD=${IEXCLOUD_PUBLISHABLE_TOKEN_PROD}
+      - IEXCLOUD_SECRET_TOKEN_PROD=${IEXCLOUD_SECRET_TOKEN_PROD}
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_PROFILE_PICTURES_BUCKET=${AWS_PROFILE_PICTURES_BUCKET}
+      - NEO4J_USERNAME=${NEO4J_USERNAME}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+      - APP_VERSION=${APP_VERSION}
     links:
       - neo4j
     depends_on:
@@ -13,6 +27,8 @@ services:
     ports:
       - 7474:7474
       - 7687:7687
+    environment:
+      - NEO4J_AUTH=${NEO4J_USERNAME}/${NEO4J_PASSWORD}
     volumes:
       - /home/neo4j/data:/data
       - /home/neo4j/logs:/logs
