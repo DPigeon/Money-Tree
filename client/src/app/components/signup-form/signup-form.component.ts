@@ -24,7 +24,6 @@ export class SignupFormComponent implements OnInit {
   pwd2: AbstractControl;
 
   constructor(fb: FormBuilder, private storeFacade: StoreFacadeService) {
-
     this.signUpForm = fb.group({
       firstName: [
         '',
@@ -86,10 +85,8 @@ export class SignupFormComponent implements OnInit {
   getFirstErrorMessage(): string {
     // creating pattern (pwd match) validator for confirm password field only if password is already have a value and not null
     if (this.pwd.value) {
-      this.pwd2.setValidators([
-        Validators.required,
-        Validators.pattern(new RegExp(this.pwd.value)),
-      ]);
+      const regex = new RegExp('^' + this.pwd.value + '$');
+      this.pwd2.setValidators([Validators.required, Validators.pattern(regex)]);
     }
     // Only 1 error msg is shown at a time, the first input field error is prior to second, and same for next ones
     if (this.signUpForm.touched && this.signUpForm.invalid) {
