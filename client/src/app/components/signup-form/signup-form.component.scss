@@ -12,7 +12,7 @@
   .mat-flat-button {
     background-color: $action-color;
     color: black;
-    font-size: 16px;
+    font-size: 12px;
     height: 42px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     margin-left: 5px;
@@ -21,6 +21,7 @@
     color: $mt-red;
     font-size: 18px;
     font-weight: 500;
+    position: absolute;
   }
 
   .btn-opacity-disabled {
@@ -34,6 +35,13 @@
     padding: 16px;
     text-align: center;
 
+    ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+      height: 35px;
+    }
+    button {
+      height: 35px !important;
+    }
+
     .signup-title {
       text-align: center;
       margin-bottom: 16px;
@@ -42,7 +50,6 @@
     }
     .form-error-messages h3 {
       font-size: 16px;
-      
     }
   }
 }

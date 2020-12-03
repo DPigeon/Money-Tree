@@ -27,6 +27,7 @@
     color: $mt-red;
     font-size: 18px;
     font-weight: 500;
+    position: absolute;
   }
 }
 
@@ -36,6 +37,13 @@
     padding: 16px;
     text-align: center;
     max-width: none;
+
+    ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+      height: 35px;
+    }
+    button {
+      height: 35px !important;
+    }
 
     .login-text-hint {
       color: $mt-dark;
