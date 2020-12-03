@@ -1,7 +1,7 @@
 version: "3"
 services:
   client:
-    image: frontend
+    build: ./client
     ports:
       - 80:80
       - 443:443
@@ -10,7 +10,7 @@ services:
     depends_on:
       - backend
   backend:
-    image: money-tree_backend
+    build: ./backend
     restart: on-failure
     ports:
       - 8080:8080
