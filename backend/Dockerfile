@@ -17,4 +17,4 @@ RUN mkdir jar
 # Copy jar file generated 
 COPY --from=maven /home/maven/target/moneytree-*.jar /home/maven/jar/moneytree.jar
 # Execute command once image started
-CMD ["java", "-jar", "/home/maven/jar/moneytree.jar"]
+CMD ["java", "-Dspring.profiles.active=prod", "-jar", "/home/maven/jar/moneytree.jar"]

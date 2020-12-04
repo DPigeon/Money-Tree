@@ -30,12 +30,19 @@ public class StockMarketDataFacade {
     private final IEXCloudClient stockMarketDataClient;
 
     @Autowired
-    public StockMarketDataFacade(@Value("${IEXCloud.publishable.token}") String pToken, @Value("${IEXCloud.secret.token}") String sToken) {
-        stockMarketDataClient = IEXTradingClient.create(IEXTradingApiVersion.IEX_CLOUD_STABLE_SANDBOX,
+    public StockMarketDataFacade(@Value("${IEXCloud.publishable.token}") String pToken,
+                                 @Value("${IEXCloud.secret.token}") String sToken,
+                                 @Value("${spring.profiles.active}") String profile) {
+        IEXTradingApiVersion apiVersion = IEXTradingApiVersion.IEX_CLOUD_STABLE_SANDBOX;
+        if (profile.equals("prod")) {
+            apiVersion = IEXTradingApiVersion.IEX_CLOUD_V1;
+        }
+        stockMarketDataClient = IEXTradingClient.create(apiVersion,
                 new IEXCloudTokenBuilder()
                         .withPublishableToken(pToken)
                         .withSecretToken(sToken)
                         .build());
+
     }
 
     public BatchStocks getBatchStocksBySymbol(String symbol) {

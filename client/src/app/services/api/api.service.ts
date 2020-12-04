@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
 
-  baseUrl = 'http://localhost:8080/api/v1/';
+  baseUrl = 'http://localhost:8080/api/v1/'; // TODO: get the right Url depending on env: 'http://${ENV_URL}/api/';
 
   constructor(private http: HttpClient) { }
 

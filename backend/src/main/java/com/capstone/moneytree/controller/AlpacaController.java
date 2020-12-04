@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @MoneyTreeController
@@ -49,9 +49,9 @@ public class AlpacaController {
     * @return ResponseEntity of Position List.
     */
    @GetMapping("/positions")
-   public ResponseEntity<ArrayList<Position>> getPositions() {
-      ArrayList<Position> positions = marketInteractionsFacade.getOpenPositions();
-      Optional<ArrayList<Position>> optional = Optional.of(positions);
+   public ResponseEntity<List<Position>> getPositions() {
+      List<Position> positions = marketInteractionsFacade.getOpenPositions();
+      Optional<List<Position>> optional = Optional.of(positions);
 
       return ResponseEntity.of(optional);
    }
