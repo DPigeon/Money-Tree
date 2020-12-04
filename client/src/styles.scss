@@ -2,9 +2,6 @@
 // For more information: https://material.angular.io/guide/theming
 @import "~@angular/material/theming";
 // Plus imports for other components in your app.
-@import "./theme.scss";
-@import "./forms.scss";
-
 
 html,
 body {
@@ -23,3 +20,5 @@ $mt-dark: #282224;
 $mt-white: #f8f8fb;
 $placeholder-color: #979797;
 
+@import "./theme.scss";
+@import "./forms.scss";

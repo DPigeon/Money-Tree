@@ -23,31 +23,19 @@
   .btn-opacity-disabled {
     opacity: 0.7;
   }
-  .form-error-messages h3 {
-    color: $mt-red;
-    font-size: 18px;
-    font-weight: 500;
-    position: absolute;
-  }
 }
 
 @media only screen and (max-width: 600px) {
   .container {
     width: initial;
+    padding-right: 0.5em;
     padding: 16px;
     text-align: center;
     max-width: none;
 
-    button {
-      height: 35px !important;
-    }
-
     .login-text-hint {
       color: $mt-dark;
       display: unset;
-    }
-    .form-error-messages h3 {
-      font-size: 16px;
     }
   }
 }

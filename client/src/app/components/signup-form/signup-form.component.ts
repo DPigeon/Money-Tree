@@ -89,13 +89,14 @@ export class SignupFormComponent implements OnInit {
     }
     // Only 1 error msg is shown at a time, the first input field error is prior to second, and same for next ones
     if (this.signUpForm.touched && this.signUpForm.invalid) {
-      // tslint:disable-next-line:forin
       for (const field in this.signUpForm.controls) {
-        const control = this.signUpForm.get(field);
-        if (control.invalid && control.touched) {
+        if (
+          this.signUpForm.get(field).invalid &&
+          this.signUpForm.get(field).touched
+        ) {
           // all failed validators are available in control.errors which is an object
           // and to get the names of failed validators we need the keys in errors Object
-          const allErrorNames = Object.keys(control.errors);
+          const allErrorNames = Object.keys(this.signUpForm.get(field).errors);
           const result = field + ',' + allErrorNames[0]; // the resslt would be for example "firstName,required"
           return result;
         }

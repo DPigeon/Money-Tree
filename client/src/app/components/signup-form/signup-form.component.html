@@ -29,8 +29,11 @@
             [disabled]="!signUpForm.valid">
             SIGN UP
         </button>
+
+        <!-- Error messages -->
+        <div class="form-error-messages" *ngIf="signUpForm.invalid">
+            {{ showErrorMessage() }}
+        </div>
     </form>
-    <div class="form-error-messages">
-        <h3 *ngIf="signUpForm.invalid">{{ showErrorMessage() }}</h3>
-    </div>
+
 </div>

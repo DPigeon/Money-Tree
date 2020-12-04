@@ -1,8 +1,5 @@
 <div class="container">
   <h2 class="login-text-hint">Already have an account?</h2>
-
-
-
   <form [formGroup]="logInForm" (ngSubmit)="onSubmit()">
     <mat-form-field class="mt-input-field" appearance="outline" color="accent">
       <input matInput type="email" placeholder="Email" [formControl]="email" />
@@ -13,10 +10,9 @@
     </mat-form-field>
     <button mat-flat-button class="mt-input-field half" [class.btn-opacity-disabled]="logInForm.invalid"
       [disabled]="logInForm.invalid">LOGIN</button>
-  </form>
-  <div class="form-error-messages">
-    <h3 *ngIf="appError"> A user with this credentials could not be found!</h3>
-    <h3 *ngIf="logInForm.invalid">{{ showErrorMessage() }}</h3>
-  </div>
 
+    <!-- Error messages -->
+    <div class="form-error-messages" *ngIf="appError"> A user with this credentials could not be found!</div>
+    <div class="form-error-messages" *ngIf="logInForm.invalid">{{ showErrorMessage() }}</div>
+  </form>
 </div>
