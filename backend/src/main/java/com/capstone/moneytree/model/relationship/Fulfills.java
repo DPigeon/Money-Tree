@@ -1,6 +1,5 @@
 package com.capstone.moneytree.model.relationship;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.neo4j.ogm.annotation.EndNode;

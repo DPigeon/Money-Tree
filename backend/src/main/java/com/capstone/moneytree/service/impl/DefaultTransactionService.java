@@ -18,7 +18,7 @@ import com.capstone.moneytree.service.api.TransactionService;
 public class DefaultTransactionService implements TransactionService {
 
    private final TransactionDao transactionDao;
-   private static final Logger LOG = LoggerFactory.getLogger(DefaultTransactionService.class);
+   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTransactionService.class);
 
    @Autowired
    public DefaultTransactionService(TransactionDao transactionDao) {
@@ -27,6 +27,7 @@ public class DefaultTransactionService implements TransactionService {
 
    @Override
    public List<Transaction> getAllTransactions() {
+      LOGGER.info("Getting all transactions...");
       return transactionDao.findAll();
    }
 
