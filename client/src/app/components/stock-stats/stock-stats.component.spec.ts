@@ -56,107 +56,195 @@ describe('StockStats', () => {
     component = new StockStatsComponent();
   });
 
+  it('should display correct precision abbreviation', () => {
+    component.stockInfo = stockInfo;
+    expect(component.setPrecisionAbbreviation(4.2723)).toBe('4.27');
+    expect(component.setPrecisionAbbreviation(40000.2723)).toBe('40.27 K');
+    expect(component.setPrecisionAbbreviation(4000000.2723)).toBe('4.27 M');
+    expect(component.setPrecisionAbbreviation(4000000000.2723)).toBe('4.27 B');
+    expect(component.setPrecisionAbbreviation(4000000000000.2723)).toBe(
+      '4.27 T'
+    );
+  });
+
   it('should display correct stock open stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.open).toBe(component.stockInfo.stats.open.toFixed(2));
+    expect(component.stockOpenPrice).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.open)
+    );
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stockOpenPrice).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.open)
+    );
     component.stockInfo.stats.open = stockInfo.stats.open;
-    expect(component.open).toBe(component.stockInfo.stats.open.toFixed(2));
+    expect(component.stockOpenPrice).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.open)
+    );
     component.stockInfo.stats.open = null;
-    expect(component.open).toBe('N/A');
+    expect(component.stockOpenPrice).toBe('N/A');
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stockOpenPrice).toBe('N/A');
     component.stockInfo = null;
-    expect(component.open).toBe('');
+    expect(component.stockOpenPrice).toBe('N/A');
   });
 
   it('should display correct stock high stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.high).toBe(component.stockInfo.stats.high.toFixed(2));
+    expect(component.stockHighPrice).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.high)
+    );
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stockHighPrice).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.high)
+    );
     component.stockInfo.stats.high = stockInfo.stats.high;
-    expect(component.high).toBe(component.stockInfo.stats.high.toFixed(2));
+    expect(component.stockHighPrice).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.high)
+    );
     component.stockInfo.stats.high = null;
-    expect(component.high).toBe('N/A');
+    expect(component.stockHighPrice).toBe('N/A');
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stockHighPrice).toBe('N/A');
     component.stockInfo = null;
-    expect(component.high).toBe('');
+    expect(component.stockHighPrice).toBe('N/A');
   });
 
   it('should display correct stock low stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.low).toBe(component.stockInfo.stats.low.toFixed(2));
+    expect(component.stockLowPrice).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.low)
+    );
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stockLowPrice).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.low)
+    );
     component.stockInfo.stats.low = stockInfo.stats.low;
-    expect(component.low).toBe(component.stockInfo.stats.low.toFixed(2));
+    expect(component.stockLowPrice).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.low)
+    );
     component.stockInfo.stats.low = null;
-    expect(component.low).toBe('N/A');
+    expect(component.stockLowPrice).toBe('N/A');
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stockLowPrice).toBe('N/A');
     component.stockInfo = null;
-    expect(component.low).toBe('');
+    expect(component.stockLowPrice).toBe('N/A');
   });
 
   it('should display correct stock volume stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.volume).toBe(
-      component.stockInfo.stats.volume.toPrecision(3)
+    expect(component.stockVolume).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.volume)
+    );
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stockVolume).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.volume)
     );
     component.stockInfo.stats.volume = stockInfo.stats.volume;
-    expect(component.volume).toBe(
-      component.stockInfo.stats.volume.toPrecision(3)
+    expect(component.stockVolume).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.volume)
     );
+
     component.stockInfo.stats.volume = null;
-    expect(component.volume).toBe('N/A');
+    expect(component.stockVolume).toBe('N/A');
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stockVolume).toBe('N/A');
     component.stockInfo = null;
-    expect(component.volume).toBe('');
+    expect(component.stockVolume).toBe('N/A');
   });
 
   it('should display correct stock mktCap stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.mktCap).toBe(component.stockInfo.stats.mktCap.toFixed(2));
+    expect(component.stockMktCap).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.mktCap)
+    );
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stockMktCap).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.mktCap)
+    );
     component.stockInfo.stats.mktCap = stockInfo.stats.mktCap;
-    expect(component.mktCap).toBe(component.stockInfo.stats.mktCap.toFixed(2));
+    expect(component.stockMktCap).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.mktCap)
+    );
     component.stockInfo.stats.mktCap = null;
-    expect(component.mktCap).toBe('N/A');
+    expect(component.stockMktCap).toBe('N/A');
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stockMktCap).toBe('N/A');
     component.stockInfo = null;
-    expect(component.mktCap).toBe('');
+    expect(component.stockMktCap).toBe('N/A');
   });
 
   it('should display correct stock stock52weekLow stat', () => {
     component.stockInfo = stockInfo;
     expect(component.stock52weekLow).toBe(
-      component.stockInfo.stats.stock52weekLow.toFixed(2)
+      component.setPrecisionAbbreviation(
+        component.stockInfo.stats.stock52weekLow
+      )
+    );
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stock52weekLow).toBe(
+      component.setPrecisionAbbreviation(
+        component.stockInfo.stats.stock52weekLow
+      )
     );
     component.stockInfo.stats.stock52weekLow = stockInfo.stats.stock52weekLow;
     expect(component.stock52weekLow).toBe(
-      component.stockInfo.stats.stock52weekLow.toFixed(2)
+      component.setPrecisionAbbreviation(
+        component.stockInfo.stats.stock52weekLow
+      )
     );
     component.stockInfo.stats.stock52weekLow = null;
     expect(component.stock52weekLow).toBe('N/A');
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stock52weekLow).toBe('N/A');
     component.stockInfo = null;
-    expect(component.stock52weekLow).toBe('');
+    expect(component.stock52weekLow).toBe('N/A');
   });
 
   it('should display correct stock stock52weekHigh stat', () => {
     component.stockInfo = stockInfo;
     expect(component.stock52weekHigh).toBe(
-      component.stockInfo.stats.stock52weekHigh.toFixed(2)
+      component.setPrecisionAbbreviation(
+        component.stockInfo.stats.stock52weekHigh
+      )
+    );
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stock52weekHigh).toBe(
+      component.setPrecisionAbbreviation(
+        component.stockInfo.stats.stock52weekHigh
+      )
     );
     component.stockInfo.stats.stock52weekHigh = stockInfo.stats.stock52weekHigh;
     expect(component.stock52weekHigh).toBe(
-      component.stockInfo.stats.stock52weekHigh.toFixed(2)
+      component.setPrecisionAbbreviation(
+        component.stockInfo.stats.stock52weekHigh
+      )
     );
     component.stockInfo.stats.stock52weekHigh = null;
     expect(component.stock52weekHigh).toBe('N/A');
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stock52weekHigh).toBe('N/A');
     component.stockInfo = null;
-    expect(component.stock52weekHigh).toBe('');
+    expect(component.stock52weekHigh).toBe('N/A');
   });
 
   it('should display correct stock avg volume stat', () => {
     component.stockInfo = stockInfo;
-    expect(component.avgVolume).toBe(
-      component.stockInfo.stats.avgVolume.toPrecision(3)
+    expect(component.stockAvgVolume).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.avgVolume)
+    );
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stockAvgVolume).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.avgVolume)
     );
     component.stockInfo.stats.avgVolume = stockInfo.stats.avgVolume;
-    expect(component.avgVolume).toBe(
-      component.stockInfo.stats.avgVolume.toPrecision(3)
+    expect(component.stockAvgVolume).toBe(
+      component.setPrecisionAbbreviation(component.stockInfo.stats.avgVolume)
     );
     component.stockInfo.stats.avgVolume = null;
-    expect(component.avgVolume).toBe('N/A');
+    expect(component.stockAvgVolume).toBe('N/A');
+    component.stockInfo.stats = stockInfo.stats;
+    expect(component.stockAvgVolume).toBe('N/A');
     component.stockInfo = null;
-    expect(component.avgVolume).toBe('');
+    expect(component.stockAvgVolume).toBe('N/A');
   });
 });
