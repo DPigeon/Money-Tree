@@ -18,8 +18,13 @@
   align-items: center;
   justify-content: space-between;
 
-  .col-stat {
+  .col-stat-left {
     width: 50%;
+    margin-right: 5px;
+  }
+  .col-stat-right {
+    width: 50%;
+    margin-left: 5px;
   }
 }
 
