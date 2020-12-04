@@ -10,99 +10,71 @@ export class StockStatsComponent {
   @Input() stockInfo: Stock;
   constructor() {}
 
-  get open(): string {
-    if (!!this.stockInfo) {
-      if (!!this.stockInfo.stats.open) {
-        return this.stockInfo.stats.open.toFixed(2);
-      } else {
-        return 'N/A';
-      }
-    } else {
-      return '';
-    }
+  get stockOpenPrice(): string {
+    return this.stockInfo && this.stockInfo.stats && this.stockInfo.stats.open
+      ? this.setPrecisionAbbreviation(this.stockInfo.stats.open)
+      : 'N/A';
   }
 
-  get high(): string {
-    if (!!this.stockInfo) {
-      if (!!this.stockInfo.stats.high) {
-        return this.stockInfo.stats.high.toFixed(2);
-      } else {
-        return 'N/A';
-      }
-    } else {
-      return '';
-    }
+  get stockHighPrice(): string {
+    return this.stockInfo && this.stockInfo.stats && this.stockInfo.stats.high
+      ? this.setPrecisionAbbreviation(this.stockInfo.stats.high)
+      : 'N/A';
   }
 
-  get low(): string {
-    if (!!this.stockInfo) {
-      if (!!this.stockInfo.stats.low) {
-        return this.stockInfo.stats.low.toFixed(2);
-      } else {
-        return 'N/A';
-      }
-    } else {
-      return '';
-    }
+  get stockLowPrice(): string {
+    return this.stockInfo && this.stockInfo.stats && this.stockInfo.stats.low
+      ? this.setPrecisionAbbreviation(this.stockInfo.stats.low)
+      : 'N/A';
   }
 
-  get volume(): string {
-    if (!!this.stockInfo) {
-      if (!!this.stockInfo.stats.volume) {
-        return this.stockInfo.stats.volume.toFixed(2);
-      } else {
-        return 'N/A';
-      }
-    } else {
-      return '';
-    }
+  get stockVolume(): string {
+    return this.stockInfo && this.stockInfo.stats && this.stockInfo.stats.volume
+      ? this.setPrecisionAbbreviation(this.stockInfo.stats.volume)
+      : 'N/A';
   }
 
-  get mktCap(): string {
-    if (!!this.stockInfo) {
-      if (!!this.stockInfo.stats.mktCap) {
-        return this.stockInfo.stats.mktCap.toFixed(2);
-      } else {
-        return 'N/A';
-      }
-    } else {
-      return '';
-    }
+  get stockMktCap(): string {
+    return this.stockInfo && this.stockInfo.stats && this.stockInfo.stats.mktCap
+      ? this.setPrecisionAbbreviation(this.stockInfo.stats.mktCap)
+      : 'N/A';
   }
 
   get stock52weekHigh(): string {
-    if (!!this.stockInfo) {
-      if (!!this.stockInfo.stats.stock52weekHigh) {
-        return this.stockInfo.stats.stock52weekHigh.toFixed(2);
-      } else {
-        return 'N/A';
-      }
-    } else {
-      return '';
-    }
+    return this.stockInfo &&
+      this.stockInfo.stats &&
+      this.stockInfo.stats.stock52weekHigh
+      ? this.setPrecisionAbbreviation(this.stockInfo.stats.stock52weekHigh)
+      : 'N/A';
   }
 
   get stock52weekLow(): string {
-    if (!!this.stockInfo) {
-      if (!!this.stockInfo.stats.stock52weekLow) {
-        return this.stockInfo.stats.stock52weekLow.toFixed(2);
-      } else {
-        return 'N/A';
-      }
-    } else {
-      return '';
-    }
+    return this.stockInfo &&
+      this.stockInfo.stats &&
+      this.stockInfo.stats.stock52weekLow
+      ? this.setPrecisionAbbreviation(this.stockInfo.stats.stock52weekLow)
+      : 'N/A';
   }
 
-  get avgVolume(): string {
-    if (!!this.stockInfo) {
-      if (!!this.stockInfo.stats.avgVolume) {
-        return this.stockInfo.stats.avgVolume.toFixed(2);
-      } else {
-        return 'N/A';
-      }
+  get stockAvgVolume(): string {
+    return this.stockInfo &&
+      this.stockInfo.stats &&
+      this.stockInfo.stats.avgVolume
+      ? this.setPrecisionAbbreviation(this.stockInfo.stats.avgVolume)
+      : 'N/A';
+  }
+
+  setPrecisionAbbreviation(stat: number): string {
+    if (stat >= 1000000000000) {  // more or equal to 1 trillion
+      return (stat / 1000000000000).toFixed(2) + ' T';
+    } else if (stat >= 1000000000) {  // more or equal to 1 billion
+      return (stat / 1000000000).toFixed(2) + ' B';
+    } else if (stat >= 1000000) {
+      return (stat / 1000000).toFixed(2) + ' M';  // more or equal to 1 million
+    } else if (stat >= 10000) {
+      return (stat / 10000).toFixed(2) + ' K';  // more or equal to 10 thousand
     } else {
-      return '';
+      return stat.toFixed(2);
     }
   }
 }
