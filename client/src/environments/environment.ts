@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  alpacaRedirectURL: "http://localhost:4200/"
+  alpacaRedirectURL: 'http://localhost:4200/'
 };
 
 /*

@@ -6,7 +6,7 @@ import { StockService } from '../../services/stock/stock.service';
 import { TransactionService } from '../../services/transaction/transaction.service';
 import { UserService } from '../../services/user/user.service';
 import * as appActions from '../actions/app.actions';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class Effects {
