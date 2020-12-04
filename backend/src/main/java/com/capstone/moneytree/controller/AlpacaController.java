@@ -1,10 +1,11 @@
 package com.capstone.moneytree.controller;
 
-import com.capstone.moneytree.facade.MarketInteractionsFacade;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
-import net.jacobpeterson.domain.alpaca.account.Account;
-import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
-import net.jacobpeterson.domain.alpaca.position.Position;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,20 +13,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import com.capstone.moneytree.facade.MarketInteractionsFacade;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import net.jacobpeterson.domain.alpaca.account.Account;
+import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
+import net.jacobpeterson.domain.alpaca.position.Position;
 
 @MoneyTreeController
 @RequestMapping("/alpaca")
 public class AlpacaController {
 
-   @Autowired
    private final MarketInteractionsFacade marketInteractionsFacade;
 
+   @Autowired
    public AlpacaController(MarketInteractionsFacade marketInteractionsFacade) {
       this.marketInteractionsFacade = marketInteractionsFacade;
    }
