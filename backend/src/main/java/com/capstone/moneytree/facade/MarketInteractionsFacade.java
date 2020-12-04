@@ -49,7 +49,7 @@ public class MarketInteractionsFacade {
          account = alpacaAPI.getAccount();
          LOGGER.info("Get account: {}", account);
       } catch (AlpacaAPIRequestException e) {
-         LOGGER.error("Error: {}", e.getMessage());
+         LOGGER.error("Error getting the Alpaca account: {}", e.getMessage());
       }
 
       return account;
@@ -65,7 +65,7 @@ public class MarketInteractionsFacade {
          positions = alpacaAPI.getOpenPositions();
          LOGGER.info("Get positions: {}", positions);
       } catch (AlpacaAPIRequestException e) {
-         LOGGER.error("Error: {}", e.getMessage());
+         LOGGER.error("Error getting positions: {}", e.getMessage());
       }
 
       return positions;
@@ -97,7 +97,7 @@ public class MarketInteractionsFacade {
                  extendedHours);
          LOGGER.info("Get portfolio: {}", portfolioHistory);
       } catch (AlpacaAPIRequestException e) {
-         LOGGER.error("Error: {}", e.getMessage());
+         LOGGER.error("Error getting the portfolio: {}", e.getMessage());
       }
 
       return portfolioHistory;
