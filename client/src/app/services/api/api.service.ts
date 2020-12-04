@@ -6,11 +6,10 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ApiService {
-
-  baseUrl = 'http://localhost:8080/api/v1/';
+  baseUrl = 'http://localhost:8080/api/v1/'; // TODO: get the right Url depending on env: 'http://${ENV_URL}/api/';
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    observe: 'response' as 'response'
+    observe: 'response' as 'response',
   };
 
   constructor(private http: HttpClient) {}
