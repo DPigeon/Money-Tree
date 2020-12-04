@@ -71,7 +71,6 @@ describe('Effects', () => {
     });
 
     effects = TestBed.inject(Effects);
-    const key = 'user';
   });
 
   // integration test
