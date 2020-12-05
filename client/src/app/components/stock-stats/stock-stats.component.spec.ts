@@ -59,10 +59,10 @@ describe('StockStats', () => {
   it('should display correct precision abbreviation', () => {
     component.stockInfo = stockInfo;
     expect(component.setPrecisionAbbreviation(4.2723)).toBe('4.27');
-    expect(component.setPrecisionAbbreviation(40000.2723)).toBe('40.27 K');
-    expect(component.setPrecisionAbbreviation(4000000.2723)).toBe('4.27 M');
-    expect(component.setPrecisionAbbreviation(4000000000.2723)).toBe('4.27 B');
-    expect(component.setPrecisionAbbreviation(4000000000000.2723)).toBe(
+    expect(component.setPrecisionAbbreviation(42723.2723)).toBe('4.27 K');
+    expect(component.setPrecisionAbbreviation(4272327.2723)).toBe('4.27 M');
+    expect(component.setPrecisionAbbreviation(4272327232.2723)).toBe('4.27 B');
+    expect(component.setPrecisionAbbreviation(4272327232723.2723)).toBe(
       '4.27 T'
     );
   });
