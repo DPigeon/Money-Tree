@@ -40,7 +40,7 @@ import { Effects } from './store/effects/app.effects';
 import { environment } from '../environments/environment';
 import { reducer } from './store/reducers/app.reducer';
 
-//analytics
+// analytics
 import { NgxHotjarModule } from 'ngx-hotjar'
 
 @NgModule({
