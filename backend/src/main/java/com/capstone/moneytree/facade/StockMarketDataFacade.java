@@ -1,24 +1,34 @@
 package com.capstone.moneytree.facade;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import pl.zankowski.iextrading4j.api.stocks.*;
+
+import pl.zankowski.iextrading4j.api.stocks.Book;
+import pl.zankowski.iextrading4j.api.stocks.Chart;
+import pl.zankowski.iextrading4j.api.stocks.ChartRange;
+import pl.zankowski.iextrading4j.api.stocks.Company;
+import pl.zankowski.iextrading4j.api.stocks.Logo;
+import pl.zankowski.iextrading4j.api.stocks.Quote;
+import pl.zankowski.iextrading4j.api.stocks.v1.BatchStocks;
 import pl.zankowski.iextrading4j.api.stocks.v1.KeyStats;
 import pl.zankowski.iextrading4j.api.stocks.v1.News;
-import pl.zankowski.iextrading4j.api.stocks.v1.BatchStocks;
 import pl.zankowski.iextrading4j.client.IEXCloudClient;
 import pl.zankowski.iextrading4j.client.IEXCloudTokenBuilder;
 import pl.zankowski.iextrading4j.client.IEXTradingApiVersion;
 import pl.zankowski.iextrading4j.client.IEXTradingClient;
-import pl.zankowski.iextrading4j.client.rest.request.stocks.*;
+import pl.zankowski.iextrading4j.client.rest.request.stocks.BookRequestBuilder;
+import pl.zankowski.iextrading4j.client.rest.request.stocks.ChartRequestBuilder;
+import pl.zankowski.iextrading4j.client.rest.request.stocks.CompanyRequestBuilder;
+import pl.zankowski.iextrading4j.client.rest.request.stocks.LogoRequestBuilder;
+import pl.zankowski.iextrading4j.client.rest.request.stocks.QuoteRequestBuilder;
 import pl.zankowski.iextrading4j.client.rest.request.stocks.v1.BatchStocksRequestBuilder;
 import pl.zankowski.iextrading4j.client.rest.request.stocks.v1.BatchStocksType;
 import pl.zankowski.iextrading4j.client.rest.request.stocks.v1.KeyStatsRequestBuilder;
 import pl.zankowski.iextrading4j.client.rest.request.stocks.v1.NewsRequestBuilder;
-
-import java.util.List;
 
 /**
  * This facade abstracts the IEXCloud API and exposes only the relevant
@@ -30,12 +40,19 @@ public class StockMarketDataFacade {
     private final IEXCloudClient stockMarketDataClient;
 
     @Autowired
-    public StockMarketDataFacade(@Value("${IEXCloud.publishable.token}") String pToken, @Value("${IEXCloud.secret.token}") String sToken) {
-        stockMarketDataClient = IEXTradingClient.create(IEXTradingApiVersion.IEX_CLOUD_STABLE_SANDBOX,
+    public StockMarketDataFacade(@Value("${IEXCloud.publishable.token}") String pToken,
+                                 @Value("${IEXCloud.secret.token}") String sToken,
+                                 @Value("${spring.profiles.active}") String profile) {
+        IEXTradingApiVersion apiVersion = IEXTradingApiVersion.IEX_CLOUD_STABLE_SANDBOX;
+        if (profile.equals("prod")) {
+            apiVersion = IEXTradingApiVersion.IEX_CLOUD_STABLE;
+        }
+        stockMarketDataClient = IEXTradingClient.create(apiVersion,
                 new IEXCloudTokenBuilder()
                         .withPublishableToken(pToken)
                         .withSecretToken(sToken)
                         .build());
+
     }
 
     public BatchStocks getBatchStocksBySymbol(String symbol) {

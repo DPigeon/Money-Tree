@@ -17,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This facade abstracts the Alpaca API and exposes only the relevant
@@ -46,9 +47,9 @@ public class MarketInteractionsFacade {
       Account account = null;
       try {
          account = alpacaAPI.getAccount();
-         LOGGER.info("Get account: {}", toString().replace(",", ",\n\t"));
+         LOGGER.info("Get account: {}", account);
       } catch (AlpacaAPIRequestException e) {
-         e.printStackTrace();
+         LOGGER.error("Error getting the Alpaca account: {}", e.getMessage());
       }
 
       return account;
@@ -58,13 +59,13 @@ public class MarketInteractionsFacade {
     * Gets all stocks position for a user.
     * @return List of available positions.
     */
-   public ArrayList<Position> getOpenPositions() {
+   public List<Position> getOpenPositions() {
       ArrayList<Position> positions = null;
       try {
          positions = alpacaAPI.getOpenPositions();
          LOGGER.info("Get positions: {}", positions);
       } catch (AlpacaAPIRequestException e) {
-         e.printStackTrace();
+         LOGGER.error("Error getting positions: {}", e.getMessage());
       }
 
       return positions;
@@ -96,7 +97,7 @@ public class MarketInteractionsFacade {
                  extendedHours);
          LOGGER.info("Get portfolio: {}", portfolioHistory);
       } catch (AlpacaAPIRequestException e) {
-         e.printStackTrace();
+         LOGGER.error("Error getting the portfolio: {}", e.getMessage());
       }
 
       return portfolioHistory;
