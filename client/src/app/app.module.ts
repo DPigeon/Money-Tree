@@ -41,7 +41,7 @@ import { environment } from '../environments/environment';
 import { reducer } from './store/reducers/app.reducer';
 
 // analytics
-import { NgxHotjarModule } from 'ngx-hotjar'
+import { NgxHotjarModule } from 'ngx-hotjar';
 
 @NgModule({
   declarations: [
