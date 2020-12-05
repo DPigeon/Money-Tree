@@ -40,6 +40,9 @@ import { Effects } from './store/effects/app.effects';
 import { environment } from '../environments/environment';
 import { reducer } from './store/reducers/app.reducer';
 
+//analytics
+import { NgxHotjarModule } from 'ngx-hotjar'
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,6 +62,7 @@ import { reducer } from './store/reducers/app.reducer';
     HttpClientModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({ appState: reducer }),
+    NgxHotjarModule.forRoot('2137688'),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([Effects]),
     MatCardModule,
