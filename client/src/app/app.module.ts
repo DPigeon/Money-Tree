@@ -32,6 +32,7 @@ import { StockStatsComponent } from './components/stock-stats/stock-stats.compon
 import { Effects } from './store/effects/app.effects';
 import { environment } from '../environments/environment';
 import { reducer } from './store/reducers/app.reducer';
+import { NgxHotjarModule } from 'ngx-hotjar';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { reducer } from './store/reducers/app.reducer';
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
+    NgxHotjarModule.forRoot("2137688"),
   ],
   providers: [],
   bootstrap: [AppComponent],
