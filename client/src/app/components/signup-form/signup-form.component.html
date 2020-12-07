@@ -1,6 +1,6 @@
 <div class="container">
     <h1 class="signup-title">Sign Up</h1>
-    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit(signUpForm.value)">
+    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
         <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
             <input matInput placeholder="First Name" type="text" [formControl]="firstName" />
         </mat-form-field>
@@ -30,7 +30,6 @@
             SIGN UP
         </button>
 
-        <!-- Error messages -->
         <div class="form-error-messages" *ngIf="signUpForm.invalid">
             {{ showErrorMessage() }}
         </div>

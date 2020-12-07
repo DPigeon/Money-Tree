@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -11,7 +11,7 @@ import { User } from 'src/app/interfaces/user';
   templateUrl: './signup-form.component.html',
   styleUrls: ['./signup-form.component.scss'],
 })
-export class SignupFormComponent implements OnInit {
+export class SignupFormComponent {
   @Output() userSignup: EventEmitter<User> = new EventEmitter();
   @Input() appError: boolean;
   signUpForm: FormGroup;
@@ -66,10 +66,9 @@ export class SignupFormComponent implements OnInit {
     this.pwd2 = this.signUpForm.controls.pwd2;
   }
 
-  onSubmit(value: any): void {
-    console.log('you submitted value:', value);
+  onSubmit(): void {
     if (this.signUpForm.valid) {
-      const newUser: any = {
+      const newUser: User = {
         firstName: this.firstName.value,
         lastName: this.lastName.value,
         password: this.pwd.value,
@@ -79,7 +78,6 @@ export class SignupFormComponent implements OnInit {
       this.userSignup.emit(newUser);
     }
   }
-  ngOnInit(): void {}
 
   getFirstErrorMessage(): string {
     // creating pattern (pwd match) validator for confirm password field only if password is already have a value and not null
