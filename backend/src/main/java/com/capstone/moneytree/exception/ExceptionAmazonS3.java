@@ -1,7 +1,7 @@
 package com.capstone.moneytree.exception;
 
-public class FailedUploadImageS3Exception extends RuntimeException {
-    public FailedUploadImageS3Exception(String message) {
+public class ExceptionAmazonS3 extends RuntimeException {
+    public ExceptionAmazonS3(String message) {
         super(message);
     }
 }

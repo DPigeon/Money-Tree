@@ -1,5 +1,11 @@
 package com.capstone.moneytree.controller
 
+import com.capstone.moneytree.facade.AmazonS3Facade
+import com.capstone.moneytree.service.api.AmazonS3Service
+import com.capstone.moneytree.service.impl.DefaultAmazonS3Service
+import org.springframework.mock.web.MockMultipartFile
+import org.springframework.web.multipart.MultipartFile
+
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUsersInMockedDatabase
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createCredential
@@ -38,13 +44,20 @@ class UserControllerTest extends Specification {
    private static UserService defaultUserService
    private static UserController userController
 
+   private static final String AWS_KEY_ID = System.getenv().get("AWS_ACCESS_KEY")
+   private static final String AWS_SECRET = System.getenv().get("AWS_SECRET_ACCESS_KEY")
+   private static final String AWS_BUCKET = System.getenv().get("AWS_PROFILE_PICTURES_BUCKET")
+
+   private static AmazonS3Facade amazonS3Facade = new AmazonS3Facade(AWS_KEY_ID, AWS_SECRET)
+   private static AmazonS3Service amazonS3Service = new DefaultAmazonS3Service(amazonS3Facade)
+
    def setup() {
       userDao = Mock()
       userValidator = new UserValidator(userDao)
       validatorFactory = Mock(ValidatorFactory) {
          it.getUserValidator() >> userValidator
       }
-      defaultUserService = new DefaultUserService(userDao, validatorFactory)
+      defaultUserService = new DefaultUserService(userDao, validatorFactory, amazonS3Service)
       userController = new UserController(defaultUserService)
       MockHttpServletRequest request = new MockHttpServletRequest()
       RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request))
@@ -235,5 +248,40 @@ class UserControllerTest extends Specification {
       userController.login(credentialWrongPassword)
       then: "Should throw CredentialNotFoundException"
       thrown(CredentialNotFoundException)
+   }
+
+   @Test
+   def "Edit User"() {
+      given: "A registered user with an Alpaca key"
+      String email = "moneytree@test.com"
+      String username = "Billy"
+      String password = "encrypted"
+      String firstName = "Billy"
+      String lastName = "Bob"
+      String alpacaApiKey = "RYFERH6ET5etETGTE6"
+      User user = createUser(email, username, password, firstName, lastName, alpacaApiKey)
+
+      and: "mock the database with the same user already registered"
+      userDao.findUserById(user.getId()) >> user
+
+      and: "s3 bucket name"
+      String bucketName = "moneytree-profile-pictures"
+
+      //try and experiment with different file types: jpg, jpeg, svg, pdf, txt, doc etc...
+
+      and: "file name"
+      String fileName = "cat.png"
+
+      and: "valid s3 image link"
+      String s3ImageLink = "https://" + bucketName + ".s3.amazonaws.com/" + fileName;
+
+      and: "A MultipartFile of type png"
+      MultipartFile imageFile = new MockMultipartFile(fileName, new FileInputStream(new File("C:\\Users\\amansour\\Downloads\\", fileName)));
+
+      //attempt to edit profile by providing user id and valid multipartfile
+      when: "Attempt to editUserProfile with png file"
+      User user0 = userController.editUserProfile(user.getId(), imageFile);
+      then: "Should return valid s3 url for user.avatarUrl property"
+      user0.getAvatarURL().equals(s3ImageLink);
    }
 }

@@ -9,6 +9,8 @@ import com.capstone.moneytree.service.api.UserService;
 import com.capstone.moneytree.utils.MoneyTreePasswordEncryption;
 import com.capstone.moneytree.validator.UserValidator;
 import com.capstone.moneytree.validator.ValidatorFactory;
+import org.springframework.beans.factory.annotation.Value;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,9 @@ public class DefaultUserService implements UserService {
    private final MoneyTreePasswordEncryption passwordEncryption;
    private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
    private final AmazonS3Service amazonS3Service;
+
+   @Value("${aws.profile.pictures.bucket}")
+   private String bucketName;
 
    @Autowired
    public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service) {
@@ -84,12 +89,17 @@ public class DefaultUserService implements UserService {
    @Override
    public User editUserProfilePicture(User user, MultipartFile imageFile) {
       //since user exists, we can now upload image to s3 and save imageUrl into db
-      String imageUrl = this.amazonS3Service.uploadImageToS3Bucket(imageFile, "moneytree-profile-pictures");
+      String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, this.bucketName);
 
+      //if user already has a profile picture, handle deleting old picture
+      if (user.getAvatarURL() != null && !user.getAvatarURL().isEmpty())
+         this.amazonS3Service.deleteImageFromS3Bucket(this.bucketName, user.getAvatarURL());
+
+      //set new image url
       user.setAvatarURL(imageUrl);
       userDao.save(user);
 
-      LOG.info("Edited profile picture of {}", user.getEmail());
+      LOG.info("Edited {}'s profile successfully!", user.getUsername());
       return user;
    }
 
