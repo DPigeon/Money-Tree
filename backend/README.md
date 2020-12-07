@@ -66,6 +66,21 @@ You can access the DB GUI with the following link [http://localhost:7474/](http:
 IMPORTANT NOTE: The first time the neo4j database runs, the user/pwd is neo4j and needs to be changed according to our the env variables
 
 
+### API Reference and Docs
+The Swagger UI page is available at http://server:port/context-path/swagger-ui.html
+
+[DEV QUICKLINK](http://money-tree.tech:8080/api/v1/swagger-ui.html)
+
+</br>
+
+The OpenAPI description is available at the following url for json format: http://server:port/context-path/v3/api-docs
+
+[DEV QUICKLINK](http://money-tree.tech:8080/api/v1/v3/api-docs)
+
+
+More info here: 
+https://springdoc.org/
+
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [ci-shield]: https://github.com/DPigeon/Money-Tree/workflows/CI%20Pipeline/badge.svg
