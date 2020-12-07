@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     // This handles authentication logic / routing
     this.storeFacade.authenticationInformation$.subscribe((info) => {
       const localUserId = Number(localStorage.getItem('userId'));
