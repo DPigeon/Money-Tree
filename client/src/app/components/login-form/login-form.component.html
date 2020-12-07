@@ -2,13 +2,13 @@
   <h2 class="login-text-hint">Already have an account?</h2>
   <form [formGroup]="logInForm" (ngSubmit)="onSubmit()">
     <mat-form-field class="mt-input-field" appearance="outline" color="accent">
-      <input matInput type="email" placeholder="Email" [formControl]="email" />
+      <input id="login-email" matInput type="email" placeholder="Email" [formControl]="email" />
     </mat-form-field>
 
     <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
-      <input matInput type="password" placeholder="Password" [formControl]="pwd" />
+      <input id="login-password" matInput type="password" placeholder="Password" [formControl]="pwd" />
     </mat-form-field>
-    <button mat-flat-button class="mt-input-field half" [class.btn-opacity-disabled]="logInForm.invalid"
+    <button id="login-submit-btn" mat-flat-button class="mt-input-field half" [class.btn-opacity-disabled]="logInForm.invalid"
       [disabled]="logInForm.invalid">LOGIN</button>
 
     <!-- Error messages -->
