@@ -29,6 +29,14 @@ describe('StockService', () => {
         change: 4,
         changePercent: 0.03,
         latestPrice: 16.34,
+        open: 100.5,
+        high: 200.2,
+        low: 516510,
+        volume: 151515,
+        marketCap: 51651,
+        week52High: 455,
+        week52Low: 123,
+        avgTotalVolume: 199410,
       },
     },
     logo: {
@@ -45,6 +53,16 @@ describe('StockService', () => {
     stockChangePercent: iexSampleResponse.book.quote.changePercent * 100,
     stockValue: iexSampleResponse.book.quote.latestPrice,
     logo: iexSampleResponse.logo.url,
+    stats: {
+      open: iexSampleResponse.book.quote.open,
+      high: iexSampleResponse.book.quote.high,
+      low: iexSampleResponse.book.quote.low,
+      volume: iexSampleResponse.book.quote.volume,
+      mktCap: iexSampleResponse.book.quote.marketCap,
+      stock52weekHigh: iexSampleResponse.book.quote.week52High,
+      stock52weekLow: iexSampleResponse.book.quote.week52Low,
+      avgVolume: iexSampleResponse.book.quote.avgTotalVolume,
+    },
   };
 
   it('should convert iex data to frontend model', () => {

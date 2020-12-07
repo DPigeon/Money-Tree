@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatDividerModule } from '@angular/material/divider';
 import { initialState } from './store/reducers/app.reducer';
 import { provideMockStore } from '@ngrx/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,6 +16,7 @@ export const MATERIAL_MODULE_DEPENDENCIES = [
   MatCardModule,
   MatChipsModule,
   MatMenuModule,
+  MatDividerModule,
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,

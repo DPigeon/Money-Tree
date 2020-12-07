@@ -8,6 +8,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
@@ -25,6 +26,7 @@ import { StockDetailComponent } from './pages/stock-detail/stock-detail.componen
 import { StockDetailHeaderComponent } from './components/stock-detail-header/stock-detail-header.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
+import { StockStatsComponent } from './components/stock-stats/stock-stats.component';
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
@@ -36,6 +38,7 @@ import { reducer } from './store/reducers/app.reducer';
     AppComponent,
     StockDetailComponent,
     StockDetailHeaderComponent,
+    StockStatsComponent,
     HeaderComponent,
     LeaderboardComponent,
     LoginSignupComponent,
@@ -54,6 +57,7 @@ import { reducer } from './store/reducers/app.reducer';
     FlexLayoutModule,
     MatIconModule,
     MatChipsModule,
+    MatDividerModule,
     MatMenuModule,
     MatButtonModule,
     MatInputModule,

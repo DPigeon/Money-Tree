@@ -17,6 +17,8 @@ export const initialState: State = {
 
 export const reducer = createReducer(
   initialState,
-  on(appActions.stockInfoLoadSuccess, (state, {stock}) => ({...state, currentStockLoaded: stock}))
+  on(appActions.stockInfoLoadSuccess, (state, { stock }) => ({
+    ...state,
+    currentStockLoaded: stock,
+  }))
 );
-

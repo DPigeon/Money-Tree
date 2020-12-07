@@ -14,6 +14,16 @@ const stockInfo = {
   stockChange: -4.27,
   stockChangePercent: 1.68,
   stockValue: 16.36,
+  stats: {
+    open: 100.50,
+    high: 200.20,
+    low: 516510,
+    volume: 151515,
+    mktCap: 51651,
+    stock52weekHigh: 455,
+    stock52weekLow: 123,
+    avgVolume: 199410,
+  },
 };
 
 describe('Effects', () => {
