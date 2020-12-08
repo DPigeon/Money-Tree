@@ -20,6 +20,7 @@ import { SignupFormComponent } from './components/signup-form/signup-form.compon
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 
+
 // Component imports:
 import { AppComponent } from './app.component';
 import { StockDetailComponent } from './pages/stock-detail/stock-detail.component';
@@ -32,6 +33,7 @@ import { StockStatsComponent } from './components/stock-stats/stock-stats.compon
 import { Effects } from './store/effects/app.effects';
 import { environment } from '../environments/environment';
 import { reducer } from './store/reducers/app.reducer';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,8 @@ import { reducer } from './store/reducers/app.reducer';
     LeaderboardComponent,
     LoginSignupComponent,
     SignupFormComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    EditProfileComponent
   ],
   imports: [
     BrowserModule,
