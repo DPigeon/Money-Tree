@@ -64,7 +64,7 @@ public class UserController {
               path("/users/{id}").
               buildAndExpand(createdUser.getId()).toUri();
 
-      return ResponseEntity.created(userURI).build();
+      return ResponseEntity.ok(createdUser);
    }
 
    /**
@@ -102,4 +102,14 @@ public class UserController {
            CredentialNotFoundException {
       return userService.login(credentials);
    }
+
+   @DeleteMapping("/delete-by-email/{email}")
+   public ResponseEntity<Void> deleteUserByEmail(@Valid @PathVariable String email) {
+      try{
+         userService.deleteUserByEmail(email);
+         return ResponseEntity.noContent().build();
+      }catch(Exception e) {
+         throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage()); 
+      }
+   } 
 }

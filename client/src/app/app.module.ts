@@ -15,10 +15,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { LoginSignupComponent } from './pages/login-signup/login-signup.component';
-import { SignupFormComponent } from './components/signup-form/signup-form.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { LoginFormComponent } from './components/login-form/login-form.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+
+
+
 
 // Component imports:
 import { AppComponent } from './app.component';
@@ -27,6 +29,11 @@ import { StockDetailHeaderComponent } from './components/stock-detail-header/sto
 import { HeaderComponent } from './components/header/header.component';
 import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
 import { StockStatsComponent } from './components/stock-stats/stock-stats.component';
+import { LoginSignupComponent } from './pages/login-signup/login-signup.component';
+import { SignupFormComponent } from './components/signup-form/signup-form.component';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { HomeComponent } from './pages/home/home.component';
+
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
@@ -43,7 +50,8 @@ import { reducer } from './store/reducers/app.reducer';
     LeaderboardComponent,
     LoginSignupComponent,
     SignupFormComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,6 +70,8 @@ import { reducer } from './store/reducers/app.reducer';
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

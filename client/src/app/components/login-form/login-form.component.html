@@ -1,13 +1,18 @@
 <div class="container">
   <h2 class="login-text-hint">Already have an account?</h2>
-  <mat-form-field class="mt-input-field" appearance="outline" color="accent">
-    <input matInput type="email" placeholder="Email" />
-  </mat-form-field>
-
-  <div class="password-login-position">
-    <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
-      <input matInput type="password" placeholder="Password" />
+  <form [formGroup]="logInForm" (ngSubmit)="onSubmit()">
+    <mat-form-field class="mt-input-field" appearance="outline" color="accent">
+      <input id="login-email" matInput type="email" placeholder="Email" [formControl]="email" />
     </mat-form-field>
-    <button mat-flat-button class="mt-input-field half">LOGIN</button>
-  </div>
+
+    <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+      <input id="login-password" matInput type="password" placeholder="Password" [formControl]="pwd" />
+    </mat-form-field>
+    <button id="login-submit-btn" mat-flat-button class="mt-input-field half" [class.btn-opacity-disabled]="logInForm.invalid"
+      [disabled]="logInForm.invalid">LOGIN</button>
+
+    <!-- Error messages -->
+    <div class="form-error-messages" *ngIf="appError"> A user with this credentials could not be found!</div>
+    <div class="form-error-messages" *ngIf="logInForm.invalid">{{ showErrorMessage() }}</div>
+  </form>
 </div>

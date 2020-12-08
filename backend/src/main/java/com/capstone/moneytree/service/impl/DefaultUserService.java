@@ -110,6 +110,15 @@ public class DefaultUserService implements UserService {
    }
 
    @Override
+   public void deleteUserByEmail(String email) {
+      User existingUser = userDao.findUserByEmail(email);
+      if (existingUser == null) {
+         throw new EntityNotFoundException(USER_NOT_FOUND);
+      }
+      userDao.delete(existingUser);
+   }
+
+   @Override
    public UserValidator getUserValidator() {
       return validatorFactory.getUserValidator();
    }

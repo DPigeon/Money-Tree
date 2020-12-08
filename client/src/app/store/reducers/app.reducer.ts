@@ -8,11 +8,13 @@ export const reducerFeatureKey = 'reducer';
 export interface State {
   user: User;
   currentStockLoaded: Stock;
+  errorMessage: any; // to be modified
 }
 
 export const initialState: State = {
   user: null,
   currentStockLoaded: null,
+  errorMessage: null,
 };
 
 export const reducer = createReducer(
@@ -20,5 +22,19 @@ export const reducer = createReducer(
   on(appActions.stockInfoLoadSuccess, (state, { stock }) => ({
     ...state,
     currentStockLoaded: stock,
-  }))
+  })),
+  on(appActions.setCurrentUser, (state, { user }) => {
+    if (user.id) {
+      localStorage.setItem('userId', String(user.id));
+    }
+    return { ...state, user };
+  }),
+  on(appActions.setAppError, (state, { errorMessage }) => ({
+    ...state,
+    errorMessage,
+  })),
+  on(appActions.logCurrentUserOut, (state) => {
+    localStorage.removeItem('userId');
+    return { ...state, user: null };
+  })
 );
