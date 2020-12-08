@@ -1,21 +1,6 @@
 import { browser, by, element, ElementFinder } from 'protractor';
 
 export class AppPage {
-
-  navigateHome(): Promise<unknown> {
-    return browser.get(browser.baseUrl) as Promise<
-      unknown
-    >;
-  }
-
-  navigateHomeWithAlpacaCode(): Promise<unknown> {
-    http://localhost:4200/?code=b64858d3-ee1f-4e70-922c-4da74e13ae46
-    return browser.get(browser.baseUrl+'/?code=b64858d3-ee1f-4e70-922c-4da74e13ae46') as Promise<
-      unknown
-    >;
-  }
-
-  ///above will be separate
   navigateToStockDetailPage(ticker: string): Promise<unknown> {
     return browser.get(browser.baseUrl + '/stock-detail/' + ticker) as Promise<
       unknown
