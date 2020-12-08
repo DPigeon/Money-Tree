@@ -35,4 +35,6 @@ public interface UserService {
    UserValidator getUserValidator();
 
    User login(User credentials) throws CredentialNotFoundException;
+
+   void deleteUserByEmail(String email);
 }

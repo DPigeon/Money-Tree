@@ -35,6 +35,10 @@ export class UserService {
       .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 
+  deleteUserByEmail(email: string): Observable<any> {
+    return this.api.delete('users/delete-by-email/' + email);
+  }
+
   userFormatter(response: any): User {
     const formattedUser: User = {
       id: response.id,
