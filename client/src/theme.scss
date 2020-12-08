@@ -74,6 +74,7 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
 @include angular-material-theme($mt-theme);
 
 // Angular Material Component Styling
+// ::ng-deep .mat-form-field-flex{ height:100px;}
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
   margin: 0 !important;
 }
@@ -87,7 +88,13 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
   padding: 0;
   display: flex;
 }
-
+::ng-deep .mat-form-field.textarea {
+  .mat-form-field-wrapper {
+    .mat-form-field-flex {
+      height: 100px;
+    }
+  }
+}
 ::ng-deep .mat-form-field-outline-gap,
 ::ng-deep .mat-form-field-outline-end,
 ::ng-deep .mat-form-field-outline-start {
