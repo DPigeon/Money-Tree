@@ -42,7 +42,7 @@ describe('SignupFormComponent', () => {
     component.pwd.setValue('qwer@123');
     component.pwd2.setValue('qwer@123');
     fixture.detectChanges();
-    component.onSubmit(component.signUpForm.value);
+    component.onSubmit();
     const newUser: User = {
       firstName: 'john',
       lastName: 'doe',
