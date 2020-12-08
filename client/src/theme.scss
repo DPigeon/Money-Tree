@@ -1,101 +1,110 @@
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 @include mat-core();
 
 //Angular Material Custom Theme
 $md-mtprimary: (
-    50 : #e1e7ef,
-    100 : #b5c3d8,
-    200 : #839bbe,
-    300 : #5172a3,
-    400 : #2c5490,
-    500 : #07367c,
-    600 : #063074,
-    700 : #052969,
-    800 : #04225f,
-    900 : #02164c,
-    A100 : #8097ff,
-    A200 : #4d6dff,
-    A400 : #1a44ff,
-    A700 : #002fff,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #ffffff,
-        400 : #ffffff,
-        500 : #ffffff,
-        600 : #ffffff,
-        700 : #ffffff,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #ffffff,
-        A400 : #ffffff,
-        A700 : #ffffff,
-    )
+  50: #e1e7ef,
+  100: #b5c3d8,
+  200: #839bbe,
+  300: #5172a3,
+  400: #2c5490,
+  500: #07367c,
+  600: #063074,
+  700: #052969,
+  800: #04225f,
+  900: #02164c,
+  A100: #8097ff,
+  A200: #4d6dff,
+  A400: #1a44ff,
+  A700: #002fff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #ffffff,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
 );
 
 $md-mtaccent: (
-    50 : #fef2e6,
-    100 : #fde0c1,
-    200 : #fbcb98,
-    300 : #f9b66e,
-    400 : #f8a64f,
-    500 : #f79630,
-    600 : #f68e2b,
-    700 : #f58324,
-    800 : #f3791e,
-    900 : #f16813,
-    A100 : #ffffff,
-    A200 : #fff3ec,
-    A400 : #ffd1b9,
-    A700 : #ffc0a0,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #000000,
-        400 : #000000,
-        500 : #000000,
-        600 : #000000,
-        700 : #000000,
-        800 : #000000,
-        900 : #000000,
-        A100 : #000000,
-        A200 : #000000,
-        A400 : #000000,
-        A700 : #000000,
-    )
+  50: #fef2e6,
+  100: #fde0c1,
+  200: #fbcb98,
+  300: #f9b66e,
+  400: #f8a64f,
+  500: #f79630,
+  600: #f68e2b,
+  700: #f58324,
+  800: #f3791e,
+  900: #f16813,
+  A100: #ffffff,
+  A200: #fff3ec,
+  A400: #ffd1b9,
+  A700: #ffc0a0,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #000000,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
 );
 
 $mt-palette-primary: mat-palette($md-mtprimary);
-$mt-palette-accent:  mat-palette($md-mtaccent);
+$mt-palette-accent: mat-palette($md-mtaccent);
 $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
 @include angular-material-theme($mt-theme);
 
 // Angular Material Component Styling
+// ::ng-deep .mat-form-field-flex{ height:100px;}
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
-    margin: 0 !important;
+  margin: 0 !important;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  height: 43px;
+  padding: 0;
+  display: flex;
+}
+::ng-deep .mat-form-field.textarea {
+  .mat-form-field-wrapper {
+    .mat-form-field-flex {
+      height: 100px;
+    }
   }
-  
-  ::ng-deep .mat-form-field-wrapper {
-    padding-bottom: 0;
-  }
-  
-  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
-    height: 43px;
-    padding: 0;
-    display: flex;
-  }
-  
-  ::ng-deep .mat-form-field-outline-gap,::ng-deep .mat-form-field-outline-end,::ng-deep .mat-form-field-outline-start {
-    background: white;
-  }
-  
-  ::ng-deep .mat-form-field-infix {
-    border: none;
-  }
-  
-  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-    top: 0 !important;
-  }
+}
+::ng-deep .mat-form-field-outline-gap,
+::ng-deep .mat-form-field-outline-end,
+::ng-deep .mat-form-field-outline-start {
+  background: white;
+}
+
+::ng-deep .mat-form-field-infix {
+  border: none;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  top: 0 !important;
+}

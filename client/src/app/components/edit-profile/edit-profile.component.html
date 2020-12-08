@@ -1,1 +1,30 @@
-<p>edit-profile works!</p>
+<div class="wrapper">
+    <div class="cover-picture">
+        <img src="https://ollienollie.files.wordpress.com/2009/10/untitled-181.jpg" class="profile-pic" />
+        <button mat-button class="edit-cover-picture"> Edit Cover Photo</button>
+    </div>
+
+    <div class="container">
+        <form>
+            <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+                <input matInput placeholder="First Name">
+            </mat-form-field>
+
+            <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+                <input matInput placeholder="Last Name">
+            </mat-form-field>
+
+            <mat-form-field class="mt-input-field textarea" appearance="outline" color="accent">
+                <textarea matInput placeholder="Bio" matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10></textarea>
+              </mat-form-field>
+
+            <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+                <input matInput placeholder="Password" type="password">
+            </mat-form-field>
+
+            <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+                <input matInput placeholder="Confirm Password" type="password">
+            </mat-form-field>
+        </form>
+    </div>
+</div>

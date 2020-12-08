@@ -1,0 +1,37 @@
+@import "../../../styles.scss";
+.wrapper{
+    width: 575px;
+    margin-left: auto;
+    margin-right: auto;
+.cover-picture {
+    
+    height: 390px;
+    background-size: cover;
+    background-image: url(https://i.pinimg.com/originals/d7/0b/19/d70b19d883f6d08caccef02b8479fbbb.png);
+   
+    position: relative;
+    .profile-pic {
+        height: 150px;
+        width: 150px;
+        border-radius: 50%;
+        position: absolute;
+        bottom: -4em;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .edit-cover-picture {
+        right: 0;
+        bottom: 0;
+        color: black;
+        position: absolute;
+        background: rgba(255, 255, 255, 0.6);
+        margin-bottom: 1em;
+        margin-right: 1em;
+    }
+}
+.container{
+    margin-top: 6em;
+}
+}
