@@ -22,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
+
 // Component imports:
 import { AppComponent } from './app.component';
 import { StockDetailComponent } from './pages/stock-detail/stock-detail.component';
@@ -39,6 +40,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { Effects } from './store/effects/app.effects';
 import { environment } from '../environments/environment';
 import { reducer } from './store/reducers/app.reducer';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,7 @@ import { reducer } from './store/reducers/app.reducer';
     SignupFormComponent,
     LoginFormComponent,
     HomeComponent,
+    EditProfileComponent
   ],
   imports: [
     BrowserModule,
