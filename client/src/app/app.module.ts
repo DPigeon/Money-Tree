@@ -23,6 +23,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
+
 // Component imports:
 import { AppComponent } from './app.component';
 import { StockDetailComponent } from './pages/stock-detail/stock-detail.component';
