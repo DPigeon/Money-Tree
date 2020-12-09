@@ -2,10 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const baseUrl = 'http://localhost';
+
 export const environment = {
   production: false,
-  alpacaRedirectURL: 'http://localhost:4200/',
-  apiURL: 'http://localhost:8080/api/v1/'
+  alpacaRedirectURL: baseUrl + ':4200/',
+  apiURL: baseUrl + ':8080/api/v1/'
 };
 
 /*

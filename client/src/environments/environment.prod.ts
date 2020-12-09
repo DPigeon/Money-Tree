@@ -1,5 +1,8 @@
+
+const baseUrl = 'http://money-tree.tech/';
+
 export const environment = {
   production: true,
-  alpacaRedirectURL: "http://money-tree.tech/",
-  apiURL: 'http://money-tree.tech/api/'
+  alpacaRedirectURL: baseUrl,
+  apiURL: baseUrl + 'api/'
 };
