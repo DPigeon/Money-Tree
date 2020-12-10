@@ -1,12 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 
 
-export interface profileData {
+export interface ProfileData {
   firstName: string;
   lastName: string;
   password: string;
   biography: string;
-  
 }
 
 @Component({
@@ -14,12 +13,10 @@ export interface profileData {
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss']
 })
+
 export class EditProfileComponent implements OnInit {
-
   constructor( ) { }
-
   ngOnInit(): void {
   }
-
 }
 

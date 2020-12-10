@@ -30,8 +30,14 @@
         margin-bottom: 1em;
         margin-right: 1em;
     }
+    
 }
 .container{
     margin-top: 6em;
+
+    .mat-flat-button{
+        color:$mt-white;
+        background-color:$mt-coral;
+    }
 }
 }
