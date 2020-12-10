@@ -14,6 +14,14 @@
   position: absolute;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s;
+  -webkit-text-fill-color: $mt-dark !important;
+}
+
 @media only screen and (max-width: 600px) {
   .form-error-messages {
     font-size: 16px;
