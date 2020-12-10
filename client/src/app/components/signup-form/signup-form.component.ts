@@ -1,3 +1,4 @@
+import { invalid } from '@angular/compiler/src/render3/view/util';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   FormBuilder,
@@ -6,6 +7,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { User } from 'src/app/interfaces/user';
+
 @Component({
   selector: 'app-signup-form',
   templateUrl: './signup-form.component.html',
@@ -23,40 +25,46 @@ export class SignupFormComponent {
   pwd2: AbstractControl;
 
   constructor(fb: FormBuilder) {
-    this.signUpForm = fb.group({
-      firstName: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern(/^[a-zA-Z]{3,20}$/u), // validate the pattern to match this regex
-        ]),
-      ],
-      lastName: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern(/^[a-zA-Z]{3,20}$/u),
-        ]),
-      ],
-      userName: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern(/^[a-zA-Z]\w{5,20}$/u),
-        ]),
-      ],
-      email: ['', Validators.compose([Validators.required, Validators.email])],
-      pwd: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern(
-            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/u
-          ),
-        ]),
-      ],
-      pwd2: ['', Validators.compose([Validators.required])],
-    });
+    this.signUpForm = fb.group(
+      {
+        firstName: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.pattern(/^[a-zA-Z]{3,20}$/u), // validate the pattern to match this regex
+          ]),
+        ],
+        lastName: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.pattern(/^[a-zA-Z]{3,20}$/u),
+          ]),
+        ],
+        userName: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.pattern(/^[a-zA-Z]\w{5,20}$/u),
+          ]),
+        ],
+        email: [
+          '',
+          Validators.compose([Validators.required, Validators.email]),
+        ],
+        pwd: [
+          '',
+          Validators.compose([
+            Validators.required,
+            Validators.pattern(
+              /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/u
+            ),
+          ]),
+        ],
+        pwd2: ['', Validators.compose([Validators.required])],
+      },
+      { validator: passwordMatch } // This would be a custom validator to check whether passwords matched.
+    );
 
     this.firstName = this.signUpForm.controls.firstName;
     this.lastName = this.signUpForm.controls.lastName;
@@ -80,10 +88,8 @@ export class SignupFormComponent {
   }
 
   getFirstErrorMessage(): string {
-    // creating pattern (pwd match) validator for confirm password field only if password is already have a value and not null
-    if (this.pwd.value) {
-      const regex = new RegExp('^' + this.pwd.value + '$');
-      this.pwd2.setValidators([Validators.required, Validators.pattern(regex)]);
+    if (this.signUpForm.hasError('pwdsDidntMatch') && this.pwd2.dirty) {
+      return 'pwds,match';
     }
     // Only 1 error msg is shown at a time, the first input field error is prior to second, and same for next ones
     if (this.signUpForm.touched && this.signUpForm.invalid) {
@@ -128,9 +134,14 @@ export class SignupFormComponent {
         case 'pwd,pattern':
           return 'Password must contain at least 8 characters, including one number, one letter and one of these special characters: @$!%*#?&';
 
-        case 'pwd2,pattern':
+        case 'pwds,match':
           return 'Passwords do not match, please check.';
       }
     }
   }
+}
+function passwordMatch(frm: FormGroup): { [key: string]: boolean } { // custom validator
+  return frm.get('pwd').value === frm.get('pwd2').value
+    ? null
+    : { pwdsDidntMatch: true };
 }

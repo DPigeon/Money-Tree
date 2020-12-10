@@ -115,6 +115,7 @@ describe('SignupFormComponent', () => {
     component.pwd2.setValue('anotherPassword@@');
     component.pwd.markAsTouched();
     component.pwd2.markAsTouched();
+    component.pwd2.markAsDirty();
     fixture.detectChanges();
     expect(component.showErrorMessage()).toBe(
       'Passwords do not match, please check.'
