@@ -55,9 +55,7 @@ export class SignupFormComponent {
           '',
           Validators.compose([
             Validators.required,
-            Validators.pattern(
-              /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[\S]{8,}$/u
-            ),
+            Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\S]{8,}$/u),
           ]),
         ],
         pwd2: ['', Validators.compose([Validators.required])],
@@ -131,7 +129,7 @@ export class SignupFormComponent {
           return 'Email is not in the valid format.';
 
         case 'pwd,pattern':
-          return 'Password must contain at least 8 characters with no spaces, including one number, one letter and one of these special characters: @$!%*#?&';
+          return 'Password must contain at least 8 characters, including one number, one lowercase and one UPPERCASE letter, and no space.';
 
         case 'pwds,match':
           return 'Passwords do not match, please check.';
