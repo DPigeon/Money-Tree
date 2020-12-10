@@ -98,7 +98,7 @@ describe('SignupFormComponent', () => {
     component.pwd.markAsTouched();
     fixture.detectChanges();
     expect(component.showErrorMessage()).toBe(
-      'Password must contain at least 8 characters, including one number, one lowercase and one UPPERCASE letter, and no space.'
+      'Password must contain at least 8 characters, including one number, one lowercase and one uppercase letter, and no space.'
     );
   });
 

@@ -85,7 +85,11 @@ export class SignupFormComponent {
   }
 
   getFirstErrorMessage(): string {
-    if (this.signUpForm.hasError('pwdsDidntMatch') && this.pwd2.dirty) {
+    if (
+      this.signUpForm.hasError('pwdsDidntMatch') &&
+      this.pwd2.dirty &&
+      this.pwd.valid
+    ) {
       return 'pwds,match';
     }
     // Only 1 error msg is shown at a time, the first input field error is prior to second, and same for next ones
@@ -129,7 +133,7 @@ export class SignupFormComponent {
           return 'Email is not in the valid format.';
 
         case 'pwd,pattern':
-          return 'Password must contain at least 8 characters, including one number, one lowercase and one UPPERCASE letter, and no space.';
+          return 'Password must contain at least 8 characters, including one number, one lowercase and one uppercase letter, and no space.';
 
         case 'pwds,match':
           return 'Passwords do not match, please check.';
