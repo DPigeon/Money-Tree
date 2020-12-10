@@ -131,7 +131,7 @@ export class SignupFormComponent {
           return 'Email is not in the valid format.';
 
         case 'pwd,pattern':
-          return 'Password must contain at least 8 characters, including one number, one letter and one of these special characters: @$!%*#?&';
+          return 'Password must contain at least 8 characters with no spaces, including one number, one letter and one of these special characters: @$!%*#?&';
 
         case 'pwds,match':
           return 'Passwords do not match, please check.';
@@ -139,7 +139,8 @@ export class SignupFormComponent {
     }
   }
 }
-function passwordMatch(frm: FormGroup): { [key: string]: boolean } { // custom validator
+function passwordMatch(frm: FormGroup): { [key: string]: boolean } {
+  // custom validator
   return frm.get('pwd').value === frm.get('pwd2').value
     ? null
     : { pwdsDidntMatch: true };
