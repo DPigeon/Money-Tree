@@ -126,7 +126,7 @@ export class SignupFormComponent {
           return 'Email is not in the valid format.';
 
         case 'pwd,pattern':
-          return 'Password must be at least 8 characters, with one number, one letter and one symbol.';
+          return 'Password must contain at least 8 characters, including one number, one letter and one of these special characters: @$!%*#?&';
 
         case 'pwd2,pattern':
           return 'Passwords do not match, please check.';
