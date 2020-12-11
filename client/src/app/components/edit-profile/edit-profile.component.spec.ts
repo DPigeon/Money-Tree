@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { EditProfileComponent } from './edit-profile.component';
+import {
+  MATERIAL_MODULE_DEPENDENCIES,
+  FORM_MODULE_DPENDENCEIES,
+} from '../../shared.module';
 
 describe('EditProfileComponent', () => {
   let component: EditProfileComponent;
@@ -8,9 +11,10 @@ describe('EditProfileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditProfileComponent ]
+      imports: [MATERIAL_MODULE_DEPENDENCIES, FORM_MODULE_DPENDENCEIES],
+      declarations: [EditProfileComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -11,7 +11,7 @@ import { initialState } from './store/reducers/app.reducer';
 import { provideMockStore } from '@ngrx/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatDialogModule} from '@angular/material/dialog/dialog-module';
+import { MatDialogModule } from '@angular/material/dialog';
 
 export const MATERIAL_MODULE_DEPENDENCIES = [
   MatIconModule,
@@ -22,8 +22,8 @@ export const MATERIAL_MODULE_DEPENDENCIES = [
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
+  MatDialogModule,
   BrowserAnimationsModule,
-  MatDialogModule
 ];
 
 export const NGRX_STORE_MODULE = provideMockStore({ initialState });
