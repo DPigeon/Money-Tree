@@ -39,8 +39,8 @@ describe('SignupFormComponent', () => {
     component.lastName.setValue('doe');
     component.username.setValue('johndoe');
     component.email.setValue('johndoe@gmail.com');
-    component.pwd.setValue('qwer@123');
-    component.pwd2.setValue('qwer@123');
+    component.pwd.setValue('Qwer@123');
+    component.pwd2.setValue('Qwer@123');
     fixture.detectChanges();
     component.onSubmit();
     const newUser: User = {
@@ -48,7 +48,7 @@ describe('SignupFormComponent', () => {
       lastName: 'doe',
       username: 'johndoe',
       email: 'johndoe@gmail.com',
-      password: 'qwer@123',
+      password: 'Qwer@123',
     };
     expect(component.userSignup.emit).toHaveBeenCalledWith(newUser);
     expect(component.showErrorMessage()).toBe(undefined);
@@ -98,7 +98,7 @@ describe('SignupFormComponent', () => {
     component.pwd.markAsTouched();
     fixture.detectChanges();
     expect(component.showErrorMessage()).toBe(
-      'Password must be at least 8 characters, with one number, one letter and one symbol.'
+      'Password must contain at least 8 characters, including one number, one symbol, one lowercase and one uppercase letter, and no space.'
     );
   });
 
@@ -110,11 +110,12 @@ describe('SignupFormComponent', () => {
     );
   });
   it('should show an error if the passwords do not match', () => {
-    component.pwd.setValue('qwer@123');
+    component.pwd.setValue('Qwer@123');
     fixture.detectChanges();
-    component.pwd2.setValue('anotherPassword@@');
+    component.pwd2.setValue('AnotherPassword1@@');
     component.pwd.markAsTouched();
     component.pwd2.markAsTouched();
+    component.pwd2.markAsDirty();
     fixture.detectChanges();
     expect(component.showErrorMessage()).toBe(
       'Passwords do not match, please check.'
