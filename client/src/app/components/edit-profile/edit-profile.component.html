@@ -1,29 +1,35 @@
 <div class="wrapper">
     <div class="cover-picture">
         <img src="https://ollienollie.files.wordpress.com/2009/10/untitled-181.jpg" class="profile-pic" />
-        <button mat-button class="edit-cover-picture"> Edit Cover Photo</button>
+        <div class="dot"><mat-icon  id="add-a-photo" aria-hidden="false">add_a_photo</mat-icon></div>
+        <button mat-button class="edit-cover-picture"><mat-icon id="add-a-photo" aria-hidden="false">add_a_photo</mat-icon> Edit Cover Photo</button>
     </div>
 
     <div class="container">
         <form>
          
             <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+                <mat-label>First Name</mat-label>
                 <input matInput placeholder="First Name">
             </mat-form-field>
 
             <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+                <mat-label>Last Name</mat-label>
                 <input matInput placeholder="Last Name">
             </mat-form-field>
 
-            <mat-form-field class="mt-input-field textarea" appearance="outline" color="accent">
+            <mat-form-field class="mt-input-field textarea bio" appearance="outline" color="accent">
+                <mat-label>Bio</mat-label>
                 <textarea matInput placeholder="Bio" matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10></textarea>
               </mat-form-field>
 
             <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+                <mat-label>New Password</mat-label>
                 <input matInput placeholder="New password" type="password">
             </mat-form-field>
 
             <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+                <mat-label>Confirm New Password</mat-label>
                 <input matInput placeholder="Confirm New Password" type="password">
             </mat-form-field>
 

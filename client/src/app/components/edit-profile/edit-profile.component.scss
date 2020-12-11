@@ -1,43 +1,59 @@
 @import "../../../styles.scss";
-.wrapper{
+.wrapper {
     width: 575px;
     margin-left: auto;
     margin-right: auto;
-.cover-picture {
-    
-    height: 390px;
-    background-size: cover;
-    background-image: url(https://i.pinimg.com/originals/d7/0b/19/d70b19d883f6d08caccef02b8479fbbb.png);
-   
-    position: relative;
-    .profile-pic {
-        height: 150px;
-        width: 150px;
-        border-radius: 50%;
-        position: absolute;
-        bottom: -4em;
-        left: 0;
-        right: 0;
-        margin-left: auto;
-        margin-right: auto;
+    .cover-picture {
+        height: 350px;
+        background-size: cover;
+        background-image: url(https://i.pinimg.com/originals/d7/0b/19/d70b19d883f6d08caccef02b8479fbbb.png);
+        position: relative;
+        border: solid $mt-dark 1px;
+        .dot{
+            height:25px;
+            width: 25px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 75%;
+            position: absolute;
+            bottom: -30px;
+            right: 223px
+        }
+        .profile-pic {
+            height: 150px;
+            width: 150px;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -3em;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            border: solid black 0.5px;
+        }
+        .edit-cover-picture {
+            right: 0;
+            bottom: 0;
+            color: black;
+            position: absolute;
+            background: rgba(255, 255, 255, 0.75);
+            margin-bottom: 1em;
+            margin-right: 1em;
+            #add-a-photo {
+                height: 30px;
+            }
+        }
     }
-    .edit-cover-picture {
-        right: 0;
-        bottom: 0;
-        color: black;
-        position: absolute;
-        background: rgba(255, 255, 255, 0.6);
-        margin-bottom: 1em;
-        margin-right: 1em;
-    }
-    
-}
-.container{
-    margin-top: 6em;
+    .container {
 
-    .mat-flat-button{
-        color:$mt-white;
-        background-color:$mt-coral;
+        margin-top: 6em;
+        .bio {
+            margin-top: 1.5em;
+            margin-bottom: 1em;
+        }
+        .mat-flat-button {
+            color: $mt-white;
+            background-color: $mt-coral;
+        }
     }
-}
 }
