@@ -17,15 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-<<<<<<< HEAD
 import { MatDialogModule } from '@angular/material/dialog';
-=======
-import { MatDialogModule } from '@angular/material/dialog'
->>>>>>> 1ee7bdd489aa1e97423da4a0a74fd88b00481293
-
-
-
-
 
 
 
