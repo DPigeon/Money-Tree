@@ -73,6 +73,11 @@ $mt-palette-accent: mat-palette($md-mtaccent);
 $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
 @include angular-material-theme($mt-theme);
 
+// Extra color scheme
+.mat-coral {
+  color: #af6060 !important;
+}
+
 // Angular Material Component Styling
 // ::ng-deep .mat-form-field-flex{ height:100px;}
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
@@ -107,4 +112,14 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
 
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
   top: 0 !important;
+}
+
+@media only screen and (max-width: 600px) {
+  ::ng-deep .cdk-overlay-pane {
+    max-width: none !important;
+    height: 100%;
+  }
+  ::ng-deep .mat-dialog-container {
+    padding: 0px;
+  } 
 }

@@ -6,24 +6,24 @@
     .cover-picture {
         width: calc(100%-10px);
         height: 350px;
-        background-size: cover;
+        background: center;
         background-image: url(https://i.pinimg.com/originals/d7/0b/19/d70b19d883f6d08caccef02b8479fbbb.png);
         position: relative;
-        border: solid $mt-dark 1px;
-        .dot{
+
+        .dot {
             height: 27px;
             width: 27px;
-            background:rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 50%;
             position: absolute;
             bottom: -30px;
             right: 223px;
-            #add-a-photo{
-               top:0px;
-               left: -1px;
-               position: absolute;
-               font-size: 20px;
-             }
+            #add-a-photo {
+                top: 0px;
+                left: -1px;
+                position: absolute;
+                font-size: 20px;
+            }
         }
         .profile-pic {
             height: 150px;
@@ -51,10 +51,9 @@
         }
     }
     .container {
-
         margin-top: 6em;
         .bio {
-            margin-top: 1.5em;
+            margin-top: 1em;
             margin-bottom: 1em;
         }
         .mat-flat-button {
@@ -62,17 +61,25 @@
             background-color: $mt-coral;
         }
     }
-    
 }
 
 // mobile styling
 @media only screen and (max-width: 600px) {
- 
-.cover-picture{
-    width: 100%;
-    background-size: contain;
+    .wrapper {
+        .container{
+            margin-top: 5em;
+        }
+        .cover-picture {
+            .edit-cover-pic-text{
+                display: none;
+            }
+            .dot{
+                right: 147px
+            }
+            .profile-pic {
+                width: 110px;
+                height: 110px;
+            }
+        }
+    }
 }
-      
-    
-}
-  
