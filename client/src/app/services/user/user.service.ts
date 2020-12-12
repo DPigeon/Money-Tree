@@ -12,7 +12,7 @@ export class UserService {
 
   createNewUser(user: User): Observable<User> {
     return this.api
-      .post('users/create-user', user)
+      .post('users/', user)
       .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 

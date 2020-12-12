@@ -10,9 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
@@ -56,13 +53,9 @@ public class UserController {
     * @param user The JSON object body
     * @return A proper response with the URI of the newly created user
     */
-   @PostMapping("/create-user")
+   @PostMapping("/")
    public ResponseEntity<User> createUser(@RequestBody User user) {
       User createdUser = userService.createUser(user);
-
-      URI userURI = ServletUriComponentsBuilder.fromCurrentContextPath().
-              path("/users/{id}").
-              buildAndExpand(createdUser.getId()).toUri();
 
       return ResponseEntity.ok(createdUser);
    }
