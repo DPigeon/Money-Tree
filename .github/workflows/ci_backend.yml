@@ -56,7 +56,7 @@ jobs:
             
       - name: Build with Maven
         working-directory: ./backend
-        run: mvn -B clean verify
+        run: mvn -Dspring.profiles.active=github -B clean verify
 
       - name: Backend Run
         working-directory: ./backend
