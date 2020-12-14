@@ -8,44 +8,57 @@
         background: center;
         background-image: url(https://i.pinimg.com/originals/d7/0b/19/d70b19d883f6d08caccef02b8479fbbb.png);
         position: relative;
-        border:white solid 5px ;
+        border-radius: 5px;
 
-        .edit-profile-pic {
-            height: 40px;
-            width: 40px;
-            background: rgba(255, 255, 255, 0.85);
+        .close-dialog-icon {
+            background: rgba(0,0,0,0.5);
+            color: white;
             position: absolute;
-            bottom: -43px;
-            right: 215px;
-            border: solid 0.01px gray;
-            #add-a-photo {
-                top: 8px;
-                left: 7px;
+            left: 1rem;
+            top: 1rem;
+        }
+
+        .profile-picture {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -75px;
+
+            .profile-pic {
+                height: 150px;
+                width: 150px;
+                border-radius: 50%;
+                background: rgba(0,0,0, 0.5);
+                color: white;
+                border: white solid 5px;
+            }
+
+            .edit-profile-pic {
+                height: 40px;
+                width: 40px;
+                background: rgba(0,0,0, 0.5);
                 position: absolute;
-                font-size: 25px;
+                bottom: 10px;
+                right: 10px;
+                color: white;
+    
+                mat-icon {
+                    top: 8px;
+                    left: 7px;
+                    position: absolute;
+                    font-size: 25px;
+                }
             }
         }
-        .profile-pic {
-            height: 150px;
-            width: 150px;
-            border-radius: 50%;
-            position: absolute;
-            bottom: -3em;
-            left: 0;
-            right: 0;
-            margin-left: auto;
-            margin-right: auto;
-            border: solid black 3px;
-        }
+
         .edit-cover-picture {
-            right: 0;
-            bottom: 0;
-            color: black;
+            right: 1rem;
+            bottom: 1rem;
+            color: white;
             position: absolute;
-            background: rgba(255, 255, 255, 0.75);
-            margin-bottom: 1em;
-            margin-right: 1em;
-            #add-a-photo {
+            background: rgba(0, 0, 0, 0.5);
+
+            mat-icon {
                 height: 30px;
             }
         }
@@ -67,11 +80,13 @@
             margin-top: 5em;
         }
         .cover-picture {
+            height: 36vh;
+
             .edit-cover-pic-text{
                 display: none;
             }
             .edit-profile-pic{
-                right: 147px
+                right: 33vw;
             }
             .profile-pic {
                 width: 110px;
