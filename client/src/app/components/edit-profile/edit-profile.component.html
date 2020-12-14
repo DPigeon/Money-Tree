@@ -1,55 +1,83 @@
-<div class="wrapper">
-    <div class="cover-picture">
-        
-        <button mat-icon-button class="close-dialog-icon" mat-dialog-close>
-            <mat-icon>close</mat-icon>
-        </button>
-        <button mat-button class="edit-cover-picture">
-            <mat-icon>add_a_photo</mat-icon>
-            <!-- Revisit this -->
-            <span class="edit-cover-pic-text">Edit Cover Photo</span>
-        </button>
-        
-        <div class="profile-picture">
-            <img src="https://ollienollie.files.wordpress.com/2009/10/untitled-181.jpg" alt="profile picture"
-            class="profile-pic" />
-            <button mat-icon-button class="edit-profile-pic">
-                <mat-icon>add_a_photo</mat-icon>
-            </button>
-        </div>
+<div class="container">
+  <div class="cover-picture">
+    <button mat-icon-button class="close-dialog-icon" mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+    <button mat-button class="edit-cover-picture">
+      <mat-icon>add_a_photo</mat-icon>
+      <span class="edit-cover-pic-text">Edit Cover Photo</span>
+    </button>
+
+    <div class="profile-picture">
+      <img
+        src="https://ollienollie.files.wordpress.com/2009/10/untitled-181.jpg"
+        alt="profile picture"
+        class="profile-pic"
+      />
+      <button mat-icon-button class="edit-profile-pic">
+        <mat-icon>add_a_photo</mat-icon>
+      </button>
     </div>
+  </div>
 
+  <form class="edit-profile-form">
+    <mat-form-field
+      class="mt-input-field half"
+      appearance="outline"
+      color="coral"
+    >
+      <mat-label>First Name</mat-label>
+      <input matInput placeholder="First Name" />
+    </mat-form-field>
 
-    <form class="container">
+    <mat-form-field
+      class="mt-input-field half"
+      appearance="outline"
+      color="coral"
+    >
+      <mat-label>Last Name</mat-label>
+      <input matInput placeholder="Last Name" />
+    </mat-form-field>
 
-        <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
-            <mat-label>First Name</mat-label>
-            <input matInput placeholder="First Name">
-        </mat-form-field>
+    <mat-form-field
+      class="mt-input-field textarea bio"
+      appearance="outline"
+      color="coral"
+    >
+      <mat-label>Bio</mat-label>
+      <textarea
+        matInput
+        placeholder="Bio"
+        matTextareaAutosize
+        matAutosizeMinRows="5"
+        matAutosizeMaxRows="10"
+      ></textarea>
+    </mat-form-field>
 
-        <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
-            <mat-label>Last Name</mat-label>
-            <input matInput placeholder="Last Name">
-        </mat-form-field>
+    <mat-form-field
+      class="mt-input-field half"
+      appearance="outline"
+      color="coral"
+    >
+      <mat-label>New Password</mat-label>
+      <input matInput placeholder="New password" type="password" />
+    </mat-form-field>
 
-        <mat-form-field class="mt-input-field textarea bio" appearance="outline" color="coral">
-            <mat-label>Bio</mat-label>
-            <textarea matInput placeholder="Bio" matTextareaAutosize matAutosizeMinRows=5
-                matAutosizeMaxRows=10></textarea>
-        </mat-form-field>
+    <mat-form-field
+      class="mt-input-field half"
+      appearance="outline"
+      color="coral"
+    >
+      <mat-label>Confirm New Password</mat-label>
+      <input matInput placeholder="Confirm New Password" type="password" />
+    </mat-form-field>
 
-        <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
-            <mat-label>New Password</mat-label>
-            <input matInput placeholder="New password" type="password">
-        </mat-form-field>
-
-        <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
-            <mat-label>Confirm New Password</mat-label>
-            <input matInput placeholder="Confirm New Password" type="password">
-        </mat-form-field>
-
-        <button class="mt-input-field secondary-action-btn" mat-flat-button type="submit">
-            Save Changes
-        </button>
-    </form>
+    <button
+      class="mt-input-field secondary-action-btn"
+      mat-flat-button
+      type="submit"
+    >
+      Save Changes
+    </button>
+  </form>
 </div>
