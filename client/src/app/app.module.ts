@@ -17,8 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -39,6 +38,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { Effects } from './store/effects/app.effects';
 import { environment } from '../environments/environment';
 import { reducer } from './store/reducers/app.reducer';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 
 // analytics
 import { NgxHotjarModule } from 'ngx-hotjar';
@@ -55,6 +55,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     SignupFormComponent,
     LoginFormComponent,
     HomeComponent,
+    EditProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -76,6 +77,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -73,6 +73,16 @@ $mt-palette-accent: mat-palette($md-mtaccent);
 $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
 @include angular-material-theme($mt-theme);
 
+// Extra color scheme
+.mat-coral {
+  ::ng-deep &.mat-form-field-appearance-outline.mat-focused {
+    // changes border and label color
+    .mat-form-field-outline, mat-label  {
+      color: #AF6060;
+    }
+  }
+}
+
 // Angular Material Component Styling
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
   margin: 0 !important;
@@ -82,12 +92,13 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
   padding-bottom: 0;
 }
 
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
-  height: 43px;
-  padding: 0;
-  display: flex;
+::ng-deep .mat-form-field.textarea {
+  .mat-form-field-wrapper {
+    .mat-form-field-flex {
+      height: 100px;
+    }
+  }
 }
-
 ::ng-deep .mat-form-field-outline-gap,
 ::ng-deep .mat-form-field-outline-end,
 ::ng-deep .mat-form-field-outline-start {
@@ -96,8 +107,22 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
 
 ::ng-deep .mat-form-field-infix {
   border: none;
+
+  .mat-form-field-label-wrapper .mat-form-field-label{
+      padding-top: 0.2rem !important;
+  }
 }
 
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
   top: 0 !important;
+}
+
+@media only screen and (max-width: 600px) {
+  ::ng-deep .cdk-overlay-pane {
+    max-width: none !important;
+    height: 100%;
+  }
+  ::ng-deep .mat-dialog-container {
+    padding: 0px;
+  } 
 }
