@@ -1,9 +1,7 @@
 @import "../../../styles.scss";
 .wrapper {
     max-width: 575px;
-    margin-left: auto;
-    margin-right: auto;
-    .cover-picture {
+        .cover-picture {
         height: 350px;
         background: center;
         background-image: url(https://i.pinimg.com/originals/d7/0b/19/d70b19d883f6d08caccef02b8479fbbb.png);
@@ -41,7 +39,7 @@
                 bottom: 10px;
                 right: 10px;
                 color: white;
-    
+
                 mat-icon {
                     top: 8px;
                     left: 7px;
@@ -58,6 +56,10 @@
             position: absolute;
             background: rgba(0, 0, 0, 0.5);
 
+            .edit-cover-pic-text{
+                padding-left: 10px;
+            }
+            
             mat-icon {
                 height: 30px;
             }
@@ -65,20 +67,18 @@
     }
     .container {
         margin-top: 6em;
-        .bio {
-            margin-top: 1em;
-            margin-bottom: 1em;
-        }
-        
     }
 }
 
 // mobile styling
 @media only screen and (max-width: 600px) {
     .wrapper {
+        padding: 5px;
+
         .container{
             margin-top: 5em;
         }
+        
         .cover-picture {
             height: 36vh;
 
