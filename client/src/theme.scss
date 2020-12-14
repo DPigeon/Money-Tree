@@ -75,7 +75,12 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
 
 // Extra color scheme
 .mat-coral {
-  color: #af6060 !important;
+  ::ng-deep &.mat-form-field-appearance-outline.mat-focused {
+    // changes border and label color
+    .mat-form-field-outline, mat-label  {
+      color: #AF6060;
+    }
+  }
 }
 
 // Angular Material Component Styling
@@ -87,11 +92,6 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
   padding-bottom: 0;
 }
 
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
-  height: 43px;
-  padding: 0;
-  display: flex;
-}
 ::ng-deep .mat-form-field.textarea {
   .mat-form-field-wrapper {
     .mat-form-field-flex {
@@ -107,6 +107,10 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
 
 ::ng-deep .mat-form-field-infix {
   border: none;
+
+  .mat-form-field-label-wrapper .mat-form-field-label{
+      padding-top: 0.2rem !important;
+  }
 }
 
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
