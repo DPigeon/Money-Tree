@@ -79,7 +79,6 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
 }
 
 // Angular Material Component Styling
-// ::ng-deep .mat-form-field-flex{ height:100px;}
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
   margin: 0 !important;
 }

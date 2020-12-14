@@ -4,25 +4,24 @@
     margin-left: auto;
     margin-right: auto;
     .cover-picture {
-        width: calc(100%-10px);
         height: 350px;
         background: center;
         background-image: url(https://i.pinimg.com/originals/d7/0b/19/d70b19d883f6d08caccef02b8479fbbb.png);
         position: relative;
 
-        .dot {
-            height: 27px;
-            width: 27px;
+        .edit-profile-pic {
+            height: 40px;
+            width: 40px;
             background: rgba(255, 255, 255, 0.85);
-            border-radius: 50%;
             position: absolute;
-            bottom: -30px;
-            right: 223px;
+            bottom: -43px;
+            right: 215px;
+            border: solid 0.01px gray;
             #add-a-photo {
-                top: 0px;
-                left: -1px;
+                top: 8px;
+                left: 7px;
                 position: absolute;
-                font-size: 20px;
+                font-size: 25px;
             }
         }
         .profile-pic {
@@ -35,7 +34,7 @@
             right: 0;
             margin-left: auto;
             margin-right: auto;
-            border: solid black 0.5px;
+            border: solid black 3px;
         }
         .edit-cover-picture {
             right: 0;
@@ -56,10 +55,7 @@
             margin-top: 1em;
             margin-bottom: 1em;
         }
-        .mat-flat-button {
-            color: $mt-white;
-            background-color: $mt-coral;
-        }
+        
     }
 }
 
@@ -73,7 +69,7 @@
             .edit-cover-pic-text{
                 display: none;
             }
-            .dot{
+            .edit-profile-pic{
                 right: 147px
             }
             .profile-pic {

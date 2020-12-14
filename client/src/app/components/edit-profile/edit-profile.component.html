@@ -1,48 +1,47 @@
-<div class="md-dialog.fullscreen-dialog">
-    <div class="wrapper">
-        <div class="cover-picture">
-            <img src="https://ollienollie.files.wordpress.com/2009/10/untitled-181.jpg" class="profile-pic" />
-            <button class="dot">
-                <mat-icon id="add-a-photo" aria-hidden="false">add_a_photo</mat-icon>
-            </button>
-            <button mat-button class="edit-cover-picture">
-                <mat-icon id="add-a-photo" aria-hidden="false">add_a_photo</mat-icon> <span class="edit-cover-pic-text">Edit Cover Photo</span>
-            </button>
-        </div>
-
-        <div class="container">
-            <form>
-
-                <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
-                    <mat-label>First Name</mat-label>
-                    <input matInput placeholder="First Name">
-                </mat-form-field>
-
-                <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
-                    <mat-label>Last Name</mat-label>
-                    <input matInput placeholder="Last Name">
-                </mat-form-field>
-
-                <mat-form-field class="mt-input-field textarea bio" appearance="outline" color="coral">
-                    <mat-label>Bio</mat-label>
-                    <textarea matInput placeholder="Bio" matTextareaAutosize matAutosizeMinRows=5
-                        matAutosizeMaxRows=10></textarea>
-                </mat-form-field>
-
-                <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
-                    <mat-label>New Password</mat-label>
-                    <input matInput placeholder="New password" type="password">
-                </mat-form-field>
-
-                <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
-                    <mat-label>Confirm New Password</mat-label>
-                    <input matInput placeholder="Confirm New Password" type="password">
-                </mat-form-field>
-
-                <button class="mt-input-field" mat-flat-button type="submit">
-                    Save Changes
-                </button>
-            </form>
-        </div>
+<div class="wrapper">
+    <div class="cover-picture">
+        <img src="https://ollienollie.files.wordpress.com/2009/10/untitled-181.jpg" alt="profile picture"
+            class="profile-pic" />
+        <button mat-icon-button class="edit-profile-pic">
+            <mat-icon id="add-a-photo" aria-hidden="false">add_a_photo</mat-icon>
+        </button>
+        <button mat-button class="edit-cover-picture">
+            <mat-icon id="add-a-photo" aria-hidden="false">add_a_photo</mat-icon>
+            <span class="edit-cover-pic-text">&nbsp;&nbsp; Edit Cover Photo</span>
+        </button>
     </div>
+
+
+    <form class="container">
+
+        <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+            <mat-label>First Name</mat-label>
+            <input matInput placeholder="First Name">
+        </mat-form-field>
+
+        <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+            <mat-label>Last Name</mat-label>
+            <input matInput placeholder="Last Name">
+        </mat-form-field>
+
+        <mat-form-field class="mt-input-field textarea bio" appearance="outline" color="coral">
+            <mat-label>Bio</mat-label>
+            <textarea matInput placeholder="Bio" matTextareaAutosize matAutosizeMinRows=5
+                matAutosizeMaxRows=10></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+            <mat-label>New Password</mat-label>
+            <input matInput placeholder="New password" type="password">
+        </mat-form-field>
+
+        <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+            <mat-label>Confirm New Password</mat-label>
+            <input matInput placeholder="Confirm New Password" type="password">
+        </mat-form-field>
+
+        <button class="mt-input-field secondary-action-btn" mat-flat-button type="submit">
+            Save Changes
+        </button>
+    </form>
 </div>

@@ -5,6 +5,10 @@
   &.half {
     width: calc(50% - 10px);
   }
+  &.secondary-action-btn {
+    color: $mt-white;
+    background-color: $mt-coral;
+  }
 }
 
 .form-error-messages {
