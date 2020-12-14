@@ -35,5 +35,9 @@
       font-size: 26px;
       color: $mt-white;
     }
+    ::ng-deep .mat-form-field-flex{
+      background-color: white;
+      border-radius: 5px;
+    }
   }
 }
