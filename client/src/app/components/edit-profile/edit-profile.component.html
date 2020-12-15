@@ -9,74 +9,49 @@
     </button>
 
     <div class="profile-picture">
-      <img
-        src="https://ollienollie.files.wordpress.com/2009/10/untitled-181.jpg"
-        alt="profile picture"
-        class="profile-pic"
-      />
+      <img src="https://ollienollie.files.wordpress.com/2009/10/untitled-181.jpg" alt="profile picture"
+        class="profile-pic" />
       <button mat-icon-button class="edit-profile-pic">
         <mat-icon>add_a_photo</mat-icon>
       </button>
     </div>
   </div>
 
-  <form class="edit-profile-form">
-    <mat-form-field
-      class="mt-input-field half"
-      appearance="outline"
-      color="coral"
-    >
+  <div class="form-error-messages" *ngIf="editProfileForm.invalid">
+    {{ showErrorMessage() }}
+  </div>
+
+  <form [formGroup]="editProfileForm" class="edit-profile-form">
+
+    <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
       <mat-label>First Name</mat-label>
-      <input matInput placeholder="First Name" />
+      <input matInput placeholder="First Name" [formControl]="firstName" />
     </mat-form-field>
 
-    <mat-form-field
-      class="mt-input-field half"
-      appearance="outline"
-      color="coral"
-    >
+    <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
       <mat-label>Last Name</mat-label>
-      <input matInput placeholder="Last Name" />
+      <input matInput placeholder="Last Name" [formControl]="lastName" />
     </mat-form-field>
 
-    <mat-form-field
-      class="mt-input-field textarea bio"
-      appearance="outline"
-      color="coral"
-    >
+    <mat-form-field class="mt-input-field textarea bio" appearance="outline" color="coral">
       <mat-label>Bio</mat-label>
-      <textarea
-        matInput
-        placeholder="Bio"
-        matTextareaAutosize
-        matAutosizeMinRows="5"
-        matAutosizeMaxRows="10"
-      ></textarea>
+      <textarea matInput placeholder="Bio" matTextareaAutosize matAutosizeMinRows="5" matAutosizeMaxRows="10"
+        [formControl]="bio"></textarea>
     </mat-form-field>
 
-    <mat-form-field
-      class="mt-input-field half"
-      appearance="outline"
-      color="coral"
-    >
+    <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
       <mat-label>New Password</mat-label>
-      <input matInput placeholder="New password" type="password" />
+      <input matInput placeholder="New password" type="password" [formControl]="newPwd" />
     </mat-form-field>
 
-    <mat-form-field
-      class="mt-input-field half"
-      appearance="outline"
-      color="coral"
-    >
+    <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
       <mat-label>Confirm New Password</mat-label>
-      <input matInput placeholder="Confirm New Password" type="password" />
+      <input matInput placeholder="Confirm New Password" type="password" [formControl]="newPwd2" />
     </mat-form-field>
 
-    <button
-      class="mt-input-field secondary-action-btn"
-      mat-flat-button
-      type="submit"
-    >
+    <button class="mt-input-field secondary-action-btn" mat-flat-button type="submit"
+      [class.btn-opacity-disabled]="editProfileForm.invalid"
+      [disabled]="!editProfileForm.valid || !editProfileForm.touched">
       Save Changes
     </button>
   </form>
