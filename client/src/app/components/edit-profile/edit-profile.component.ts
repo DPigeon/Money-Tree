@@ -1,5 +1,4 @@
-import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
-
+import { Component, Inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,14 +6,8 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { User } from 'src/app/interfaces/user';
-
-// export interface ProfileData {
-//   firstName: string;
-//   lastName: string;
-//   password: string;
-//   biography: string;
-// }
-
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ProfileData } from '../../interfaces/profileData';
 @Component({
   selector: 'app-edit-profile',
   templateUrl: './edit-profile.component.html',
@@ -29,21 +22,27 @@ export class EditProfileComponent {
   bio: AbstractControl;
   newPwd: AbstractControl;
   newPwd2: AbstractControl;
-  constructor(fb: FormBuilder) {
+  dataFromDialog: User;
+  // currentUser$: Observable<User>;
+  constructor(
+    fb: FormBuilder,
+    public dialogRef: MatDialogRef<EditProfileComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: ProfileData
+  ) {
     this.editProfileForm = fb.group(
       {
         firstName: [
-          '',
+          data.firstName,
           Validators.compose([
             Validators.pattern(/^[a-zA-Z]{3,20}$/u), // validate the pattern to match this regex
           ]),
         ],
         lastName: [
-          '',
+          data.lastName,
           Validators.compose([Validators.pattern(/^[a-zA-Z]{3,20}$/u)]),
         ],
         bio: [
-          '',
+          data.biography,
           Validators.compose([
             Validators.minLength(10),
             Validators.maxLength(250),
@@ -69,19 +68,6 @@ export class EditProfileComponent {
     this.newPwd2 = this.editProfileForm.controls.newPwd2;
   }
 
-  // onSubmit(): void {
-  //   if (this.editProfileForm.valid) {
-  //     const newUser: User = {
-  //       firstName: this.firstName.value,
-  //       lastName: this.lastName.value,
-  //       password: this.newPwd.value,
-  //       email: this.email.value,
-  //       username: this.username.value,
-  //     };
-  //     this.userSignup.emit(newUser);
-  //   }
-  // }
-
   getFirstErrorMessage(): string {
     if (
       this.newPwd2.dirty &&
@@ -102,7 +88,7 @@ export class EditProfileComponent {
           const allErrorNames = Object.keys(
             this.editProfileForm.get(field).errors
           );
-          const result = field + ',' + allErrorNames[0]; // the resslt would be for example "firstName,required"
+          const result = field + ',' + allErrorNames[0]; // the result would be for example "firstName,required"
           return result;
         }
       }
