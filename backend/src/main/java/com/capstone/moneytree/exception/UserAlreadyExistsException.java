@@ -1,4 +1,4 @@
-package com.capstone.moneytree.handler.exception;
+package com.capstone.moneytree.exception;
 
 /**
  * A unique exception that is thrown when the user already exists in our database.

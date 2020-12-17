@@ -34,9 +34,19 @@ jobs:
 
       - name: Compute Version Name
         run: echo "VERSION_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+        
+      - name: Get the Client Environment Configuration for UAT
+        if: ${{ env.BRANCH_NAME == 'dev' }}
+        run: echo "ENVCONFIG=--configuration=uat" >> $GITHUB_ENV
+        
+      - name: Get the Client Environment Configuration for Prod
+        if: ${{ env.BRANCH_NAME == 'master' }}
+        run: echo "ENVCONFIG=--prod" >> $GITHUB_ENV
 
       - name: Build & Publish Frontend
         uses: elgohr/Publish-Docker-Github-Action@master # This action builds & publishes on GitHub Package Registry
+        env:
+          ENVCONFIG: ${{ env.ENVCONFIG }}
         with:
           name: dpigeon/money-tree/frontend
           registry: docker.pkg.github.com
@@ -45,6 +55,7 @@ jobs:
           workdir: client
           dockerfile: Dockerfile
           tags: ${{ env.VERSION_NAME }}
+          buildargs: ENVCONFIG # For --configuration=uat or --prod in the build
 
       - name: Build & Publish Backend
         uses: elgohr/Publish-Docker-Github-Action@master

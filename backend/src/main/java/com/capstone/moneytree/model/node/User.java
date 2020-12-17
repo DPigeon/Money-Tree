@@ -60,3 +60,7 @@ public class User extends Entity {
         this.getStocks().add(stock);
     }
 }
+
+
+
+    

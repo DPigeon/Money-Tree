@@ -1,27 +1,30 @@
 package com.capstone.moneytree.controller;
 
-import com.capstone.moneytree.exception.EntityNotFoundException;
-import com.capstone.moneytree.handler.ExceptionMessage;
-import com.capstone.moneytree.model.node.User;
-import com.capstone.moneytree.service.api.UserService;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.security.auth.login.CredentialNotFoundException;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
-
-import javax.security.auth.login.CredentialNotFoundException;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import com.capstone.moneytree.exception.EntityNotFoundException;
+import com.capstone.moneytree.exception.InvalidMediaFileException;
+import com.capstone.moneytree.handler.ExceptionMessage;
+import com.capstone.moneytree.model.node.User;
+import com.capstone.moneytree.service.api.UserService;
 
 
 @MoneyTreeController
@@ -58,15 +61,11 @@ public class UserController {
     * @param user The JSON object body
     * @return A proper response with the URI of the newly created user
     */
-   @PostMapping("/create-user")
+   @PostMapping("/")
    public ResponseEntity<User> createUser(@RequestBody User user) {
       User createdUser = userService.createUser(user);
 
-      URI userURI = ServletUriComponentsBuilder.fromCurrentContextPath().
-              path("/users/{id}").
-              buildAndExpand(createdUser.getId()).toUri();
-
-      return ResponseEntity.created(userURI).build();
+      return ResponseEntity.ok(createdUser);
    }
 
    /**
@@ -109,9 +108,19 @@ public class UserController {
    ResponseEntity<User> editUserProfile(@PathVariable Long id,
                                         @RequestParam(required = false) MultipartFile imageFile) {
       User userToUpdate = this.userService.getUserById(id);
-      if (imageFile != null && !imageFile.isEmpty()) {
-         this.userService.editUserProfilePicture(userToUpdate, imageFile);
+      if (imageFile == null || imageFile.isEmpty()) {
+         throw new InvalidMediaFileException("The provided profile picture is null or empty");
       }
-      return ResponseEntity.ok(userToUpdate);
+      return ResponseEntity.ok(this.userService.editUserProfilePicture(userToUpdate, imageFile));
+   }
+
+   @DeleteMapping("/delete-by-email/{email}")
+   public ResponseEntity<Void> deleteUserByEmail(@Valid @PathVariable String email) {
+      try {
+         userService.deleteUserByEmail(email);
+         return ResponseEntity.noContent().build();
+      } catch (Exception e) {
+         throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage());
+      }
    }
 }

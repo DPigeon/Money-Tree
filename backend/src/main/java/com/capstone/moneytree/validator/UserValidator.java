@@ -7,11 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
 
 import com.capstone.moneytree.dao.UserDao;
 import com.capstone.moneytree.exception.MissingMandatoryFieldException;
-import com.capstone.moneytree.handler.exception.UserAlreadyExistsException;
+import com.capstone.moneytree.exception.UserAlreadyExistsException;
 import com.capstone.moneytree.model.node.User;
 
 @Component

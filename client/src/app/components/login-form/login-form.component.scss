@@ -1,0 +1,40 @@
+@import "../../../styles.scss";
+
+.container {
+  width: 530px;
+  padding-right: 3em;
+  max-width: 50vw;
+
+  .login-text-hint {
+    display: none;
+  }
+  .mat-form-field {
+    font-size: 16px;
+  }
+
+  .mat-flat-button {
+    background-color: $action-color;
+    color: black;
+    font-size: 16px;
+    height: 42px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .btn-opacity-disabled {
+    opacity: 0.7;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    width: initial;
+    padding: 16px 0.5em 16px 16px;
+    text-align: center;
+    max-width: none;
+
+    .login-text-hint {
+      color: $mt-dark;
+      display: unset;
+    }
+  }
+}

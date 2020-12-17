@@ -1,0 +1,10 @@
+<app-header></app-header>
+<h1>Welcome to home page!</h1>
+<button mat-raised-button (click)="openDialog()">Edit Profile</button>
+
+<div *ngIf = "currentUser$ | async as user">
+    <h1>This is a test to see user state</h1>
+    <div>{{user.firstName}}</div>
+    <div>{{user.username}}</div>
+    <div>{{user.email}}</div>
+</div>

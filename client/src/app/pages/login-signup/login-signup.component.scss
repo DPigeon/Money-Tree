@@ -1,0 +1,89 @@
+@import "../../../styles.scss";
+
+.container {
+  background-image: url("../../../assets/backgroung-shape.svg");
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  color: $mt-dark;
+
+  .logo {
+    position: absolute;
+    top: 2em;
+    left: 5em;
+    max-height: 14vw;
+  }
+  .app-login-position {
+    position: absolute;
+    top: 2em;
+    right: 0;
+  }
+  .app-signup-position {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  .money-tree-position {
+    position: absolute;
+    top: 12em;
+    left: 5em;
+    margin-top: 35px;
+  }
+  .login-text-hint {
+    display: none;
+  }
+  .sub-header {
+    font-weight: 500;
+    font-size: 46px;
+    mix-blend-mode: difference;
+    color: $mt-white;
+    margin-top: 26px;
+    line-height: 100%;
+  }
+  .money-tree {
+    font-weight: 900;
+    font-size: 72px;
+  }
+}
+
+// mobile styling
+@media only screen and (max-width: 600px) {
+  .container {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+
+    .logo {
+      display: none;
+    }
+    .app-login-position {
+      position: absolute;
+      top: unset;
+      bottom: 5vh;
+    }
+    .app-signup-position {
+      position: absolute;
+      top: 17vh;
+      bottom: unset;
+      left: unset;
+    }
+    .money-tree-position {
+      align-self: center;
+      position: unset;
+      margin-top: 20px;
+    }
+    .money-tree {
+      display: none;
+    }
+    .sub-header {
+      color: $mt-white;
+      font-size: 25px;
+      text-align: center;
+      width: 250px;
+      margin: auto;
+      mix-blend-mode: unset;
+    }
+  }
+}

@@ -2,15 +2,19 @@ import { Stock } from './stock';
 import { Transaction } from './transaction';
 
 export interface User {
-    firstName: string;
-    lastName: string;
-    username: string;
-    email: string;
-    profilePicture: string;
-    score: number;
-    availableBalance: number;
-    follows: User[];
-    followers: User[];
-    portfolio: Stock[];
-    transactionsMade: Transaction[];
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+  avatarUrl?: string;
+  email?: string;
+  score?: number;
+  rank?: number;
+  balance?: number;
+  password?: string;
+  alpacaApiKey?: string;
+  follows?: User[];
+  followers?: User[];
+  portfolio?: Stock[];
+  transactions?: Transaction[];
 }

@@ -1,36 +1,48 @@
 package com.capstone.moneytree.controller;
 
-import com.capstone.moneytree.service.api.StockMarketDataService;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import pl.zankowski.iextrading4j.api.stocks.*;
-import pl.zankowski.iextrading4j.api.stocks.v1.BatchStocks;
-import pl.zankowski.iextrading4j.api.stocks.v1.KeyStats;
-import pl.zankowski.iextrading4j.api.stocks.v1.News;
+import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.capstone.moneytree.service.api.StockMarketDataService;
+
+import pl.zankowski.iextrading4j.api.stocks.Book;
+import pl.zankowski.iextrading4j.api.stocks.Chart;
+import pl.zankowski.iextrading4j.api.stocks.Company;
+import pl.zankowski.iextrading4j.api.stocks.Logo;
+import pl.zankowski.iextrading4j.api.stocks.Quote;
+import pl.zankowski.iextrading4j.api.stocks.v1.BatchStocks;
+import pl.zankowski.iextrading4j.api.stocks.v1.KeyStats;
+import pl.zankowski.iextrading4j.api.stocks.v1.News;
 
 @MoneyTreeController
 @RequestMapping("/stockmarket")
 public class StockController {
 
-   @Autowired
+
    private StockMarketDataService stockMarketDataService;
+
    private static final Logger LOG = LoggerFactory.getLogger(StockController.class);
+
+   @Autowired
+   public StockController(StockMarketDataService stockMarketDataService) {
+      this.stockMarketDataService = stockMarketDataService;
+   }
 
    /**
     * Obtain json object containing company quote, info, news, keystats and logo
     *
-    * @param symbol
+    * @param symbol symbol of the stock
     * @return batchStocks
     */
    @GetMapping("/batch/{symbol}")
