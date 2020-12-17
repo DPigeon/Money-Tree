@@ -35,6 +35,8 @@ public class User extends Entity {
 
     String alpacaApiKey;
 
+    String biography;
+
     @Relationship(type = "FOLLOWS", direction = Relationship.INCOMING)
     Set<User> followers;
 

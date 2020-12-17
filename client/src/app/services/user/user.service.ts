@@ -54,6 +54,7 @@ export class UserService {
       followers: response.followers,
       portfolio: response.portfolio,
       transactions: response.transactions,
+      biography: response.biography,
     };
     return formattedUser;
   }

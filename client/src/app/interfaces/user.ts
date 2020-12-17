@@ -13,6 +13,7 @@ export interface User {
   balance?: number;
   password?: string;
   alpacaApiKey?: string;
+  biography?: string;
   follows?: User[];
   followers?: User[];
   portfolio?: Stock[];

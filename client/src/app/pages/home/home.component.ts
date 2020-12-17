@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
       if (user) {
         this.profileData.firstName = user.firstName;
         this.profileData.lastName = user.lastName;
-        // this.profileData.biography = user.biography; TODO: add biography to the User interfce in FE and also to the backend user
+        this.profileData.biography = user.biography;
         this.profileData.password = user.password;
       }
     });
