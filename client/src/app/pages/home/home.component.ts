@@ -24,7 +24,6 @@ export class HomeComponent implements OnInit {
       firstName: '',
       lastName: '',
       biography: '',
-      password: '',
     };
   }
 
@@ -35,7 +34,6 @@ export class HomeComponent implements OnInit {
         this.profileData.firstName = user.firstName;
         this.profileData.lastName = user.lastName;
         this.profileData.biography = user.biography;
-        this.profileData.password = user.password;
       }
     });
   }

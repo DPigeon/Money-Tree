@@ -85,6 +85,7 @@ export class SignupFormComponent {
         password: this.pwd.value,
         email: this.email.value,
         username: this.username.value,
+        biography: '',
       };
       this.userSignup.emit(newUser);
     }

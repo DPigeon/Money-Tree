@@ -36,7 +36,7 @@
     <mat-form-field class="mt-input-field textarea bio" appearance="outline" color="coral">
       <mat-label>Bio</mat-label>
       <textarea matInput placeholder="Bio" matTextareaAutosize matAutosizeMinRows="5" matAutosizeMaxRows="10"
-        [formControl]="bio"></textarea>
+        [formControl]="biography"></textarea>
     </mat-form-field>
 
     <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
@@ -51,7 +51,7 @@
 
     <button class="mt-input-field secondary-action-btn" mat-flat-button type="submit"
       [class.btn-opacity-disabled]="editProfileForm.invalid"
-      [disabled]="!editProfileForm.valid || !editProfileForm.touched">
+      [disabled]="!editProfileForm.valid || !editProfileForm.touched || compareFormValues()">
       Save Changes
     </button>
   </form>

@@ -5,7 +5,6 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
-import { User } from 'src/app/interfaces/user';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProfileData } from '../../interfaces/profileData';
 @Component({
@@ -19,11 +18,9 @@ export class EditProfileComponent {
   editProfileForm: FormGroup;
   firstName: AbstractControl;
   lastName: AbstractControl;
-  bio: AbstractControl;
+  biography: AbstractControl;
   newPwd: AbstractControl;
   newPwd2: AbstractControl;
-  dataFromDialog: User;
-  // currentUser$: Observable<User>;
   constructor(
     fb: FormBuilder,
     public dialogRef: MatDialogRef<EditProfileComponent>,
@@ -41,7 +38,7 @@ export class EditProfileComponent {
           data.lastName,
           Validators.compose([Validators.pattern(/^[a-zA-Z]{3,20}$/u)]),
         ],
-        bio: [
+        biography: [
           data.biography,
           Validators.compose([
             Validators.minLength(10),
@@ -63,11 +60,11 @@ export class EditProfileComponent {
 
     this.firstName = this.editProfileForm.controls.firstName;
     this.lastName = this.editProfileForm.controls.lastName;
-    this.bio = this.editProfileForm.controls.bio;
+    this.biography = this.editProfileForm.controls.biography;
     this.newPwd = this.editProfileForm.controls.newPwd;
-    this.newPwd2 = this.editProfileForm.controls.newPwd2;
+    this.newPwd2 = this.editProfileForm.controls.newPwd2; // this function return false if user put old values in input fileds.
   }
-
+  onSubmit(): void {}
   getFirstErrorMessage(): string {
     if (
       this.newPwd2.dirty &&
@@ -104,8 +101,8 @@ export class EditProfileComponent {
         case 'lastName,pattern':
           return 'First/Last name should be of length 3-20 characters with no numbers/spaces.';
 
-        case 'bio,maxlength':
-        case 'bio,minlength':
+        case 'biography,maxlength':
+        case 'biography,minlength':
           return 'Bio has to between 10 to 250 characters.';
 
         case 'newPwd,pattern':
@@ -115,6 +112,14 @@ export class EditProfileComponent {
           return 'Passwords do not match, please check.';
       }
     }
+  }
+  compareFormValues(): boolean {
+    return (
+      this.firstName.value === this.data.firstName &&
+      this.lastName.value === this.data.lastName &&
+      (!this.newPwd.dirty) &&
+      this.biography.value === this.data.biography
+    );
   }
 }
 function passwordMatch(frm: FormGroup): { [key: string]: boolean } {
