@@ -22,6 +22,7 @@ export class SignupFormComponent {
   email: AbstractControl;
   pwd: AbstractControl;
   pwd2: AbstractControl;
+  submitted = false;
 
   constructor(fb: FormBuilder) {
     this.signUpForm = fb.group(
@@ -74,7 +75,8 @@ export class SignupFormComponent {
   }
 
   onSubmit(): void {
-    if (this.signUpForm.valid) {
+    if (this.signUpForm.valid && !this.submitted) {
+      this.submitted = true;
       const newUser: User = {
         firstName: this.firstName.value,
         lastName: this.lastName.value,

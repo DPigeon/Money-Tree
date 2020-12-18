@@ -22,14 +22,17 @@
         </mat-form-field>
 
         <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
-            <input id="signup-password-2" matInput placeholder="Confirm Password" type="password" [formControl]="pwd2" />
+            <input id="signup-password-2" matInput placeholder="Confirm Password" type="password"
+                [formControl]="pwd2" />
         </mat-form-field>
 
-        <button id="signup-submit-btn" class="mt-input-field" mat-flat-button type="submit" [class.btn-opacity-disabled]="signUpForm.invalid"
-            [disabled]="!signUpForm.valid">
+        <button id="signup-submit-btn" class="mt-input-field" mat-flat-button type="submit"
+            [class.btn-opacity-disabled]="signUpForm.invalid"
+            [disabled]="(!signUpForm.valid || submitted) && !appError">
             SIGN UP
         </button>
-
+        <div class="form-error-messages" *ngIf="appError">A user with this email address or username already exist!
+        </div>
         <div class="form-error-messages" *ngIf="signUpForm.invalid">
             {{ showErrorMessage() }}
         </div>

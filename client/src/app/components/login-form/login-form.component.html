@@ -8,8 +8,9 @@
     <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
       <input id="login-password" matInput type="password" placeholder="Password" [formControl]="pwd" />
     </mat-form-field>
-    <button id="login-submit-btn" mat-flat-button class="mt-input-field half" [class.btn-opacity-disabled]="logInForm.invalid"
-      [disabled]="logInForm.invalid">LOGIN</button>
+    <button id="login-submit-btn" mat-flat-button class="mt-input-field half"
+      [class.btn-opacity-disabled]="logInForm.invalid"
+      [disabled]="(logInForm.invalid || submitted) && !appError">LOGIN</button>
 
     <!-- Error messages -->
     <div class="form-error-messages" *ngIf="appError"> A user with this credentials could not be found!</div>

@@ -18,6 +18,7 @@ export class LoginFormComponent {
   logInForm: FormGroup;
   email: AbstractControl;
   pwd: AbstractControl;
+  submitted = false;
 
   constructor(fb: FormBuilder) {
     this.logInForm = fb.group({
@@ -31,6 +32,7 @@ export class LoginFormComponent {
 
   onSubmit(): void {
     if (this.logInForm.valid) {
+      this.submitted = true;
       const userCredentials: User = {
         email: this.email.value,
         password: this.pwd.value,
