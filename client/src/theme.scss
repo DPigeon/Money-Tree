@@ -77,8 +77,9 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
 .mat-coral {
   ::ng-deep &.mat-form-field-appearance-outline.mat-focused {
     // changes border and label color
-    .mat-form-field-outline, mat-label  {
-      color: #AF6060;
+    .mat-form-field-outline,
+    mat-label {
+      color: #af6060;
     }
   }
 }
@@ -108,13 +109,17 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
 ::ng-deep .mat-form-field-infix {
   border: none;
 
-  .mat-form-field-label-wrapper .mat-form-field-label{
-      padding-top: 0.2rem !important;
+  .mat-form-field-label-wrapper .mat-form-field-label {
+    padding-top: 0.2rem !important;
   }
 }
 
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
   top: 0 !important;
+}
+::ng-deep .mat-form-field-flex {
+  background-color: white;
+  border-radius: 5px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -124,5 +129,5 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
   }
   ::ng-deep .mat-dialog-container {
     padding: 0px;
-  } 
+  }
 }
