@@ -4,15 +4,23 @@
       <mat-icon>close</mat-icon>
     </button>
     <button mat-button class="edit-cover-picture">
-      <mat-icon>add_a_photo</mat-icon>
-      <span class="edit-cover-pic-text">Edit Cover Photo</span>
+      <input single type="file" id="cover-photo" style="display: none;" />
+      <label for="cover-photo">
+        <mat-icon>add_a_photo</mat-icon>
+        <span class="edit-cover-pic-text">Edit Cover Photo</span>
+      </label>
+
     </button>
 
     <div class="profile-picture">
       <img src="https://ollienollie.files.wordpress.com/2009/10/untitled-181.jpg" alt="profile picture"
         class="profile-pic" />
       <button mat-icon-button class="edit-profile-pic">
-        <mat-icon>add_a_photo</mat-icon>
+        <input single type="file" id="profile-picture" style="display: none;" />
+        <label for="profile-picture">
+          <mat-icon>add_a_photo</mat-icon>
+        </label>
+
       </button>
     </div>
   </div>
