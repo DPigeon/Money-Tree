@@ -2,24 +2,27 @@ package com.capstone.moneytree.controller
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.*
 
+import java.nio.file.Files
+import java.nio.file.Paths
+
 import javax.security.auth.login.CredentialNotFoundException
 
 import org.junit.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.mock.web.MockHttpServletRequest
+import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import org.springframework.web.multipart.MultipartFile
 
 import com.capstone.moneytree.dao.UserDao
-import com.capstone.moneytree.exception.EntityNotFoundException
-import com.capstone.moneytree.exception.InvalidMediaFileException
-import com.capstone.moneytree.exception.MissingMandatoryFieldException
-import com.capstone.moneytree.exception.UserAlreadyExistsException
+import com.capstone.moneytree.exception.*
+import com.capstone.moneytree.facade.AmazonS3Facade
 import com.capstone.moneytree.model.node.User
 import com.capstone.moneytree.service.api.AmazonS3Service
 import com.capstone.moneytree.service.api.UserService
+import com.capstone.moneytree.service.impl.DefaultAmazonS3Service
 import com.capstone.moneytree.service.impl.DefaultUserService
 import com.capstone.moneytree.validator.UserValidator
 import com.capstone.moneytree.validator.ValidatorFactory
@@ -31,16 +34,19 @@ import spock.lang.Specification
  */
 @SpringBootTest
 class UserControllerTest extends Specification {
+   private static final String PIC_FILE_NAME = "profile.jpg"
 
-   private static final String URL_LOCATION = "http://localhost/users/"
+   private static String S3_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY")
+   private static String S3_SECRET_KEY = System.getenv("AWS_SECRET_ACCESS_KEY")
+   private static String BUCKET_NAME = System.getenv("AWS_PROFILE_PICTURES_BUCKET")
 
    private static UserDao userDao
    private static UserValidator userValidator
    private static ValidatorFactory validatorFactory
    private static UserService defaultUserService
    private static UserController userController
-
    private static AmazonS3Service amazonS3Service
+   private static AmazonS3Facade amazonS3Facade
 
    def setup() {
       userDao = Mock()
@@ -48,11 +54,12 @@ class UserControllerTest extends Specification {
       validatorFactory = Mock(ValidatorFactory) {
          it.getUserValidator() >> userValidator
       }
-      amazonS3Service = Mock()
-      defaultUserService = new DefaultUserService(userDao, validatorFactory, amazonS3Service)
-      userController = new UserController(defaultUserService)
       MockHttpServletRequest request = new MockHttpServletRequest()
       RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request))
+      amazonS3Facade = new AmazonS3Facade(S3_ACCESS_KEY, S3_SECRET_KEY)
+      amazonS3Service = new DefaultAmazonS3Service(amazonS3Facade)
+      defaultUserService = new DefaultUserService(userDao, validatorFactory, amazonS3Service, BUCKET_NAME)
+      userController = new UserController(defaultUserService)
    }
 
    @Test
@@ -241,66 +248,66 @@ class UserControllerTest extends Specification {
       thrown(CredentialNotFoundException)
    }
 
-   @Test
-   def "Edit User is successful if he does not have an avatar url"() {
-      setup:
-      def imageUrl = "www.s3.bucket.image.com/id"
-      and:
-      amazonS3Service.uploadImageToS3Bucket(_, _) >> imageUrl
-
-      and: "A registered user with an Alpaca key"
-      String email = "moneytree@test.com"
-      String username = "Billy"
-      String password = "encrypted"
-      String firstName = "Billy"
-      String lastName = "Bob"
-      String alpacaApiKey = "RYFERH6ET5etETGTE6"
-      User user = createUser(email, username, password, firstName, lastName, alpacaApiKey)
-
-      and: "mock the database with the same user already registered"
-      userDao.findUserById(user.getId()) >> user
-
-      and: "A valid multipartFile is passed"
-      MultipartFile imageFile = Mock()
-      imageFile.isEmpty() >> false
-
-      when: "Attempt to editUserProfile with png file"
-      def res = userController.editUserProfile(user.getId(), imageFile)
-      then: "Should return valid s3 url for user.avatarUrl property"
-      res.getBody().getAvatarURL() == imageUrl
-   }
-
-   @Test
-   def "Edit User deletes the old profile pictures and replaces with the new one"() {
-      setup:
-      def imageUrl = "www.s3.bucket.image.com/id"
-      def oldImageUrl = "www.s3.old.com/oldId"
-      and:
-      amazonS3Service.uploadImageToS3Bucket(_, _) >> imageUrl
-      amazonS3Service.deleteImageFromS3Bucket(_ as String, oldImageUrl)
-
-      and: "A registered user with an Alpaca key"
-      String email = "moneytree@test.com"
-      String username = "Billy"
-      String password = "encrypted"
-      String firstName = "Billy"
-      String lastName = "Bob"
-      String alpacaApiKey = "RYFERH6ET5etETGTE6"
-      User user = createUser(email, username, password, firstName, lastName, alpacaApiKey)
-      user.setAvatarURL(oldImageUrl)
-
-      and: "mock the database with the same user already registered"
-      userDao.findUserById(user.getId()) >> user
-
-      and: "A valid multipartFile is passed"
-      MultipartFile imageFile = Mock()
-      imageFile.isEmpty() >> false
-
-      when: "Attempt to editUserProfile with png file"
-      def res = userController.editUserProfile(user.getId(), imageFile)
-      then: "Should return valid s3 url for user.avatarUrl property"
-      res.getBody().getAvatarURL() == imageUrl
-   }
+//   @Test
+//   def "Edit User is successful if he does not have an avatar url"() {
+//      setup:
+//      def imageUrl = "www.s3.bucket.image.com/id"
+//      and:
+//      amazonS3Service.uploadImageToS3Bucket(_, _) >> imageUrl
+//
+//      and: "A registered user with an Alpaca key"
+//      String email = "moneytree@test.com"
+//      String username = "Billy"
+//      String password = "encrypted"
+//      String firstName = "Billy"
+//      String lastName = "Bob"
+//      String alpacaApiKey = "RYFERH6ET5etETGTE6"
+//      User user = createUser(email, username, password, firstName, lastName, alpacaApiKey)
+//
+//      and: "mock the database with the same user already registered"
+//      userDao.findUserById(user.getId()) >> user
+//
+//      and: "A valid multipartFile is passed"
+//      MultipartFile imageFile = Mock()
+//      imageFile.isEmpty() >> false
+//
+//      when: "Attempt to editUserProfile with png file"
+//      def res = userController.editUserProfile(user.getId(), imageFile)
+//      then: "Should return valid s3 url for user.avatarUrl property"
+//      res.getBody().getAvatarURL() == imageUrl
+//   }
+//
+//   @Test
+//   def "Edit User deletes the old profile pictures and replaces with the new one"() {
+//      setup:
+//      def imageUrl = "www.s3.bucket.image.com/id"
+//      def oldImageUrl = "www.s3.old.com/oldId"
+//      and:
+//      amazonS3Service.uploadImageToS3Bucket(_, _) >> imageUrl
+//      amazonS3Service.deleteImageFromS3Bucket(_ as String, oldImageUrl)
+//
+//      and: "A registered user with an Alpaca key"
+//      String email = "moneytree@test.com"
+//      String username = "Billy"
+//      String password = "encrypted"
+//      String firstName = "Billy"
+//      String lastName = "Bob"
+//      String alpacaApiKey = "RYFERH6ET5etETGTE6"
+//      User user = createUser(email, username, password, firstName, lastName, alpacaApiKey)
+//      user.setAvatarURL(oldImageUrl)
+//
+//      and: "mock the database with the same user already registered"
+//      userDao.findUserById(user.getId()) >> user
+//
+//      and: "A valid multipartFile is passed"
+//      MultipartFile imageFile = Mock()
+//      imageFile.isEmpty() >> false
+//
+//      when: "Attempt to editUserProfile with png file"
+//      def res = userController.editUserProfile(user.getId(), imageFile)
+//      then: "Should return valid s3 url for user.avatarUrl property"
+//      res.getBody().getAvatarURL() == imageUrl
+//   }
 
    @Test
    def "Edit User is returns an exception if the provided image is empty"() {
@@ -350,4 +357,157 @@ class UserControllerTest extends Specification {
       then:
       thrown(InvalidMediaFileException)
    }
+
+   @Test
+   def "Edit User is successful if the user uploads its first picture ever"() {
+      given: "A registered user"
+      def user = new User(
+              id: 123,
+              email: "moneytree@test.com",
+              username: "Billy",
+              password: "encrypted",
+              firstName: "Billy",
+              lastName: "Bob"
+      )
+
+      and: "mock the database with the same user already registered"
+      userDao.findUserById(user.getId()) >> user
+
+      when: "Attempt to editUserProfile"
+      def response = userController.editUserProfile(user.getId(), getMultipartFile())
+
+      then: "The returned avatar url contains the profile picture name uploaded by the user"
+      with(response) {
+         getBody().getAvatarURL() != null
+         getBody().getAvatarURL() != ""
+         getBody().getAvatarURL().contains(PIC_FILE_NAME)
+      }
+
+      cleanup: "Recopy file locally for other tests"
+      Files.copy(Paths.get("./src/test/resources/${PIC_FILE_NAME}"), Paths.get("./src/test/resources/image/${PIC_FILE_NAME}"))
+   }
+
+   @Test
+   def "Edit User successfully deletes the previous avatar when present"() {
+      given: "A registered user"
+      def user = new User(
+              id: 123,
+              email: "moneytree@test.com",
+              username: "Billy",
+              password: "encrypted",
+              firstName: "Billy",
+              lastName: "Bob"
+      )
+
+      and: "Get multipart file from request"
+      def image = getMultipartFile()
+
+      and: "User has already an avatar url"
+      user.setAvatarURL(uploadNewAvatar())
+
+      and: "mock the database with the same user already registered"
+      userDao.findUserById(user.getId()) >> user
+
+      when: "Attempt to editUserProfile"
+      def response = userController.editUserProfile(user.getId(), image)
+
+      then: "The returned avatar url contains the profile picture name uploaded by the user"
+      with(response) {
+         getBody().getAvatarURL() != null
+         getBody().getAvatarURL() != ""
+         getBody().getAvatarURL().contains(PIC_FILE_NAME)
+      }
+
+      cleanup: "Recopy file locally for other tests"
+      Files.copy(Paths.get("./src/test/resources/${PIC_FILE_NAME}"), Paths.get("./src/test/resources/image/${PIC_FILE_NAME}"))
+   }
+
+   @Test
+   def "Edit User throws exception when image is null"() {
+      given: "A registered user"
+      def user = new User(
+              id: 123,
+              email: "moneytree@test.com",
+              username: "Billy",
+              password: "encrypted",
+              firstName: "Billy",
+              lastName: "Bob"
+      )
+
+      and: "mock the database with the same user already registered"
+      userDao.findUserById(user.getId()) >> user
+
+      when: "Attempt to editUserProfile when image is null"
+      userController.editUserProfile(user.getId(), null)
+
+      then: "throws an invalidMediaException"
+      thrown(InvalidMediaFileException)
+   }
+
+   @Test
+   def "Edit User throws exception when image is empty"() {
+      given: "A registered user"
+      def user = new User(
+              id: 123,
+              email: "moneytree@test.com",
+              username: "Billy",
+              password: "encrypted",
+              firstName: "Billy",
+              lastName: "Bob"
+      )
+
+      and: "mock the database with the same user already registered"
+      userDao.findUserById(user.getId()) >> user
+
+      and: "image is empty but not null"
+      MockMultipartFile imageFile = Mock() {
+         isEmpty() >> true
+      }
+
+      when: "Attempt to editUserProfile when image is empty but not null"
+      userController.editUserProfile(user.getId(), imageFile)
+
+      then: "throws an invalidMediaException"
+      thrown(InvalidMediaFileException)
+   }
+
+   @Test
+   def "converting to multipart to file throws exception when the file does not exist"() {
+      given: "An empty file"
+      def image = Mock(File) {
+         exists() >> false
+      }
+
+      and: "mocking the facade"
+      def mockAmazonS3Facade = Spy(AmazonS3Facade, constructorArgs: ["", ""]) {
+         convertMultiPartToFile(_ as MultipartFile) >> image
+      }
+
+      when:
+      mockAmazonS3Facade.uploadImageToS3Bucket(_ as MultipartFile, _ as String)
+
+      then: "throws an ExceptionAmazonS3"
+      thrown(ExceptionAmazonS3)
+   }
+
+   @Test
+   def "deleting a file returns nothing when the url provided is empty"() {
+      when: "the upload operation to return with no exception thrown"
+      amazonS3Facade.deleteImageFromS3Bucket(_ as String, null)
+
+      then: "No exception is thrown"
+      notThrown(Exception)
+   }
+
+   def uploadNewAvatar() {
+      File file = new File("./src/test/resources/image/${PIC_FILE_NAME}")
+      MockMultipartFile imageFile = new MockMultipartFile(file.getName(), file.getAbsolutePath(), null, file.getBytes())
+      return amazonS3Facade.uploadImageToS3Bucket(imageFile, BUCKET_NAME)
+   }
+
+   def getMultipartFile() {
+      File file = new File("./src/test/resources/image/${PIC_FILE_NAME}")
+      return new MockMultipartFile(file.getName(), file.getAbsolutePath(), null, file.getBytes())
+   }
 }
+

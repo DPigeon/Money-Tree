@@ -36,15 +36,15 @@ public class DefaultUserService implements UserService {
    private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
    private final AmazonS3Service amazonS3Service;
 
-   @Value("${aws.profile.pictures.bucket}")
-   private String bucketName;
+   private final String bucketName;
 
    @Autowired
-   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service) {
+   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service, @Value("${aws.profile.pictures.bucket}") String bucketName) {
       this.userDao = userDao;
       this.validatorFactory = validatorFactory;
       this.passwordEncryption = new MoneyTreePasswordEncryption();
       this.amazonS3Service = amazonS3Service;
+      this.bucketName = bucketName;
    }
 
    @Override
