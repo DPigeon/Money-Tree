@@ -3,6 +3,7 @@ package com.capstone.moneytree.controller
 import org.junit.platform.commons.util.StringUtils
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.ActiveProfiles
 
 import com.capstone.moneytree.facade.StockMarketDataFacade
 import com.capstone.moneytree.service.api.StockMarketDataService
@@ -16,7 +17,8 @@ import spock.lang.Specification
  * Tests for the Stock Controller. Tests the StockMarketDataFacade as well.
  * */
 @SpringBootTest
-class StockControllerIntegrationTest extends Specification {
+@ActiveProfiles("local")
+class StockControllerIT extends Specification {
 
    private static final String PUBLISH_TOKEN = System.getenv().get("IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX")
    private static final String SECRET_TOKEN = System.getenv().get("IEXCLOUD_SECRET_TOKEN_SANDBOX")
