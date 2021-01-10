@@ -17,7 +17,7 @@ import spock.lang.Specification
  * Tests for the Stock Controller. Tests the StockMarketDataFacade as well.
  * */
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles("@spring.profiles.active@")
 class StockControllerIT extends Specification {
 
    private static final String PUBLISH_TOKEN = System.getenv().get("IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX")

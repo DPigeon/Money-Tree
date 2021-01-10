@@ -12,7 +12,7 @@ import com.capstone.moneytree.model.node.User
 import spock.lang.Specification
 
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles("@spring.profiles.active@")
 class UserControllerIT extends Specification {
 
    @Autowired
@@ -32,5 +32,8 @@ class UserControllerIT extends Specification {
 
       then:
       userdb.getEmail() == email
+
+      cleanup:
+      userDao.delete(userdb)
    }
 }
