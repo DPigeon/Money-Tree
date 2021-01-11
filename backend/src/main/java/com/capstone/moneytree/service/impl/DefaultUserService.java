@@ -1,21 +1,25 @@
 package com.capstone.moneytree.service.impl;
 
 
+import javax.security.auth.login.CredentialNotFoundException;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.capstone.moneytree.dao.UserDao;
 import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.model.node.User;
+import com.capstone.moneytree.service.api.AmazonS3Service;
 import com.capstone.moneytree.service.api.UserService;
 import com.capstone.moneytree.utils.MoneyTreePasswordEncryption;
 import com.capstone.moneytree.validator.UserValidator;
 import com.capstone.moneytree.validator.ValidatorFactory;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.security.auth.login.CredentialNotFoundException;
 
 /**
  * {@inheritDoc}
@@ -30,12 +34,17 @@ public class DefaultUserService implements UserService {
    private final ValidatorFactory validatorFactory;
    private final MoneyTreePasswordEncryption passwordEncryption;
    private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
+   private final AmazonS3Service amazonS3Service;
+
+   private final String bucketName;
 
    @Autowired
-   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory) {
+   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service, @Value("${aws.profile.pictures.bucket}") String bucketName) {
       this.userDao = userDao;
       this.validatorFactory = validatorFactory;
       this.passwordEncryption = new MoneyTreePasswordEncryption();
+      this.amazonS3Service = amazonS3Service;
+      this.bucketName = bucketName;
    }
 
    @Override
@@ -74,6 +83,24 @@ public class DefaultUserService implements UserService {
 
       LOG.info("Created user: {}", user.getFirstName());
 
+      return user;
+   }
+
+   @Override
+   public User editUserProfilePicture(User user, MultipartFile imageFile) {
+      //since user exists, we can now upload image to s3 and save imageUrl into db
+      String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
+
+      //if user already has a profile picture, handle deleting old picture
+      if (StringUtils.isNotBlank(user.getAvatarURL())) {
+         this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getAvatarURL());
+      }
+
+      //set new image url
+      user.setAvatarURL(imageUrl);
+      userDao.save(user);
+
+      LOG.info("Edited {}'s profile successfully!", user.getUsername());
       return user;
    }
 
@@ -129,5 +156,9 @@ public class DefaultUserService implements UserService {
 
    public boolean compareDigests(String plainPassword, String encryptedPassword) {
       return passwordEncryption.checkPassword(plainPassword, encryptedPassword);
+   }
+
+   public String getBucketName() {
+      return bucketName;
    }
 }

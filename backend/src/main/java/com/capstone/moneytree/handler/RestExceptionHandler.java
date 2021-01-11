@@ -1,13 +1,17 @@
 package com.capstone.moneytree.handler;
 
-import static com.capstone.moneytree.handler.ExceptionMessage.*;
+import static com.capstone.moneytree.handler.ExceptionMessage.ENTITY_NOT_FOUND;
+import static com.capstone.moneytree.handler.ExceptionMessage.FAILED_TO_UPLOAD_S3;
+import static com.capstone.moneytree.handler.ExceptionMessage.ILLEGAL_ARGUMENT;
+import static com.capstone.moneytree.handler.ExceptionMessage.MISSING_FIELDS;
+import static com.capstone.moneytree.handler.ExceptionMessage.NULL_POINTER;
+import static com.capstone.moneytree.handler.ExceptionMessage.REQUEST_NOT_FOUND;
+import static com.capstone.moneytree.handler.ExceptionMessage.USER_ALREADY_EXISTS;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-import com.capstone.moneytree.exception.MissingMandatoryFieldException;
-import com.capstone.moneytree.handler.exception.UserAlreadyExistsException;
-
-import javassist.NotFoundException;
+import javax.security.auth.login.CredentialNotFoundException;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -17,9 +21,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.capstone.moneytree.exception.EntityNotFoundException;
+import com.capstone.moneytree.exception.ExceptionAmazonS3;
+import com.capstone.moneytree.exception.InvalidMediaFileException;
+import com.capstone.moneytree.exception.MissingMandatoryFieldException;
+import com.capstone.moneytree.exception.UserAlreadyExistsException;
 import com.capstone.moneytree.utils.MoneyTreeError;
 
-import javax.security.auth.login.CredentialNotFoundException;
+import javassist.NotFoundException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -27,6 +35,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
    private ResponseEntity<MoneyTreeError> buildResponseEntity(MoneyTreeError apiError) {
       return new ResponseEntity<>(apiError, apiError.getStatus());
+   }
+
+   @ExceptionHandler(ExceptionAmazonS3.class)
+   protected ResponseEntity<MoneyTreeError> handleFailedUploadImageS3(
+           ExceptionAmazonS3 ex) {
+      MoneyTreeError apiError = MoneyTreeError.builder()
+              .status(INTERNAL_SERVER_ERROR)
+              .debugMessage(ex.getMessage())
+              .message(FAILED_TO_UPLOAD_S3.getMessage())
+              .build();
+      return buildResponseEntity(apiError);
    }
 
    @ExceptionHandler(EntityNotFoundException.class)
@@ -91,6 +110,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
               .status(BAD_REQUEST)
               .debugMessage(ex.getMessage())
               .message(MISSING_FIELDS.getMessage())
+              .build();
+      return buildResponseEntity(apiError);
+   }
+
+   @ExceptionHandler(InvalidMediaFileException.class)
+   protected ResponseEntity<MoneyTreeError> handleInvalidMediaFileException(
+           InvalidMediaFileException ex) {
+      MoneyTreeError apiError = MoneyTreeError.builder()
+              .status(BAD_REQUEST)
+              .debugMessage(ex.getMessage())
+              .message(FAILED_TO_UPLOAD_S3.getMessage())
               .build();
       return buildResponseEntity(apiError);
    }
