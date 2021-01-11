@@ -19,6 +19,7 @@ describe('workspace-project App', () => {
   })
 
   it('should display stock price', () => {
+    browser.sleep(2000);
     page.navigateToStockDetailPage('AAPL');
     const stockPrice = page.getStockPrice();
     // stock value
