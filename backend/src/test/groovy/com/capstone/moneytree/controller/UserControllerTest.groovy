@@ -248,67 +248,6 @@ class UserControllerTest extends Specification {
       thrown(CredentialNotFoundException)
    }
 
-//   @Test
-//   def "Edit User is successful if he does not have an avatar url"() {
-//      setup:
-//      def imageUrl = "www.s3.bucket.image.com/id"
-//      and:
-//      amazonS3Service.uploadImageToS3Bucket(_, _) >> imageUrl
-//
-//      and: "A registered user with an Alpaca key"
-//      String email = "moneytree@test.com"
-//      String username = "Billy"
-//      String password = "encrypted"
-//      String firstName = "Billy"
-//      String lastName = "Bob"
-//      String alpacaApiKey = "RYFERH6ET5etETGTE6"
-//      User user = createUser(email, username, password, firstName, lastName, alpacaApiKey)
-//
-//      and: "mock the database with the same user already registered"
-//      userDao.findUserById(user.getId()) >> user
-//
-//      and: "A valid multipartFile is passed"
-//      MultipartFile imageFile = Mock()
-//      imageFile.isEmpty() >> false
-//
-//      when: "Attempt to editUserProfile with png file"
-//      def res = userController.editUserProfile(user.getId(), imageFile)
-//      then: "Should return valid s3 url for user.avatarUrl property"
-//      res.getBody().getAvatarURL() == imageUrl
-//   }
-//
-//   @Test
-//   def "Edit User deletes the old profile pictures and replaces with the new one"() {
-//      setup:
-//      def imageUrl = "www.s3.bucket.image.com/id"
-//      def oldImageUrl = "www.s3.old.com/oldId"
-//      and:
-//      amazonS3Service.uploadImageToS3Bucket(_, _) >> imageUrl
-//      amazonS3Service.deleteImageFromS3Bucket(_ as String, oldImageUrl)
-//
-//      and: "A registered user with an Alpaca key"
-//      String email = "moneytree@test.com"
-//      String username = "Billy"
-//      String password = "encrypted"
-//      String firstName = "Billy"
-//      String lastName = "Bob"
-//      String alpacaApiKey = "RYFERH6ET5etETGTE6"
-//      User user = createUser(email, username, password, firstName, lastName, alpacaApiKey)
-//      user.setAvatarURL(oldImageUrl)
-//
-//      and: "mock the database with the same user already registered"
-//      userDao.findUserById(user.getId()) >> user
-//
-//      and: "A valid multipartFile is passed"
-//      MultipartFile imageFile = Mock()
-//      imageFile.isEmpty() >> false
-//
-//      when: "Attempt to editUserProfile with png file"
-//      def res = userController.editUserProfile(user.getId(), imageFile)
-//      then: "Should return valid s3 url for user.avatarUrl property"
-//      res.getBody().getAvatarURL() == imageUrl
-//   }
-
    @Test
    def "Edit User is returns an exception if the provided image is empty"() {
       given: "A registered user with an Alpaca key"
