@@ -31,7 +31,7 @@ export class UserAuthPage {
     ) as Promise<unknown>;
   }
 
-  authenticateUser() {
+  authenticateUser(): void {
     http.post('users/', systemTestUser2);
     this.navigateHome();
     const emailInput = element(by.id('login-email'));
@@ -42,7 +42,7 @@ export class UserAuthPage {
     loginBtn.click();
   }
 
-  cleanAuthenticatedUser() {
+  cleanAuthenticatedUser(): void  {
     http.delete('/users/delete-by-email/' + systemTestUser2.email);
     browser.executeScript('window.sessionStorage.clear();');
     browser.executeScript('window.localStorage.clear();');

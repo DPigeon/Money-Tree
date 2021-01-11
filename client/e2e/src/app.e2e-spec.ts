@@ -16,7 +16,7 @@ describe('workspace-project App', () => {
   afterEach(() => {
     authentication.cleanAuthenticatedUser();
     browser.sleep(1000);
-  })
+  });
 
   it('should display stock price', () => {
     browser.sleep(2000);
