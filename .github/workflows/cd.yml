@@ -36,7 +36,7 @@ jobs:
         run: echo “ENVCONFIG=--prod” >> $GITHUB_ENV
       - name: Get the Backend Environment Configuration for UAT
         if: ${{ env.BRANCH_NAME == ‘dev’ }}
-        run: echo “ENVCONFIGBACKEND=-Dspring.profiles.active=@spring.profiles.active@” >> $GITHUB_ENV
+        run: echo “ENVCONFIGBACKEND=-Dspring.profiles.active=dev” >> $GITHUB_ENV
       - name: Get the Backend Environment Configuration for Prod
         if: ${{ env.BRANCH_NAME == ‘master’ }}
         run: echo “ENVCONFIGBACKEND=-Dspring.profiles.active=prod” >> $GITHUB_ENV

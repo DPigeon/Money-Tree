@@ -26,9 +26,4 @@ public class DefaultAmazonS3Service implements AmazonS3Service {
     public void deleteImageFromS3Bucket(String bucketName, String url) {
         amazonS3Facade.deleteImageFromS3Bucket(bucketName, url);
     }
-
-    @Override
-    public void deleteImageFromS3Bucket(String bucketName, String url) {
-        amazonS3Facade.deleteImageFroms3Bucket(bucketName, url);
-    }
 }

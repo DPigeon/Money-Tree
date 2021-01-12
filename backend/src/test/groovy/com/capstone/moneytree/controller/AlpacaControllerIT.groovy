@@ -20,7 +20,7 @@ import spock.lang.Specification
  */
 
 @SpringBootTest
-@ActiveProfiles("@spring.profiles.active@")
+@ActiveProfiles("dev")
 class AlpacaControllerIT extends Specification {
 
     private static final String API_VERSION = "v2"

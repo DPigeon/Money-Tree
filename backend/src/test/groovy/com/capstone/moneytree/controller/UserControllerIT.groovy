@@ -12,7 +12,7 @@ import com.capstone.moneytree.model.node.User
 import spock.lang.Specification
 
 @SpringBootTest
-@ActiveProfiles("@spring.profiles.active@")
+@ActiveProfiles("dev")
 class UserControllerIT extends Specification {
 
    @Autowired
