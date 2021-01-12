@@ -24,6 +24,10 @@
             src/main/java/com/capstone/moneytree/utils/**/*
         </sonar.coverage.exclusions>
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <!-- Properties related to running tests with maven cli -->
+        <skipTests>false</skipTests>
+        <skipUnitTests>${skipTests}</skipUnitTests>
+        <skipIntegrationTests>${skipTests}</skipIntegrationTests>
     </properties>
 
     <dependencies>
@@ -104,19 +108,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.athaydes</groupId>
-            <artifactId>spock-reports</artifactId>
-            <version>1.7.1</version>
-            <scope>test</scope>
-            <!-- this avoids affecting your version of Groovy/Spock -->
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-test</artifactId>
             <scope>test</scope>
@@ -138,6 +129,22 @@
             <artifactId>iextrading4j</artifactId>
             <version>3.3.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-spring</artifactId>
+            <version>1.2-groovy-2.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.0.0-M5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>3.0.0-M5</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -145,7 +152,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.4.1</version>
             </plugin>
+            <!-- build plugin to use groovy to compile and run tests -->
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
@@ -153,7 +162,6 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>compile</goal>
                             <goal>testCompile</goal>
                         </goals>
                     </execution>
@@ -167,11 +175,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
-            </plugin>
+            <!-- build plugin used by CI for static code analysis (sonarcloud) -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -193,6 +197,26 @@
                         <id>default-report</id>
                         <goals>
                             <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Plugins to configure tests with maven. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <goal>verify</goal>
                         </goals>
                     </execution>
                 </executions>

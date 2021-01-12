@@ -8,7 +8,6 @@ import java.nio.file.Paths
 import javax.security.auth.login.CredentialNotFoundException
 
 import org.junit.Test
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockMultipartFile
@@ -32,7 +31,6 @@ import spock.lang.Specification
 /**
  * Unit Tests for the User Controller.
  */
-@SpringBootTest
 class UserControllerTest extends Specification {
    private static final String PIC_FILE_NAME = "profile.jpg"
 

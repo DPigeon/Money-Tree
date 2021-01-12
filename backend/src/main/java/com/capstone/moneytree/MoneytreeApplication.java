@@ -1,11 +1,12 @@
 package com.capstone.moneytree;
 
-import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 
 @EnableTransactionManagement
 @EnableNeo4jRepositories
