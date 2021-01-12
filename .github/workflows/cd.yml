@@ -34,20 +34,20 @@ jobs:
 
       - name: Compute Version Name
         run: echo "VERSION_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-        
+
       - name: Get the Client Environment Configuration for UAT
         if: ${{ env.BRANCH_NAME == 'dev' }}
         run: echo "ENVCONFIG=--configuration=uat" >> $GITHUB_ENV
-        
+
       - name: Get the Client Environment Configuration for Prod
         if: ${{ env.BRANCH_NAME == 'master' }}
         run: echo "ENVCONFIG=--prod" >> $GITHUB_ENV
-      
-	  - name: Get the Backend Environment Configuration for UAT
+
+      - name: Get the Backend Environment Configuration for UAT
         if: ${{ env.BRANCH_NAME == 'dev' }}
         run: echo "ENVCONFIGBACKEND=-Dspring.profiles.active=dev" >> $GITHUB_ENV
-	
-	  - name: Get the Backend Environment Configuration for Prod
+
+      - name: Get the Backend Environment Configuration for Prod
         if: ${{ env.BRANCH_NAME == 'master' }}
         run: echo "ENVCONFIGBACKEND=-Dspring.profiles.active=prod" >> $GITHUB_ENV
 
@@ -55,7 +55,7 @@ jobs:
         uses: elgohr/Publish-Docker-Github-Action@master # This action builds & publishes on GitHub Package Registry
         env:
           ENVCONFIG: ${{ env.ENVCONFIG }}
-		  ENVCONFIGBACKEND: ${{ env.ENVCONFIGBACKEND }}
+          ENVCONFIGBACKEND: ${{ env.ENVCONFIGBACKEND }}
         with:
           name: dpigeon/money-tree/frontend
           registry: docker.pkg.github.com
@@ -76,7 +76,7 @@ jobs:
           workdir: backend
           dockerfile: Dockerfile
           tags: ${{ env.VERSION_NAME }}
-		  buildargs: ENVCONFIGBACKEND
+          buildargs: ENVCONFIGBACKEND
 
   job_2:
     name: Deploy
