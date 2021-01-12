@@ -18,7 +18,7 @@ jobs:
       - name: Get branch name
         run: echo “BRANCH_NAME=${GITHUB_REF#refs/heads/}” >> $GITHUB_ENV
       - name: Versioning # Done only if released to prod
-        if: ${{ env.BRANCH_NAME == ‘master’ }}
+        if: ${{ env.BRANCH_NAME == "master" }}
         uses: mathieudutour/github-tag-action@v4.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -29,16 +29,16 @@ jobs:
       - name: Compute Version Name
         run: echo “VERSION_NAME=$(git describe --tags --abbrev=0)” >> $GITHUB_ENV
       - name: Get the Client Environment Configuration for UAT
-        if: ${{ env.BRANCH_NAME == ‘dev’ }}
+        if: ${{ env.BRANCH_NAME == "dev" }}
         run: echo “ENVCONFIG=--configuration=uat” >> $GITHUB_ENV
       - name: Get the Client Environment Configuration for Prod
-        if: ${{ env.BRANCH_NAME == ‘master’ }}
+        if: ${{ env.BRANCH_NAME == "master" }}
         run: echo “ENVCONFIG=--prod” >> $GITHUB_ENV
       - name: Get the Backend Environment Configuration for UAT
-        if: ${{ env.BRANCH_NAME == ‘dev’ }}
+        if: ${{ env.BRANCH_NAME == "dev" }}
         run: echo “ENVCONFIGBACKEND=-Dspring.profiles.active=@spring.profiles.active@” >> $GITHUB_ENV
       - name: Get the Backend Environment Configuration for Prod
-        if: ${{ env.BRANCH_NAME == ‘master’ }}
+        if: ${{ env.BRANCH_NAME == "master" }}
         run: echo “ENVCONFIGBACKEND=-Dspring.profiles.active=prod” >> $GITHUB_ENV
       - name: Build & Publish Frontend
         uses: elgohr/Publish-Docker-Github-Action@master # This action builds & publishes on GitHub Package Registry
@@ -83,7 +83,7 @@ jobs:
         run: echo “VERSION_NAME=$(git describe --tags --abbrev=0)” >> $GITHUB_ENV
       # Deploy to UAT if on dev branch
       - name: Deploy-UAT
-        if: ${{ env.BRANCH_NAME == ‘dev’ }}
+        if: ${{ env.BRANCH_NAME == "dev" }}
         uses: appleboy/ssh-action@master
         env:
           GITHUB_USERNAME: ${{ secrets.USERNAME }}
@@ -98,7 +98,7 @@ jobs:
             sh deploy.sh $GITHUB_USERNAME $GITHUB_TOKEN ${{ env.VERSION_NAME }}
       # Deploy to Prod if on master branch
       - name: Deploy-Prod
-        if: ${{ env.BRANCH_NAME == ‘master’ }}
+        if: ${{ env.BRANCH_NAME == "master" }}
         uses: appleboy/ssh-action@master
         env:
           GITHUB_USERNAME: ${{ secrets.USERNAME }}
