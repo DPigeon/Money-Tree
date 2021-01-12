@@ -121,11 +121,6 @@
             <artifactId>spring-boot-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.5.0</version>
-        </dependency>
 
         <!-- // if you don't already have slf4j-api and an implementation of it in the classpath, add this! -->
         <dependency>
@@ -141,7 +136,7 @@
         <dependency>
             <groupId>com.github.razine-bensari</groupId>
             <artifactId>iextrading4j</artifactId>
-            <version>3.3.6</version>
+            <version>3.3.5</version>
         </dependency>
     </dependencies>
 
@@ -204,6 +199,26 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <active.profile>dev</active.profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>local</id>
+            <properties>
+                <active.profile>local</active.profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <active.profile>prod</active.profile>
+            </properties>
+        </profile>
+    </profiles>
     <repositories>
         <repository>
             <id>jitpack.io</id>

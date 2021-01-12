@@ -1,11 +1,9 @@
 name: CD Pipeline
-
 on:
   push:
     branches:
       - dev
       - master
-
 # (Build --> Publish --> Deploy-UAT --> Cleanup)
 jobs:
   job_1:
@@ -17,32 +15,31 @@ jobs:
         with:
           # Fetches entire history, so we can analyze commits since last tag
           fetch-depth: 0
-
       - name: Get branch name
-        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-
+        run: echo “BRANCH_NAME=${GITHUB_REF#refs/heads/}” >> $GITHUB_ENV
       - name: Versioning # Done only if released to prod
-        if: ${{ env.BRANCH_NAME == 'master' }}
+        if: ${{ env.BRANCH_NAME == ‘master’ }}
         uses: mathieudutour/github-tag-action@v4.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          create_annotated_tag: true # To annotate the new tag so that we can describe it with 'git describe'
-
+          create_annotated_tag: true # To annotate the new tag so that we can describe it with ‘git describe’
       # These next 2 steps gets the latest released tag & computes the version name from git
       - name: Fetch Tags
         run: git fetch --prune --tags
-
       - name: Compute Version Name
-        run: echo "VERSION_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-        
+        run: echo “VERSION_NAME=$(git describe --tags --abbrev=0)” >> $GITHUB_ENV
       - name: Get the Client Environment Configuration for UAT
-        if: ${{ env.BRANCH_NAME == 'dev' }}
-        run: echo "ENVCONFIG=--configuration=uat" >> $GITHUB_ENV
-        
+        if: ${{ env.BRANCH_NAME == ‘dev’ }}
+        run: echo “ENVCONFIG=--configuration=uat” >> $GITHUB_ENV
       - name: Get the Client Environment Configuration for Prod
-        if: ${{ env.BRANCH_NAME == 'master' }}
-        run: echo "ENVCONFIG=--prod" >> $GITHUB_ENV
-
+        if: ${{ env.BRANCH_NAME == ‘master’ }}
+        run: echo “ENVCONFIG=--prod” >> $GITHUB_ENV
+      - name: Get the Backend Environment Configuration for UAT
+        if: ${{ env.BRANCH_NAME == ‘dev’ }}
+        run: echo “ENVCONFIGBACKEND=-Dspring.profiles.active=@spring.profiles.active@” >> $GITHUB_ENV
+      - name: Get the Backend Environment Configuration for Prod
+        if: ${{ env.BRANCH_NAME == ‘master’ }}
+        run: echo “ENVCONFIGBACKEND=-Dspring.profiles.active=prod” >> $GITHUB_ENV
       - name: Build & Publish Frontend
         uses: elgohr/Publish-Docker-Github-Action@master # This action builds & publishes on GitHub Package Registry
         env:
@@ -56,7 +53,6 @@ jobs:
           dockerfile: Dockerfile
           tags: ${{ env.VERSION_NAME }}
           buildargs: ENVCONFIG # For --configuration=uat or --prod in the build
-
       - name: Build & Publish Backend
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
@@ -67,7 +63,7 @@ jobs:
           workdir: backend
           dockerfile: Dockerfile
           tags: ${{ env.VERSION_NAME }}
-
+          buildargs: ENVCONFIGBACKEND # For --configuration=uat or --prod in the build
   job_2:
     name: Deploy
     needs: job_1
@@ -78,20 +74,16 @@ jobs:
         with:
           # Fetches entire history, so we can analyze commits since last tag
           fetch-depth: 0
-
       - name: Get branch name
-        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-
+        run: echo “BRANCH_NAME=${GITHUB_REF#refs/heads/}” >> $GITHUB_ENV
       # These next 2 steps gets the latest released tag & computes the version name from git
       - name: Fetch Tags
         run: git fetch --prune --tags
-
       - name: Compute Version Name
-        run: echo "VERSION_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-
+        run: echo “VERSION_NAME=$(git describe --tags --abbrev=0)” >> $GITHUB_ENV
       # Deploy to UAT if on dev branch
       - name: Deploy-UAT
-        if: ${{ env.BRANCH_NAME == 'dev' }}
+        if: ${{ env.BRANCH_NAME == ‘dev’ }}
         uses: appleboy/ssh-action@master
         env:
           GITHUB_USERNAME: ${{ secrets.USERNAME }}
@@ -104,10 +96,9 @@ jobs:
           envs: GITHUB_USERNAME, GITHUB_TOKEN
           script: |
             sh deploy.sh $GITHUB_USERNAME $GITHUB_TOKEN ${{ env.VERSION_NAME }}
-
       # Deploy to Prod if on master branch
       - name: Deploy-Prod
-        if: ${{ env.BRANCH_NAME == 'master' }}
+        if: ${{ env.BRANCH_NAME == ‘master’ }}
         uses: appleboy/ssh-action@master
         env:
           GITHUB_USERNAME: ${{ secrets.USERNAME }}
@@ -120,7 +111,6 @@ jobs:
           envs: GITHUB_USERNAME, GITHUB_TOKEN
           script: |
             sh deploy.sh $GITHUB_USERNAME $GITHUB_TOKEN ${{ env.VERSION_NAME }}
-
   job_3:
     name: Cleanup
     needs: job_2
@@ -129,7 +119,7 @@ jobs:
       - name: Cleanup Artifactory Packages
         uses: MobileheadHolding/github-action-purge-packages@master
         with:
-          version-regex: ".*"
+          version-regex: “.*”
           days-old: 30 # Lifetime: 30 days package
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
