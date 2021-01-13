@@ -7,7 +7,9 @@ public enum ExceptionMessage {
     NULL_POINTER("Arguments are null"),
     USER_ALREADY_EXISTS("Email or username already exists!"),
     MISSING_FIELDS("The entity is missing fields!"),
-    FAILED_TO_UPLOAD_S3("Failed to upload image to S3");
+    FAILED_TO_UPLOAD_S3("Failed to upload image to S3"),
+    CREDENTIALS_NOT_FOUND("Credentials not found");
+    
 
     private final String message;
 

@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Stock } from 'src/app/interfaces/stock';
 import { User } from 'src/app/interfaces/user';
+import { AppError } from 'src/app/interfaces/app-error';
 
 export const loadStockInfo = createAction(
   '[Stock Info] Load Stock Info',
@@ -41,5 +42,5 @@ export const logCurrentUserOut = createAction('[User] Log user out');
 
 export const setAppError = createAction(
   '[User] App Error',
-  props<{ errorMessage: any }>()
+  props<{ errorMessage: AppError }>()
 );

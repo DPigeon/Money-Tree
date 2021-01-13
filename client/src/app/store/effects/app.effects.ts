@@ -7,6 +7,7 @@ import { TransactionService } from '../../services/transaction/transaction.servi
 import { UserService } from '../../services/user/user.service';
 import * as appActions from '../actions/app.actions';
 import { catchError, map, switchMap } from 'rxjs/operators';
+import { AppError } from 'src/app/interfaces/app-error';
 
 @Injectable()
 export class Effects {
@@ -21,11 +22,16 @@ export class Effects {
     this.actions$.pipe(
       ofType(appActions.loadStockInfo),
       switchMap((action) => {
-        return this.stockService
-          .loadStockInfo(action.stockTicker)
-          .pipe(
-            map((data) => appActions.stockInfoLoadSuccess({ stock: data }))
-          );
+        return this.stockService.loadStockInfo(action.stockTicker).pipe(
+          map((data) => appActions.stockInfoLoadSuccess({ stock: data })),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: mirrorError(data),
+              })
+            )
+          )
+        );
       })
     )
   );
@@ -37,7 +43,11 @@ export class Effects {
         return this.userService.createNewUser(action.user).pipe(
           map((data) => appActions.setCurrentUser({ user: data })),
           catchError((data) =>
-            of(appActions.setAppError({ errorMessage: data }))
+            of(
+              appActions.setAppError({
+                errorMessage: mirrorError(data),
+              })
+            )
           )
         );
       })
@@ -49,12 +59,18 @@ export class Effects {
       ofType(appActions.upadateUser),
       switchMap((action) => {
         // This function will be changed when the backend refactos
-        return this.userService.updateAlpacaCode(action.user.id, action.user.alpacaApiKey).pipe(
-          map((data) => appActions.setCurrentUser({ user: data })),
-          catchError((data) =>
-            of(appActions.setAppError({ errorMessage: data }))
-          )
-        );
+        return this.userService
+          .updateAlpacaCode(action.user.id, action.user.alpacaApiKey)
+          .pipe(
+            map((data) => appActions.setCurrentUser({ user: data })),
+            catchError((data) =>
+              of(
+                appActions.setAppError({
+                  errorMessage: mirrorError(data),
+                })
+              )
+            )
+          );
       })
     )
   );
@@ -66,7 +82,11 @@ export class Effects {
         return this.userService.getUser(action.id).pipe(
           map((data) => appActions.setCurrentUser({ user: data })),
           catchError((data) =>
-            of(appActions.setAppError({ errorMessage: data }))
+            of(
+              appActions.setAppError({
+                errorMessage: mirrorError(data),
+              })
+            )
           )
         );
       })
@@ -80,10 +100,24 @@ export class Effects {
         return this.userService.userLogin(action.user).pipe(
           map((data) => appActions.setCurrentUser({ user: data })),
           catchError((data) =>
-            of(appActions.setAppError({ errorMessage: data }))
+            of(
+              appActions.setAppError({
+                errorMessage: mirrorError(data),
+              })
+            )
           )
         );
       })
     )
   );
+}
+
+function mirrorError(backEndError): AppError {
+  const errorMessage: AppError = {
+    status: backEndError.error.status,
+    timestamp: backEndError.error.timestamp,
+    debugMessage: backEndError.error.debugMessage,
+    message: backEndError.error.message,
+  };
+  return errorMessage;
 }
