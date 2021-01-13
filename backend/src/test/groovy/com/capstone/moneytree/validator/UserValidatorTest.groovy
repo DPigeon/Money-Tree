@@ -4,7 +4,7 @@ import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
 
 import com.capstone.moneytree.dao.UserDao
 import com.capstone.moneytree.exception.MissingMandatoryFieldException
-import com.capstone.moneytree.handler.exception.UserAlreadyExistsException
+import com.capstone.moneytree.exception.UserAlreadyExistsException
 import com.capstone.moneytree.model.node.User
 
 import spock.lang.Specification

@@ -42,7 +42,7 @@ public class StockController {
    /**
     * Obtain json object containing company quote, info, news, keystats and logo
     *
-    * @param symbol
+    * @param symbol symbol of the stock
     * @return batchStocks
     */
    @GetMapping("/batch/{symbol}")

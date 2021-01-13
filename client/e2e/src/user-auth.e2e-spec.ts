@@ -1,4 +1,4 @@
-import { browser, by, element, ExpectedConditions, logging } from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 import { UserAuthPage } from './user-auth.po';
 import { HttpClient } from 'protractor-http-client';
 

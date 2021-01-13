@@ -1,24 +1,27 @@
 package com.capstone.moneytree.controller
 
-import com.capstone.moneytree.facade.MarketInteractionsFacade
-import net.jacobpeterson.domain.alpaca.account.Account
-import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory
-import net.jacobpeterson.domain.alpaca.position.Position
+import java.time.LocalDate
+
 import org.junit.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import spock.lang.Shared
-import spock.lang.Specification
+import org.springframework.test.context.ActiveProfiles
 
-import java.time.LocalDate
+import com.capstone.moneytree.facade.MarketInteractionsFacade
+
+import net.jacobpeterson.domain.alpaca.account.Account
+import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory
+import net.jacobpeterson.domain.alpaca.position.Position
+import spock.lang.Specification
 
 /**
  * Integration Tests for the Alpaca Controller. Tests the MarketInteractionFacade as well.
  */
 
 @SpringBootTest
-class AlpacaControllerIntegrationTest extends Specification {
+@ActiveProfiles("dev")
+class AlpacaControllerIT extends Specification {
 
     private static final String API_VERSION = "v2"
     private static final String KEY_ID = System.getenv().get("ALPACA_KEY_ID")
@@ -41,7 +44,7 @@ class AlpacaControllerIntegrationTest extends Specification {
     @Test
     def "Should retrieve a list of positions successfully"() {
         when: "Getting a list of positions"
-        ResponseEntity<ArrayList<Position>> response = alpacaController.getPositions()
+        ResponseEntity<List<Position>> response = alpacaController.getPositions()
 
         then: "The positions should be retrieved"
         assert response.statusCode == HttpStatus.OK
