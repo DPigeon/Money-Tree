@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity
 
 import com.capstone.moneytree.exception.EntityNotFoundException
 import com.capstone.moneytree.exception.UserAlreadyExistsException
+
 import com.capstone.moneytree.utils.MoneyTreeError
 
 import javassist.NotFoundException
@@ -91,6 +92,6 @@ class RestHandlerExceptionTest extends Specification {
       then:
       apiError.getBody().getStatus() == HttpStatus.NOT_FOUND
       apiError.getBody().getDebugMessage() == errorMessage
-      apiError.getBody().getMessage() == HttpStatus.NOT_FOUND.getReasonPhrase()
+      apiError.getBody().getMessage() == ExceptionMessage.CREDENTIALS_NOT_FOUND.getMessage()
    }
 }
