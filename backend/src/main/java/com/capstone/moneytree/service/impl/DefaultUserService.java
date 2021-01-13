@@ -132,7 +132,7 @@ public class DefaultUserService implements UserService {
       if (user != null && compareDigests(credentials.getPassword(), user.getPassword())) {
          return user;
       } else {
-         throw new CredentialNotFoundException();
+         throw new CredentialNotFoundException("Authentication failed for this email/pwd combination.");
       }
    }
 

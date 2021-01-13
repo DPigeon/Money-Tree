@@ -7,9 +7,11 @@ import static com.capstone.moneytree.handler.ExceptionMessage.MISSING_FIELDS;
 import static com.capstone.moneytree.handler.ExceptionMessage.NULL_POINTER;
 import static com.capstone.moneytree.handler.ExceptionMessage.REQUEST_NOT_FOUND;
 import static com.capstone.moneytree.handler.ExceptionMessage.USER_ALREADY_EXISTS;
+import static com.capstone.moneytree.handler.ExceptionMessage.CREDENTIALS_NOT_FOUND;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 
 import javax.security.auth.login.CredentialNotFoundException;
 
@@ -136,7 +138,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
       MoneyTreeError apiError = MoneyTreeError.builder()
               .status(NOT_FOUND)
               .debugMessage(ex.getMessage())
-              .message(NOT_FOUND.getReasonPhrase())
+              .message(CREDENTIALS_NOT_FOUND.getMessage())
               .build();
       return buildResponseEntity(apiError);
    }

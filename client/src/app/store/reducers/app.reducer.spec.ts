@@ -62,9 +62,16 @@ describe('Reducer Reducer', () => {
     });
 
     it('should return the state with error message', () => {
-      const action = appActions.setAppError({ errorMessage: 'error' });
+      const action = appActions.setAppError({
+        errorMessage: {
+          status: '',
+          message: 'error',
+          debugMessage: '',
+          timestamp: '',
+        },
+      });
       const state = reducer(initialState, action);
-      expect(state.errorMessage).toEqual('error');
+      expect(state.errorMessage.message).toEqual('error');
     });
 
     it('should return a null user state when logged out', () => {
