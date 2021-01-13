@@ -112,12 +112,15 @@ export class Effects {
   );
 }
 
-function mirrorError(backEndError): AppError {
-  const errorMessage: AppError = {
-    status: backEndError.error.status,
-    timestamp: backEndError.error.timestamp,
-    debugMessage: backEndError.error.debugMessage,
-    message: backEndError.error.message,
-  };
-  return errorMessage;
+function mirrorError(backendError): AppError {
+  if (backendError && backendError.error) {
+    const errorMessage: AppError = {
+      status: backendError.error.status,
+      timestamp: backendError.error.timestamp,
+      debugMessage: backendError.error.debugMessage,
+      message: backendError.error.message,
+    };
+    return errorMessage;
+  }
+  return null;
 }
