@@ -27,7 +27,7 @@ export class Effects {
           catchError((data) =>
             of(
               appActions.setAppError({
-                errorMessage: mirrorError(data),
+                errorMessage: this.mirrorError(data),
               })
             )
           )
@@ -45,7 +45,7 @@ export class Effects {
           catchError((data) =>
             of(
               appActions.setAppError({
-                errorMessage: mirrorError(data),
+                errorMessage: this.mirrorError(data),
               })
             )
           )
@@ -66,7 +66,7 @@ export class Effects {
             catchError((data) =>
               of(
                 appActions.setAppError({
-                  errorMessage: mirrorError(data),
+                  errorMessage: this.mirrorError(data),
                 })
               )
             )
@@ -84,7 +84,7 @@ export class Effects {
           catchError((data) =>
             of(
               appActions.setAppError({
-                errorMessage: mirrorError(data),
+                errorMessage: this.mirrorError(data),
               })
             )
           )
@@ -102,7 +102,7 @@ export class Effects {
           catchError((data) =>
             of(
               appActions.setAppError({
-                errorMessage: mirrorError(data),
+                errorMessage: this.mirrorError(data),
               })
             )
           )
@@ -110,17 +110,17 @@ export class Effects {
       })
     )
   );
-}
 
-function mirrorError(backendError): AppError {
-  if (backendError && backendError.error) {
-    const errorMessage: AppError = {
-      status: backendError.error.status,
-      timestamp: backendError.error.timestamp,
-      debugMessage: backendError.error.debugMessage,
-      message: backendError.error.message,
-    };
-    return errorMessage;
+  mirrorError(backendError): AppError {
+    if (backendError && backendError.error) {
+      const errorMessage: AppError = {
+        status: backendError.error.status,
+        timestamp: backendError.error.timestamp,
+        debugMessage: backendError.error.debugMessage,
+        message: backendError.error.message,
+      };
+      return errorMessage;
+    }
+    return null;
   }
-  return null;
 }
