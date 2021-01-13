@@ -84,9 +84,10 @@ export class LoginFormComponent {
   wrongCredential(): boolean {
     return this.appError && this.appError.message === 'Credentials not found';
   }
-  disableButton(): boolean { 
-    // Disable the button if a value in a field is problematic, or if user submitted the form (not to let him/her click multiple times) and there's no appError
-    // We manually asign appError to null after each submission, untill the response from server is back (not to let multiple clicks when submitted and we have appError)   
+  disableButton(): boolean {
+    // Disable the button if a value in a field is problematic, or if user submitted the form (not to let him/her click multiple times)
+    // and there's no appError. We manually asign appError to null after each submission, untill the response from server is back
+    // (not to let multiple clicks when submitted and we have appError)
     return (!this.logInForm.valid || this.submitted) && !this.appError;
   }
 }
