@@ -9,8 +9,8 @@
       <input id="login-password" matInput type="password" placeholder="Password" [formControl]="pwd" />
     </mat-form-field>
     <button id="login-submit-btn" mat-flat-button class="mt-input-field half"
-      [class.btn-opacity-disabled]="(!logInForm.valid || submitted) && !wrongCredential()"
-      [disabled]="(!logInForm.valid || submitted) && !wrongCredential()">LOGIN</button>
+      [class.btn-opacity-disabled]="disableButton()"
+      [disabled]="disableButton()">LOGIN</button>
 
     <!-- Error messages -->
     <div class="form-error-messages" *ngIf="wrongCredential()"> A user with this

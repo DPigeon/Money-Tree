@@ -27,8 +27,8 @@
         </mat-form-field>
 
         <button id="signup-submit-btn" class="mt-input-field" mat-flat-button type="submit"
-            [class.btn-opacity-disabled]="(!signUpForm.valid || submitted) && !userAlreadyExist()"
-            [disabled]="(!signUpForm.valid || submitted) && !userAlreadyExist()">
+            [class.btn-opacity-disabled]="disableButton()"
+            [disabled]="disableButton()">
             SIGN UP
         </button>
         <div class="form-error-messages" *ngIf="userAlreadyExist()">A user with this email address or username already

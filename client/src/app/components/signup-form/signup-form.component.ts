@@ -78,6 +78,7 @@ export class SignupFormComponent {
   onSubmit(): void {
     if (this.signUpForm.valid) {
       this.submitted = true;
+      this.appError = null; // to disable the button when we have an appError and user tries to click multiple times
       const newUser: User = {
         firstName: this.firstName.value,
         lastName: this.lastName.value,
@@ -145,14 +146,18 @@ export class SignupFormComponent {
       }
     }
   }
+
   userAlreadyExist(): boolean {
-    const result =
+    return (
       this.appError &&
-      this.appError.message === 'Email or username already exists!';
-    if (result) {
-      this.submitted = false;
-    }
-    return result;
+      this.appError.message === 'Email or username already exists!'
+    );
+  }
+
+  disableButton(): boolean {
+    // Disable the button if a value in a field is problematic, or if user submitted the form (not to let him/her click multiple times) and there's no appError
+    // We manually asign appError to null after each submission, untill the response from server is back (not to let multiple clicks when submitted and we have appError)
+    return (!this.signUpForm.valid || this.submitted) && !this.appError;
   }
 }
 function passwordMatch(frm: FormGroup): { [key: string]: boolean } {

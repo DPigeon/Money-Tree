@@ -5,7 +5,6 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
-import { resultMemoize } from '@ngrx/store';
 import { AppError } from 'src/app/interfaces/app-error';
 import { User } from 'src/app/interfaces/user';
 
@@ -35,6 +34,7 @@ export class LoginFormComponent {
   onSubmit(): void {
     if (this.logInForm.valid) {
       this.submitted = true;
+      this.appError = null; // to disable the button when we have an appError and user tries to click multiple times
       const userCredentials: User = {
         email: this.email.value,
         password: this.pwd.value,
@@ -82,11 +82,11 @@ export class LoginFormComponent {
     return '';
   }
   wrongCredential(): boolean {
-    const result =
-      this.appError && this.appError.message === 'Credentials not found';
-    if (result) {
-      this.submitted = false;
-    }
-    return result;
+    return this.appError && this.appError.message === 'Credentials not found';
+  }
+  disableButton(): boolean { 
+    // Disable the button if a value in a field is problematic, or if user submitted the form (not to let him/her click multiple times) and there's no appError
+    // We manually asign appError to null after each submission, untill the response from server is back (not to let multiple clicks when submitted and we have appError)   
+    return (!this.logInForm.valid || this.submitted) && !this.appError;
   }
 }
