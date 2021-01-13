@@ -5,6 +5,7 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
+import { AppError } from 'src/app/interfaces/app-error';
 import { User } from 'src/app/interfaces/user';
 
 @Component({
@@ -14,7 +15,7 @@ import { User } from 'src/app/interfaces/user';
 })
 export class SignupFormComponent {
   @Output() userSignup: EventEmitter<User> = new EventEmitter();
-  @Input() appError: boolean;
+  @Input() appError: AppError;
   signUpForm: FormGroup;
   firstName: AbstractControl;
   lastName: AbstractControl;
@@ -75,7 +76,7 @@ export class SignupFormComponent {
   }
 
   onSubmit(): void {
-    if (this.signUpForm.valid && !this.submitted) {
+    if (this.signUpForm.valid) {
       this.submitted = true;
       const newUser: User = {
         firstName: this.firstName.value,
@@ -143,6 +144,15 @@ export class SignupFormComponent {
           return 'Passwords do not match, please check.';
       }
     }
+  }
+  userAlreadyExist(): boolean {
+    const result =
+      this.appError &&
+      this.appError.message === 'Email or username already exists!';
+    if (result) {
+      this.submitted = false;
+    }
+    return result;
   }
 }
 function passwordMatch(frm: FormGroup): { [key: string]: boolean } {

@@ -5,6 +5,8 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
+import { resultMemoize } from '@ngrx/store';
+import { AppError } from 'src/app/interfaces/app-error';
 import { User } from 'src/app/interfaces/user';
 
 @Component({
@@ -14,7 +16,7 @@ import { User } from 'src/app/interfaces/user';
 })
 export class LoginFormComponent {
   @Output() userLogin: EventEmitter<User> = new EventEmitter();
-  @Input() appError: boolean;
+  @Input() appError: AppError;
   logInForm: FormGroup;
   email: AbstractControl;
   pwd: AbstractControl;
@@ -78,5 +80,13 @@ export class LoginFormComponent {
       }
     }
     return '';
+  }
+  wrongCredential(): boolean {
+    const result =
+      this.appError && this.appError.message === 'Credentials not found';
+    if (result) {
+      this.submitted = false;
+    }
+    return result;
   }
 }
