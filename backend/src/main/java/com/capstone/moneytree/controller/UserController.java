@@ -105,13 +105,10 @@ public class UserController {
    }
 
    @PutMapping("/{id}")
-   ResponseEntity<User> editUserProfile(@PathVariable Long id,
-                                        @RequestParam(required = false) MultipartFile imageFile) {
+   ResponseEntity<User> editUserProfile(@PathVariable Long id, @RequestBody User user) {
       User userToUpdate = this.userService.getUserById(id);
-      if (imageFile == null || imageFile.isEmpty()) {
-         throw new InvalidMediaFileException("The provided profile picture is null or empty");
-      }
-      return ResponseEntity.ok(this.userService.editUserProfilePicture(userToUpdate, imageFile));
+      User updatedUser = this.userService.updateUser(userToUpdate, user);
+      return ResponseEntity.ok(updatedUser);
    }
 
    @DeleteMapping("/delete-by-email/{email}")

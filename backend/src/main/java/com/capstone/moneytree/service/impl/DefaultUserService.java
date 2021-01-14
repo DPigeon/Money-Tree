@@ -81,9 +81,21 @@ public class DefaultUserService implements UserService {
 
       userDao.save(user);
 
-      LOG.info("Created user: {}", user.getFirstName());
+      LOG.info("Created user: {}", user.getUsername());
 
       return user;
+   }
+
+   @Override
+   public User updateUser(User userToUpdate, User user) {
+      userToUpdate.setFirstName(user.getFirstName());
+      userToUpdate.setLastName(user.getLastName());
+
+      userDao.save(userToUpdate);
+
+      LOG.info("Updated user: {}", user.getUsername());
+
+      return userToUpdate;
    }
 
    @Override
