@@ -83,17 +83,36 @@ class UserValidatorTest extends Specification {
       "test@test.com" | "Test"   | "encrypted" | "John"    | null     | MissingMandatoryFieldException
    }
 
-   def "validation throws UserAlreadyExistsException for the email and username field"() {
-      given: "A user that already exist"
+   def "validation throws UserAlreadyExistsException for the email field"() {
+      given: "An email that already exist"
       String email = "test@test.com"
+      String username = "Test_2"
+      String password = "encrypted"
+      String firstName = "John"
+      String lastName = "Doe"
+      user = createUser(email, username, password, firstName, lastName, "")
+
+      and: "userDao finds that user by email in db"
+      userDao.findUserByEmail(user.getEmail()) >> user
+
+      when: "We validate a user"
+      userValidator.validate(user)
+
+      then:
+      thrown(UserAlreadyExistsException)
+   }
+
+   def "validation throws UserAlreadyExistsException for the username field"() {
+      given: "A username that already exist"
+      String email = "test_2@test.com"
       String username = "Test"
       String password = "encrypted"
       String firstName = "John"
       String lastName = "Doe"
       user = createUser(email, username, password, firstName, lastName, "")
 
-      and: "userDao returns null (no user such user in db)"
-      userDao.findUserByEmailAndUsername(user.getEmail(), user.getUsername()) >> user
+      and: "userDao finds that user by username in db"
+      userDao.findUserByUsername(user.getUsername()) >> user
 
       when: "We validate a user"
       userValidator.validate(user)

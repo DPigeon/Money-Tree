@@ -59,7 +59,8 @@ public class UserValidator implements Validator {
     * @return boolean if exists or not.
     */
    private boolean userAlreadyExists(User user) {
-      return Objects.nonNull(getUserDao().findUserByEmail(user.getEmail())) ||  Objects.nonNull(getUserDao().findUserByUsername(user.getUsername()));
+      return Objects.nonNull(getUserDao().findUserByEmail(user.getEmail()))
+       ||    Objects.nonNull(getUserDao().findUserByUsername(user.getUsername()));
    }
 
    public UserDao getUserDao() {

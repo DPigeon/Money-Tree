@@ -113,7 +113,7 @@ class UserControllerTest extends Specification {
       User user = createUser(email, username, password, firstName, lastName, null)
 
       and: "mock the database with some users already registered"
-      userDao.findUserByEmailAndUsername(user.getEmail(), user.getUsername()) >> user
+      userDao.findUserByEmail(user.getEmail()) >> user
 
       when: "creating a user"
       userController.createUser(user)
@@ -133,7 +133,7 @@ class UserControllerTest extends Specification {
       User user = createUser(email, username, password, firstName, lastName, null)
 
       and: "mock the database with some users already registered"
-      userDao.findUserByEmailAndUsername(user.getEmail(), user.getUsername()) >> user
+      userDao.findUserByUsername(user.getUsername()) >> user
 
       when: "creating a user"
       userController.createUser(user)
