@@ -45,11 +45,9 @@ public class UserValidator implements Validator {
    }
 
    public void validateEmptyFields(User user) {
-      if (StringUtils.isBlank(user.getPassword()) ||
-              StringUtils.isBlank(user.getUsername()) ||
-              StringUtils.isBlank(user.getEmail()) ||
-              StringUtils.isBlank(user.getFirstName()) ||
-              StringUtils.isBlank(user.getLastName())) {
+      if (StringUtils.isBlank(user.getPassword()) || StringUtils.isBlank(user.getUsername())
+            || StringUtils.isBlank(user.getEmail()) || StringUtils.isBlank(user.getFirstName())
+            || StringUtils.isBlank(user.getLastName())) {
          throw new MissingMandatoryFieldException(String.format("Missing field for %s", User.class));
       }
    }
@@ -61,8 +59,7 @@ public class UserValidator implements Validator {
     * @return boolean if exists or not.
     */
    private boolean userAlreadyExists(User user) {
-      return Objects.nonNull(getUserDao().
-              findUserByEmailAndUsername(user.getEmail(), user.getUsername()));
+      return Objects.nonNull(getUserDao().findUserByEmail(user.getEmail())) ||  Objects.nonNull(getUserDao().findUserByUsername(user.getUsername()));
    }
 
    public UserDao getUserDao() {
