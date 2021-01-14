@@ -37,8 +37,12 @@ public class UserValidator implements Validator {
    }
 
    public void validateEmailAndUsername(User user) {
-      if (userAlreadyExists(user)) {
-         String errorMessage = "The email address or username already exist";
+      if (emailAlreadyExists(user)) {
+         String errorMessage = "The email address already exist!";
+         LOG.error(errorMessage);
+         throw new UserAlreadyExistsException(errorMessage);
+      } else if (usernameAlreadyExists(user)) {
+         String errorMessage = "The username already exist!";
          LOG.error(errorMessage);
          throw new UserAlreadyExistsException(errorMessage);
       }
@@ -53,14 +57,23 @@ public class UserValidator implements Validator {
    }
 
    /**
-    * Method to look if user exists with unique email and username.
+    * Method to look if user exists with unique email address.
     *
     * @param user User from front end.
     * @return boolean if exists or not.
     */
-   private boolean userAlreadyExists(User user) {
-      return Objects.nonNull(getUserDao().findUserByEmail(user.getEmail()))
-       ||    Objects.nonNull(getUserDao().findUserByUsername(user.getUsername()));
+   private boolean emailAlreadyExists(User user) {
+      return Objects.nonNull(getUserDao().findUserByEmail(user.getEmail()));
+   }
+
+   /**
+    * Method to look if user exists with unique username.
+    *
+    * @param user User from front end.
+    * @return boolean if exists or not.
+    */
+   private boolean usernameAlreadyExists(User user) {
+      return Objects.nonNull(getUserDao().findUserByUsername(user.getUsername()));
    }
 
    public UserDao getUserDao() {
