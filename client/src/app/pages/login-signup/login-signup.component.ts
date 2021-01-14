@@ -11,7 +11,7 @@ import { environment } from '../../../environments/environment';
 })
 export class LoginSignupComponent implements OnInit {
   hasAlpacaCode = false;
-  hasAppError = this.storeFacade.appError$;
+  appError = this.storeFacade.appError$;
 
   constructor(
     private storeFacade: StoreFacadeService,
