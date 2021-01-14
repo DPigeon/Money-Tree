@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DebugElement } from '@angular/core';
 import { User } from 'src/app/interfaces/user';
 import { AppError } from 'src/app/interfaces/app-error';
 import {
