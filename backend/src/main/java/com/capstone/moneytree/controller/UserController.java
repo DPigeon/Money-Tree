@@ -104,8 +104,8 @@ public class UserController {
       return userService.login(credentials);
    }
 
-   @PutMapping("/{id}")
-   ResponseEntity<User> editUserProfile(@PathVariable Long id,
+   @PutMapping("/profile-picture/{id}")
+   ResponseEntity<User> editUserProfilePicture(@PathVariable Long id,
                                         @RequestParam(required = false) MultipartFile imageFile) {
       User userToUpdate = this.userService.getUserById(id);
       if (imageFile == null || imageFile.isEmpty()) {
