@@ -143,6 +143,9 @@ export class SignupFormComponent {
 
         case 'pwds,match':
           return 'Passwords do not match, please check.';
+
+        default:
+          return '';
       }
     }
   }

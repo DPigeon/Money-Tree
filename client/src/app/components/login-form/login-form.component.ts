@@ -66,7 +66,7 @@ export class LoginFormComponent {
     const failedValidator = this.getFirstErrorMessage();
 
     // to go around null errors in console for when we dont have any failed validators.
-    if (failedValidator && !this.appError) {
+    if (failedValidator) {
       switch (failedValidator) {
         case 'email,required':
         case 'pwd,required':

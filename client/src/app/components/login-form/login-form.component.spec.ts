@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DebugElement } from '@angular/core';
 import { User } from 'src/app/interfaces/user';
+import { AppError } from 'src/app/interfaces/app-error';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
   FORM_MODULE_DPENDENCEIES,
@@ -9,6 +11,13 @@ import { LoginFormComponent } from './login-form.component';
 const userCredentials: User = {
   email: 'test@gmail.com',
   password: 'Hunter2',
+};
+
+const appError: AppError = {
+  status: '',
+  message: '',
+  debugMessage: '',
+  timestamp: '',
 };
 
 describe('LoginFormComponent', () => {
@@ -64,5 +73,25 @@ describe('LoginFormComponent', () => {
       'Email is not in the valid format.'
     );
     expect(component.userLogin.emit).toHaveBeenCalledTimes(0);
+  });
+
+  it('should show no error messages ahout form fields entries if appError is not null', () => {
+    component.appError = null;
+    component.getFirstErrorMessage = () => 'a new error for failedValidator';
+    fixture.detectChanges();
+    expect(component.showErrorMessage()).toBe('');
+  });
+
+  it('should detect wrongCredentials based on appError message', () => {
+    appError.message = 'Credentials not found';
+    component.appError = appError;
+    fixture.detectChanges();
+    expect(component.wrongCredential()).toBe(true);
+  });
+
+  it('should disable the login button if at least one form field is not valid.', () => {
+    component.pwd.setErrors({ required: true });
+    fixture.detectChanges();
+    expect(component.disableButton()).toBe(true);
   });
 });
