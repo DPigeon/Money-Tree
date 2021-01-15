@@ -31,8 +31,7 @@
             [disabled]="disableButton()">
             SIGN UP
         </button>
-        <div class="form-error-messages" *ngIf="userAlreadyExist()">A user with this email address or username already
-            exist!
+        <div class="form-error-messages" *ngIf="userAlreadyExist()">{{appError.debugMessage}}
         </div>
         <div class="form-error-messages" *ngIf="signUpForm.invalid && !userAlreadyExist()">
             {{ showErrorMessage() }}
