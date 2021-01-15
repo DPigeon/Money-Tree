@@ -40,4 +40,3 @@ services:
     volumes:
       - /home/neo4j/data:/data
       - /home/neo4j/logs:/logs
-
