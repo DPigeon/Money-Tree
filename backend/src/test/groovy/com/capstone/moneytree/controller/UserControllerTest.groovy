@@ -247,7 +247,7 @@ class UserControllerTest extends Specification {
    }
 
    @Test
-   def "Edit User is returns an exception if the provided image is empty"() {
+   def "Edit User Profile Picture returns an exception if the provided image is empty"() {
       given: "A registered user with an Alpaca key"
       String email = "moneytree@test.com"
       String username = "Billy"
@@ -265,14 +265,14 @@ class UserControllerTest extends Specification {
       imageFile.isEmpty() >> true
 
       when: "Attempt to editUserProfile without a png file"
-      userController.editUserProfile(user.getId(), imageFile)
+      userController.editUserProfilePicture(user.getId(), imageFile)
 
       then:
       thrown(InvalidMediaFileException)
    }
 
    @Test
-   def "Edit User is returns an exception if the provided image is null"() {
+   def "Edit User Profile Picture is returns an exception if the provided image is null"() {
       given: "A registered user with an Alpaca key"
       String email = "moneytree@test.com"
       String username = "Billy"
@@ -289,14 +289,14 @@ class UserControllerTest extends Specification {
       MultipartFile imageFile = null
 
       when: "Attempt to editUserProfile without a png file"
-      userController.editUserProfile(user.getId(), imageFile)
+      userController.editUserProfilePicture(user.getId(), imageFile)
 
       then:
       thrown(InvalidMediaFileException)
    }
 
    @Test
-   def "Edit User is successful if the user uploads its first picture ever"() {
+   def "Edit User Profile Picture is successful if the user uploads its first picture ever"() {
       given: "A registered user"
       def user = new User(
               id: 123,
@@ -311,7 +311,7 @@ class UserControllerTest extends Specification {
       userDao.findUserById(user.getId()) >> user
 
       when: "Attempt to editUserProfile"
-      def response = userController.editUserProfile(user.getId(), getMultipartFile())
+      def response = userController.editUserProfilePicture(user.getId(), getMultipartFile())
 
       then: "The returned avatar url contains the profile picture name uploaded by the user"
       with(response) {
@@ -325,7 +325,7 @@ class UserControllerTest extends Specification {
    }
 
    @Test
-   def "Edit User successfully deletes the previous avatar when present"() {
+   def "Edit User Profile Picture successfully deletes the previous avatar when present"() {
       given: "A registered user"
       def user = new User(
               id: 123,
@@ -346,7 +346,7 @@ class UserControllerTest extends Specification {
       userDao.findUserById(user.getId()) >> user
 
       when: "Attempt to editUserProfile"
-      def response = userController.editUserProfile(user.getId(), image)
+      def response = userController.editUserProfilePicture(user.getId(), image)
 
       then: "The returned avatar url contains the profile picture name uploaded by the user"
       with(response) {
@@ -360,7 +360,7 @@ class UserControllerTest extends Specification {
    }
 
    @Test
-   def "Edit User throws exception when image is null"() {
+   def "Edit User Profile Picture throws exception when image is null"() {
       given: "A registered user"
       def user = new User(
               id: 123,
@@ -375,14 +375,14 @@ class UserControllerTest extends Specification {
       userDao.findUserById(user.getId()) >> user
 
       when: "Attempt to editUserProfile when image is null"
-      userController.editUserProfile(user.getId(), null)
+      userController.editUserProfilePicture(user.getId(), null)
 
       then: "throws an invalidMediaException"
       thrown(InvalidMediaFileException)
    }
 
    @Test
-   def "Edit User throws exception when image is empty"() {
+   def "Edit User Profile Picture throws exception when image is empty"() {
       given: "A registered user"
       def user = new User(
               id: 123,
@@ -402,7 +402,7 @@ class UserControllerTest extends Specification {
       }
 
       when: "Attempt to editUserProfile when image is empty but not null"
-      userController.editUserProfile(user.getId(), imageFile)
+      userController.editUserProfilePicture(user.getId(), imageFile)
 
       then: "throws an invalidMediaException"
       thrown(InvalidMediaFileException)
