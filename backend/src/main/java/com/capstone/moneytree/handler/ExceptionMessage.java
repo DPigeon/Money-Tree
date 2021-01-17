@@ -8,7 +8,7 @@ public enum ExceptionMessage {
     USER_ALREADY_EXISTS("Email or username already exists!"),
     MISSING_FIELDS("The entity is missing fields!"),
     FAILED_TO_UPLOAD_S3("Failed to upload image to S3"),
-    BAD_REQUEST_MESSAGE("Bad request!");
+    BAD_REQUEST_MESSAGE("Bad request!"),
     CREDENTIALS_NOT_FOUND("Credentials not found");
 
     private final String message;
