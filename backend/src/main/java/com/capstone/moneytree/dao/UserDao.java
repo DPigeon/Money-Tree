@@ -19,4 +19,6 @@ public interface UserDao extends Neo4jRepository<User, Long> {
     User findUserByEmailAndUsername(String email, String username);
 
     User findUserByEmail(String email);
+
+    User findUserByUsername(String username);
 }

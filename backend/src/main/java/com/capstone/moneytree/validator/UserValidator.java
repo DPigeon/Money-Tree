@@ -37,32 +37,43 @@ public class UserValidator implements Validator {
    }
 
    public void validateEmailAndUsername(User user) {
-      if (userAlreadyExists(user)) {
-         String errorMessage = "The email address or username already exist";
+      if (emailAlreadyExists(user)) {
+         String errorMessage = "The email address already exist!";
+         LOG.error(errorMessage);
+         throw new UserAlreadyExistsException(errorMessage);
+      } else if (usernameAlreadyExists(user)) {
+         String errorMessage = "The username already exist!";
          LOG.error(errorMessage);
          throw new UserAlreadyExistsException(errorMessage);
       }
    }
 
    public void validateEmptyFields(User user) {
-      if (StringUtils.isBlank(user.getPassword()) ||
-              StringUtils.isBlank(user.getUsername()) ||
-              StringUtils.isBlank(user.getEmail()) ||
-              StringUtils.isBlank(user.getFirstName()) ||
-              StringUtils.isBlank(user.getLastName())) {
+      if (StringUtils.isBlank(user.getPassword()) || StringUtils.isBlank(user.getUsername())
+            || StringUtils.isBlank(user.getEmail()) || StringUtils.isBlank(user.getFirstName())
+            || StringUtils.isBlank(user.getLastName())) {
          throw new MissingMandatoryFieldException(String.format("Missing field for %s", User.class));
       }
    }
 
    /**
-    * Method to look if user exists with unique email and username.
+    * Method to look if user exists with unique email address.
     *
     * @param user User from front end.
     * @return boolean if exists or not.
     */
-   private boolean userAlreadyExists(User user) {
-      return Objects.nonNull(getUserDao().
-              findUserByEmailAndUsername(user.getEmail(), user.getUsername()));
+   private boolean emailAlreadyExists(User user) {
+      return Objects.nonNull(getUserDao().findUserByEmail(user.getEmail()));
+   }
+
+   /**
+    * Method to look if user exists with unique username.
+    *
+    * @param user User from front end.
+    * @return boolean if exists or not.
+    */
+   private boolean usernameAlreadyExists(User user) {
+      return Objects.nonNull(getUserDao().findUserByUsername(user.getUsername()));
    }
 
    public UserDao getUserDao() {

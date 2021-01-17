@@ -6,6 +6,7 @@ import * as appSelectors from './selectors/app.selectors';
 import { Observable } from 'rxjs';
 import { Stock } from '../interfaces/stock';
 import { User } from '../interfaces/user';
+import { AppError } from '../interfaces/app-error';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ import { User } from '../interfaces/user';
 export class StoreFacadeService {
   currentStockLoaded$: Observable<Stock>;
   currentUser$: Observable<User>;
-  appError$: Observable<any>; // the any should be changed to an Error standard
+  appError$: Observable<AppError>;
   shouldAlpacaRedirect$: Observable<boolean>;
   isUserLoggedIn$: Observable<boolean>;
   authenticationInformation$: Observable<{

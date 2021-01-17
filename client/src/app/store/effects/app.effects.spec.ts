@@ -16,8 +16,8 @@ const stockInfo = {
   stockChangePercent: 1.68,
   stockValue: 16.36,
   stats: {
-    open: 100.50,
-    high: 200.20,
+    open: 100.5,
+    high: 200.2,
     low: 516510,
     volume: 151515,
     mktCap: 51651,
@@ -126,5 +126,11 @@ describe('Effects', () => {
       expect(res[key]).toEqual(userInfo);
       done();
     });
+  });
+
+  it('should return null error message if backend error is not defined', (done) => {
+    const backendError = undefined;
+    expect(effects.mirrorError(backendError)).toEqual(null);
+    done();
   });
 });

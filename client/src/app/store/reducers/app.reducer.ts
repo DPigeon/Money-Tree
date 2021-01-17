@@ -1,4 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
+import { AppError } from 'src/app/interfaces/app-error';
 import { Stock } from 'src/app/interfaces/stock';
 import { User } from 'src/app/interfaces/user';
 import * as appActions from '../actions/app.actions';
@@ -8,7 +9,7 @@ export const reducerFeatureKey = 'reducer';
 export interface State {
   user: User;
   currentStockLoaded: Stock;
-  errorMessage: any; // to be modified
+  errorMessage: AppError;
 }
 
 export const initialState: State = {
