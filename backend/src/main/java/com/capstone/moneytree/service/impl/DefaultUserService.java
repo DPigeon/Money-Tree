@@ -37,16 +37,17 @@ public class DefaultUserService implements UserService {
    private final AmazonS3Service amazonS3Service;
 
    private final String bucketName;
-   private final String defaultProfileURL;
+
+   @Value("${aws.default.profile.picture}")
+   private String defaultProfileURL;
 
    @Autowired
-   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service, @Value("${aws.profile.pictures.bucket}") String bucketName, @Value("${aws.default.profile.picture}") String defaultProfileURL) {
+   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service, @Value("${aws.profile.pictures.bucket}") String bucketName) {
       this.userDao = userDao;
       this.validatorFactory = validatorFactory;
       this.passwordEncryption = new MoneyTreePasswordEncryption();
       this.amazonS3Service = amazonS3Service;
       this.bucketName = bucketName;
-      this.defaultProfileURL = defaultProfileURL;
    }
 
    @Override
