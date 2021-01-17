@@ -60,10 +60,8 @@ public class StockMarketDataFacade {
                 .withSymbol(symbol)
                 .addType(BatchStocksType.BOOK)
                 .addType(BatchStocksType.COMPANY)
-                .addType(BatchStocksType.NEWS).withLast(10)
                 .addType(BatchStocksType.KEY_STATS)
                 .addType(BatchStocksType.LOGO)
-                .addType(BatchStocksType.CHART)
                 .build()
         );
     }
