@@ -25,11 +25,11 @@ public class User extends Entity {
 
     String email;
 
-    double score;
+    Double score;
 
-    double rank;
+    Double rank;
 
-    float balance;
+    Float balance;
 
     String password; // Must be encrypted
 

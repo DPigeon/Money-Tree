@@ -3,6 +3,7 @@ package com.capstone.moneytree.service.impl;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
+import com.capstone.moneytree.exception.BadRequestException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,14 +89,17 @@ public class DefaultUserService implements UserService {
 
    @Override
    public User updateUser(User userToUpdate, User user) {
-      userToUpdate.setFirstName(user.getFirstName());
-      userToUpdate.setLastName(user.getLastName());
 
-      userDao.save(userToUpdate);
+      if (!userToUpdate.getId().equals(user.getId())) {
+         throw new BadRequestException("User ID passed does not correspond with stored user");
+      }
 
-      LOG.info("Updated user: {}", user.getUsername());
+      getUserValidator().validateEmptyFields(user);
 
-      return userToUpdate;
+      User updatedUser = userDao.save(user);
+      LOG.info("Updated user: {}", updatedUser.getUsername());
+
+      return updatedUser;
    }
 
    @Override
