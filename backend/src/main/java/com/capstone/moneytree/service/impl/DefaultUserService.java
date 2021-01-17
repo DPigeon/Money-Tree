@@ -95,7 +95,6 @@ public class DefaultUserService implements UserService {
 
       //if user already has a profile picture that is not the default picture, handle deleting old picture
       if (StringUtils.isNotBlank(user.getAvatarURL()) && !user.getAvatarURL().contains(DEFAULT_PROFILE_NAME)) {
-         String test = "fgh";
          this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getAvatarURL());
       }
 
