@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
-  NGRX_STORE_MODULE,
 } from '../../shared.module';
 
 import { StockSearchComponent } from './stockSearch.component';
@@ -13,8 +12,7 @@ describe('StockSearchComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: MATERIAL_MODULE_DEPENDENCIES,
-      declarations: [StockSearchComponent],
-      providers: NGRX_STORE_MODULE,
+      declarations: [StockSearchComponent]
     }).compileComponents();
   });
 

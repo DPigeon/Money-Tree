@@ -28,16 +28,15 @@ export class StockSearchComponent {
     } else {
       this.searchResults = this.searcher.search(this.query).slice(0, 4);
       let symbol = '';
+      // logic under is for keyboard support of selecting an autocomplete option
       if (
         e.key === 'Enter' &&
         (!!this.activeOption || this.searchResults.length > 0)
       ) {
         if (!!this.activeOption) {
           symbol = this.activeOption;
-        } else {
-          if (this.searchResults.length > 0) {
-            symbol = this.searchResults[0].symbol;
-          }
+        } else if(this.searchResults.length > 0) {
+          symbol = this.searchResults[0].symbol;
         }
         this.router.navigate(['/stock-detail/' + symbol]);
       }
