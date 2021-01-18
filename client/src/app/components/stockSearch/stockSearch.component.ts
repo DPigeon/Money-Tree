@@ -1,11 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import {
-  MatAutocompleteActivatedEvent,
-} from '@angular/material/autocomplete';
+import { MatAutocompleteActivatedEvent } from '@angular/material/autocomplete';
 
 import { Router } from '@angular/router';
 import FuzzySearch from 'fuzzy-search';
-import { stockSearch } from 'src/app/interfaces/stockSearch';
+import { StockSearch } from 'src/app/interfaces/stockSearch';
 import { stockList } from 'src/assets/StockNames&Symbols';
 
 @Component({
@@ -15,7 +13,7 @@ import { stockList } from 'src/assets/StockNames&Symbols';
 })
 export class StockSearchComponent {
   query = '';
-  searchResults: stockSearch[] = [];
+  searchResults: StockSearch[] = [];
   activeOption = '';
   searcher = new FuzzySearch(stockList, ['name', 'symbol'], {
     caseSensitive: false,
@@ -23,7 +21,8 @@ export class StockSearchComponent {
   });
 
   constructor(private router: Router) {}
-  queryFilter(e: KeyboardEvent) {
+
+  queryFilter(e: KeyboardEvent): void {
     if (this.query === '') {
       this.searchResults = [];
     } else {
@@ -44,7 +43,7 @@ export class StockSearchComponent {
       }
     }
   }
-  getActiveOption(e: MatAutocompleteActivatedEvent) {
+  getActiveOption(e: MatAutocompleteActivatedEvent): void {
     this.activeOption = e.option.value;
   }
 }

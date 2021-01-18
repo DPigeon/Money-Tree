@@ -1,4 +1,4 @@
-export interface stockSearch {
+export interface StockSearch {
   symbol: string;
   name: string;
 }

@@ -1,6 +1,6 @@
-import { stockSearch } from 'src/app/interfaces/stockSearch';
+import { StockSearch } from 'src/app/interfaces/stockSearch';
 
-export const stockList: stockSearch[] = [
+export const stockList: StockSearch[] = [
   {
     symbol: 'VCVCU',
     name: '10X Capital Venture Acquisition Corp',
