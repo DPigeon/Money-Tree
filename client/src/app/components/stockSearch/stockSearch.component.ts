@@ -1,9 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import {
-  MatAutocomplete,
   MatAutocompleteActivatedEvent,
 } from '@angular/material/autocomplete';
-import { MatOption } from '@angular/material/core';
+
 import { Router } from '@angular/router';
 import FuzzySearch from 'fuzzy-search';
 import { stockSearch } from 'src/app/interfaces/stockSearch';
@@ -15,7 +14,6 @@ import { stockList } from 'src/assets/StockNames&Symbols';
   styleUrls: ['./stockSearch.component.scss'],
 })
 export class StockSearchComponent {
-  @ViewChild(MatAutocomplete) public a: MatAutocomplete;
   query = '';
   searchResults: stockSearch[] = [];
   activeOption = '';
