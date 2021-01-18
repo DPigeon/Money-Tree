@@ -1,0 +1,23 @@
+<input
+  id="searchbox"
+  type="text"
+  (keyup)="queryFilter($event)"
+  placeholder="Search for stocks ..."
+  matInput
+  [(ngModel)]="query"
+  [matAutocomplete]="auto"
+/>
+<mat-autocomplete
+  #auto="matAutocomplete"
+  (optionActivated)="getActiveOption($event)"
+>
+  <mat-option
+    *ngFor="let stock of searchResults"
+    [value]="stock.symbol"
+    [routerLink]="'/stock-detail/' + stock.symbol"
+  >
+    <div class="option-container">
+      <span>{{ stock.name }}</span> <span>{{ stock.symbol }}</span>
+    </div>
+  </mat-option>
+</mat-autocomplete>

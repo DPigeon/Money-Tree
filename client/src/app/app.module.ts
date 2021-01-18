@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 
@@ -32,7 +33,7 @@ import { LoginSignupComponent } from './pages/login-signup/login-signup.componen
 import { SignupFormComponent } from './components/signup-form/signup-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { HomeComponent } from './pages/home/home.component';
-
+import { StockSearchComponent } from './components/stockSearch/stockSearch.component';
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
@@ -50,6 +51,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     StockDetailHeaderComponent,
     StockStatsComponent,
     HeaderComponent,
+    StockSearchComponent,
     LeaderboardComponent,
     LoginSignupComponent,
     SignupFormComponent,
@@ -77,7 +79,8 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent],
