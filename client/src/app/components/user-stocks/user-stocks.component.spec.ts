@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Stock } from '../../interfaces/stock';
 import { MATERIAL_MODULE_DEPENDENCIES } from '../../shared.module';
 import { UserStocksComponent } from './user-stocks.component';
 
