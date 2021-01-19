@@ -3,9 +3,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
+import { StockSearchComponent } from './components/stock-search/stock-search.component';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
   NGRX_STORE_MODULE,
+  FORM_MODULE_DPENDENCEIES
 } from './shared.module';
 
 const mockStoreFacade = {
@@ -22,8 +24,8 @@ const fakeRoute = {
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, MATERIAL_MODULE_DEPENDENCIES],
-      declarations: [AppComponent, HeaderComponent],
+      imports: [RouterTestingModule, MATERIAL_MODULE_DEPENDENCIES, FORM_MODULE_DPENDENCEIES],
+      declarations: [AppComponent, HeaderComponent, StockSearchComponent],
       providers: NGRX_STORE_MODULE,
     }).compileComponents();
   });
