@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
-  FORM_MODULE_DPENDENCEIES
+  FORM_MODULE_DPENDENCEIES,
 } from '../../shared.module';
 
 import { StockSearchComponent } from './stock-search.component';
@@ -13,8 +13,12 @@ describe('StockSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MATERIAL_MODULE_DEPENDENCIES, RouterTestingModule, FORM_MODULE_DPENDENCEIES], 
-      declarations: [StockSearchComponent]
+      imports: [
+        MATERIAL_MODULE_DEPENDENCIES,
+        RouterTestingModule,
+        FORM_MODULE_DPENDENCEIES,
+      ],
+      declarations: [StockSearchComponent],
     }).compileComponents();
   });
 
@@ -30,18 +34,18 @@ describe('StockSearchComponent', () => {
 });
 
 const mockRouter = {
-  navigate: jest.fn()
+  navigate: jest.fn(),
 } as any;
 
 describe('StockSearchComponent Unit Test', () => {
   let component: StockSearchComponent;
 
-  beforeEach(() =>{
+  beforeEach(() => {
     component = new StockSearchComponent(mockRouter);
-  })
+  });
 
   it('should handle proper keyboard input on autocomplete', () => {
-    let routingSpy = jest.spyOn(mockRouter, "navigate");
+    const routingSpy = jest.spyOn(mockRouter, 'navigate');
 
     // case: no active option, no search result
     component.query = '';
@@ -52,7 +56,7 @@ describe('StockSearchComponent Unit Test', () => {
 
     // case: active option, no search result
     routingSpy.mockClear();
-    component.activeOption = "AAPL";
+    component.activeOption = 'AAPL';
     component.searchResults = [];
     component.handleKeyboardSelectionEvent();
     expect(routingSpy).toHaveBeenCalledTimes(1);
@@ -60,19 +64,24 @@ describe('StockSearchComponent Unit Test', () => {
     // case: no active option, search result
     routingSpy.mockClear();
     component.activeOption = null;
-    component.searchResults = [{symbol: 'AAPL', name: "Apple"}];
+    component.searchResults = [{ symbol: 'AAPL', name: 'Apple' }];
     component.handleKeyboardSelectionEvent();
     expect(routingSpy).toHaveBeenCalledTimes(1);
 
     // case: active option, search result
     routingSpy.mockClear();
-    component.activeOption = "AAPL";
-    component.searchResults = [{symbol: 'AAPL', name: "Apple"}];
+    component.activeOption = 'AAPL';
+    component.searchResults = [{ symbol: 'AAPL', name: 'Apple' }];
     component.handleKeyboardSelectionEvent();
     expect(routingSpy).toHaveBeenCalledTimes(1);
-  })
+  });
 
   it('should return the correct search results when querying', () => {
+    const keyboardHandlerSpy = jest.spyOn(
+      component,
+      'handleKeyboardSelectionEvent'
+    );
+
     // case: no key, no query
     component.query = '';
     component.queryFilter(null);
@@ -84,15 +93,14 @@ describe('StockSearchComponent Unit Test', () => {
     expect(component.searchResults.length > 0).toBe(true);
 
     // case: key, query
-    let keyboardHandlerSpy = jest.spyOn(component, 'handleKeyboardSelectionEvent');
     component.query = 'aapl';
-    component.queryFilter({key: "Enter"} as any);
+    component.queryFilter({ key: 'Enter' } as any);
     expect(keyboardHandlerSpy).toHaveBeenCalled();
 
     // case: key, no query
     keyboardHandlerSpy.mockClear();
     component.query = '';
-    component.queryFilter({key: "Enter"} as any);
+    component.queryFilter({ key: 'Enter' } as any);
     expect(keyboardHandlerSpy).toHaveBeenCalledTimes(0);
   });
-})
+});
