@@ -14,11 +14,11 @@
 >
   <mat-option
     *ngFor="let stock of searchResults"
-    [value]="stock.symbol"
-    [routerLink]="'/stock-detail/' + stock.symbol"
+    [value]="stock.Symbol"
+    [routerLink]="'/stock-detail/' + stock.Symbol"
   >
     <div class="option-container">
-      <span>{{ stock.name }}</span> <span>{{ stock.symbol }}</span>
+      <span>{{ stock.Name }}</span> <span>{{ stock.Symbol }}</span>
     </div>
   </mat-option>
 </mat-autocomplete>

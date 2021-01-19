@@ -33,7 +33,7 @@ import { LoginSignupComponent } from './pages/login-signup/login-signup.componen
 import { SignupFormComponent } from './components/signup-form/signup-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { HomeComponent } from './pages/home/home.component';
-import { StockSearchComponent } from './components/stockSearch/stockSearch.component';
+import { StockSearchComponent } from './components/stock-search/stock-search.component';
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
