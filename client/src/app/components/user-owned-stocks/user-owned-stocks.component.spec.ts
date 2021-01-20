@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MATERIAL_MODULE_DEPENDENCIES } from '../../shared.module';
-import { UserStocksComponent } from './user-stocks.component';
+import { UserOwnedStocksComponent } from './user-owned-stocks.component';
 
 // integration tests
-describe('UserStocksComponent', () => {
-  let component: UserStocksComponent;
-  let fixture: ComponentFixture<UserStocksComponent>;
+describe('UserOwnedStocksComponent', () => {
+  let component: UserOwnedStocksComponent;
+  let fixture: ComponentFixture<UserOwnedStocksComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: MATERIAL_MODULE_DEPENDENCIES,
-      declarations: [UserStocksComponent],
+      declarations: [UserOwnedStocksComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserStocksComponent);
+    fixture = TestBed.createComponent(UserOwnedStocksComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

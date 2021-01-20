@@ -8,6 +8,8 @@ import {
   NGRX_STORE_MODULE,
 } from '../../shared.module';
 import { ActivatedRoute } from '@angular/router';
+import { HeaderComponent } from 'src/app/components/header/header.component';
+import { UserOwnedStocksComponent } from 'src/app/components/user-owned-stocks/user-owned-stocks.component';
 
 const fakeActivatedRoute = {
   snapshot: {
@@ -30,6 +32,8 @@ describe('StockDetailComponent', () => {
         StockDetailComponent,
         StockDetailHeaderComponent,
         StockStatsComponent,
+        UserOwnedStocksComponent,
+        HeaderComponent,
       ],
       providers: [
         StoreFacadeService,

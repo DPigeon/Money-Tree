@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-user-stocks',
-  templateUrl: './user-stocks.component.html',
-  styleUrls: ['./user-stocks.component.scss'],
+  templateUrl: './user-owned-stocks.component.html',
+  styleUrls: ['./user-owned-stocks.component.scss'],
 })
-export class UserStocksComponent {
+export class UserOwnedStocksComponent {
   constructor() {}
 
   get userStockNoOfShares(): number {
