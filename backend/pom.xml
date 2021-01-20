@@ -11,9 +11,9 @@
     </parent>
     <groupId>com.capstone</groupId>
     <artifactId>moneytree</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <name>money-tree_BACKEND</name>
-    <description>Rest api for money tree social network</description>
+    <description>Rest API for Money Tree social etwork</description>
 
     <properties>
         <java.version>11</java.version>
@@ -56,14 +56,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-websocket</artifactId>
-            <version>5.3.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-messaging</artifactId>
-            <version>5.3.3</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+            <version>2.4.2</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

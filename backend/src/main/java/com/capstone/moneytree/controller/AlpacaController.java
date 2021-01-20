@@ -7,10 +7,10 @@ import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
-import com.capstone.moneytree.model.node.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +27,12 @@ public class AlpacaController {
 
    private final MarketInteractionsFacade marketInteractionsFacade;
 
+   private final SimpMessagingTemplate messageSender;
+
    @Autowired
-   public AlpacaController(MarketInteractionsFacade marketInteractionsFacade) {
+   public AlpacaController(MarketInteractionsFacade marketInteractionsFacade, SimpMessagingTemplate messageSender) {
       this.marketInteractionsFacade = marketInteractionsFacade;
+      this.messageSender = messageSender;
    }
 
    /**
@@ -86,8 +89,15 @@ public class AlpacaController {
       return ResponseEntity.ok(portfolioHistory);
    }
 
-   @MessageMapping("/secured/trade-updates")
-   public void registerToTradeUpdates(User user) {
-      marketInteractionsFacade.listenToTradeUpdates(user);
+   /**
+    * 1. To make a WS request, you must use a STOMP client with SockJS
+    * 2. Endpoint to connect is "http://localhost:8080/api/v1/ws"
+    * 3. Subscribe to the "/queue/user-{userId}" channel
+    * 4. Send a message to "/app/trade/updates" with content "{userId}" to receive trade updates on the user's alpaca account
+    * @param userId
+    */
+   @MessageMapping("/trade/updates")
+   public void registerToTradeUpdates(String userId) {
+      marketInteractionsFacade.listenToTradeUpdates(userId, messageSender);
    }
 }

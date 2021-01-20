@@ -1,11 +1,11 @@
 package com.capstone.moneytree.facade;
 
-import com.capstone.moneytree.model.node.User;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.enums.PortfolioPeriodUnit;
 import net.jacobpeterson.alpaca.enums.PortfolioTimeFrame;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
+import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListener;
 import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListenerAdapter;
 import net.jacobpeterson.alpaca.websocket.broker.message.AlpacaStreamMessageType;
 import net.jacobpeterson.domain.alpaca.account.Account;
@@ -37,9 +37,6 @@ public class MarketInteractionsFacade {
 
    private static final Logger LOGGER = LoggerFactory.getLogger(MarketInteractionsFacade.class);
    private final AlpacaAPI alpacaAPI;
-
-   @Autowired
-   private SimpMessagingTemplate simpMessaging;
 
    @Autowired
    public MarketInteractionsFacade(@Value("${alpaca.api.version}") String apiVersion,
@@ -118,11 +115,17 @@ public class MarketInteractionsFacade {
     * A stream listener to receive trade updates
     * https://alpaca.markets/docs/api-documentation/api-v2/streaming/
     */
-   public void listenToTradeUpdates(User user) {
+   public void listenToTradeUpdates(String userId, SimpMessagingTemplate messageSender) {
       try {
-         AlpacaStreamListenerAdapter tradeListener = createStreamListenerAdapter(user, AlpacaStreamMessageType.TRADE_UPDATES);
+         AlpacaStreamListener tradeListener = createStreamListener(userId, messageSender, AlpacaStreamMessageType.TRADE_UPDATES);
          alpacaAPI.addAlpacaStreamListener(tradeListener);
-      } catch (WebsocketException e) {
+         LOGGER.info("Listening to trades of user ID {}", userId);
+
+         Thread.sleep(5000);
+
+         alpacaAPI.removeAlpacaStreamListener(tradeListener); // Error here
+         LOGGER.info("Disconnected the WebSocket connection for user ID: {}", userId);
+      } catch (WebsocketException | InterruptedException e) {
          e.printStackTrace();
       }
    }
@@ -132,7 +135,7 @@ public class MarketInteractionsFacade {
     * @param messageType A list of AlpacaStreamMessageType
     * @return An AlpacaStreamListenerAdapter
     */
-   private AlpacaStreamListenerAdapter createStreamListenerAdapter(User user, AlpacaStreamMessageType... messageType) {
+   private AlpacaStreamListener createStreamListener(String userId, SimpMessagingTemplate messageSender, AlpacaStreamMessageType... messageType) {
       return new AlpacaStreamListenerAdapter(messageType) {
          @Override
          public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
@@ -140,9 +143,8 @@ public class MarketInteractionsFacade {
                TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
                TradeUpdate tradeUpdate = tradeMessage.getData();
                if (tradeUpdate.getEvent().equals("fill")) {
-                  simpMessaging.convertAndSendToUser(
-                          user.getUsername(),
-                          "/secured/user/queue/specific-user",
+                  messageSender.convertAndSend(
+                          "/queue/user-" + userId,
                           tradeUpdate.getOrder().getClientOrderId());
                }
             }
