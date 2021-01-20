@@ -12,6 +12,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 export const MATERIAL_MODULE_DEPENDENCIES = [
   MatIconModule,
@@ -24,6 +25,7 @@ export const MATERIAL_MODULE_DEPENDENCIES = [
   MatInputModule,
   MatDialogModule,
   BrowserAnimationsModule,
+  MatAutocompleteModule
 ];
 
 export const NGRX_STORE_MODULE = provideMockStore({ initialState });

@@ -32,6 +32,7 @@ import java.lang.reflect.Field;
 public class DefaultUserService implements UserService {
 
    private static final String USER_NOT_FOUND = "The requested user was not found";
+   private static final String DEFAULT_PROFILE_NAME = "DEFAULT-profile.jpg";
 
    private final UserDao userDao;
    private final ValidatorFactory validatorFactory;
@@ -81,6 +82,7 @@ public class DefaultUserService implements UserService {
       String password = user.getPassword();
       String encryptedPassword = encryptData(password);
       user.setPassword(encryptedPassword);
+      user.setAvatarURL(String.format("https://%s.s3.amazonaws.com/%s", bucketName, DEFAULT_PROFILE_NAME));
 
       userDao.save(user);
 
@@ -147,8 +149,8 @@ public class DefaultUserService implements UserService {
       //since user exists, we can now upload image to s3 and save imageUrl into db
       String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
 
-      //if user already has a profile picture, handle deleting old picture
-      if (StringUtils.isNotBlank(user.getAvatarURL())) {
+      //if user already has a profile picture that is not the default picture, handle deleting old picture
+      if (StringUtils.isNotBlank(user.getAvatarURL()) && !user.getAvatarURL().contains(DEFAULT_PROFILE_NAME)) {
          this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getAvatarURL());
       }
 

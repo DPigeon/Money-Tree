@@ -26,6 +26,7 @@
     "@ngrx/entity": "^10.0.1",
     "@ngrx/store": "^10.0.1",
     "@ngrx/store-devtools": "^10.0.1",
+    "fuzzy-search": "^3.2.1",
     "ngx-hotjar": "^9.0.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

@@ -9,7 +9,7 @@
   </div>
 
   <div class="search-box-container">
-    <input id="searchbox" type="text" placeholder="Search for stocks ..." />
+    <app-stock-search-input></app-stock-search-input>
   </div>
 
   <div class="right-side-buttons">
@@ -20,7 +20,13 @@
       <mat-icon>leaderboard</mat-icon>
     </button>
 
-    <button id="logout-btn" mat-icon-button routerLink="/home" routerLinkActive="active" (click)="logout()">
+    <button
+      id="logout-btn"
+      mat-icon-button
+      routerLink="/home"
+      routerLinkActive="active"
+      (click)="logout()"
+    >
       <mat-icon>exit_to_app</mat-icon>
     </button>
   </div>
