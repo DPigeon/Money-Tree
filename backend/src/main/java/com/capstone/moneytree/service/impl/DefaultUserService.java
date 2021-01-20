@@ -22,6 +22,8 @@ import com.capstone.moneytree.utils.MoneyTreePasswordEncryption;
 import com.capstone.moneytree.validator.UserValidator;
 import com.capstone.moneytree.validator.ValidatorFactory;
 
+import java.lang.reflect.Field;
+
 /**
  * {@inheritDoc}
  */
@@ -89,17 +91,55 @@ public class DefaultUserService implements UserService {
 
    @Override
    public User updateUser(User userToUpdate, User user) {
-
-      if (!userToUpdate.getId().equals(user.getId())) {
-         throw new BadRequestException("User ID passed does not correspond with stored user");
+      //ensure that if username is changed, then it is changed to an unused username
+      if (user.getUsername() != null && !user.getUsername().equals(userToUpdate.getUsername())) {
+         getUserValidator().validateUsername(user);
+         userToUpdate.setUsername(user.getUsername());
       }
 
-      getUserValidator().validateEmptyFields(user);
+      //ensure that if email is changed, then it is changed to an unused email
+      if (user.getEmail() != null && !user.getEmail().equals(userToUpdate.getEmail())) {
+         getUserValidator().validateEmail(user);
+         userToUpdate.setEmail(user.getEmail());
+      }
 
-      User updatedUser = userDao.save(user);
+      if (user.getFirstName() != null)
+         userToUpdate.setFirstName(user.getFirstName());
+
+      if (user.getLastName() != null)
+         userToUpdate.setLastName(user.getLastName());
+
+      if (user.getAvatarURL() != null)
+         userToUpdate.setAvatarURL(user.getAvatarURL());
+
+      if (user.getScore() != null)
+         userToUpdate.setScore(user.getScore());
+
+      if (user.getRank() != null)
+         userToUpdate.setRank(user.getRank());
+
+      if (user.getBalance() != null)
+         userToUpdate.setBalance(user.getBalance());
+
+      if (user.getPassword() != null)
+         userToUpdate.setPassword(user.getPassword());
+
+      if (user.getAlpacaApiKey() != null)
+         userToUpdate.setAlpacaApiKey(user.getAlpacaApiKey());
+
+      if (user.getFollowers() != null)
+         userToUpdate.setFollowers(user.getFollowers());
+
+      if (user.getStocks() != null)
+         userToUpdate.setStocks(user.getStocks());
+
+      if (user.getTransactions() != null)
+         userToUpdate.setTransactions(user.getTransactions());
+
+      User updatedUser = userDao.save(userToUpdate);
       LOG.info("Updated user: {}", updatedUser.getUsername());
 
-      return updatedUser;
+      return userToUpdate;
    }
 
    @Override
