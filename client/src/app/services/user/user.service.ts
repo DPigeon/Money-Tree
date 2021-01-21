@@ -16,10 +16,9 @@ export class UserService {
       .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 
-  // This will be removed for a more generic update function
-  updateAlpacaCode(userId: number, alpacaCode: string): Observable<User> {
+  updateUser(userId: number, newUserParams: User): Observable<User> {
     return this.api
-      .post('users/' + userId + '/register-alpaca-key/' + alpacaCode, {})
+      .patch('users/' + userId, newUserParams)
       .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 

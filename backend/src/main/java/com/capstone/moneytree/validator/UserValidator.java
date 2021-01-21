@@ -37,11 +37,20 @@ public class UserValidator implements Validator {
    }
 
    public void validateEmailAndUsername(User user) {
+      validateEmail(user);
+      validateUsername(user);
+   }
+
+   public void validateEmail(User user) {
       if (emailAlreadyExists(user)) {
          String errorMessage = "The email address already exist!";
          LOG.error(errorMessage);
          throw new UserAlreadyExistsException(errorMessage);
-      } else if (usernameAlreadyExists(user)) {
+      }
+   }
+
+   public void validateUsername(User user) {
+      if (usernameAlreadyExists(user)) {
          String errorMessage = "The username already exist!";
          LOG.error(errorMessage);
          throw new UserAlreadyExistsException(errorMessage);
