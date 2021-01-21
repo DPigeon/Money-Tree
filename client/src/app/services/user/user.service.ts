@@ -44,7 +44,7 @@ export class UserService {
       firstName: response.firstName,
       lastName: response.lastName,
       username: response.username,
-      avatarUrl: response.avatarUrl,
+      avatarURL: response.avatarURL,
       email: response.email,
       score: response.score,
       rank: response.rank,

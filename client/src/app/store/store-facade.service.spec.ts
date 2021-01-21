@@ -9,7 +9,7 @@ const userInfo = {
   firstName: 'John',
   lastName: 'Doe',
   username: 'john1',
-  avatarUrl: '',
+  avatarURL: '',
   email: 'john1@gmail.com',
   score: 12,
   rank: 10000,

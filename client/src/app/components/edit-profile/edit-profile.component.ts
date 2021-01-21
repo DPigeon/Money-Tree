@@ -6,7 +6,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ProfileData } from '../../interfaces/profileData';
+import { User } from '../../interfaces/user';
 @Component({
   selector: 'app-edit-profile',
   templateUrl: './edit-profile.component.html',
@@ -24,22 +24,22 @@ export class EditProfileComponent {
   constructor(
     fb: FormBuilder,
     public dialogRef: MatDialogRef<EditProfileComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ProfileData
+    @Inject(MAT_DIALOG_DATA) public userInDb: User
   ) {
     this.editProfileForm = fb.group(
       {
         firstName: [
-          data.firstName,
+          userInDb.firstName,
           Validators.compose([
             Validators.pattern(/^[a-zA-Z]{3,20}$/u), // validate the pattern to match this regex
           ]),
         ],
         lastName: [
-          data.lastName,
+          userInDb.lastName,
           Validators.compose([Validators.pattern(/^[a-zA-Z]{3,20}$/u)]),
         ],
         biography: [
-          data.biography,
+          userInDb.biography,
           Validators.compose([
             Validators.minLength(10),
             Validators.maxLength(250),
@@ -115,10 +115,10 @@ export class EditProfileComponent {
   }
   compareFormValues(): boolean {
     return (
-      this.firstName.value === this.data.firstName &&
-      this.lastName.value === this.data.lastName &&
-      (!this.newPwd.dirty) &&
-      this.biography.value === this.data.biography
+      this.firstName.value === this.userInDb.firstName &&
+      this.lastName.value === this.userInDb.lastName &&
+      !this.newPwd.dirty &&
+      this.biography.value === this.userInDb.biography
     );
   }
 }
