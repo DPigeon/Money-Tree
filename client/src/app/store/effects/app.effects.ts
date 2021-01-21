@@ -60,7 +60,7 @@ export class Effects {
       switchMap((action) => {
         // This function will be changed when the backend refactos
         return this.userService
-          .updateAlpacaCode(action.user.id, action.user.alpacaApiKey)
+          .updateUser(action.user.id, action.user)
           .pipe(
             map((data) => appActions.setCurrentUser({ user: data })),
             catchError((data) =>

@@ -27,6 +27,10 @@ export class ApiService {
     return this.http.put(this.baseUrl + url, params, this.httpOptions);
   }
 
+  patch(url: string, params: any): Observable<any> {
+    return this.http.patch(this.baseUrl + url, params, this.httpOptions);
+  }
+
   delete(url: string): Observable<any> {
     return this.http.delete(this.baseUrl + url, this.httpOptions);
   }
