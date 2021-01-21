@@ -121,11 +121,11 @@ public class MarketInteractionsFacade {
          alpacaAPI.addAlpacaStreamListener(tradeListener);
          LOGGER.info("Listening to trades of user ID {}", userId);
 
-         Thread.sleep(5000);
-
-         alpacaAPI.removeAlpacaStreamListener(tradeListener); // Error here
-         LOGGER.info("Disconnected the WebSocket connection for user ID: {}", userId);
-      } catch (WebsocketException | InterruptedException e) {
+//         Thread.sleep(5000);
+//
+//         alpacaAPI.removeAlpacaStreamListener(tradeListener); // Error here
+//         LOGGER.info("Disconnected the WebSocket connection for user ID: {}", userId);
+      } catch (WebsocketException e) {
          e.printStackTrace();
       }
    }
