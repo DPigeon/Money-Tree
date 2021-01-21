@@ -13,10 +13,10 @@
     </button>
 
     <div class="profile-picture">
-      <img src="{{userInDb.avatarURL}}" alt="profile picture"
-        class="profile-pic" />
+      <img src="{{userPhotoURL}}" alt="profile picture" class="profile-pic" />
       <button mat-icon-button class="edit-profile-pic">
-        <input single type="file" id="profile-picture" style="display: none;" />
+        <input single type="file" id="profile-picture" style="display: none;" accept="image/x-png,image/jpeg"
+          (change)="onFileSelected($event)" />
         <label for="profile-picture">
           <mat-icon>add_a_photo</mat-icon>
         </label>
@@ -24,10 +24,11 @@
       </button>
     </div>
   </div>
-
+  <div class="form-error-messages" *ngIf="pictureErrMessage">{{pictureErrMessage}}</div>
   <div class="form-error-messages" *ngIf="editProfileForm.invalid">
     {{ showErrorMessage() }}
   </div>
+
 
   <form [formGroup]="editProfileForm" class="edit-profile-form">
 

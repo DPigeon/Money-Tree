@@ -21,6 +21,9 @@ export class EditProfileComponent {
   biography: AbstractControl;
   newPwd: AbstractControl;
   newPwd2: AbstractControl;
+  userPhotoURL: string | ArrayBuffer;
+  temporaryPhotoFile: File;
+  pictureErrMessage: string;
   constructor(
     fb: FormBuilder,
     public dialogRef: MatDialogRef<EditProfileComponent>,
@@ -57,7 +60,7 @@ export class EditProfileComponent {
       },
       { validator: passwordMatch } // This would be a custom validator to check whether passwords matched.
     );
-
+    this.userPhotoURL = userInDb.avatarURL;
     this.firstName = this.editProfileForm.controls.firstName;
     this.lastName = this.editProfileForm.controls.lastName;
     this.biography = this.editProfileForm.controls.biography;
@@ -120,6 +123,26 @@ export class EditProfileComponent {
       !this.newPwd.dirty &&
       this.biography.value === this.userInDb.biography
     );
+  }
+  onFileSelected(event: Event): void {
+    this.temporaryPhotoFile = (event.target as HTMLInputElement).files[0];
+    const size = this.temporaryPhotoFile.size;
+    const type = this.temporaryPhotoFile.type;
+    if (type !== 'image/jpeg' && type !== 'image/png') {
+      this.pictureErrMessage =
+        'The photo must be a file of type: jpeg, png, jpg!';
+      this.userPhotoURL = this.userInDb.avatarURL;
+      return;
+    } else if (size > 1000000) {
+      this.pictureErrMessage = 'Photo must be smaller than 1.0 MB!';
+      this.userPhotoURL = this.userInDb.avatarURL;
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => (this.userPhotoURL = reader.result);
+    reader.readAsDataURL(this.temporaryPhotoFile);
+    this.userPhotoURL = URL.createObjectURL(this.temporaryPhotoFile);
+    this.pictureErrMessage = null; // image type/size is valid
   }
 }
 function passwordMatch(frm: FormGroup): { [key: string]: boolean } {
