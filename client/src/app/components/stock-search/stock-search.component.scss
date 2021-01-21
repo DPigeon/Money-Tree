@@ -1,5 +1,13 @@
-input {
+#searchbox {
+  width: 90%;
+  height: 28px;
+  padding: 5px;
   outline: none;
+
+  &.mat-input-element {
+    background: white;
+    border: none;
+  }
 }
 
 .option-container {
@@ -10,8 +18,3 @@ input {
   align-items: center;
 }
 
-#searchbox {
-  width: 90%;
-  height: 28px;
-  padding: 5px;
-}
