@@ -58,6 +58,8 @@ class UserControllerTest extends Specification {
       amazonS3Service = new DefaultAmazonS3Service(amazonS3Facade)
       defaultUserService = new DefaultUserService(userDao, validatorFactory, amazonS3Service, BUCKET_NAME)
       userController = new UserController(defaultUserService)
+
+
    }
 
    @Test

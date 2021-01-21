@@ -151,6 +151,12 @@
             <artifactId>maven-failsafe-plugin</artifactId>
             <version>3.0.0-M5</version>
         </dependency>
+        <dependency>
+            <groupId>org.neo4j.test</groupId>
+            <artifactId>neo4j-harness</artifactId>
+            <version>4.2.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

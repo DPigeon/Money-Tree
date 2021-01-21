@@ -1,27 +1,24 @@
 package com.capstone.moneytree.controller
 
-import com.capstone.moneytree.exception.BadRequestException
-import com.capstone.moneytree.facade.AmazonS3Facade
-import com.capstone.moneytree.service.api.UserService
-import com.capstone.moneytree.service.impl.DefaultAmazonS3Service
-import com.capstone.moneytree.service.impl.DefaultUserService
-import com.capstone.moneytree.validator.UserValidator
-import com.capstone.moneytree.validator.ValidatorFactory
-import org.springframework.mock.web.MockHttpServletRequest
-import org.springframework.web.context.request.RequestContextHolder
-import org.springframework.web.context.request.ServletRequestAttributes
-
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
 
+import org.junit.Rule
+import org.neo4j.harness.junit.rule.Neo4jRule
+import org.neo4j.ogm.config.Configuration
+import org.neo4j.ogm.session.Session
+import org.neo4j.ogm.session.SessionFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
 import com.capstone.moneytree.dao.UserDao
+import com.capstone.moneytree.exception.BadRequestException
 import com.capstone.moneytree.model.node.User
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
+@Ignore
 @SpringBootTest
 @ActiveProfiles("dev")
 class UserControllerIT extends Specification {
@@ -30,44 +27,38 @@ class UserControllerIT extends Specification {
    private UserController userController
 
    @Autowired
-   private UserDao userDao
+   UserDao userDao
 
-   def "sample test integration user test"() {
-      given: " a user to persist"
-      String email = "test@test.com"
-      String username = "Test"
-      String password = "encrypted"
-      String firstName = "John"
-      String lastName = "Doe"
-      User user = createUser(email, username, password, firstName, lastName, null)
+   @Rule
+   public Neo4jRule neoServer = new Neo4jRule()
 
-      when: "I persist the user"
-      def userdb = userDao.save(user)
+   private Session session
 
-      then:
-      userdb.getEmail() == email
+   def setup() {
+      Configuration configuration = new Configuration.Builder()
+              .uri(neoServer.boltURI().toString())
+              .build()
 
-      cleanup:
-      userDao.delete(userdb)
+      SessionFactory sessionFactory = new SessionFactory(configuration, User.class.getPackage().getName());
+      session = sessionFactory.openSession();
+      session.purgeDatabase()
    }
 
    def "a user is correctly updated; request body is valid"() {
-      setup:
-      String email = "test@test.com"
-      String username = "Test"
-      String password = "encrypted"
-      String firstName = "John"
-      String lastName = "Doe"
-      User userToUpdate = createUser(email, username, password, firstName, lastName, null)
-      userDao.save(userToUpdate)
+      setup: "Persist an initial user"
+      userDao.save(createUser("test@test9009.com", "raz123412", "pass", "razine1234", "bensari2341", null))
+      def persistedUser = userDao.findUserByEmail("test@test9009.com")
 
       and: " a new user from request body"
-      String newEmail = "test@test2.com"
-      User newUser = createUser(newEmail, username, password, firstName, lastName, null)
-      newUser.setId(userToUpdate.getId())
+      String newEmail = "test@test2123.com"
+      String username = "razine123"
+      String password = "encrypted"
+      String firstName = "razineFristName"
+      String lastName = "BENSARI-razine"
+      User newUser = createUser(persistedUser.getId(), newEmail, username, password, firstName, lastName, null)
 
       when: " we update the user"
-      def updatedUser = userController.editUserProfile(userToUpdate.getId(), newUser)
+      def updatedUser = userController.editUserProfile(persistedUser.getId(), newUser)
 
       then: " the user should have the updated fields"
       updatedUser.getBody().getEmail() == newEmail
@@ -75,31 +66,31 @@ class UserControllerIT extends Specification {
       updatedUser.getBody().getLastName() == lastName
       updatedUser.getBody().getUsername() == username
 
-      cleanup:
-      userDao.delete(userToUpdate)
+      cleanup: "delete the created user"
+      userDao.delete(persistedUser)
    }
 
    def "the passed user has a different id than the path"() {
-      setup:
-      String email = "test@test.com"
+      setup: "Persist an initial user"
+      userDao.save(createUser("test@test9092345209.com", "raz23452", "pass2345", "razine2345234", "bensari2345", null))
+      def persistedUser = userDao.findUserByEmail("test@test9092345209.com")
+
+      and: " a new user from request body"
+      String newEmail = "test@test2.com"
       String username = "Test"
       String password = "encrypted"
       String firstName = "John"
       String lastName = "Doe"
-      User userToUpdate = createUser(email, username, password, firstName, lastName, null)
-      userDao.save(userToUpdate)
-
-      and: " a new user from request body"
-      String newEmail = "test@test2.com"
-      User newUser = createUser(newEmail, username, password, firstName, lastName, null)
+      Long differentId = 123
+      User newUser = createUser(differentId, newEmail, username, password, firstName, lastName, null)
 
       when: " we update the user"
-      userController.editUserProfile(userToUpdate.getId(), newUser)
+      userController.editUserProfile(persistedUser.getId(), newUser)
 
       then: " the user should have the updated fields"
       thrown(BadRequestException)
 
-      cleanup:
-      userDao.delete(userToUpdate)
+      cleanup: "delete the created user"
+      userDao.delete(persistedUser)
    }
 }

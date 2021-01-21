@@ -7,7 +7,7 @@ class MoneyTreeTestUtils {
    /**
     * Utility method to create a user
     */
-   static User createUser(String email, String username, String password, String firstName, String lastName, String alpacaApiKey) {
+   static User createUser(Long id = new Random().nextLong(), String email, String username, String password, String firstName, String lastName, String alpacaApiKey) {
       User user = User.builder()
               .email(email)
               .username(username)
@@ -16,7 +16,7 @@ class MoneyTreeTestUtils {
               .lastName(lastName)
               .alpacaApiKey(alpacaApiKey)
               .build()
-      user.setId(new Random().nextLong())
+      user.setId(id)
       return user
    }
 
