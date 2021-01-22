@@ -1,6 +1,5 @@
 package com.capstone.moneytree.testconfig;
 
-import com.capstone.moneytree.facade.MarketInteractionsFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -42,6 +41,7 @@ public class WebSocketClientConfig {
                     .get(timeout, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOGGER.error(e.getMessage());
+            Thread.currentThread().interrupt();
         }
 
         return stompSession;
