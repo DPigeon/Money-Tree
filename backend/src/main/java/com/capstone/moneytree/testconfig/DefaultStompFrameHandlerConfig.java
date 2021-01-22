@@ -29,6 +29,6 @@ public class DefaultStompFrameHandlerConfig implements StompFrameHandler {
     @Override
     public void handleFrame(StompHeaders stompHeaders, Object object) {
         boolean offer = blockingQueue.offer(new String((byte[]) object));
-        LOGGER.info("Queue offer: " + offer);
+        LOGGER.info("Queue offer: {}", offer);
     }
 }
