@@ -1,7 +1,7 @@
 package com.capstone.moneytree.controller
 
-import com.capstone.moneytree.DefaultStompFrameHandlerConfig
-import com.capstone.moneytree.WebSocketClientConfig
+import com.capstone.moneytree.testconfig.DefaultStompFrameHandlerConfig
+import com.capstone.moneytree.testconfig.WebSocketClientConfig
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.messaging.simp.stomp.StompSession
 
@@ -39,6 +39,7 @@ class AlpacaControllerIT extends Specification {
 
     private static final String WS_CHANNEL_TRADE_UPDATES = "/queue/user-";
     private static final String MESSAGE_MAPPING_TRADE_UPDATES = "/app/trade/updates"
+    private static final String MESSAGE_MAPPING_DISCONNECT = "/app/trade/disconnect"
 
     SimpMessagingTemplate messageSender
 
@@ -131,7 +132,25 @@ class AlpacaControllerIT extends Specification {
 
         then: "Should be connected and ready to receive trade updates"
         assert session.isConnected()
-        assert blockingQueue.size() == 0;
+        assert blockingQueue.size() == 0
+    }
+
+    @Test
+    def "Should disconnect from the WebSocket server"() {
+        given:
+        String userIdMessage = "1"
+        int timeout = 5
+        StompSession session = WebSocketClientConfig.createSession(timeout);
+        BlockingQueue<String> blockingQueue = new LinkedBlockingDeque<>();
+
+        when: "Subscribing to the channel and sending a user ID frame"
+        session.subscribe(WS_CHANNEL_TRADE_UPDATES + userIdMessage, new DefaultStompFrameHandlerConfig(blockingQueue) {})
+        session.send(MESSAGE_MAPPING_TRADE_UPDATES, userIdMessage.getBytes());
+        Thread.sleep(5000)
+        session.send(MESSAGE_MAPPING_DISCONNECT, userIdMessage.getBytes());
+
+        then: "Should be disconnected from the WebSocket server"
+        assert blockingQueue.size() == 0
     }
 
     // TODO: Make a class later that creates and encapsulates our requests with methods like this one below to be reusable

@@ -1,10 +1,14 @@
-package com.capstone.moneytree;
+package com.capstone.moneytree.testconfig;
 
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 
 import java.lang.reflect.Type;
 import java.util.concurrent.BlockingQueue;
+
+/**
+ * Used for the WebSocket integration tests for the TCP frame handler protocol
+ */
 
 public class DefaultStompFrameHandlerConfig implements StompFrameHandler {
 

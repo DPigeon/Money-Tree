@@ -25,7 +25,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This facade abstracts the Alpaca API and exposes only the relevant
@@ -37,6 +39,7 @@ public class MarketInteractionsFacade {
 
    private static final Logger LOGGER = LoggerFactory.getLogger(MarketInteractionsFacade.class);
    private final AlpacaAPI alpacaAPI;
+   private final Map<String, AlpacaStreamListener> userIdToStream;
 
    @Autowired
    public MarketInteractionsFacade(@Value("${alpaca.api.version}") String apiVersion,
@@ -45,6 +48,7 @@ public class MarketInteractionsFacade {
                                    @Value("${alpaca.base.api.url}") String baseApiUrl,
                                    @Value("${alpaca.base.data.url}") String baseDataUrl) {
       alpacaAPI = new AlpacaAPI(apiVersion, keyId, secretKey, baseApiUrl, baseDataUrl);
+      userIdToStream = new HashMap<>();
    }
 
    /**
@@ -115,18 +119,30 @@ public class MarketInteractionsFacade {
     * A stream listener to receive trade updates
     * https://alpaca.markets/docs/api-documentation/api-v2/streaming/
     */
-   public void listenToTradeUpdates(String userId, SimpMessagingTemplate messageSender) {
+   public void listenToStreamUpdates(String userId, SimpMessagingTemplate messageSender) {
       try {
-         AlpacaStreamListener tradeListener = createStreamListener(userId, messageSender, AlpacaStreamMessageType.TRADE_UPDATES);
-         alpacaAPI.addAlpacaStreamListener(tradeListener);
-         LOGGER.info("Listening to trades of user ID {}", userId);
-
-//         Thread.sleep(5000);
-//
-//         alpacaAPI.removeAlpacaStreamListener(tradeListener); // Error here
-//         LOGGER.info("Disconnected the WebSocket connection for user ID: {}", userId);
+         AlpacaStreamListener streamListener = createStreamListener(userId, messageSender, AlpacaStreamMessageType.TRADE_UPDATES);
+         alpacaAPI.addAlpacaStreamListener(streamListener);
+         if (userIdToStream.containsKey(userId)) {
+            userIdToStream.replace(userId, streamListener);
+         } else {
+            userIdToStream.put(userId, streamListener);
+         }
+         LOGGER.info("[Trade Updates]: Listening to trade streams of user ID {}", userId);
       } catch (WebsocketException e) {
          e.printStackTrace();
+      }
+   }
+
+   public void disconnectFromStream(String userId) {
+      if (userIdToStream.containsKey(userId)) {
+         AlpacaStreamListener streamListener = userIdToStream.get(userId);
+         try {
+            alpacaAPI.removeAlpacaStreamListener(streamListener);
+            userIdToStream.remove(userId);
+            LOGGER.info("[Trade Updates]: Removing stream listener for user ID {}", userId);
+         } catch (WebsocketException ignored) {
+         }
       }
    }
 

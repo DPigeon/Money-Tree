@@ -1,4 +1,4 @@
-package com.capstone.moneytree;
+package com.capstone.moneytree.testconfig;
 
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
@@ -11,6 +11,10 @@ import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+/**
+ * Used for the WebSocket integration tests sessions
+ */
 
 public class WebSocketClientConfig {
 

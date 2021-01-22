@@ -94,10 +94,16 @@ public class AlpacaController {
     * 2. Endpoint to connect is "http://localhost:8080/api/v1/ws"
     * 3. Subscribe to the "/queue/user-{userId}" channel
     * 4. Send a message to "/app/trade/updates" with content "{userId}" to receive trade updates on the user's alpaca account
-    * @param userId
+    * 5. Send a message to "/app/trade/disconnect" with content "{userId}" to disconnect from stream
+    * @param userId The user ID
     */
    @MessageMapping("/trade/updates")
    public void registerToTradeUpdates(String userId) {
-      marketInteractionsFacade.listenToTradeUpdates(userId, messageSender);
+      marketInteractionsFacade.listenToStreamUpdates(userId, messageSender);
+   }
+
+   @MessageMapping("/trade/disconnect")
+   public void disconnectFromTradeUpdates(String userId) {
+      marketInteractionsFacade.disconnectFromStream(userId);
    }
 }
