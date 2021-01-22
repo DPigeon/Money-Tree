@@ -7,12 +7,12 @@ import { Stock } from 'src/app/interfaces/stock';
   styleUrls: ['./user-owned-stocks.component.scss'],
 })
 export class UserOwnedStocksComponent {
-  @Input() stockInfo: Stock;
+ 
 
   constructor() {}
 
   get stockSymbol(): string {
-    return this.stockInfo ? this.stockInfo.tickerSymbol : '';
+    return 'AAPL';   // to be changed
   }
 
   get userStockNoOfShares(): number {
