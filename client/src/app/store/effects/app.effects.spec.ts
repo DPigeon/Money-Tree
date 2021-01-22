@@ -54,7 +54,7 @@ describe('Effects', () => {
 
   const mockUserService = {
     createNewUser: jest.fn(() => of(userInfo)),
-    updateAlpacaCode: jest.fn(() => of(userInfo)),
+    updateUser: jest.fn(() => of(userInfo)),
     getUser: jest.fn(() => of(userInfo)),
     userLogin: jest.fn(() => of(userInfo)),
   } as any;

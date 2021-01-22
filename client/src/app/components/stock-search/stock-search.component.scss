@@ -1,0 +1,20 @@
+#searchbox {
+  width: 90%;
+  height: 28px;
+  padding: 5px;
+  outline: none;
+
+  &.mat-input-element {
+    background: white;
+    border: none;
+  }
+}
+
+.option-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
