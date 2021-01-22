@@ -2,6 +2,7 @@ package com.capstone.moneytree.controller
 
 import com.capstone.moneytree.testconfig.DefaultStompFrameHandlerConfig
 import com.capstone.moneytree.testconfig.WebSocketClientConfig
+import spock.lang.Ignore
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.messaging.simp.stomp.StompSession
 
@@ -119,6 +120,7 @@ class AlpacaControllerIT extends Specification {
     }
 
     @Test
+    @Ignore("Only run locally for an E2E backend test")
     def "Should connect to the WebSocket server"() {
         given:
         String userIdMessage = "1"
@@ -136,6 +138,7 @@ class AlpacaControllerIT extends Specification {
     }
 
     @Test
+    @Ignore("Only run locally for an E2E backend test")
     def "Should disconnect from the WebSocket server"() {
         given:
         String userIdMessage = "1"
