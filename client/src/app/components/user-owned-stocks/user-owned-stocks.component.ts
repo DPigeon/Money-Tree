@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Stock } from 'src/app/interfaces/stock';
 
 @Component({
   selector: 'app-user-stocks',
@@ -6,7 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./user-owned-stocks.component.scss'],
 })
 export class UserOwnedStocksComponent {
+  @Input() stockInfo: Stock;
+
   constructor() {}
+
+  get stockSymbol(): string {
+    return this.stockInfo ? this.stockInfo.tickerSymbol : '';
+  }
 
   get userStockNoOfShares(): number {
     return 14;
@@ -34,5 +41,8 @@ export class UserOwnedStocksComponent {
 
   isUserStockIncrease(): boolean {
     return true;
+  }
+  stockChangeColor(): string {
+    return true ? 'negative-change' : 'positive-change';
   }
 }
