@@ -130,7 +130,7 @@ public class MarketInteractionsFacade {
          }
          LOGGER.info("[Trade Updates]: Listening to trade streams of user ID {}", userId);
       } catch (WebsocketException e) {
-         e.printStackTrace();
+         LOGGER.error("WebSocketException for user ID {}. Error: {}", userId, e.getMessage());
       }
    }
 
@@ -141,7 +141,8 @@ public class MarketInteractionsFacade {
             alpacaAPI.removeAlpacaStreamListener(streamListener);
             userIdToStream.remove(userId);
             LOGGER.info("[Trade Updates]: Removing stream listener for user ID {}", userId);
-         } catch (WebsocketException ignored) {
+         } catch (WebsocketException e) {
+            LOGGER.error("WebSocketException for user ID {}", userId);
          }
       }
    }
