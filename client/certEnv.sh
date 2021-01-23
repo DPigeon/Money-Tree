@@ -1,12 +1,11 @@
 #!/bin/bash
 
-echo $1
+# arg 1: certificate
+# arg 2: certificate's private key
+
 mkdir ssl
 
-if [[ $1 =~ "--configuration=uat" ]]; then
-    mv ./certs/uat/cert.pem ./certs/uat/key.pem ./ssl
-    echo "UAT"
-else 
-    mv ./certs/prod/cert.pem ./certs/prod/key.pem ./ssl
-    echo "PROD" 
-fi
+echo "$1" > cert.pem
+echo "$2" > key.pem
+
+mv cert.pem key.pem ./ssl
