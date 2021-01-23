@@ -7,8 +7,6 @@ import { Stock } from 'src/app/interfaces/stock';
   styleUrls: ['./user-owned-stocks.component.scss'],
 })
 export class UserOwnedStocksComponent {
- 
-
   constructor() {}
 
   get stockSymbol(): string {
