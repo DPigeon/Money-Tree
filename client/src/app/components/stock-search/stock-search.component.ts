@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
-import { MatAutocompleteActivatedEvent } from '@angular/material/autocomplete';
+import { Component, ViewChild } from '@angular/core';
+import {
+  MatAutocompleteActivatedEvent,
+  MatAutocompleteTrigger,
+} from '@angular/material/autocomplete';
 import { Router } from '@angular/router';
 import { StockSearch } from 'src/app/interfaces/stockSearch';
 import FuzzySearch from 'fuzzy-search';
@@ -26,7 +29,8 @@ const searcher: FuzzySearch = new FuzzySearch(
 export class StockSearchComponent {
   query = '';
   searchResults: StockSearch[] = [];
-  activeOption = '';
+  activeOption: StockSearch = { Symbol: '', Name: '' };
+  @ViewChild(MatAutocompleteTrigger) autoComplete: MatAutocompleteTrigger;
 
   constructor(private router: Router) {}
 
@@ -37,19 +41,27 @@ export class StockSearchComponent {
       this.searchResults = searcher.search(this.query).slice(0, 5);
       if (e && e.key === 'Enter') {
         this.handleKeyboardSelectionEvent();
+        this.autoComplete.closePanel();
       }
     }
   }
 
   handleKeyboardSelectionEvent(): void {
-    if (!!this.activeOption) {
-      this.router.navigate(['/stock-detail/' + this.activeOption]);
+    if (this.activeOption.Symbol !== '' || this.activeOption.Name !== '') {
+      this.router.navigate(['/stock-detail/' + this.activeOption.Symbol]);
+      this.query = this.activeOption.Name;
     } else if (this.searchResults.length > 0) {
-      this.router.navigate(['/stock-detail/' + this.searchResults[0].symbol]);
+      this.router.navigate(['/stock-detail/' + this.searchResults[0].Symbol]);
+      this.query = this.searchResults[0].Name;
     }
   }
 
   getActiveOption(e: MatAutocompleteActivatedEvent): void {
-    this.activeOption = e.option.value;
+    if (!!e.option) {
+      this.activeOption = {
+        Symbol: e.option.value.Symbol,
+        Name: e.option.value.Name,
+      };
+    }
   }
 }

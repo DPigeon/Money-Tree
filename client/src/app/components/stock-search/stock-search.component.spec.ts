@@ -49,34 +49,37 @@ describe('StockSearchComponent Unit Test', () => {
 
     // case: no active option, no search result
     component.query = '';
-    component.activeOption = null;
+    component.activeOption = { Symbol: '', Name: '' };
     component.searchResults = [];
     component.handleKeyboardSelectionEvent();
     expect(routingSpy).toHaveBeenCalledTimes(0);
 
     // case: active option, no search result
     routingSpy.mockClear();
-    component.activeOption = 'AAPL';
+    component.activeOption = { Symbol: 'AAPL', Name: 'Apple Inc.' };
     component.searchResults = [];
     component.handleKeyboardSelectionEvent();
     expect(routingSpy).toHaveBeenCalledTimes(1);
 
     // case: no active option, search result
     routingSpy.mockClear();
-    component.activeOption = null;
-    component.searchResults = [{ symbol: 'AAPL', name: 'Apple' }];
+    component.activeOption = { Symbol: '', Name: '' };
+    component.searchResults = [{ Symbol: 'AAPL', Name: 'Apple Inc.' }];
     component.handleKeyboardSelectionEvent();
     expect(routingSpy).toHaveBeenCalledTimes(1);
 
     // case: active option, search result
     routingSpy.mockClear();
-    component.activeOption = 'AAPL';
-    component.searchResults = [{ symbol: 'AAPL', name: 'Apple' }];
+    component.activeOption = { Symbol: '', Name: '' };
+    component.searchResults = [{ Symbol: 'AAPL', Name: 'Apple Inc.' }];
     component.handleKeyboardSelectionEvent();
     expect(routingSpy).toHaveBeenCalledTimes(1);
   });
 
   it('should return the correct search results when querying', () => {
+    component.autoComplete = {
+      closePanel: jest.fn()
+    } as any;
     const keyboardHandlerSpy = jest.spyOn(
       component,
       'handleKeyboardSelectionEvent'
@@ -91,11 +94,13 @@ describe('StockSearchComponent Unit Test', () => {
     component.query = 'aapl';
     component.queryFilter(null);
     expect(component.searchResults.length > 0).toBe(true);
+    expect(component.query).toBe('aapl');
 
     // case: key, query
     component.query = 'aapl';
     component.queryFilter({ key: 'Enter' } as any);
     expect(keyboardHandlerSpy).toHaveBeenCalled();
+    expect(component.query).toBe('Apple Inc.');
 
     // case: key, no query
     keyboardHandlerSpy.mockClear();
