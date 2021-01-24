@@ -14,8 +14,9 @@
 >
   <mat-option
     *ngFor="let stock of searchResults"
-    [value]="stock.Symbol"
+    [value]="stock"
     [routerLink]="'/stock-detail/' + stock.Symbol"
+    (click)="query=stock.Name"
   >
     <div class="option-container">
       <span>{{ stock.Name }}</span> <span>{{ stock.Symbol }}</span>
