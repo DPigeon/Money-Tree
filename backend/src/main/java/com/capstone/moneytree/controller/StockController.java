@@ -36,6 +36,7 @@ public class StockController {
 
    @Autowired
    public StockController(StockMarketDataService stockMarketDataService) {
+      LOG.info("Initializing StockController");
       this.stockMarketDataService = stockMarketDataService;
    }
 

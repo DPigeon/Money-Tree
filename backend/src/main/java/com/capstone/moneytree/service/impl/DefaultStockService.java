@@ -1,5 +1,6 @@
 package com.capstone.moneytree.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -54,11 +55,11 @@ public class DefaultStockService implements StockService {
 
    @Override
    public List<Stock> getStockByUser(User user) {
-      return null;
+      return Collections.emptyList();
    }
 
    @Override
    public List<Stock> getStockByTransaction(Transaction transaction) {
-      return null;
+      return Collections.emptyList();
    }
 }
