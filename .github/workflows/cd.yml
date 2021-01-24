@@ -51,30 +51,11 @@ jobs:
         if: ${{ env.BRANCH_NAME == 'master' }}
         run: echo "ENVCONFIGBACKEND=-Dspring.profiles.active=prod" >> $GITHUB_ENV
 
-      # Certificates logic
-      - name: Get the right certificate for UAT
-        if: ${{ env.BRANCH_NAME == 'dev' }}
-        run: echo "CERT=${{ secrets.CERT_UAT }}" >> $GITHUB_ENV
-
-      - name: Get the right certificate for Prod
-        if: ${{ env.BRANCH_NAME == 'master' }}
-        run: echo "CERT=${{ secrets.CERT_PROD }}" >> $GITHUB_ENV
-
-      - name: Get the right cert key for UAT
-        if: ${{ env.BRANCH_NAME == 'dev' }}
-        run: echo "CERT_KEY=${{ secrets.CERT_KEY_UAT }}" >> $GITHUB_ENV
-
-      - name: Get the right cert key for Prod
-        if: ${{ env.BRANCH_NAME == 'master' }}
-        run: echo "CERT_KEY=${{ secrets.CERT_KEY_PROD }}" >> $GITHUB_ENV
-
       - name: Build & Publish Frontend
         uses: elgohr/Publish-Docker-Github-Action@master # This action builds & publishes on GitHub Package Registry
         env:
           ENVCONFIG: ${{ env.ENVCONFIG }}
           ENVCONFIGBACKEND: ${{ env.ENVCONFIGBACKEND }}
-          CERT: ${{ env.CERT }}
-          CERT_KEY: ${{ env.CERT_KEY }}
         with:
           name: dpigeon/money-tree/frontend
           registry: docker.pkg.github.com
@@ -83,7 +64,7 @@ jobs:
           workdir: client
           dockerfile: Dockerfile
           tags: ${{ env.VERSION_NAME }}
-          buildargs: ENVCONFIG,CERT,CERT_KEY
+          buildargs: ENVCONFIG
 
       - name: Build & Publish Backend
         uses: elgohr/Publish-Docker-Github-Action@master
