@@ -20,8 +20,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
-
-
 // Component imports:
 import { AppComponent } from './app.component';
 import { StockDetailComponent } from './pages/stock-detail/stock-detail.component';
@@ -34,6 +32,7 @@ import { SignupFormComponent } from './components/signup-form/signup-form.compon
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { HomeComponent } from './pages/home/home.component';
 import { StockSearchComponent } from './components/stock-search/stock-search.component';
+import { UserOwnedStocksComponent } from './components/user-owned-stocks/user-owned-stocks.component';
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
@@ -50,6 +49,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     StockDetailComponent,
     StockDetailHeaderComponent,
     StockStatsComponent,
+    UserOwnedStocksComponent,
     HeaderComponent,
     StockSearchComponent,
     LeaderboardComponent,
@@ -57,7 +57,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     SignupFormComponent,
     LoginFormComponent,
     HomeComponent,
-    EditProfileComponent
+    EditProfileComponent,
   ],
   imports: [
     BrowserModule,
