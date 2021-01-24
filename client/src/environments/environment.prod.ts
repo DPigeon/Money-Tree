@@ -1,5 +1,5 @@
 
-const baseUrl = 'http://money-tree.tech/';
+const baseUrl = 'https://money-tree.tech/';
 
 export const environment = {
   production: true,
