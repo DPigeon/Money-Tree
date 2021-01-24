@@ -64,7 +64,7 @@ jobs:
           workdir: client
           dockerfile: Dockerfile
           tags: ${{ env.VERSION_NAME }}
-          buildargs: ENVCONFIG # For --configuration=uat or --prod in the build
+          buildargs: ENVCONFIG
 
       - name: Build & Publish Backend
         uses: elgohr/Publish-Docker-Github-Action@master
