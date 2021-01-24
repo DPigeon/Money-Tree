@@ -36,13 +36,12 @@ export class StockSearchComponent {
 
   queryFilter(e: KeyboardEvent): void {
     if (this.query === '') {
-      // console.log(this.activeOption)
       this.searchResults = [];
     } else {
       this.searchResults = searcher.search(this.query).slice(0, 5);
       if (e && e.key === 'Enter') {
         this.handleKeyboardSelectionEvent();
-        // this.autoComplete.closePanel();
+        this.autoComplete.closePanel();
       }
     }
   }
@@ -59,7 +58,6 @@ export class StockSearchComponent {
 
   getActiveOption(e: MatAutocompleteActivatedEvent): void {
     if (!!e.option) {
-      console.log(e.option.value);
       this.activeOption = {
         Symbol: e.option.value.Symbol,
         Name: e.option.value.Name,

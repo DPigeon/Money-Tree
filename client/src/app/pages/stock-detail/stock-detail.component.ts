@@ -24,11 +24,12 @@ export class StockDetailComponent implements OnInit {
 
   ngOnInit(): void {
     let ticker = this.route.snapshot.paramMap.get('ticker');
+    this.storeFacade.loadCurrentStock(ticker);
     this.router.events
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
       .subscribe(() => {
         ticker = this.route.snapshot.paramMap.get('ticker');
+        this.storeFacade.loadCurrentStock(ticker);
       });
-    this.storeFacade.loadCurrentStock(ticker);
   }
 }
