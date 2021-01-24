@@ -77,6 +77,9 @@ describe('StockSearchComponent Unit Test', () => {
   });
 
   it('should return the correct search results when querying', () => {
+    component.autoComplete = {
+      closePanel: jest.fn()
+    } as any;
     const keyboardHandlerSpy = jest.spyOn(
       component,
       'handleKeyboardSelectionEvent'
