@@ -18,7 +18,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatRadioModule } from '@angular/material/radio';
 
 // Component imports:
 import { AppComponent } from './app.component';
@@ -33,6 +34,7 @@ import { LoginFormComponent } from './components/login-form/login-form.component
 import { HomeComponent } from './pages/home/home.component';
 import { StockSearchComponent } from './components/stock-search/stock-search.component';
 import { UserOwnedStocksComponent } from './components/user-owned-stocks/user-owned-stocks.component';
+import { SellOwnedActionsComponent } from './components/sell-owned-stock/sell-owned-actions.component';
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
@@ -58,6 +60,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     LoginFormComponent,
     HomeComponent,
     EditProfileComponent,
+    SellOwnedActionsComponent,
   ],
   imports: [
     BrowserModule,
@@ -80,7 +83,8 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatRadioModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

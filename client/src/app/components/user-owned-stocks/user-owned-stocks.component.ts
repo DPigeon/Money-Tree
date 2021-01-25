@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Stock } from 'src/app/interfaces/stock';
+import { MatDialog } from '@angular/material/dialog';
+import { SellOwnedActionsComponent } from '../sell-owned-stock/sell-owned-actions.component';
 
 @Component({
   selector: 'app-user-stocks',
@@ -7,10 +8,10 @@ import { Stock } from 'src/app/interfaces/stock';
   styleUrls: ['./user-owned-stocks.component.scss'],
 })
 export class UserOwnedStocksComponent {
-  constructor() {}
+  constructor(public dialog: MatDialog) {}
 
   get stockSymbol(): string {
-    return 'AAPL';   // to be changed
+    return 'AAPL'; // to be changed
   }
 
   get userStockNoOfShares(): number {
@@ -42,5 +43,14 @@ export class UserOwnedStocksComponent {
   }
   stockChangeColor(): string {
     return true ? 'negative-change' : 'positive-change';
+  }
+  openSellActionsModal(): void {
+    const dialogRef = this.dialog.open(SellOwnedActionsComponent, {
+      // data to be passed into modal
+      data: {},
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      // returned results
+    });
   }
 }

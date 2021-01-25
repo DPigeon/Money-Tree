@@ -1,0 +1,53 @@
+@import "../../../styles.scss";
+.sell-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.sell-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  .radio-group {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0 10px 0;
+  }
+  .sell-field {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0 5px 0;
+    color: $primary-color;
+    font-weight: 500;
+    span {
+      color: black;
+      font-weight: normal;
+    }
+  }
+
+  .sell-input {
+    width: 50px;
+    outline: none;
+  }
+  .quantity-error {
+    color: $mt-red;
+    font-size: 12px;
+    align-self: flex-end;
+  }
+}
+.sell-button {
+  width: 100%;
+}
+.mat-flat-button {
+  height: auto;
+}
