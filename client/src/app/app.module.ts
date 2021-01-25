@@ -34,7 +34,7 @@ import { LoginFormComponent } from './components/login-form/login-form.component
 import { HomeComponent } from './pages/home/home.component';
 import { StockSearchComponent } from './components/stock-search/stock-search.component';
 import { UserOwnedStocksComponent } from './components/user-owned-stocks/user-owned-stocks.component';
-import { SellOwnedActionsComponent } from './components/sell-owned-stock/sell-owned-actions.component';
+import { SellOrBuyActionsComponent } from './components/sell-buy-stock/sell-buy-actions.component';
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
@@ -60,7 +60,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     LoginFormComponent,
     HomeComponent,
     EditProfileComponent,
-    SellOwnedActionsComponent,
+    SellOrBuyActionsComponent,
   ],
   imports: [
     BrowserModule,

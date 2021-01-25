@@ -4,11 +4,11 @@ import {
   FORM_MODULE_DPENDENCEIES,
   MATERIAL_MODULE_DEPENDENCIES,
 } from '../../shared.module';
-import { SellOwnedActionsComponent } from './sell-owned-actions.component';
+import { SellOrBuyActionsComponent } from './sell-buy-actions.component';
 
-describe('SellOwnedActionsComponent', () => {
-  let component: SellOwnedActionsComponent;
-  let fixture: ComponentFixture<SellOwnedActionsComponent>;
+describe('SellOrBuyActionsComponent', () => {
+  let component: SellOrBuyActionsComponent;
+  let fixture: ComponentFixture<SellOrBuyActionsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -22,12 +22,12 @@ describe('SellOwnedActionsComponent', () => {
         },
         { provide: MAT_DIALOG_DATA, useValue: [] },
       ],
-      declarations: [SellOwnedActionsComponent],
+      declarations: [SellOrBuyActionsComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SellOwnedActionsComponent);
+    fixture = TestBed.createComponent(SellOrBuyActionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

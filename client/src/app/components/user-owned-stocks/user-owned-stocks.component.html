@@ -51,18 +51,32 @@
   </div>
   <div *ngIf="true" class="buttons-container">
     <!--ngIf to change -->
-    <button class="btn-half" mat-raised-button color="primary">BUY</button>
     <button
       class="btn-half"
       mat-raised-button
       color="primary"
-      (click)="openSellActionsModal()"
+      (click)="openSellOrBuyActionsModal('buy')"
+    >
+      BUY
+    </button>
+    <button
+      class="btn-half"
+      mat-raised-button
+      color="primary"
+      (click)="openSellOrBuyActionsModal('sell')"
     >
       SELL
     </button>
   </div>
   <div *ngIf="false" class="buy-button">
     <!--ngIf to change -->
-    <button class="btn" mat-raised-button color="primary">BUY</button>
+    <button
+      class="btn"
+      mat-raised-button
+      color="primary"
+      (click)="openSellOrBuyActionsModal('buy')"
+    >
+      BUY
+    </button>
   </div>
 </mat-card>
