@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatRadioModule } from '@angular/material/radio';
 
 export const MATERIAL_MODULE_DEPENDENCIES = [
   MatIconModule,
@@ -25,12 +26,10 @@ export const MATERIAL_MODULE_DEPENDENCIES = [
   MatInputModule,
   MatDialogModule,
   BrowserAnimationsModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatRadioModule,
 ];
 
 export const NGRX_STORE_MODULE = provideMockStore({ initialState });
 
-export const FORM_MODULE_DPENDENCEIES = [
-  FormsModule,
-  ReactiveFormsModule
-];
+export const FORM_MODULE_DPENDENCEIES = [FormsModule, ReactiveFormsModule];

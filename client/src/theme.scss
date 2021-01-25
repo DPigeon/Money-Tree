@@ -126,6 +126,7 @@ $mt-theme: mat-light-theme($mt-palette-primary, $mt-palette-accent);
   ::ng-deep .cdk-overlay-pane {
     max-width: none !important;
     height: 100%;
+    width: 100%;
   }
   ::ng-deep .mat-dialog-container {
     padding: 0px;
