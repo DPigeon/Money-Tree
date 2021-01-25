@@ -1,63 +1,71 @@
-<div mat-dialog-title class="sell-title">
-  Sell Actions<mat-icon>card_travel</mat-icon>
-</div>
-<div mat-dialog-content class="sell-container">
-  <label>Please choose the type of your order</label>
-  <mat-radio-group
-    class="radio-group"
-    aria-label="Select an option"
-    color="primary"
-    [(ngModel)]="isMarketOrder"
-    (change)="clearInputs()"
-  >
-    <mat-radio-button [value]="true">Market Order</mat-radio-button>
-    <mat-radio-button [value]="false">Limit Order</mat-radio-button>
-  </mat-radio-group>
+<div class="action-wrapper">
+  <div class="w-100" align="right">
+    <mat-icon class="close-button" mat-dialog-close>close</mat-icon>
+  </div>
 
-  <div class="sell-field">Available Balance: <span>$ 156.23</span></div>
-  <div class="sell-field">Company Name:<span>AC</span></div>
-  <div *ngIf="isMarketOrder" class="sell-field">
-    Current Price:<span>$ 16.17</span>
+  <div mat-dialog-title class="sell-title">
+    Sell Actions<mat-icon>card_travel</mat-icon>
   </div>
-  <div *ngIf="!isMarketOrder" class="sell-field">
-    Price:
-    <input
-      *ngIf="!isMarketOrder"
-      [(ngModel)]="price"
-      class="sell-input"
-      type="number"
-      min="0"
-      matInput
-    />
+  <div mat-dialog-content class="sell-container">
+    <label>Please choose the type of your order</label>
+    <mat-radio-group
+      class="radio-group"
+      aria-label="Select an option"
+      color="primary"
+      [(ngModel)]="isMarketOrder"
+      (change)="clearInputs()"
+    >
+      <mat-radio-button [value]="true">Market Order</mat-radio-button>
+      <mat-radio-button [value]="false">Limit Order</mat-radio-button>
+    </mat-radio-group>
+
+    <div class="sell-field">Available Balance: <span>$ 156.23</span></div>
+    <div class="sell-field">Company Name:<span>AC</span></div>
+    <div *ngIf="isMarketOrder" class="sell-field">
+      Current Price:<span>$ 16.17</span>
+    </div>
+    <div *ngIf="!isMarketOrder" class="sell-field">
+      Price:
+      <input
+        *ngIf="!isMarketOrder"
+        [(ngModel)]="price"
+        class="sell-input"
+        type="number"
+        min="0"
+        matInput
+      />
+    </div>
+    <span class="quantity-error" *ngIf="price < 0">Only Positive Number</span>
+    <div class="sell-field">
+      Quantity:
+      <input
+        [(ngModel)]="quantity"
+        class="sell-input"
+        type="number"
+        min="0"
+        matInput
+      />
+    </div>
+    <span class="quantity-error" *ngIf="quantity < 0"
+      >Only Positive Number</span
+    >
+    <div *ngIf="isMarketOrder" class="sell-field">
+      Estimated Total:<span>-------</span>
+    </div>
+    <div *ngIf="!isMarketOrder" class="sell-field">
+      Total:<span>-------</span>
+    </div>
+    <div class="sell-field">Remaining Balance:<span>$ 156.23</span></div>
   </div>
-  <span class="quantity-error" *ngIf="price < 0">Only Positive Number</span>
-  <div class="sell-field">
-    Quantity:
-    <input
-      [(ngModel)]="quantity"
-      class="sell-input"
-      type="number"
-      min="0"
-      matInput
-    />
+  <div mat-dialog-actions>
+    <button
+      class="sell-button"
+      mat-flat-button
+      color="primary"
+      (click)="sellActions()"
+      [disabled]="quantity <= 0 || price < 0"
+    >
+      SELL
+    </button>
   </div>
-  <span class="quantity-error" *ngIf="quantity < 0">Only Positive Number</span>
-  <div *ngIf="isMarketOrder" class="sell-field">
-    Estimated Total:<span>-------</span>
-  </div>
-  <div *ngIf="!isMarketOrder" class="sell-field">
-    Total:<span>-------</span>
-  </div>
-  <div class="sell-field">Remaining Balance:<span>$ 156.23</span></div>
-</div>
-<div mat-dialog-actions>
-  <button
-    class="sell-button"
-    mat-flat-button
-    color="primary"
-    (click)="sellActions()"
-    [disabled]="quantity <= 0 || price < 0"
-  >
-    SELL
-  </button>
 </div>

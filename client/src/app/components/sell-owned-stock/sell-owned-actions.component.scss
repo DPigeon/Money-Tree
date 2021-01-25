@@ -1,9 +1,40 @@
 @import "../../../styles.scss";
+
+@media only screen and (min-width: 601px) {
+  .action-wrapper {
+    width: 350px;
+  }
+  .close-button {
+    position: fixed;
+    margin-left: -10px;
+    margin-top: -45px;
+    font-size: 22px;
+    z-index: 999 !important;
+    cursor: pointer;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .action-wrapper {
+    padding: 40px;
+    margin: auto;
+    width: 80%;
+  }
+  .close-button {
+    position: fixed;
+    margin-left: -10px;
+    margin-top: -25px;
+    font-size: 22px;
+    z-index: 999 !important;
+    cursor: pointer;
+  }
+}
+
 .sell-title {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-top: 30px;
 }
 .sell-container {
   width: 100%;
@@ -34,10 +65,14 @@
       font-weight: normal;
     }
   }
-
   .sell-input {
     width: 50px;
     outline: none;
+  }
+  @media only screen and (max-width: 600px) {
+    .sell-input {
+      width: 50px;
+    }
   }
   .quantity-error {
     color: $mt-red;
