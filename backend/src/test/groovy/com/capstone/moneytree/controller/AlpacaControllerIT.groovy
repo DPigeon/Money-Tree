@@ -1,5 +1,11 @@
 package com.capstone.moneytree.controller
 
+import com.capstone.moneytree.testconfig.DefaultStompFrameHandlerConfig
+import com.capstone.moneytree.testconfig.WebSocketClientConfig
+import spock.lang.Ignore
+import org.springframework.messaging.simp.SimpMessagingTemplate
+import org.springframework.messaging.simp.stomp.StompSession
+
 import java.time.LocalDate
 
 import org.junit.Test
@@ -15,11 +21,14 @@ import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory
 import net.jacobpeterson.domain.alpaca.position.Position
 import spock.lang.Specification
 
+import java.util.concurrent.BlockingQueue
+import java.util.concurrent.LinkedBlockingDeque
+
 /**
  * Integration Tests for the Alpaca Controller. Tests the MarketInteractionFacade as well.
  */
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("dev")
 class AlpacaControllerIT extends Specification {
 
@@ -29,8 +38,14 @@ class AlpacaControllerIT extends Specification {
     private static final String BASE_API_URL = "https://paper-api.alpaca.markets"
     private static final String BASE_DATA_URL = "https://data.alpaca.markets"
 
+    private static final String WS_CHANNEL_TRADE_UPDATES = "/queue/user-";
+    private static final String MESSAGE_MAPPING_TRADE_UPDATES = "/app/trade/updates"
+    private static final String MESSAGE_MAPPING_DISCONNECT = "/app/trade/disconnect"
+
+    SimpMessagingTemplate messageSender
+
     def marketInteractionsFacade = new MarketInteractionsFacade(API_VERSION, KEY_ID, SECRET, BASE_API_URL, BASE_DATA_URL)
-    def alpacaController = new AlpacaController(marketInteractionsFacade)
+    def alpacaController = new AlpacaController(marketInteractionsFacade, messageSender);
 
     @Test
     def "Should retrieve an Alpaca account successfully"() {
@@ -102,6 +117,43 @@ class AlpacaControllerIT extends Specification {
 
         then: "Should not retrieve a portfolio with null time frame"
         thrown(NullPointerException)
+    }
+
+    @Test
+    @Ignore("Only run locally for an E2E backend test")
+    def "Should connect to the WebSocket server"() {
+        given:
+        String userIdMessage = "1"
+        int timeout = 5
+        StompSession session = WebSocketClientConfig.createSession(timeout);
+        BlockingQueue<String> blockingQueue = new LinkedBlockingDeque<>();
+
+        when: "Subscribing to the channel and sending a user ID frame"
+        session.subscribe(WS_CHANNEL_TRADE_UPDATES + userIdMessage, new DefaultStompFrameHandlerConfig(blockingQueue) {})
+        session.send(MESSAGE_MAPPING_TRADE_UPDATES, userIdMessage.getBytes());
+
+        then: "Should be connected and ready to receive trade updates"
+        assert session.isConnected()
+        assert blockingQueue.size() == 0
+    }
+
+    @Test
+    @Ignore("Only run locally for an E2E backend test")
+    def "Should disconnect from the WebSocket server"() {
+        given:
+        String userIdMessage = "1"
+        int timeout = 5
+        StompSession session = WebSocketClientConfig.createSession(timeout);
+        BlockingQueue<String> blockingQueue = new LinkedBlockingDeque<>();
+
+        when: "Subscribing to the channel and sending a user ID frame"
+        session.subscribe(WS_CHANNEL_TRADE_UPDATES + userIdMessage, new DefaultStompFrameHandlerConfig(blockingQueue) {})
+        session.send(MESSAGE_MAPPING_TRADE_UPDATES, userIdMessage.getBytes());
+        Thread.sleep(5000)
+        session.send(MESSAGE_MAPPING_DISCONNECT, userIdMessage.getBytes());
+
+        then: "Should be disconnected from the WebSocket server"
+        assert blockingQueue.size() == 0
     }
 
     // TODO: Make a class later that creates and encapsulates our requests with methods like this one below to be reusable
