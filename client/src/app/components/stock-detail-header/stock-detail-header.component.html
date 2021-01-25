@@ -1,14 +1,21 @@
 <div class="company-title">
-    <div class="company-logo" [style.background-image]='companyLogo'></div>
-    <h1><span class="ticker">{{ companySymbol }}</span> {{ companyName }}</h1>
+  <div class="company-header">
+    <div class="company-logo" [style.background-image]="companyLogo"></div>
+    <h1>
+      <span class="ticker">{{ companySymbol }}</span> {{ companyName }}
+    </h1>
+  </div>
+  <mat-chip-list>
+    <mat-chip>{{ stockIndustry }}</mat-chip>
+  </mat-chip-list>
 </div>
 <mat-card>
-    <div class="stock-pricing">
-        <span class="stock-value">${{ stockValue }}</span>
-        <span class="stock-change" [ngClass]="stockChangeColor()"> 
-            {{stockInfoFormatter()}}
-            <mat-icon id="up-arrow" aria-hidden="false">arrow_upward</mat-icon>
-            <mat-icon id="down-arrow" aria-hidden="false">arrow_downward</mat-icon>
-        </span>
-    </div>
+  <div class="stock-pricing">
+    <span class="stock-value">${{ stockValue }}</span>
+    <span class="stock-change" [ngClass]="stockChangeColor()">
+      {{ stockInfoFormatter() }}
+      <mat-icon id="up-arrow" aria-hidden="false">arrow_upward</mat-icon>
+      <mat-icon id="down-arrow" aria-hidden="false">arrow_downward</mat-icon>
+    </span>
+  </div>
 </mat-card>

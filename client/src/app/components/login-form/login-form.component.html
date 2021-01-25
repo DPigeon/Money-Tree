@@ -1,0 +1,20 @@
+<div class="container">
+  <h2 class="login-text-hint">Already have an account?</h2>
+  <form [formGroup]="logInForm" (ngSubmit)="onSubmit()">
+    <mat-form-field class="mt-input-field" appearance="outline" color="accent">
+      <input id="login-email" matInput type="email" placeholder="Email" [formControl]="email" />
+    </mat-form-field>
+
+    <mat-form-field class="mt-input-field half" appearance="outline" color="accent">
+      <input id="login-password" matInput type="password" placeholder="Password" [formControl]="pwd" />
+    </mat-form-field>
+    <button id="login-submit-btn" mat-flat-button class="mt-input-field half"
+      [class.btn-opacity-disabled]="disableButton()"
+      [disabled]="disableButton()">LOGIN</button>
+
+    <!-- Error messages -->
+    <div class="form-error-messages" *ngIf="wrongCredential()"> A user with this
+      credentials could not be found!</div>
+    <div class="form-error-messages" *ngIf="logInForm.invalid && !wrongCredential()">{{ showErrorMessage() }}</div>
+  </form>
+</div>

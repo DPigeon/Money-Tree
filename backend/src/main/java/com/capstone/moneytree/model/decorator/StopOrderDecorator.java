@@ -2,6 +2,7 @@ package com.capstone.moneytree.model.decorator;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.jacobpeterson.domain.alpaca.order.Order;
 
@@ -14,9 +15,10 @@ import net.jacobpeterson.domain.alpaca.order.Order;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class StopOrderDecorator extends OrderDecorator {
 
-   public Order order;
+   private Order order;
 
    @Override
    public void decorate() {

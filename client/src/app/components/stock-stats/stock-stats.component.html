@@ -1,0 +1,57 @@
+<mat-card>
+  <div class="stats-header">
+    <h2 class="title">Stats</h2>
+    <mat-icon>trending_up</mat-icon>
+  </div>
+
+  <div class="stats-container">
+    <div class="col-stat-left">
+      <div class="row-stat">
+        <div class="tooltip">
+          <span class="tooltip-text"> Open definition</span>
+          <span class="stat-label">Open </span>
+        </div>
+        <span id="stat-open">{{ stockOpenPrice }}</span>
+      </div>
+      <mat-divider [inset]="true"></mat-divider>
+      <div class="row-stat">
+        <span class="stat-label">High </span>
+        <span id="stat-high">{{ stockHighPrice }}</span>
+      </div>
+      <mat-divider [inset]="true"></mat-divider>
+      <div class="row-stat">
+        <span class="stat-label">Low </span>
+        <span id="stat-low">{{ stockLowPrice }}</span>
+      </div>
+      <mat-divider [inset]="true"></mat-divider>
+      <div class="row-stat">
+        <span class="stat-label">Vol. </span>
+        <span id="stat-vol">{{ stockVolume }}</span>
+      </div>
+      <mat-divider [inset]="true"></mat-divider>
+    </div>
+   
+    <div class="col-stat-right">
+      <div class="row-stat">
+        <span class="stat-label">Mkt cap </span>
+        <span id="stat-mkt-cap">{{ stockMktCap }}</span>
+      </div>
+      <mat-divider [inset]="true"></mat-divider>
+      <div class="row-stat">
+        <span class="stat-label">52W h </span>
+        <span id="stat-week-high">{{ stock52weekHigh }}</span>
+      </div>
+      <mat-divider [inset]="true"></mat-divider>
+      <div class="row-stat">
+        <span class="stat-label">52W l </span>
+        <span id="stat-week-low">{{ stock52weekLow }}</span>
+      </div>
+      <mat-divider [inset]="true"></mat-divider>
+      <div class="row-stat">
+        <span class="stat-label">Avg vol. </span>
+        <span id="stat-avg-vol">{{ stockAvgVolume }}</span>
+      </div>
+      <mat-divider [inset]="true"></mat-divider>
+    </div>
+  </div>
+</mat-card>

@@ -1,14 +1,25 @@
 import { AppPage } from './app.po';
-import { browser, logging } from 'protractor';
+import { UserAuthPage } from './user-auth.po';
+import { browser } from 'protractor';
 
 describe('workspace-project App', () => {
   let page: AppPage;
+  let authentication: UserAuthPage;
 
   beforeEach(() => {
     page = new AppPage();
+    authentication = new UserAuthPage();
+    authentication.authenticateUser();
+    browser.sleep(1000);
+  });
+
+  afterEach(() => {
+    authentication.cleanAuthenticatedUser();
+    browser.sleep(1000);
   });
 
   it('should display stock price', () => {
+    browser.sleep(2000);
     page.navigateToStockDetailPage('AAPL');
     const stockPrice = page.getStockPrice();
     // stock value
@@ -50,13 +61,19 @@ describe('workspace-project App', () => {
     });
   });
 
-  afterEach(async () => {
-    // Assert that there are no errors emitted from the browser
-    const logs = await browser.manage().logs().get(logging.Type.BROWSER);
-    expect(logs).not.toContain(
-      jasmine.objectContaining({
-        level: logging.Level.SEVERE,
-      } as logging.Entry)
-    );
+  it('should display stock industry', () => {
+    page.navigateToStockDetailPage('AAPL');
+    expect(page.getStockIndustry()).toBeTruthy();
+  });
+
+  it('should display stock stats', () => {
+    expect(page.getStockStatOpen()).toBeTruthy();
+    expect(page.getStockStatHigh()).toBeTruthy();
+    expect(page.getStockStatLow()).toBeTruthy();
+    expect(page.getStockStatVol()).toBeTruthy();
+    expect(page.getStockStatMktCap()).toBeTruthy();
+    expect(page.getStockStat52weekHigh()).toBeTruthy();
+    expect(page.getStockStat52weekLow()).toBeTruthy();
+    expect(page.getStockStatAvgVol()).toBeTruthy();
   });
 });

@@ -34,7 +34,17 @@ const stockInfo: Stock = {
   stockChange: 4.27,
   stockChangePercent: 1.68,
   stockValue: 16.36,
-  logo: 'https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0021/6847/brand.gif?itok=u0iVoArk'
+  logo: 'https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0021/6847/brand.gif?itok=u0iVoArk',
+  stats: {
+    open: 100.50,
+    high: 200.20,
+    low: 516510,
+    volume: 151515,
+    mktCap: 51651,
+    stock52weekHigh: 455,
+    stock52weekLow: 123,
+    avgVolume: 199410,
+  },
 };
 
 // unit tests
@@ -50,6 +60,13 @@ describe('StockDetailHeader', () => {
     expect(component.stockValue).toBe(component.stockInfo.stockValue.toFixed(2));
     component.stockInfo = null;
     expect(component.stockValue).toBe('');
+  });
+
+  it('should display correct stock industry', () => {
+    component.stockInfo = stockInfo;
+    expect(component.stockIndustry).toBe(component.stockInfo.industry);
+    component.stockInfo = null;
+    expect(component.stockIndustry).toBe('');
   });
 
   it('should display correct stock class', () => {

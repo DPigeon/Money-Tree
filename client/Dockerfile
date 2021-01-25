@@ -1,5 +1,7 @@
 # Client Build
 FROM trion/ng-cli as ng
+# Define args
+ARG ENVCONFIG
 # User node has write access
 WORKDIR /home/node
 # Copy packages files
@@ -9,9 +11,11 @@ RUN npm ci
 # Copy everything else in client
 COPY ./ ./
 # Build frontend in production mode
-RUN ng build --prod
+RUN ng build ${ENVCONFIG}
 # Get nginx to host on production
 FROM nginx:1.17-alpine
+# Redefine args for multi-stage
+ARG ENVCONFIG
 # Copy the nginx config to nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Copy dist to nginx

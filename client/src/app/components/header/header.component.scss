@@ -1,0 +1,160 @@
+// Desktop Version Styling:
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #07367c;
+
+  .logo-and-text,
+  .right-side-buttons {
+    width: 25%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
+
+  .search-box-container {
+    width: 50%;
+  }
+
+  .right-side-buttons {
+    padding: 0;
+    Button,
+    mat-icon {
+      color: white;
+      height: 40px;
+      width: 40px;
+      font-size: 40px;
+      margin-right: 10%;
+      margin-top: 5px;
+    }
+  }
+
+  #logo {
+    max-height: 56px;
+    width: auto;
+  }
+
+  figcaption {
+    text-align: center;
+    color: white;
+    font-size: 19px;
+    font-weight: bold;
+  }
+
+  #log-out-link {
+    color: white;
+    font-size: 22px;
+    margin-right: 10px;
+  }
+}
+
+/* -------------------------------------------------------------------------------------------------------------------------------------------- */
+// Mobile Version Styling:
+.header-container-mobile {
+  width: 100%;
+  background-color: #07367c;
+  display: none;
+  align-items: center;
+  height: 5rem;
+
+  .menu-btn {
+    position: absolute;
+    left: 15px;
+    background: none;
+    border: none;
+
+    #menu-btn-icon {
+      color: white;
+      width: 34px;
+      height: 34px;
+    }
+  }
+
+  .logo-and-text-mobile {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+
+    #logo {
+      max-height: 48px;
+      width: auto;
+    }
+  }
+}
+
+.figcaption-in-menu {
+  text-align: center;
+  color: #282224;
+  font-size: 22px;
+  text-shadow: 0.15px 0.15px #282224;
+  margin-bottom: 2vh;
+
+  #score {
+    color: #af6060;
+    font-size: 16px;
+  }
+  #score-value {
+    color: #07367c;
+    font-size: 16px;
+  }
+}
+#user-photo {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-right: auto;
+  margin-left: auto;
+  height: 6rem;
+  width: 6rem;
+}
+::ng-deep .cdk-overlay-connected-position-bounding-box {
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+}
+
+::ng-deep .mat-menu-panel {
+  overflow: hidden;
+  max-width: none !important;
+  width: 100vw !important;
+  height: calc(100vh - 5rem) !important;
+  position: absolute !important;
+  top: 5rem !important;
+  background: white;
+}
+
+.menu-items {
+  align-items: center;
+
+  button {
+    padding-left: 25%;
+    margin-bottom: 10px;
+  }
+
+  span {
+    font-size: 1.3rem;
+    color: #07367c;
+    text-decoration: underline;
+  }
+
+  #menu-item-icon {
+    color: #07367c;
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 34px !important;
+  }
+}
+
+// triggers if the screen is less than 600px
+@media only screen and (max-width: 600px) {
+  .header-container {
+    display: none;
+  }
+
+  .header-container-mobile {
+    display: flex;
+  }
+}

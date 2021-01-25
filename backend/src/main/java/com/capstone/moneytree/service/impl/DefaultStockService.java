@@ -1,5 +1,6 @@
 package com.capstone.moneytree.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ import com.capstone.moneytree.service.api.StockService;
 public class DefaultStockService implements StockService {
 
    private final StockDao stockDao;
-   private static final Logger LOG = LoggerFactory.getLogger(DefaultStockService.class);
+   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultStockService.class);
 
    @Autowired
    public DefaultStockService(StockDao stockDao) {
@@ -28,6 +29,7 @@ public class DefaultStockService implements StockService {
 
    @Override
    public List<Stock> getAllStocks() {
+      LOGGER.info("Getting all stocks...");
       return stockDao.findAll();
    }
 
@@ -53,11 +55,11 @@ public class DefaultStockService implements StockService {
 
    @Override
    public List<Stock> getStockByUser(User user) {
-      return null;
+      return Collections.emptyList();
    }
 
    @Override
    public List<Stock> getStockByTransaction(Transaction transaction) {
-      return null;
+      return Collections.emptyList();
    }
 }

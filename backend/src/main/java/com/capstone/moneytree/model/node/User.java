@@ -25,13 +25,15 @@ public class User extends Entity {
 
     String email;
 
-    double score;
+    Double score;
 
-    double rank;
+    Double rank;
 
-    float balance;
+    Float balance;
 
-    String password;
+    String password; // Must be encrypted
+
+    String alpacaApiKey;
 
     @Relationship(type = "FOLLOWS", direction = Relationship.INCOMING)
     Set<User> followers;
@@ -58,3 +60,7 @@ public class User extends Entity {
         this.getStocks().add(stock);
     }
 }
+
+
+
+    

@@ -1,0 +1,80 @@
+@import "../../../styles.scss";
+
+.mat-card {
+  margin-bottom: 20px;
+}
+.stats-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  .title {
+    margin: 0;
+  }
+}
+
+.stats-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  .col-stat-left {
+    width: 50%;
+    margin-right: 5px;
+  }
+  .col-stat-right {
+    width: 50%;
+    margin-left: 5px;
+  }
+}
+
+.stat-label {
+  color: $primary-color;
+  font-weight: 500;
+}
+
+.row-stat {
+  padding: 2px 0 2px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: $primary-color;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip .tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: $primary-color transparent transparent transparent;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}

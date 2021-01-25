@@ -1,21 +1,16 @@
 package com.capstone.moneytree.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.capstone.moneytree.service.api.TransactionService;
 
-@RestController
-public class TransactionController extends ApiController {
-
-   private final TransactionService transactionService;
-   private static final Logger LOG = LoggerFactory.getLogger(StockController.class);
+@MoneyTreeController
+@RequestMapping("/transactions")
+public class TransactionController {
 
    @Autowired
-   public TransactionController(TransactionService transactionService){
-      this.transactionService = transactionService;
+   public TransactionController() {
+      // Empty constructor for now
    }
 
 }

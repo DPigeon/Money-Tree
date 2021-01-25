@@ -1,0 +1,78 @@
+name: CI Backend Pipeline
+
+on:
+  pull_request:
+    paths:
+      - 'backend/**'
+  push:
+    paths:
+      - 'backend/**'
+    branches: 
+      - dev
+      - master
+
+env:
+  ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
+  ALPACA_SECRET_ID: ${{ secrets.ALPACA_SECRET_ID }}
+  IEXCLOUD_PUBLISHABLE_TOKEN_PROD: ${{ secrets.IEXCLOUD_PUBLISHABLE_TOKEN_PROD }}
+  IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX: ${{ secrets.IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX }}
+  IEXCLOUD_SECRET_TOKEN_PROD: ${{ secrets.IEXCLOUD_SECRET_TOKEN_PROD }}
+  IEXCLOUD_SECRET_TOKEN_SANDBOX: ${{ secrets.IEXCLOUD_SECRET_TOKEN_SANDBOX }}
+  NEO4J_PASSWORD: ${{ secrets.NEO4J_PASSWORD }}
+  NEO4J_USERNAME: ${{ secrets.NEO4J_USERNAME }}
+  AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_PROFILE_PICTURES_BUCKET: ${{ secrets.AWS_PROFILE_PICTURES_BUCKET }}
+  SERVER_SSL_KEYSTOREPASSWORD: ${{ secrets.SERVER_SSL_KEYSTOREPASSWORD }}
+
+jobs:
+  job_1:
+    name: Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Setup Java
+        uses: actions/setup-java@v1.4.3
+        with:
+          java-version: 11.0.8
+
+      - name: Cache Maven
+        id: maven-dependencies
+        uses: actions/cache@v2.1.1
+        # maven cache files are stored in `~/.m2/repository` on Linux/macOS
+        # Used to create place to store libraries to resure it in other steps
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+            
+      - name: Build with Maven
+        working-directory: ./backend
+        run: mvn -B clean verify
+
+      - name: Backend Run
+        working-directory: ./backend
+        run:
+          | # can we inject spring profil as so: (java -jar  -Dspring.profiles.active=dev target/moneytree-*.jar)
+          nohup java -jar target/moneytree-*.jar &
+          sleep 20
+          sh backend_endpoints.sh
+
+      - name: Backend SonarCloud Scan
+        working-directory: ./backend
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar

@@ -1,0 +1,44 @@
+.mat-form-field {
+  font-size: 14px;
+}
+
+.mat-flat-button {
+  font-size: 14px;
+  height: 44px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.mt-input-field {
+  width: calc(100% - 10px);
+  margin: 5px;
+  margin-top: calc(5px + 0.25em);
+
+  &.half {
+    width: calc(50% - 10px);
+  }
+  &.secondary-action-btn {
+    color: $mt-white;
+    background-color: $mt-coral;
+  }
+}
+
+.form-error-messages {
+  color: $mt-red;
+  font-size: 18px;
+  font-weight: 500;
+  position: absolute;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s;
+  -webkit-text-fill-color: $mt-dark !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .form-error-messages {
+    font-size: 16px;
+  }
+}
