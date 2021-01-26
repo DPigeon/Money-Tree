@@ -1,11 +1,17 @@
 package com.capstone.moneytree.model.node;
 
-import com.capstone.moneytree.model.Entity;
-import lombok.*;
+import java.util.List;
+
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.Set;
+import com.capstone.moneytree.model.Entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(callSuper = true)
 @NodeEntity
@@ -36,13 +42,13 @@ public class User extends Entity {
     String alpacaApiKey;
 
     @Relationship(type = "FOLLOWS", direction = Relationship.INCOMING)
-    Set<User> followers;
+    List<User> followers;
 
     @Relationship(type = "OWNS")
-    Set<Stock> stocks;
+    List<Stock> stocks;
 
     @Relationship(type = "MADE")
-    Set<Transaction> transactions;
+    List<Transaction> transactions;
 
     public void follows(User user) {
         user.getFollowers().add(this);
