@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.jacobpeterson.domain.alpaca.asset.Asset;
 
 @NodeEntity
 @Data
@@ -23,4 +24,7 @@ public class Stock extends Entity {
    String industry;
 
    String volatility;
+
+   /* Asset from alpaca fulfilling the stock */
+   Asset asset;
 }

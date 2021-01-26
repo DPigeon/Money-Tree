@@ -80,7 +80,7 @@
         <dependency>
             <groupId>net.jacobpeterson</groupId>
             <artifactId>alpaca-java</artifactId>
-            <version>6.0</version>
+            <version>6.1</version>
             <scope>compile</scope>
         </dependency>
         <!-- AWS -->
