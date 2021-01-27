@@ -53,9 +53,9 @@ public class DefaultTransactionService implements TransactionService {
    }
 
    @Override
-   public Transaction execute(Long userId, Order order) {
+   public Transaction execute(String userId, Order order) {
       /* Get user for that transaction*/
-      User user = getUser(userId);
+      User user = getUser(Long.parseLong(userId));
 
       String alpacaKey = user.getAlpacaApiKey();
       AlpacaAPI api = AlpacaSession.alpaca(alpacaKey);
@@ -64,7 +64,7 @@ public class DefaultTransactionService implements TransactionService {
       Order placedOrder;
       Transaction transaction;
       try {
-         placedOrder = api.requestNewOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide()), OrderType.valueOf(order.getType()), OrderTimeInForce.DAY, null, null, null, null, null, null, null, null, null, null);
+         placedOrder = api.requestNewOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderType.valueOf(order.getType().toUpperCase()), OrderTimeInForce.DAY, null, null, null, null, null, null, null, null, null, null);
          LOGGER.info("Placed order {}", placedOrder.getClientOrderId());
 
          /* Build the transaction and persist */

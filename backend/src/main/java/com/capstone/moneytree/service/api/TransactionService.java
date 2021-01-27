@@ -19,5 +19,5 @@ public interface TransactionService {
     * @param order The order to execute
     * @return the transaction
     **/
-   Transaction execute(Long userId, Order order);
+   Transaction execute(String userId, Order order);
 }
