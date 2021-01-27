@@ -8,12 +8,9 @@ import { environment } from '../../../environments/environment';
 })
 export class ApiService {
   baseUrl = environment.apiURL;
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    observe: 'response' as 'response',
-  };
+  httpOptions = { observe: 'response' as 'response' };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   get(url: string): Observable<any> {
     return this.http.get(this.baseUrl + url, this.httpOptions);

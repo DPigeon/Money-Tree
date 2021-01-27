@@ -13,7 +13,7 @@
     </button>
 
     <div class="profile-picture">
-      <img src="{{userPhotoURL}}" alt="profile picture" class="profile-pic" />
+      <img [src]="userPhotoURL" alt="profile picture" class="profile-pic" />
       <button mat-icon-button class="edit-profile-pic">
         <input single type="file" id="profile-picture" style="display: none;" accept="image/x-png,image/jpeg"
           (change)="onFileSelected($event)" />
@@ -29,8 +29,7 @@
     {{ showErrorMessage() }}
   </div>
 
-
-  <form [formGroup]="editProfileForm" class="edit-profile-form">
+  <form [formGroup]="editProfileForm" class="edit-profile-form" (ngSubmit)="onSubmit()">
 
     <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
       <mat-label>First Name</mat-label>
@@ -57,11 +56,9 @@
       <mat-label>Confirm New Password</mat-label>
       <input matInput placeholder="Confirm New Password" type="password" [formControl]="newPwd2" />
     </mat-form-field>
-
+    <!-- <p>{{this.temporaryPhotoFile===null}}</p> -->
     <button class="mt-input-field secondary-action-btn" mat-flat-button type="submit"
-      [class.btn-opacity-disabled]="editProfileForm.invalid"
-      [disabled]="!editProfileForm.valid || !editProfileForm.touched || compareFormValues()">
-      Save Changes
+      [class.btn-opacity-disabled]="disableButton()" [disabled]="disableButton()">
     </button>
   </form>
 </div>

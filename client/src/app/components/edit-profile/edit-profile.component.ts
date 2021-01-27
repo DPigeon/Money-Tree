@@ -1,4 +1,5 @@
-import { Component, Inject } from '@angular/core';
+import { UserService } from 'src/app/services/user/user.service';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,42 +8,52 @@ import {
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from '../../interfaces/user';
+import { AppError } from '../../interfaces/app-error';
+
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-edit-profile',
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss'],
 })
 export class EditProfileComponent {
-  // @Output() userSignup: EventEmitter<User> = new EventEmitter();
-  // @Input() appError: boolean;
+  @Input() appError: AppError;
+
   editProfileForm: FormGroup;
   firstName: AbstractControl;
   lastName: AbstractControl;
   biography: AbstractControl;
   newPwd: AbstractControl;
   newPwd2: AbstractControl;
+  submitted = false;
+
   userPhotoURL: string | ArrayBuffer;
-  temporaryPhotoFile: File;
+  temporaryPhotoFile: File = null;
   pictureErrMessage: string;
+
+  userUpdate: EventEmitter<User> = new EventEmitter();
+  userPhotoUpdate: EventEmitter<File> = new EventEmitter();
+
   constructor(
     fb: FormBuilder,
+    private sanitizer: DomSanitizer,
     public dialogRef: MatDialogRef<EditProfileComponent>,
-    @Inject(MAT_DIALOG_DATA) public userInDb: User
+    @Inject(MAT_DIALOG_DATA) public userInState: User
   ) {
     this.editProfileForm = fb.group(
       {
         firstName: [
-          userInDb.firstName,
+          userInState.firstName, // initial value from current user in state
           Validators.compose([
             Validators.pattern(/^[a-zA-Z]{3,20}$/u), // validate the pattern to match this regex
           ]),
         ],
         lastName: [
-          userInDb.lastName,
+          userInState.lastName,
           Validators.compose([Validators.pattern(/^[a-zA-Z]{3,20}$/u)]),
         ],
         biography: [
-          userInDb.biography,
+          userInState.biography,
           Validators.compose([
             Validators.minLength(10),
             Validators.maxLength(250),
@@ -60,14 +71,29 @@ export class EditProfileComponent {
       },
       { validator: passwordMatch } // This would be a custom validator to check whether passwords matched.
     );
-    this.userPhotoURL = userInDb.avatarURL;
+    this.userPhotoURL = userInState.avatarURL;
     this.firstName = this.editProfileForm.controls.firstName;
     this.lastName = this.editProfileForm.controls.lastName;
     this.biography = this.editProfileForm.controls.biography;
     this.newPwd = this.editProfileForm.controls.newPwd;
     this.newPwd2 = this.editProfileForm.controls.newPwd2; // this function return false if user put old values in input fileds.
   }
-  onSubmit(): void {}
+
+  onSubmit(): void {
+    this.submitted = true;
+    this.appError = null; // to disable the button when we have an appError and user tries to click multiple times
+    if (this.temporaryPhotoFile) {
+      this.userPhotoUpdate.emit(this.temporaryPhotoFile);
+    }
+    const newUser: User = {
+      firstName: this.firstName.value,
+      lastName: this.lastName.value,
+      password: this.newPwd.value,
+      biography: this.biography.value,
+    };
+    this.userUpdate.emit(newUser);
+  }
+
   getFirstErrorMessage(): string {
     if (
       this.newPwd2.dirty &&
@@ -116,35 +142,60 @@ export class EditProfileComponent {
       }
     }
   }
-  compareFormValues(): boolean {
-    return (
-      this.firstName.value === this.userInDb.firstName &&
-      this.lastName.value === this.userInDb.lastName &&
-      !this.newPwd.dirty &&
-      this.biography.value === this.userInDb.biography
-    );
-  }
+
   onFileSelected(event: Event): void {
     this.temporaryPhotoFile = (event.target as HTMLInputElement).files[0];
     const size = this.temporaryPhotoFile.size;
     const type = this.temporaryPhotoFile.type;
+
     if (type !== 'image/jpeg' && type !== 'image/png') {
       this.pictureErrMessage =
         'The photo must be a file of type: jpeg, png, jpg!';
-      this.userPhotoURL = this.userInDb.avatarURL;
+      this.userPhotoURL = this.userInState.avatarURL;
+      this.temporaryPhotoFile = null;
+      console.log('photo successfully selected.');
       return;
-    } else if (size > 1000000) {
+    } else if (size > 1048576) {
       this.pictureErrMessage = 'Photo must be smaller than 1.0 MB!';
-      this.userPhotoURL = this.userInDb.avatarURL;
+      this.userPhotoURL = this.userInState.avatarURL;
+      this.temporaryPhotoFile = null;
       return;
     }
+
     const reader = new FileReader();
     reader.onload = (e) => (this.userPhotoURL = reader.result);
     reader.readAsDataURL(this.temporaryPhotoFile);
-    this.userPhotoURL = URL.createObjectURL(this.temporaryPhotoFile);
+    this.userPhotoURL = this.sanitizeImageUrl(
+      URL.createObjectURL(this.temporaryPhotoFile)
+    ) as string;
     this.pictureErrMessage = null; // image type/size is valid
   }
+
+  valuesChanged(): boolean {
+    return (
+      this.temporaryPhotoFile !== null ||
+      this.firstName.value !== this.userInState.firstName ||
+      this.lastName.value !== this.userInState.lastName ||
+      this.biography.value !== this.userInState.biography ||
+      this.newPwd.dirty
+    );
+  }
+
+  disableButton(): boolean {
+    // Disable the button if a value in a field is problematic, or if user submitted the form (not to let him/her click multiple times)
+    // or user only wants to change the photo and there's no appError. We manually asign appError to null after each submission,
+    // untill the response from server is back (not to let multiple clicks when submitted and we have appError)
+    return (
+      !this.valuesChanged() ||
+      ((!this.editProfileForm.valid || this.submitted) && !this.appError)
+    );
+  }
+  sanitizeImageUrl(imageUrl: string): SafeUrl {
+    // otherwise the browser will complaint about unsafe url
+    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
+  }
 }
+
 function passwordMatch(frm: FormGroup): { [key: string]: boolean } {
   return frm.get('newPwd').value === frm.get('newPwd2').value
     ? null
