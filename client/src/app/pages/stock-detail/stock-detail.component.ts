@@ -17,6 +17,8 @@ export class StockDetailComponent implements OnInit {
   stockInfo$ = this.storeFacade.currentStockLoaded$;
   marketClock$ = this.storeFacade.currentMarketClock$;
 
+  userInfo$ = this.storeFacade.currentUser$
+  
   constructor(
     private storeFacade: StoreFacadeService,
     private route: ActivatedRoute,
