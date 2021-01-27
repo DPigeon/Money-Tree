@@ -55,7 +55,7 @@
       class="btn-half"
       mat-raised-button
       color="primary"
-      (click)="openSellOrBuyActionsModal('buy')"
+      (click)="openSellOrBuyActionsModal('buy',[stockInfo])"
     >
       BUY
     </button>
@@ -63,7 +63,7 @@
       class="btn-half"
       mat-raised-button
       color="primary"
-      (click)="openSellOrBuyActionsModal('sell')"
+      (click)="openSellOrBuyActionsModal('sell',[stockInfo])"
     >
       SELL
     </button>
@@ -74,7 +74,7 @@
       class="btn"
       mat-raised-button
       color="primary"
-      (click)="openSellOrBuyActionsModal('buy')"
+      (click)="openSellOrBuyActionsModal('buy', [stockInfo])"
     >
       BUY
     </button>
