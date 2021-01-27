@@ -59,7 +59,7 @@ export class UserService {
     return formattedUser;
   }
 
-  updateProfilePictureUrl(userId: number, imageFile: File): Observable<any> {
+  updateProfilePictureURL(userId: number, imageFile: File): Observable<any> {
     const body = new FormData();
     body.append('imageFile', imageFile);
     return this.api.update('users/profile-picture/' + userId.toString(), body);

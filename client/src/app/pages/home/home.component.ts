@@ -40,12 +40,22 @@ export class HomeComponent implements OnInit {
 
     dialogRef.componentInstance.userPhotoUpdate.subscribe((imageFile: File) => {
       this.userService
-        .updateProfilePictureUrl(this.currentUser.id, imageFile)
+        .updateProfilePictureURL(this.currentUser.id, imageFile)
         .subscribe((res) => {
           const updatedUser = { ...this.currentUser };
           updatedUser.avatarURL = res.body.avatarURL;
           this.storeFacade.updateUser(updatedUser);
         });
     });
+
+    dialogRef.componentInstance.userUpdate.subscribe(
+      (updatedUserInfo: User) => {
+        this.userService
+          .updateUser(this.currentUser.id, updatedUserInfo)
+          .subscribe((res) => {
+            this.storeFacade.updateUser(res);
+          });
+      }
+    );
   }
 }

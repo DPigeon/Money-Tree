@@ -83,15 +83,20 @@ export class EditProfileComponent {
     this.submitted = true;
     this.appError = null; // to disable the button when we have an appError and user tries to click multiple times
     if (this.temporaryPhotoFile) {
+      console.log('user photo update event will be fired!');
       this.userPhotoUpdate.emit(this.temporaryPhotoFile);
     }
-    const newUser: User = {
-      firstName: this.firstName.value,
-      lastName: this.lastName.value,
-      password: this.newPwd.value,
-      biography: this.biography.value,
-    };
-    this.userUpdate.emit(newUser);
+    if (this.valuesChanged) {
+      const updatedUser = { ...this.userInState };
+      if (this.newPwd.value) {
+        updatedUser.password = this.newPwd.value;
+      }
+      updatedUser.firstName = this.firstName.value;
+      updatedUser.lastName = this.lastName.value;
+      updatedUser.password = this.newPwd.value;
+      updatedUser.biography = this.biography.value;
+      this.userUpdate.emit(updatedUser);
+    }
   }
 
   getFirstErrorMessage(): string {
