@@ -38,23 +38,15 @@ export class HomeComponent implements OnInit {
       disableClose: true,
     });
 
+    // const updatedUser = { ...this.currentUser };
+
     dialogRef.componentInstance.userPhotoUpdate.subscribe((imageFile: File) => {
-      this.userService
-        .updateProfilePictureURL(this.currentUser.id, imageFile)
-        .subscribe((res) => {
-          const updatedUser = { ...this.currentUser };
-          updatedUser.avatarURL = res.body.avatarURL;
-          this.storeFacade.updateUser(updatedUser);
-        });
+      this.storeFacade.updateProfilePictureURL(this.currentUser.id, imageFile);
     });
 
     dialogRef.componentInstance.userUpdate.subscribe(
       (updatedUserInfo: User) => {
-        this.userService
-          .updateUser(this.currentUser.id, updatedUserInfo)
-          .subscribe((res) => {
-            this.storeFacade.updateUser(res);
-          });
+        this.storeFacade.updateUser(updatedUserInfo);
       }
     );
   }

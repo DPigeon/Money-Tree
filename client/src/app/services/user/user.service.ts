@@ -62,6 +62,6 @@ export class UserService {
   updateProfilePictureURL(userId: number, imageFile: File): Observable<any> {
     const body = new FormData();
     body.append('imageFile', imageFile);
-    return this.api.update('users/profile-picture/' + userId.toString(), body);
+    return this.api.post('users/profile-picture/' + userId.toString(), body);
   }
 }

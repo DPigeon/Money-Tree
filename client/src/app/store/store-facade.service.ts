@@ -60,4 +60,10 @@ export class StoreFacadeService {
   logCurrentUserOut(): void {
     this.store.dispatch(appActions.logCurrentUserOut());
   }
+
+  updateProfilePictureURL(userId: number, imageFile: File): void {
+    this.store.dispatch(
+      appActions.updateProfilePictureURL({ id: userId, image: imageFile })
+    );
+  }
 }

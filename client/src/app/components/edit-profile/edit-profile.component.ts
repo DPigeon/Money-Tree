@@ -29,7 +29,7 @@ export class EditProfileComponent {
 
   userPhotoURL: string | ArrayBuffer;
   temporaryPhotoFile: File = null;
-  pictureErrMessage: string;
+  pictureErrMessage: string = null;
 
   userUpdate: EventEmitter<User> = new EventEmitter();
   userPhotoUpdate: EventEmitter<File> = new EventEmitter();
@@ -60,14 +60,14 @@ export class EditProfileComponent {
           ]),
         ],
         newPwd: [
-          '',
+          null,
           Validators.compose([
             Validators.pattern(
               /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\d\s])[\S]{8,}$/u
             ),
           ]),
         ],
-        newPwd2: '',
+        newPwd2: null,
       },
       { validator: passwordMatch } // This would be a custom validator to check whether passwords matched.
     );
@@ -82,11 +82,12 @@ export class EditProfileComponent {
   onSubmit(): void {
     this.submitted = true;
     this.appError = null; // to disable the button when we have an appError and user tries to click multiple times
-    if (this.temporaryPhotoFile) {
+    if (this.goodPhotoLoaded()) {
       console.log('user photo update event will be fired!');
       this.userPhotoUpdate.emit(this.temporaryPhotoFile);
+      this.temporaryPhotoFile = null;
     }
-    if (this.valuesChanged) {
+    if (this.fieldsChanged()) {
       const updatedUser = { ...this.userInState };
       if (this.newPwd.value) {
         updatedUser.password = this.newPwd.value;
@@ -97,6 +98,7 @@ export class EditProfileComponent {
       updatedUser.biography = this.biography.value;
       this.userUpdate.emit(updatedUser);
     }
+    this.dialogRef.close();
   }
 
   getFirstErrorMessage(): string {
@@ -176,24 +178,32 @@ export class EditProfileComponent {
     this.pictureErrMessage = null; // image type/size is valid
   }
 
-  valuesChanged(): boolean {
+  fieldsChanged(): boolean {
     return (
-      this.temporaryPhotoFile !== null ||
       this.firstName.value !== this.userInState.firstName ||
       this.lastName.value !== this.userInState.lastName ||
       this.biography.value !== this.userInState.biography ||
       this.newPwd.dirty
     );
   }
+  goodPhotoLoaded(): boolean {
+    return this.pictureErrMessage === null && this.temporaryPhotoFile !== null;
+  }
 
   disableButton(): boolean {
-    // Disable the button if a value in a field is problematic, or if user submitted the form (not to let him/her click multiple times)
-    // or user only wants to change the photo and there's no appError. We manually asign appError to null after each submission,
-    // untill the response from server is back (not to let multiple clicks when submitted and we have appError)
-    return (
-      !this.valuesChanged() ||
-      ((!this.editProfileForm.valid || this.submitted) && !this.appError)
-    );
+    if (!this.editProfileForm.valid) {
+      return true;
+    } else if (
+      !this.goodPhotoLoaded() &&
+      !!this.editProfileForm.valid &&
+      !this.fieldsChanged()
+    ) {
+      return true;
+    }
+    if (this.submitted) {
+      return true; // to prevent multiple clicks
+    }
+    return false;
   }
   sanitizeImageUrl(imageUrl: string): SafeUrl {
     // otherwise the browser will complaint about unsafe url
