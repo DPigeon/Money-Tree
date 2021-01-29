@@ -14,14 +14,21 @@
 
     <div class="profile-picture">
       <img [src]="userPhotoURL" alt="profile picture" class="profile-pic" />
-      <button mat-icon-button class="edit-profile-pic">
+      <button mat-icon-button class="edit-profile-pic" *ngIf="userPhotoURL==userInState.avatarURL">
         <input single type="file" id="profile-picture" style="display: none;" accept="image/x-png,image/jpeg"
           (change)="onFileSelected($event)" />
         <label for="profile-picture">
           <mat-icon>add_a_photo</mat-icon>
         </label>
-
       </button>
+
+      <button mat-icon-button class="edit-profile-pic cancel-button" *ngIf="userPhotoURL!==userInState.avatarURL">
+        <input single style="display: none;" />
+        <label for="profile-picture">
+          <mat-icon (click)="cancelPhoto()">close</mat-icon>
+        </label>
+      </button>
+
     </div>
   </div>
   <div class="form-error-messages" *ngIf="pictureErrMessage">{{pictureErrMessage}}</div>
@@ -56,7 +63,7 @@
       <mat-label>Confirm New Password</mat-label>
       <input matInput placeholder="Confirm New Password" type="password" [formControl]="newPwd2" />
     </mat-form-field>
-    <!-- <p>{{this.temporaryPhotoFile===null}}</p> -->
+
     <button class="mt-input-field secondary-action-btn" mat-flat-button type="submit"
       [class.btn-opacity-disabled]="disableButton()" [disabled]="disableButton()"> Save Changes
     </button>

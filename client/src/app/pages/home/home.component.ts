@@ -1,5 +1,5 @@
 import { UserService } from 'src/app/services/user/user.service';
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
 import { StoreFacadeService } from '../../store/store-facade.service';
@@ -37,8 +37,6 @@ export class HomeComponent implements OnInit {
       data: this.currentUser,
       disableClose: true,
     });
-
-    // const updatedUser = { ...this.currentUser };
 
     dialogRef.componentInstance.userPhotoUpdate.subscribe((imageFile: File) => {
       this.storeFacade.updateProfilePictureURL(this.currentUser.id, imageFile);

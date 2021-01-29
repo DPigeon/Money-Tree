@@ -83,9 +83,16 @@ export class EditProfileComponent {
     this.submitted = true;
     this.appError = null; // to disable the button when we have an appError and user tries to click multiple times
     if (this.goodPhotoLoaded()) {
-      console.log('user photo update event will be fired!');
-      this.userPhotoUpdate.emit(this.temporaryPhotoFile);
-      this.temporaryPhotoFile = null;
+      if (this.fieldsChanged()) {
+        setTimeout(() => {
+          this.userPhotoUpdate.emit(this.temporaryPhotoFile);
+        }, 1000);
+        // in case user is changing both the photo, and some of the fileds,
+        // we have to wait for the general update to finish updating state and then emit this event
+      }
+      else{
+        this.userPhotoUpdate.emit(this.temporaryPhotoFile);
+      }
     }
     if (this.fieldsChanged()) {
       const updatedUser = { ...this.userInState };
@@ -160,7 +167,6 @@ export class EditProfileComponent {
         'The photo must be a file of type: jpeg, png, jpg!';
       this.userPhotoURL = this.userInState.avatarURL;
       this.temporaryPhotoFile = null;
-      console.log('photo successfully selected.');
       return;
     } else if (size > 1048576) {
       this.pictureErrMessage = 'Photo must be smaller than 1.0 MB!';
@@ -208,6 +214,11 @@ export class EditProfileComponent {
   sanitizeImageUrl(imageUrl: string): SafeUrl {
     // otherwise the browser will complaint about unsafe url
     return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
+  }
+  cancelPhoto(): void {
+    this.temporaryPhotoFile = null;
+    this.userPhotoURL = this.userInState.avatarURL;
+    console.log('remove photo clicked');
   }
 }
 

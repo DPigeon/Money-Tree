@@ -27,8 +27,8 @@
         width: 150px;
         border-radius: 50%;
         background: rgba(0, 0, 0, 0.5);
-        color: white;
         border: white solid 5px;
+        object-fit: cover;
       }
 
       .edit-profile-pic {
@@ -46,6 +46,10 @@
           position: absolute;
           font-size: 25px;
         }
+      }
+      .cancel-button {
+        background: rgba(0, 0, 0, 0.5);
+        -webkit-text-stroke-width: medium;
       }
     }
 
