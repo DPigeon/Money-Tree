@@ -72,6 +72,26 @@ export class Effects {
     )
   );
 
+  getAlpacaOAuthToken$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.getAlpacaOAuthToken),
+      switchMap((action) => {
+        return this.userService
+          .getOAuthAlpacaToken(action.userId, action.alpacaToken)
+          .pipe(
+            map((data) => appActions.setCurrentUser({ user: data })),
+            catchError((data) =>
+              of(
+                appActions.setAppError({
+                  errorMessage: this.mirrorError(data),
+                })
+              )
+            )
+          );
+      })
+    )
+  );
+
   getCurrentUser$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
       ofType(appActions.getCurrentUser),
