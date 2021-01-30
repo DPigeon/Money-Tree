@@ -22,7 +22,7 @@
     <div class="sell-buy-field">Available Balance: <span>{{ balance }}</span></div>
     <div class="sell-buy-field">Company Name:<span>{{ currentStock.companyName }}</span></div>
     <div *ngIf="isMarketOrder" class="sell-buy-field">
-      Current Price:<span>$ {{currentStock.stockValue}}</span>
+      Current Price:<span>$ {{getStockPrice()}}</span>
     </div>
     <div *ngIf="!isMarketOrder" class="sell-buy-field">
       Price:
@@ -50,12 +50,12 @@
       >Only Positive Number</span
     >
     <div *ngIf="isMarketOrder" class="sell-buy-field">
-      Estimated Total:<span>{{updateTotal()}}</span>
+      Estimated Total:<span>{{getTotal()}}</span>
     </div>
     <div *ngIf="!isMarketOrder" class="sell-buy-field">
-      Total:<span>{{updateTotal(quantity, price)}}</span>
+      Total:<span>{{getTotal()}}</span>
     </div>
-    <div class="sell-buy-field">Remaining Balance:<span>{{updateRemainingBalance()}}</span></div>
+    <div class="sell-buy-field">Remaining Balance:<span>{{getRemainingBalance()| number 4}}</span></div>
   </div>
   <div mat-dialog-actions>
     <button
@@ -63,7 +63,7 @@
       mat-flat-button
       color="primary"
       (click)="processActions()"
-      [disabled]="quantity <= 0 || price < 0 || updateRemainingBalance() < 0"
+      [disabled]="quantity <= 0 || price < 0 || getRemainingBalance() < 0"
     >
       {{ getProcessActionType().toUpperCase() }}
     </button>

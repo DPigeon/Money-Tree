@@ -14,7 +14,7 @@ export class SellOrBuyActionsComponent implements OnInit {
   quantity = 0;
   price = 0;
   total = 0;
-  currentStock: Stock; // Ask alessandro if I need to keep this or if I can just do everything from the matdialog data
+  currentStock: Stock;
   balance: number = 5000; // Faking this value for now, will have to get this from alpaca
   remainingBalance: number = 0
   constructor(
@@ -25,7 +25,8 @@ export class SellOrBuyActionsComponent implements OnInit {
       stock: Stock
     }
   ) {
-    this.currentStock = data.stock[0];
+    this.currentStock = data.stock;
+    this.price = this.currentStock.stockValue;
     this.remainingBalance = this.balance;
   }
   ngOnInit(): void { }
@@ -49,17 +50,17 @@ export class SellOrBuyActionsComponent implements OnInit {
     this.storeFacade.processStockTransaction(transaction);
     this.dialogRef.close();
   }
-
-  updateTotal(): number {
-    console.log("Actively updating total", this.total)
-    this.total = this.quantity * this.price;
-    return this.total
-  }
   
-  updateRemainingBalance(): number {
-    console.log("Actively updating remaining balance", this.balance - this.total)
+  getTotal(): number {
+    return this.isMarketOrder ? this.quantity * this.currentStock.stockValue : this.quantity * this.price;
+  }
+
+  getRemainingBalance(): number {
     this.remainingBalance = this.balance - this.total;
     return this.remainingBalance
   }
 
+  getStockPrice(): number {
+    return (this.data != null && this.data.stock.stockValue != null) ? this.data.stock.stockValue : 0;
+  }
 }
