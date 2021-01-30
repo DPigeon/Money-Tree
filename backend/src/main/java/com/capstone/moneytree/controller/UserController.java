@@ -72,17 +72,12 @@ public class UserController {
     * A method that updates a user with a new Alpaca key. This should be done only once at beginning
     *
     * @param id  The user ID sent from the frontend
-    * @param key The Alpaca API key sent from the frontend
+    * @param code The Alpaca API code sent from the frontend
     * @return The new updated user from the database
     */
-   @PostMapping("/{id}/register-alpaca-key/{key}")
-   public ResponseEntity<User> registerAlpacaApiKey(@Valid @PathVariable Long id, @Valid @PathVariable String key) {
-      User updatedUser = userService.registerAlpacaApiKey(id, key);
-
-      if (updatedUser == null) {
-         throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage());
-      }
-
+   @PostMapping("/{id}/register-alpaca-key/{code}")
+   public ResponseEntity<User> registerAlpacaApiKey(@Valid @PathVariable Long id, @Valid @PathVariable String code) {
+      User updatedUser = userService.registerAlpacaApiKey(id, code);
       return ResponseEntity.ok(updatedUser);
    }
 
