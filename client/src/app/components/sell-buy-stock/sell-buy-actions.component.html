@@ -55,7 +55,7 @@
     <div *ngIf="!isMarketOrder" class="sell-buy-field">
       Total:<span>{{getTotal()}}</span>
     </div>
-    <div class="sell-buy-field">Remaining Balance:<span>{{getRemainingBalance()| number 4}}</span></div>
+    <div class="sell-buy-field">Remaining Balance:<span>{{getRemainingBalance() | number: '3.1-5'}}</span></div>
   </div>
   <div mat-dialog-actions>
     <button
