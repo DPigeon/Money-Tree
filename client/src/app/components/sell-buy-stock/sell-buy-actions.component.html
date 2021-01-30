@@ -50,7 +50,7 @@
       >Only Positive Number</span
     >
     <div *ngIf="isMarketOrder" class="sell-buy-field">
-      Estimated Total:<span>{{updateTotal(quantity, currentStock.stockValue)}}</span>
+      Estimated Total:<span>{{updateTotal()}}</span>
     </div>
     <div *ngIf="!isMarketOrder" class="sell-buy-field">
       Total:<span>{{updateTotal(quantity, price)}}</span>

@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { Stock } from '../interfaces/stock';
 import { User } from '../interfaces/user';
 import { AppError } from '../interfaces/app-error';
+import { Transaction } from '../interfaces/transaction';
 
 @Injectable({
   providedIn: 'root',
@@ -73,5 +74,8 @@ export class StoreFacadeService {
         typeSelection: selection,
       })
     );
+  }
+  processStockTransaction(transaction: Transaction): void {
+    this.store.dispatch(appActions.processStockTransaction({ transaction }))
   }
 }
