@@ -54,7 +54,7 @@ export class StoreFacadeService {
   }
 
   getAlpacaOAuthToken(userId: number, alpacaToken: string): void {
-    this.store.dispatch(appActions.getAlpacaOAuthToken({userId: userId, alpacaToken: alpacaToken}));
+    this.store.dispatch(appActions.getAlpacaOAuthToken({userId, alpacaToken}));
   }
 
   getCurrentUser(userId: number): void {
