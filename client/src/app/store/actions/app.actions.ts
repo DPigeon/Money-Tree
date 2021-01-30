@@ -3,6 +3,7 @@ import { Stock } from 'src/app/interfaces/stock';
 import { User } from 'src/app/interfaces/user';
 import { AppError } from 'src/app/interfaces/app-error';
 import { MarketClock } from 'src/app/interfaces/market-clock';
+import { Transaction } from 'src/app/interfaces/transaction';
 
 export const loadStockInfo = createAction(
   '[Stock Info] Load Stock Info',
@@ -62,4 +63,9 @@ export const setAppError = createAction(
 export const updatePictureURL = createAction(
   '[User] Photo URL updated for user',
   props<{ id: number; image: File; typeSelection: string }>()
+);
+
+export const processStockTransaction = createAction(
+  '[Transactions] New stock transaction for user',
+  props<{ transaction: Transaction}>()
 );

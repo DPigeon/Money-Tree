@@ -1,6 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Stock } from '../../interfaces/stock'
+import { StoreFacadeService } from 'src/app/store/store-facade.service';
+import { Stock } from '../../interfaces/stock';
+import { Transaction } from '../../interfaces/transaction';
+
 @Component({
   selector: 'app-sell-buy-actions',
   templateUrl: './sell-buy-actions.component.html',
@@ -16,6 +19,7 @@ export class SellOrBuyActionsComponent implements OnInit {
   remainingBalance: number = 0
   constructor(
     public dialogRef: MatDialogRef<SellOrBuyActionsComponent>,
+    private storeFacade: StoreFacadeService,
     @Inject(MAT_DIALOG_DATA) public data: {
       type: string,
       stock: Stock
@@ -35,20 +39,23 @@ export class SellOrBuyActionsComponent implements OnInit {
   }
 
   processActions(): void {
-    this.data.type === 'sell' ? this.sellActions() : this.buyActions();
+    const transaction: Transaction = {
+      symbol: this.data.stock.tickerSymbol,
+      qty: this.quantity,
+      side: this.data.type,
+      type: this.isMarketOrder ? "market" : "limit",
+      time_in_force: "day"
+    }
+    this.storeFacade.processStockTransaction(transaction);
+    this.dialogRef.close();
   }
 
-  sellActions(): void {
-    this.dialogRef.close();
-  }
-  buyActions(): void {
-    this.dialogRef.close();
-  }
-  updateTotal(quantity: number, price: number): number {
+  updateTotal(): number {
     console.log("Actively updating total", this.total)
-    this.total = quantity * price;
+    this.total = this.quantity * this.price;
     return this.total
   }
+  
   updateRemainingBalance(): number {
     console.log("Actively updating remaining balance", this.balance - this.total)
     this.remainingBalance = this.balance - this.total;

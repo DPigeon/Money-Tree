@@ -169,6 +169,24 @@ export class Effects {
     )
   );
 
+  createStockTransaction$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.processStockTransaction),
+      switchMap((action) => {
+        return this.transactionService.processStockTransaction(action.transaction).pipe(
+          map((data) => appActions.setCurrentUser({ user: data })), 
+          catchError((data) =>
+          of(
+            appActions.setAppError({
+              errorMessage: this.mirrorError(data),
+            })
+            )
+          )
+        );
+      })
+    )
+  );
+
   mirrorError(backendError): AppError {
     if (backendError && backendError.error) {
       const errorMessage: AppError = {
