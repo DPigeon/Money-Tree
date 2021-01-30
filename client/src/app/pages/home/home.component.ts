@@ -35,7 +35,6 @@ export class HomeComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(EditProfileComponent, {
       data: this.currentUser,
-      disableClose: true,
     });
 
     dialogRef.componentInstance.userPhotoUpdate.subscribe((imageFile: File) => {

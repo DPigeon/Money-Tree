@@ -46,11 +46,15 @@ export class EditProfileComponent {
           userInState.firstName, // initial value from current user in state
           Validators.compose([
             Validators.pattern(/^[a-zA-Z]{3,20}$/u), // validate the pattern to match this regex
+            Validators.required,
           ]),
         ],
         lastName: [
           userInState.lastName,
-          Validators.compose([Validators.pattern(/^[a-zA-Z]{3,20}$/u)]),
+          Validators.compose([
+            Validators.pattern(/^[a-zA-Z]{3,20}$/u),
+            Validators.required,
+          ]),
         ],
         biography: [
           userInState.biography,
@@ -89,8 +93,7 @@ export class EditProfileComponent {
         }, 1000);
         // in case user is changing both the photo, and some of the fileds,
         // we have to wait for the general update to finish updating state and then emit this event
-      }
-      else{
+      } else {
         this.userPhotoUpdate.emit(this.temporaryPhotoFile);
       }
     }
@@ -140,6 +143,9 @@ export class EditProfileComponent {
     // to go around null errors in console for when we dont have any failed validators.
     if (failedValidator) {
       switch (failedValidator) {
+        case 'firstName,required':
+        case 'lastName,required':
+          return 'First/Last name should not be empty.';
         case 'firstName,pattern':
         case 'lastName,pattern':
           return 'First/Last name should be of length 3-20 characters with no numbers/spaces.';
