@@ -1,5 +1,4 @@
-import { UserService } from 'src/app/services/user/user.service';
-import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
