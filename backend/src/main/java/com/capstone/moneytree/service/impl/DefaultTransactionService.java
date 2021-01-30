@@ -2,6 +2,7 @@ package com.capstone.moneytree.service.impl;
 
 import java.util.List;
 
+import net.jacobpeterson.domain.alpaca.accountconfiguration.AccountConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,15 +59,16 @@ public class DefaultTransactionService implements TransactionService {
       User user = getUser(Long.parseLong(userId));
 
       String alpacaKey = user.getAlpacaApiKey();
-      //AlpacaAPI api = new AlpacaAPI("PKE4MSSQWI37CB0DZZF0", "VxAGTj9XabTgRqXFhtRWRJhjfb8gto0RUmUAvFnR");
+      //AlpacaAPI api = new AlpacaAPI("PKZVEATJSRHXR2AY4UWB", "LzIPiJmjAXju9DVuuRa9gBQcCXQwl9IrN5CfhloZ");
       AlpacaAPI api = AlpacaSession.alpaca(alpacaKey);
 
       /* Place the order to alpaca api */
       Order placedOrder;
       Transaction transaction;
       try {
+         System.out.println("Buying Power: " + api.getAccount().getBuyingPower());
          placedOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
-//         placedOrder = api.requestNewOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderType.valueOf(order.getType().toUpperCase()), OrderTimeInForce.DAY, null, null, null, null, null, null, null, null, null, null);
+         //placedOrder = api.requestNewOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderType.valueOf(order.getType().toUpperCase()), OrderTimeInForce.DAY, null, null, null, null, null, null, null, null, null, null);
          LOGGER.info("Placed order {}", placedOrder.getClientOrderId());
 
          /* Build the transaction and persist */
@@ -77,9 +79,10 @@ public class DefaultTransactionService implements TransactionService {
                  .fulfilledStocks(List.of(Stock.builder().asset(api.getAssetBySymbol(placedOrder.getSymbol())).build())) // populate the stock which this transaction fulfills. Only asset field is populated now
                  .build();
 
-         /* Save the user with this new transaction */
+         /* Save the user with by appending new transaction */
          List<Transaction> transactions = new java.util.ArrayList<>(List.of(transaction));
-         transactions.addAll(user.getTransactions());
+         if (user.getTransactions() != null)
+            transactions.addAll(user.getTransactions());
          user.setTransactions(transactions);
          userDao.save(user);
 
