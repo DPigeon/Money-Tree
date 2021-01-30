@@ -68,7 +68,7 @@ export class LoginSignupComponent implements OnInit {
       clientId +
       '&redirect_uri=' +
       redirectUri +
-      '&scope=trading';
+      '&scope=account:write%20trading';
     window.location.href = alpacaUrl;
   }
 
