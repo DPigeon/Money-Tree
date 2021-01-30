@@ -58,9 +58,28 @@ export class Effects {
     this.actions$.pipe(
       ofType(appActions.upadateUser),
       switchMap((action) => {
-        // This function will be changed when the backend refactos
         return this.userService
           .updateUser(action.user.id, action.user)
+          .pipe(
+            map((data) => appActions.setCurrentUser({ user: data })),
+            catchError((data) =>
+              of(
+                appActions.setAppError({
+                  errorMessage: this.mirrorError(data),
+                })
+              )
+            )
+          );
+      })
+    )
+  );
+
+  getAlpacaOAuthToken$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.getAlpacaOAuthToken),
+      switchMap((action) => {
+        return this.userService
+          .getOAuthAlpacaToken(action.userId, action.alpacaToken)
           .pipe(
             map((data) => appActions.setCurrentUser({ user: data })),
             catchError((data) =>

@@ -158,10 +158,6 @@ public class DefaultUserService implements UserService {
          userToUpdate.setPassword(user.getPassword());
       }
 
-      if (user.getAlpacaApiKey() != null) {
-         userToUpdate.setAlpacaApiKey(user.getAlpacaApiKey());
-      }
-
       if (user.getFollowers() != null) {
          userToUpdate.setFollowers(user.getFollowers());
       }

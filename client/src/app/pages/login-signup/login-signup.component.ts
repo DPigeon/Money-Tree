@@ -52,11 +52,7 @@ export class LoginSignupComponent implements OnInit {
     this.hasAlpacaCode = false;
     if (!!alpacaCode) {
       this.hasAlpacaCode = true;
-      const userParams: User = {
-        id: Number(localStorage.getItem('userId')),
-        alpacaApiKey: alpacaCode,
-      };
-      this.storeFacade.updateUser(userParams);
+      this.storeFacade.getAlpacaOAuthToken(Number(localStorage.getItem('userId')), alpacaCode);
     }
   }
 

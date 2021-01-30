@@ -33,6 +33,11 @@ export const upadateUser = createAction(
   props<{ user: User }>()
 );
 
+export const getAlpacaOAuthToken = createAction(
+  '[User] Get OAuthToken',
+  props<{ userId: number, alpacaToken: string }>()
+);
+
 export const setCurrentUser = createAction(
   '[User] New value for current user',
   props<{ user: User }>()
