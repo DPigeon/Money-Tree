@@ -36,7 +36,7 @@ export class UserService {
 
   getOAuthAlpacaToken(userId: number, alpacaCode: string): Observable<User> {
     return this.api
-      .post('users/' + userId + '/register-alpaca-key/'+ alpacaCode, {})
+      .post('users/' + userId + '/register-alpaca-key/' + alpacaCode, {})
       .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 
