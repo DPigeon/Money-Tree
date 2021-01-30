@@ -58,13 +58,15 @@ public class DefaultTransactionService implements TransactionService {
       User user = getUser(Long.parseLong(userId));
 
       String alpacaKey = user.getAlpacaApiKey();
+      //AlpacaAPI api = new AlpacaAPI("PKE4MSSQWI37CB0DZZF0", "VxAGTj9XabTgRqXFhtRWRJhjfb8gto0RUmUAvFnR");
       AlpacaAPI api = AlpacaSession.alpaca(alpacaKey);
 
       /* Place the order to alpaca api */
       Order placedOrder;
       Transaction transaction;
       try {
-         placedOrder = api.requestNewOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderType.valueOf(order.getType().toUpperCase()), OrderTimeInForce.DAY, null, null, null, null, null, null, null, null, null, null);
+         placedOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
+//         placedOrder = api.requestNewOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderType.valueOf(order.getType().toUpperCase()), OrderTimeInForce.DAY, null, null, null, null, null, null, null, null, null, null);
          LOGGER.info("Placed order {}", placedOrder.getClientOrderId());
 
          /* Build the transaction and persist */
@@ -76,7 +78,9 @@ public class DefaultTransactionService implements TransactionService {
                  .build();
 
          /* Save the user with this new transaction */
-         user.setTransactions(List.of(transaction));
+         List<Transaction> transactions = new java.util.ArrayList<>(List.of(transaction));
+         transactions.addAll(user.getTransactions());
+         user.setTransactions(transactions);
          userDao.save(user);
 
       } catch (AlpacaAPIRequestException ex) {
