@@ -7,6 +7,7 @@ export interface User {
   lastName?: string;
   username?: string;
   avatarURL?: string;
+  coverPhotoURL?: string;
   email?: string;
   score?: number;
   rank?: number;

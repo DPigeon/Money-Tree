@@ -30,6 +30,7 @@ const userInfo: User = {
   lastName: 'Doe',
   username: 'john1',
   avatarURL: '',
+  coverPhotoURL: '',
   email: 'john1@gmail.com',
   score: 12,
   rank: 10000,

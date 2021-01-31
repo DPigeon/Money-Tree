@@ -8,6 +8,7 @@ const systemTestUser2 = {
   lastName: 'Test',
   username: 'SystemTestUser',
   avatarURL: '',
+  coverPhotoURL: '',
   password: 'Hunter42',
   email: 'systemtestuser1@systemtestuser.com',
   score: 12,

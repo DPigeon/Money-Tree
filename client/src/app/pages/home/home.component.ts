@@ -1,4 +1,3 @@
-import { UserService } from 'src/app/services/user/user.service';
 import { Component, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
@@ -11,14 +10,15 @@ import { EditProfileComponent } from '../../components/edit-profile/edit-profile
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  @Output() userPhotoUrl: string;
+  @Output() userPhotoURL: string;
+  @Output() coverPhotoURL: string;
+
   currentUser$: Observable<User>;
   currentUser: User;
 
   constructor(
     private storeFacade: StoreFacadeService,
-    public dialog: MatDialog,
-    private userService: UserService
+    public dialog: MatDialog
   ) {
     this.currentUser = null; // otherwise there would be an undefined error because of waiting for the currentUser values to fetch
   }
@@ -28,7 +28,8 @@ export class HomeComponent implements OnInit {
     this.currentUser$.subscribe((user: User) => {
       if (user) {
         this.currentUser = user;
-        this.userPhotoUrl = this.currentUser.avatarURL;
+        this.userPhotoURL = this.currentUser.avatarURL;
+        this.coverPhotoURL = this.currentUser.coverPhotoURL;
       }
     });
   }
@@ -38,8 +39,22 @@ export class HomeComponent implements OnInit {
     });
 
     dialogRef.componentInstance.userPhotoUpdate.subscribe((imageFile: File) => {
-      this.storeFacade.updateProfilePictureURL(this.currentUser.id, imageFile);
+      this.storeFacade.updatePictureURL(
+        this.currentUser.id,
+        imageFile,
+        'avatarURL'
+      );
     });
+
+    dialogRef.componentInstance.userCoverPhotoUpdate.subscribe(
+      (imageFile: File) => {
+        this.storeFacade.updatePictureURL(
+          this.currentUser.id,
+          imageFile,
+          'coverPhotoURL'
+        );
+      }
+    );
 
     dialogRef.componentInstance.userUpdate.subscribe(
       (updatedUserInfo: User) => {

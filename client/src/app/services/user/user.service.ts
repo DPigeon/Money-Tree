@@ -45,6 +45,7 @@ export class UserService {
       lastName: response.lastName,
       username: response.username,
       avatarURL: response.avatarURL,
+      coverPhotoURL: response.coverPhotoURL,
       email: response.email,
       score: response.score,
       rank: response.rank,
@@ -59,9 +60,14 @@ export class UserService {
     return formattedUser;
   }
 
-  updateProfilePictureURL(userId: number, imageFile: File): Observable<any> {
+  updatePictureURL(
+    userId: number,
+    imageFile: File,
+    selection: string
+  ): Observable<any> {
     const body = new FormData();
     body.append('imageFile', imageFile);
+    body.append('selection', selection); // here selection must be either "avatarURL" or "coverPhotoURL"
     return this.api
       .post('users/profile-picture/' + userId.toString(), body)
       .pipe(map((res: Response) => this.userFormatter(res.body)));

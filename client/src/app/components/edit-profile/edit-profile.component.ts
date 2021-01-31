@@ -27,11 +27,15 @@ export class EditProfileComponent {
   submitted = false;
 
   userPhotoURL: string | ArrayBuffer;
+  userCoverPhotoURL: string | ArrayBuffer;
   temporaryPhotoFile: File = null;
+  temporaryCoverPhotoFile: File = null;
   pictureErrMessage: string = null;
+  coverErrMessage: string = null;
 
   userUpdate: EventEmitter<User> = new EventEmitter();
   userPhotoUpdate: EventEmitter<File> = new EventEmitter();
+  userCoverPhotoUpdate: EventEmitter<File> = new EventEmitter();
 
   constructor(
     fb: FormBuilder,
@@ -74,27 +78,28 @@ export class EditProfileComponent {
       },
       { validator: passwordMatch } // This would be a custom validator to check whether passwords matched.
     );
-    this.userPhotoURL = userInState.avatarURL;
     this.firstName = this.editProfileForm.controls.firstName;
     this.lastName = this.editProfileForm.controls.lastName;
     this.biography = this.editProfileForm.controls.biography;
     this.newPwd = this.editProfileForm.controls.newPwd;
     this.newPwd2 = this.editProfileForm.controls.newPwd2; // this function return false if user put old values in input fileds.
+    this.userPhotoURL = userInState.avatarURL;
+    this.userCoverPhotoURL = userInState.coverPhotoURL;
   }
 
   onSubmit(): void {
     this.submitted = true;
     this.appError = null; // to disable the button when we have an appError and user tries to click multiple times
     if (this.goodPhotoLoaded()) {
-      if (this.fieldsChanged()) {
-        setTimeout(() => {
-          this.userPhotoUpdate.emit(this.temporaryPhotoFile);
-        }, 1000);
-        // in case user is changing both the photo, and some of the fileds,
-        // we have to wait for the general update to finish updating state and then emit this event
-      } else {
+      setTimeout(() => {
         this.userPhotoUpdate.emit(this.temporaryPhotoFile);
-      }
+      }, 1000);
+      // because of possibility of multiple api calls, events will be fired with small delays
+    }
+    if (this.goodCoverPhotoLoaded()) {
+      setTimeout(() => {
+        this.userCoverPhotoUpdate.emit(this.temporaryCoverPhotoFile);
+      }, 2000);
     }
     if (this.fieldsChanged()) {
       const updatedUser = { ...this.userInState };
@@ -161,7 +166,7 @@ export class EditProfileComponent {
     }
   }
 
-  onFileSelected(event: Event): void {
+  onPhotoFileSelected(event: Event): void {
     this.temporaryPhotoFile = (event.target as HTMLInputElement).files[0];
     const size = this.temporaryPhotoFile.size;
     const type = this.temporaryPhotoFile.type;
@@ -188,6 +193,33 @@ export class EditProfileComponent {
     this.pictureErrMessage = null; // image type/size is valid
   }
 
+  onCoverFileSelected(event: Event): void {
+    this.temporaryCoverPhotoFile = (event.target as HTMLInputElement).files[0];
+    const size = this.temporaryCoverPhotoFile.size;
+    const type = this.temporaryCoverPhotoFile.type;
+
+    if (type !== 'image/jpeg' && type !== 'image/png') {
+      this.coverErrMessage =
+        'The cover photo must be a file of type: jpeg, png, jpg!';
+      this.userCoverPhotoURL = this.userInState.coverPhotoURL;
+      this.temporaryCoverPhotoFile = null;
+      return;
+    } else if (size > 1048576) {
+      this.coverErrMessage = 'Cover photo must be smaller than 1.0 MB!';
+      this.userCoverPhotoURL = this.userInState.coverPhotoURL;
+      this.temporaryCoverPhotoFile = null;
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => (this.userCoverPhotoURL = reader.result);
+    reader.readAsDataURL(this.temporaryCoverPhotoFile);
+    this.userCoverPhotoURL = this.sanitizeImageUrl(
+      URL.createObjectURL(this.temporaryCoverPhotoFile)
+    ) as string;
+    this.coverErrMessage = null; // image type/size is valid
+  }
+
   fieldsChanged(): boolean {
     return (
       this.firstName.value !== this.userInState.firstName ||
@@ -199,11 +231,17 @@ export class EditProfileComponent {
   goodPhotoLoaded(): boolean {
     return this.pictureErrMessage === null && this.temporaryPhotoFile !== null;
   }
+  goodCoverPhotoLoaded(): boolean {
+    return (
+      this.coverErrMessage === null && this.temporaryCoverPhotoFile !== null
+    );
+  }
 
   disableButton(): boolean {
     if (
       !this.editProfileForm.valid ||
       (!this.goodPhotoLoaded() &&
+        !this.goodCoverPhotoLoaded() &&
         !!this.editProfileForm.valid &&
         !this.fieldsChanged())
     ) {
@@ -221,6 +259,10 @@ export class EditProfileComponent {
   cancelPhoto(): void {
     this.temporaryPhotoFile = null;
     this.userPhotoURL = this.userInState.avatarURL;
+  }
+  cancelCoverPhoto(): void {
+    this.temporaryCoverPhotoFile = null;
+    this.userCoverPhotoURL = this.userInState.coverPhotoURL;
   }
 }
 

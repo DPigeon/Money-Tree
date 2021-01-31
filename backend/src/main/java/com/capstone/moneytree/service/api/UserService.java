@@ -40,7 +40,7 @@ public interface UserService {
 
    User login(User credentials) throws CredentialNotFoundException;
 
-   User editUserProfilePicture(User user, MultipartFile imageFile);
+   User editUserProfilePicture(User user, MultipartFile imageFile, String selection);
 
    void deleteUserByEmail(String email);
 

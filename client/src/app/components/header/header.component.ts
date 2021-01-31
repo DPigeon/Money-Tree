@@ -7,7 +7,7 @@ import { StoreFacadeService } from '../../store/store-facade.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  @Input() userPhotoUrl: string;
+  @Input() userPhotoURL: string;
   constructor(private storeFacade: StoreFacadeService) {}
 
   logout(): void {

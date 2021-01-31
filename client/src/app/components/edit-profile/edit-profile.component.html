@@ -1,28 +1,39 @@
 <div class="container">
-  <div class="cover-picture">
+
+  <div class="photos-container">
     <button mat-icon-button class="close-dialog-icon" mat-dialog-close>
       <mat-icon>close</mat-icon>
     </button>
-    <button mat-button class="edit-cover-picture">
-      <input single type="file" id="cover-photo" style="display: none;" />
+
+    <img [src]="userCoverPhotoURL" alt="cover photo picture" class="cover-pic-img" />
+    <button mat-button class="edit-cover-picture-btn" *ngIf="userCoverPhotoURL==userInState.coverPhotoURL">
+      <input single type="file" id="cover-picture" class="cover-hidden-input" accept="image/x-png,image/jpeg"
+        (change)="onCoverFileSelected($event)" />
       <label for="cover-photo">
         <mat-icon>add_a_photo</mat-icon>
         <span class="edit-cover-pic-text">Edit Cover Photo</span>
       </label>
-
     </button>
 
-    <div class="profile-picture">
-      <img [src]="userPhotoURL" alt="profile picture" class="profile-pic" />
-      <button mat-icon-button class="edit-profile-pic" *ngIf="userPhotoURL==userInState.avatarURL">
+    <button mat-icon-button class="edit-cover-picture-btn cancel-button"
+      *ngIf="userCoverPhotoURL!==userInState.coverPhotoURL">
+      <input single class="cover-hidden-input" />
+      <label for="cover-picture">
+        <mat-icon (click)="cancelCoverPhoto()">close</mat-icon>
+      </label>
+    </button>
+
+    <div class="profile-picture-container">
+      <img [src]="userPhotoURL" class="profile-pic-img" alt="profile picture" />
+      <button mat-icon-button class="edit-profile-pic-btn" *ngIf="userPhotoURL==userInState.avatarURL">
         <input single type="file" id="profile-picture" style="display: none;" accept="image/x-png,image/jpeg"
-          (change)="onFileSelected($event)" />
+          (change)="onPhotoFileSelected($event)" />
         <label for="profile-picture">
           <mat-icon>add_a_photo</mat-icon>
         </label>
       </button>
 
-      <button mat-icon-button class="edit-profile-pic cancel-button" *ngIf="userPhotoURL!==userInState.avatarURL">
+      <button mat-icon-button class="edit-profile-pic-btn cancel-button" *ngIf="userPhotoURL!==userInState.avatarURL">
         <input single style="display: none;" />
         <label for="profile-picture">
           <mat-icon (click)="cancelPhoto()">close</mat-icon>
@@ -32,7 +43,8 @@
     </div>
   </div>
   <div class="form-error-messages" *ngIf="pictureErrMessage">{{pictureErrMessage}}</div>
-  <div class="form-error-messages" *ngIf="editProfileForm.invalid">
+  <div class="form-error-messages" *ngIf="coverErrMessage && !pictureErrMessage">{{coverErrMessage}}</div>
+  <div class="form-error-messages" *ngIf="editProfileForm.invalid && !coverErrMessage && !pictureErrMessage">
     {{ showErrorMessage() }}
   </div>
 

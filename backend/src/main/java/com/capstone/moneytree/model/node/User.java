@@ -23,6 +23,8 @@ public class User extends Entity {
 
     String avatarURL;
 
+    String coverPhotoURL;
+    
     String email;
 
     Double score;

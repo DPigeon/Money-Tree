@@ -81,6 +81,7 @@ public class DefaultUserService implements UserService {
       String encryptedPassword = encryptData(password);
       user.setPassword(encryptedPassword);
       user.setAvatarURL(String.format("https://%s.s3.amazonaws.com/%s", bucketName, DEFAULT_PROFILE_NAME));
+      user.setCoverPhotoURL(String.format("https://%s.s3.amazonaws.com/%s", bucketName, DEFAULT_PROFILE_NAME)); // TODO: must be changed to a general cover photo
 
       userDao.save(user);
 
@@ -119,6 +120,11 @@ public class DefaultUserService implements UserService {
       if (user.getAvatarURL() != null) {
          userToUpdate.setAvatarURL(user.getAvatarURL());
       }
+
+      if (user.getCoverPhotoURL() != null) {
+         userToUpdate.setCoverPhotoURL(user.getCoverPhotoURL());
+      }
+
       if (user.getBiography() != null) {
          userToUpdate.setBiography(user.getBiography());
       }
@@ -162,21 +168,39 @@ public class DefaultUserService implements UserService {
    }
 
    @Override
-   public User editUserProfilePicture(User user, MultipartFile imageFile) {
-      // since user exists, we can now upload image to s3 and save imageUrl into db
-      String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
+   public User editUserProfilePicture(User user, MultipartFile imageFile, String selection) {
 
-      // if user already has a profile picture that is not the default picture, handle
-      // deleting old picture
-      if (StringUtils.isNotBlank(user.getAvatarURL()) && !user.getAvatarURL().contains(DEFAULT_PROFILE_NAME)) {
-         this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getAvatarURL());
+      switch (selection) {
+         case "avatarURL": {
+            // since user exists, we can now upload image to s3 and save imageUrl into db
+            String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
+            // if user already has a profile picture that is not the default picture, handle
+            // deleting old picture
+            if (StringUtils.isNotBlank(user.getAvatarURL()) && !user.getAvatarURL().contains(DEFAULT_PROFILE_NAME)) {
+               this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getAvatarURL());
+            }
+            // set new image url
+            user.setAvatarURL(imageUrl);
+            userDao.save(user);
+            LOG.info("Edited {}'s profile picture successfully!", user.getUsername());
+            break;
+         }
+         case "coverPhotoURL": {
+            String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
+            if (StringUtils.isNotBlank(user.getCoverPhotoURL())
+                  && !user.getCoverPhotoURL().contains(DEFAULT_PROFILE_NAME)) {
+               this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getCoverPhotoURL());
+            }
+            // set new image url
+            user.setCoverPhotoURL(imageUrl);
+            userDao.save(user);
+            LOG.info("Edited {}'s profile cover photo successfully!", user.getUsername());
+            break;
+         }
+         default:
+            LOG.info("Photo was not saved on Amazon S3!");
+            throw new BadRequestException(String.format("Wrong selection string was put as parameter."));
       }
-
-      // set new image url
-      user.setAvatarURL(imageUrl);
-      userDao.save(user);
-
-      LOG.info("Edited {}'s profile successfully!", user.getUsername());
       return user;
    }
 

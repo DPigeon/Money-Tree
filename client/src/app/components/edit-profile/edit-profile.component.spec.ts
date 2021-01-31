@@ -49,6 +49,7 @@ describe('EditProfileComponent', () => {
             biography: null,
             password: 'Qwerty@123',
             avatarURL: 'avatarURLforJohn',
+            coverPhotoURL: 'coverPhotoURLforJohn',
           },
         },
       ],
@@ -61,6 +62,7 @@ describe('EditProfileComponent', () => {
     component = fixture.componentInstance;
 
     spyOn(component.userPhotoUpdate, 'emit');
+    spyOn(component.userCoverPhotoUpdate, 'emit');
     spyOn(component.userUpdate, 'emit');
   });
 
@@ -68,10 +70,20 @@ describe('EditProfileComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should emit the photoUpdate event only, if good photo was chosen but fields are not changed', () => {
+  it('should emit the correct event, if good photo was chosen but fields are not changed', () => {
+    jest.useFakeTimers();
     component.temporaryPhotoFile = fakeFile;
     component.onSubmit();
+    jest.advanceTimersByTime(1000);
     expect(component.userPhotoUpdate.emit).toHaveBeenCalledWith(fakeFile);
+    expect(component.userCoverPhotoUpdate.emit).not.toHaveBeenCalled();
+    expect(component.userUpdate.emit).not.toHaveBeenCalled();
+    jest.clearAllTimers();
+    component.temporaryPhotoFile = null;
+    component.temporaryCoverPhotoFile = fakeFile;
+    component.onSubmit();
+    jest.advanceTimersByTime(2000);
+    expect(component.userCoverPhotoUpdate.emit).toHaveBeenCalledWith(fakeFile);
     expect(component.userUpdate.emit).not.toHaveBeenCalled();
   });
 
@@ -89,6 +101,7 @@ describe('EditProfileComponent', () => {
       biography: 'this is the bio str for jack brown',
       avatarURL: 'avatarURLforJohn',
       password: 'Qwer@123456',
+      coverPhotoURL: 'coverPhotoURLforJohn',
     });
   });
 
@@ -106,6 +119,7 @@ describe('EditProfileComponent', () => {
       biography: 'this is the bio str for John brown',
       avatarURL: 'avatarURLforJohn',
       password: 'Qwerty@123',
+      coverPhotoURL: 'coverPhotoURLforJohn',
     });
     expect(component.userPhotoUpdate.emit).toHaveBeenCalledTimes(1);
     expect(component.userUpdate.emit).toHaveBeenCalledTimes(1);
@@ -166,27 +180,24 @@ describe('EditProfileComponent', () => {
       'Passwords do not match, please check.'
     );
   });
-  it('should show "length" error message for bio', () => {
-    component.biography.markAsTouched();
-    component.biography.setValue('ab');
-    component.lastName.markAsTouched();
-    expect(component.editProfileForm.valid).toBe(false);
-    expect(component.showErrorMessage()).toEqual(
-      'Bio has to between 10 to 250 characters.'
-    );
-  });
 
   it('should show error message for large image file input', () => {
     Object.defineProperty(fakeFile, 'size', { value: 1024 * 1024 + 1 }); // ie: 1048577 whichi is >1048576
     Object.defineProperty(fakeFile, 'type', { value: 'image/png' }); // ie: 1048577 whichi is >1048576
     component.temporaryPhotoFile = fakeFile;
+    component.temporaryCoverPhotoFile = fakeFile;
     const event = {
       target: { files: [fakeFile] },
     };
-    component.onFileSelected((event as unknown) as Event);
+    component.onPhotoFileSelected((event as unknown) as Event);
+    component.onCoverFileSelected((event as unknown) as Event);
     expect(component.userPhotoURL).toEqual('avatarURLforJohn');
+    expect(component.userCoverPhotoURL).toEqual('coverPhotoURLforJohn');
     expect(component.pictureErrMessage).toBe(
       'Photo must be smaller than 1.0 MB!'
+    );
+    expect(component.coverErrMessage).toBe(
+      'Cover photo must be smaller than 1.0 MB!'
     );
     expect(component.temporaryPhotoFile).toBe(null);
   });
@@ -195,34 +206,48 @@ describe('EditProfileComponent', () => {
     Object.defineProperty(fakeFile, 'size', { value: 1024 * 1024 }); // good size this time
     Object.defineProperty(fakeFile, 'type', { value: 'nonImage' });
     component.temporaryPhotoFile = fakeFile;
+    component.temporaryCoverPhotoFile = fakeFile;
     const event = {
       target: { files: [fakeFile] },
     };
 
-    component.onFileSelected((event as unknown) as Event);
+    component.onPhotoFileSelected((event as unknown) as Event);
+    component.onCoverFileSelected((event as unknown) as Event);
     expect(component.userPhotoURL).toEqual('avatarURLforJohn');
+    expect(component.userCoverPhotoURL).toEqual('coverPhotoURLforJohn');
     expect(component.pictureErrMessage).toBe(
       'The photo must be a file of type: jpeg, png, jpg!'
     );
+    expect(component.coverErrMessage).toBe(
+      'The cover photo must be a file of type: jpeg, png, jpg!'
+    );
     expect(component.temporaryPhotoFile).toBe(null);
+    expect(component.temporaryCoverPhotoFile).toBe(null);
   });
 
   it('should successfully show a good photo in the browser (before upload)', () => {
     Object.defineProperty(fakeFile, 'size', { value: 1024 * 1024 }); // good size this time
     Object.defineProperty(fakeFile, 'type', { value: 'image/png' });
     component.temporaryPhotoFile = fakeFile;
+    component.temporaryCoverPhotoFile = fakeFile;
     const event = {
       target: { files: [fakeFile] },
     };
-    component.onFileSelected((event as unknown) as Event);
+    component.onPhotoFileSelected((event as unknown) as Event);
+    component.onCoverFileSelected((event as unknown) as Event);
     expect(component.userPhotoURL).toEqual('safeString'); // sanitized url
+    expect(component.userCoverPhotoURL).toEqual('safeString');
     expect(component.pictureErrMessage).toBe(null);
+    expect(component.coverErrMessage).toBe(null);
     expect(component.temporaryPhotoFile).toBe(fakeFile);
+    expect(component.temporaryCoverPhotoFile).toBe(fakeFile);
   });
 
   it('should validate photos', () => {
     component.temporaryPhotoFile = fakeFile;
+    component.temporaryCoverPhotoFile = fakeFile;
     expect(component.goodPhotoLoaded()).toBe(true);
+    expect(component.goodCoverPhotoLoaded()).toBe(true);
   });
 
   it('should disable submit button if form fields are not valid', () => {
@@ -247,8 +272,12 @@ describe('EditProfileComponent', () => {
 
   it('should remove the photo if user clicks on cancel photo button ', () => {
     component.temporaryPhotoFile = fakeFile;
+    component.temporaryCoverPhotoFile = fakeFile;
     component.cancelPhoto();
+    component.cancelCoverPhoto();
     expect(component.temporaryPhotoFile).toBe(null);
+    expect(component.temporaryCoverPhotoFile).toBe(null);
     expect(component.userPhotoURL).toBe('avatarURLforJohn');
+    expect(component.userCoverPhotoURL).toBe('coverPhotoURLforJohn');
   });
 });

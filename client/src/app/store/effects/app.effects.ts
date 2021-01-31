@@ -108,12 +108,12 @@ export class Effects {
     )
   );
 
-  updateProfilePictureURL$: Observable<Action> = createEffect(() =>
+  updatePictureURL$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
-      ofType(appActions.updateProfilePictureURL),
+      ofType(appActions.updatePictureURL),
       switchMap((action) => {
         return this.userService
-          .updateProfilePictureURL(action.id, action.image)
+          .updatePictureURL(action.id, action.image, action.typeSelection)
           .pipe(
             map((data) => appActions.setCurrentUser({ user: data })),
             catchError((data) =>

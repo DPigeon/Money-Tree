@@ -1,4 +1,3 @@
-import { UserService } from 'src/app/services/user/user.service';
 import { HomeComponent } from './home.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -33,7 +32,6 @@ describe('HomeComponent', () => {
       ],
       providers: [
         NGRX_STORE_MODULE,
-        { provide: UserService, useValue: mockUserService },
         {
           provide: MatDialogRef,
           useValue: {
