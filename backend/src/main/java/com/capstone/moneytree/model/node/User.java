@@ -23,6 +23,8 @@ public class User extends Entity {
 
     String avatarURL;
 
+    String coverPhotoURL;
+    
     String email;
 
     Double score;
@@ -34,6 +36,8 @@ public class User extends Entity {
     String password; // Must be encrypted
 
     String alpacaApiKey;
+
+    String biography;
 
     @Relationship(type = "FOLLOWS", direction = Relationship.INCOMING)
     Set<User> followers;

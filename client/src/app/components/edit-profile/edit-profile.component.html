@@ -1,83 +1,83 @@
 <div class="container">
-  <div class="cover-picture">
+
+  <div class="photos-container">
     <button mat-icon-button class="close-dialog-icon" mat-dialog-close>
       <mat-icon>close</mat-icon>
     </button>
-    <button mat-button class="edit-cover-picture">
-      <mat-icon>add_a_photo</mat-icon>
-      <span class="edit-cover-pic-text">Edit Cover Photo</span>
+
+    <img [src]="userCoverPhotoURL" alt="cover photo picture" class="cover-pic-img" />
+    <button mat-button class="edit-cover-picture-btn" *ngIf="userCoverPhotoURL==userInState.coverPhotoURL">
+      <input single type="file" id="cover-picture" class="cover-hidden-input" accept="image/x-png,image/jpeg"
+        (change)="onCoverFileSelected($event)" />
+      <label for="cover-photo">
+        <mat-icon>add_a_photo</mat-icon>
+        <span class="edit-cover-pic-text">Edit Cover Photo</span>
+      </label>
     </button>
 
-    <div class="profile-picture">
-      <img
-        src="https://ollienollie.files.wordpress.com/2009/10/untitled-181.jpg"
-        alt="profile picture"
-        class="profile-pic"
-      />
-      <button mat-icon-button class="edit-profile-pic">
-        <mat-icon>add_a_photo</mat-icon>
+    <button mat-icon-button class="edit-cover-picture-btn cancel-button"
+      *ngIf="userCoverPhotoURL!==userInState.coverPhotoURL">
+      <input single class="cover-hidden-input" />
+      <label for="cover-picture">
+        <mat-icon (click)="cancelCoverPhoto()">close</mat-icon>
+      </label>
+    </button>
+
+    <div class="profile-picture-container">
+      <img [src]="userPhotoURL" class="profile-pic-img" alt="profile picture" />
+      <button mat-icon-button class="edit-profile-pic-btn" *ngIf="userPhotoURL==userInState.avatarURL">
+        <input single type="file" id="profile-picture" style="display: none;" accept="image/x-png,image/jpeg"
+          (change)="onPhotoFileSelected($event)" />
+        <label for="profile-picture">
+          <mat-icon>add_a_photo</mat-icon>
+        </label>
       </button>
+
+      <button mat-icon-button class="edit-profile-pic-btn cancel-button" *ngIf="userPhotoURL!==userInState.avatarURL">
+        <input single style="display: none;" />
+        <label for="profile-picture">
+          <mat-icon (click)="cancelPhoto()">close</mat-icon>
+        </label>
+      </button>
+
     </div>
   </div>
+  <div class="form-error-messages" *ngIf="pictureErrMessage">{{pictureErrMessage}}</div>
+  <div class="form-error-messages" *ngIf="coverErrMessage && !pictureErrMessage">{{coverErrMessage}}</div>
+  <div class="form-error-messages" *ngIf="editProfileForm.invalid && !coverErrMessage && !pictureErrMessage">
+    {{ showErrorMessage() }}
+  </div>
 
-  <form class="edit-profile-form">
-    <mat-form-field
-      class="mt-input-field half"
-      appearance="outline"
-      color="coral"
-    >
+  <form [formGroup]="editProfileForm" class="edit-profile-form" (ngSubmit)="onSubmit()">
+
+    <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
       <mat-label>First Name</mat-label>
-      <input matInput placeholder="First Name" />
+      <input matInput placeholder="First Name" [formControl]="firstName" />
     </mat-form-field>
 
-    <mat-form-field
-      class="mt-input-field half"
-      appearance="outline"
-      color="coral"
-    >
+    <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
       <mat-label>Last Name</mat-label>
-      <input matInput placeholder="Last Name" />
+      <input matInput placeholder="Last Name" [formControl]="lastName" />
     </mat-form-field>
 
-    <mat-form-field
-      class="mt-input-field textarea bio"
-      appearance="outline"
-      color="coral"
-    >
+    <mat-form-field class="mt-input-field textarea bio" appearance="outline" color="coral">
       <mat-label>Bio</mat-label>
-      <textarea
-        matInput
-        placeholder="Bio"
-        matTextareaAutosize
-        matAutosizeMinRows="5"
-        matAutosizeMaxRows="10"
-      ></textarea>
+      <textarea matInput placeholder="Bio" matTextareaAutosize matAutosizeMinRows="5" matAutosizeMaxRows="10"
+        [formControl]="biography"></textarea>
     </mat-form-field>
 
-    <mat-form-field
-      class="mt-input-field half"
-      appearance="outline"
-      color="coral"
-    >
+    <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
       <mat-label>New Password</mat-label>
-      <input matInput placeholder="New password" type="password" />
+      <input matInput placeholder="New password" type="password" [formControl]="newPwd" />
     </mat-form-field>
 
-    <mat-form-field
-      class="mt-input-field half"
-      appearance="outline"
-      color="coral"
-    >
+    <mat-form-field class="mt-input-field half" appearance="outline" color="coral">
       <mat-label>Confirm New Password</mat-label>
-      <input matInput placeholder="Confirm New Password" type="password" />
+      <input matInput placeholder="Confirm New Password" type="password" [formControl]="newPwd2" />
     </mat-form-field>
 
-    <button
-      class="mt-input-field secondary-action-btn"
-      mat-flat-button
-      type="submit"
-    >
-      Save Changes
+    <button class="mt-input-field secondary-action-btn" mat-flat-button type="submit"
+      [class.btn-opacity-disabled]="disableButton()" [disabled]="disableButton()"> Save Changes
     </button>
   </form>
 </div>

@@ -1,6 +1,5 @@
 package com.capstone.moneytree.service.impl;
 
-
 import javax.security.auth.login.CredentialNotFoundException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +40,8 @@ public class DefaultUserService implements UserService {
    private final String bucketName;
 
    @Autowired
-   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service, @Value("${aws.profile.pictures.bucket}") String bucketName) {
+   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service,
+         @Value("${aws.profile.pictures.bucket}") String bucketName) {
       this.userDao = userDao;
       this.validatorFactory = validatorFactory;
       this.passwordEncryption = new MoneyTreePasswordEncryption();
@@ -81,6 +81,7 @@ public class DefaultUserService implements UserService {
       String encryptedPassword = encryptData(password);
       user.setPassword(encryptedPassword);
       user.setAvatarURL(String.format("https://%s.s3.amazonaws.com/%s", bucketName, DEFAULT_PROFILE_NAME));
+      user.setCoverPhotoURL(String.format("https://%s.s3.amazonaws.com/%s", bucketName, DEFAULT_PROFILE_NAME)); // TODO: must be changed to a general cover photo
 
       userDao.save(user);
 
@@ -96,13 +97,13 @@ public class DefaultUserService implements UserService {
          throw new BadRequestException("The ID of the user in the payload is not the same as the ID in the path");
       }
 
-      //ensure that if username is changed, then it is changed to an unused username
+      // ensure that if username is changed, then it is changed to an unused username
       if (user.getUsername() != null && !user.getUsername().equals(userToUpdate.getUsername())) {
          getUserValidator().validateUsername(user);
          userToUpdate.setUsername(user.getUsername());
       }
 
-      //ensure that if email is changed, then it is changed to an unused email
+      // ensure that if email is changed, then it is changed to an unused email
       if (user.getEmail() != null && !user.getEmail().equals(userToUpdate.getEmail())) {
          getUserValidator().validateEmail(user);
          userToUpdate.setEmail(user.getEmail());
@@ -120,6 +121,14 @@ public class DefaultUserService implements UserService {
          userToUpdate.setAvatarURL(user.getAvatarURL());
       }
 
+      if (user.getCoverPhotoURL() != null) {
+         userToUpdate.setCoverPhotoURL(user.getCoverPhotoURL());
+      }
+
+      if (user.getBiography() != null) {
+         userToUpdate.setBiography(user.getBiography());
+      }
+
       if (user.getScore() != null) {
          userToUpdate.setScore(user.getScore());
       }
@@ -133,7 +142,7 @@ public class DefaultUserService implements UserService {
       }
 
       if (user.getPassword() != null) {
-         userToUpdate.setPassword(user.getPassword());
+         userToUpdate.setPassword(encryptData(user.getPassword()));
       }
 
       if (user.getAlpacaApiKey() != null) {
@@ -159,20 +168,39 @@ public class DefaultUserService implements UserService {
    }
 
    @Override
-   public User editUserProfilePicture(User user, MultipartFile imageFile) {
-      //since user exists, we can now upload image to s3 and save imageUrl into db
-      String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
+   public User editUserProfilePicture(User user, MultipartFile imageFile, String selection) {
 
-      //if user already has a profile picture that is not the default picture, handle deleting old picture
-      if (StringUtils.isNotBlank(user.getAvatarURL()) && !user.getAvatarURL().contains(DEFAULT_PROFILE_NAME)) {
-         this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getAvatarURL());
+      switch (selection) {
+         case "avatarURL": {
+            // since user exists, we can now upload image to s3 and save imageUrl into db
+            String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
+            // if user already has a profile picture that is not the default picture, handle
+            // deleting old picture
+            if (StringUtils.isNotBlank(user.getAvatarURL()) && !user.getAvatarURL().contains(DEFAULT_PROFILE_NAME)) {
+               this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getAvatarURL());
+            }
+            // set new image url
+            user.setAvatarURL(imageUrl);
+            userDao.save(user);
+            LOG.info("Edited {}'s profile picture successfully!", user.getUsername());
+            break;
+         }
+         case "coverPhotoURL": {
+            String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
+            if (StringUtils.isNotBlank(user.getCoverPhotoURL())
+                  && !user.getCoverPhotoURL().contains(DEFAULT_PROFILE_NAME)) {
+               this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getCoverPhotoURL());
+            }
+            // set new image url
+            user.setCoverPhotoURL(imageUrl);
+            userDao.save(user);
+            LOG.info("Edited {}'s profile cover photo successfully!", user.getUsername());
+            break;
+         }
+         default:
+            LOG.info("Photo was not saved on Amazon S3!");
+            throw new BadRequestException(String.format("Wrong selection string was put as parameter."));
       }
-
-      //set new image url
-      user.setAvatarURL(imageUrl);
-      userDao.save(user);
-
-      LOG.info("Edited {}'s profile successfully!", user.getUsername());
       return user;
    }
 
@@ -194,12 +222,11 @@ public class DefaultUserService implements UserService {
     * A method to verify given credentials against existing user records
     *
     * @param credentials A User object with email and unencrypted password
-    * @return The full User object from the database if login is successful, null otherwise
+    * @return The full User object from the database if login is successful, null
+    *         otherwise
     */
    @Override
-   public User login(User credentials)
-           throws
-           CredentialNotFoundException {
+   public User login(User credentials) throws CredentialNotFoundException {
       User user = userDao.findUserByEmail(credentials.getEmail());
       if (user != null && compareDigests(credentials.getPassword(), user.getPassword())) {
          return user;

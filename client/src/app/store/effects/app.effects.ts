@@ -58,19 +58,16 @@ export class Effects {
     this.actions$.pipe(
       ofType(appActions.upadateUser),
       switchMap((action) => {
-        // This function will be changed when the backend refactos
-        return this.userService
-          .updateUser(action.user.id, action.user)
-          .pipe(
-            map((data) => appActions.setCurrentUser({ user: data })),
-            catchError((data) =>
-              of(
-                appActions.setAppError({
-                  errorMessage: this.mirrorError(data),
-                })
-              )
+        return this.userService.updateUser(action.user.id, action.user).pipe(
+          map((data) => appActions.setCurrentUser({ user: data })),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
             )
-          );
+          )
+        );
       })
     )
   );
@@ -111,6 +108,25 @@ export class Effects {
     )
   );
 
+  updatePictureURL$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.updatePictureURL),
+      switchMap((action) => {
+        return this.userService
+          .updatePictureURL(action.id, action.image, action.typeSelection)
+          .pipe(
+            map((data) => appActions.setCurrentUser({ user: data })),
+            catchError((data) =>
+              of(
+                appActions.setAppError({
+                  errorMessage: this.mirrorError(data),
+                })
+              )
+            )
+          );
+      })
+    )
+  );
   mirrorError(backendError): AppError {
     if (backendError && backendError.error) {
       const errorMessage: AppError = {

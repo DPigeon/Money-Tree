@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { StoreFacadeService } from '../../store/store-facade.service';
 
 @Component({
@@ -7,6 +7,7 @@ import { StoreFacadeService } from '../../store/store-facade.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
+  @Input() userPhotoURL: string;
   constructor(private storeFacade: StoreFacadeService) {}
 
   logout(): void {
