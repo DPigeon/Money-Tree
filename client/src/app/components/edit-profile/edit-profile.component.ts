@@ -103,7 +103,6 @@ export class EditProfileComponent {
       }
       updatedUser.firstName = this.firstName.value;
       updatedUser.lastName = this.lastName.value;
-      updatedUser.password = this.newPwd.value;
       updatedUser.biography = this.biography.value;
       this.userUpdate.emit(updatedUser);
     }
@@ -223,7 +222,6 @@ export class EditProfileComponent {
   cancelPhoto(): void {
     this.temporaryPhotoFile = null;
     this.userPhotoURL = this.userInState.avatarURL;
-    console.log('remove photo clicked');
   }
 }
 
