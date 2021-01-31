@@ -201,12 +201,11 @@ export class EditProfileComponent {
   }
 
   disableButton(): boolean {
-    if (!this.editProfileForm.valid) {
-      return true;
-    } else if (
-      !this.goodPhotoLoaded() &&
-      !!this.editProfileForm.valid &&
-      !this.fieldsChanged()
+    if (
+      !this.editProfileForm.valid ||
+      (!this.goodPhotoLoaded() &&
+        !!this.editProfileForm.valid &&
+        !this.fieldsChanged())
     ) {
       return true;
     }
