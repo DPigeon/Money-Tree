@@ -192,7 +192,6 @@ describe('EditProfileComponent', () => {
   });
 
   it('should show error message for non image file input', () => {
-    const fakeFile = new File([''], 'nonImageFile');
     Object.defineProperty(fakeFile, 'size', { value: 1024 * 1024 }); // good size this time
     Object.defineProperty(fakeFile, 'type', { value: 'nonImage' });
     component.temporaryPhotoFile = fakeFile;
@@ -209,7 +208,6 @@ describe('EditProfileComponent', () => {
   });
 
   it('should successfully show a good photo in the browser (before upload)', () => {
-    const fakeFile = new File([''], 'GoodImage');
     Object.defineProperty(fakeFile, 'size', { value: 1024 * 1024 }); // good size this time
     Object.defineProperty(fakeFile, 'type', { value: 'image/png' });
     component.temporaryPhotoFile = fakeFile;
