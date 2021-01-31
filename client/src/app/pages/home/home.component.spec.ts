@@ -15,8 +15,6 @@ describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
 
-  const mockUserService = {} as any;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
