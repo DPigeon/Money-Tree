@@ -57,18 +57,22 @@ describe('user authentication', () => {
   it('should update user with alpaca id and navigate home', () => {
     page.navigateHomeWithAlpacaCode();
     expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'home');
+    browser.sleep(1000);
   });
 
   it('should navigate to signup page if the user logs out', () => {
     logoutBtn.click();
     expect(browser.getCurrentUrl()).toBe(browser.baseUrl);
+    browser.sleep(1000);
   });
 
   it('should navigate to home if the user is logged in', () => {
     page.navigateHome();
     emailInput.sendKeys(user.email);
     passwordInput.sendKeys(user.password);
+    browser.sleep(1000);
     loginBtn.click();
     expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'home');
+    browser.sleep(1000);
   });
 });

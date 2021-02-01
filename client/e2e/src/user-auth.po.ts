@@ -10,7 +10,7 @@ const systemTestUser2 = {
   avatarURL: '',
   coverPhotoURL: '',
   password: 'Hunter42',
-  email: 'systemtestuser1@systemtestuser.com',
+  email: 'systemtestuser6@systemtestuser.com',
   score: 12,
   rank: 10000,
   balance: 223,
