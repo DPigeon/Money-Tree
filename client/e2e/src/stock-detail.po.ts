@@ -1,18 +1,18 @@
-import { browser, by, element } from 'protractor';
+import { browser, by, element, ElementFinder } from 'protractor';
 
 export class StockDetail {
-  getStockSearchBar() {
+  getStockSearchBar(): ElementFinder {
     return element(by.id('searchbox'));
   }
 
-  getFirstSearchResult() {
-    return element.all(by.css('.option-container')).get(0).getText();
+  getFirstSearchResult(): Promise<string> {
+    return element.all(by.css('.option-container')).get(0).getText() as Promise<string>;
   }
 
   navigateToStockDetailPage(ticker: string): Promise<unknown> {
-    return browser.get(browser.baseUrl + '/stock-detail/' + ticker) as Promise<
-      unknown
-    >;
+    return browser.get(
+      browser.baseUrl + '/stock-detail/' + ticker
+    ) as Promise<unknown>;
   }
 
   getStockStatOpen(): string {
