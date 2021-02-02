@@ -120,6 +120,34 @@ public class UserController {
       return ResponseEntity.ok(this.userService.editUserProfilePicture(userToUpdate, imageFile, selection));
    }
 
+   /**
+    * Following a user endpoint
+    * @param userId The ID of the user that is following a user
+    * @param userToFollowId The ID of the user to follow
+    * @return A response object
+    */
+
+   @PostMapping("/{userId}/follow/{userToFollowId}")
+   ResponseEntity<Long> followUser(@PathVariable Long userId, @PathVariable Long userToFollowId) {
+      Long id = userService.followUser(userId, userToFollowId);
+
+      return ResponseEntity.ok(id);
+   }
+
+   /**
+    * Unfollowing a user endpoint
+    * @param userId The ID of the user that is following a user
+    * @param userToUnfollowId The ID of the user to unfollow
+    * @return A response object
+    */
+
+   @DeleteMapping("/{userId}/follow/{userToUnfollowId}")
+   ResponseEntity<Long> unfollowUser(@PathVariable Long userId, @PathVariable Long userToUnfollowId) {
+      Long id = userService.unfollowUser(userId, userToUnfollowId);
+
+      return ResponseEntity.ok(id);
+   }
+
    @DeleteMapping("/delete-by-email/{email}")
    public ResponseEntity<Void> deleteUserByEmail(@Valid @PathVariable String email) {
       try {

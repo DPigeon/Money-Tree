@@ -42,6 +42,10 @@ public interface UserService {
 
    User editUserProfilePicture(User user, MultipartFile imageFile, String selection);
 
+   Long followUser(Long userId, Long userToFollowId);
+
+   Long unfollowUser(Long userId, Long userToUnfollowId);
+
    void deleteUserByEmail(String email);
 
 }

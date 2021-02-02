@@ -48,12 +48,12 @@ public class User extends Entity {
     @Relationship(type = "MADE")
     Set<Transaction> transactions;
 
-    public void follows(User user) {
-        user.getFollowers().add(this);
+    public void follow(User user) {
+        this.getFollowers().add(user);
     }
 
-    public void followedBy(User user) {
-        this.getFollowers().add(user);
+    public void unfollow(User user) {
+        this.getFollowers().remove(user);
     }
 
     public void made(Transaction transaction) {
