@@ -13,6 +13,8 @@ import java.util.List;
 import com.capstone.moneytree.exception.AlpacaException;
 import com.capstone.moneytree.model.AlpacaOrder;
 import com.google.gson.Gson;
+import net.jacobpeterson.alpaca.enums.OrderSide;
+import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -83,52 +85,22 @@ public class DefaultTransactionService implements TransactionService {
 
       String alpacaKey = user.getAlpacaApiKey();
 
-      CloseableHttpClient httpClient = HttpClients.createDefault();
-      HttpPost httpPost = new HttpPost(alpacaPaperApiUrl + "/v2/orders");
-      httpPost.addHeader("Authorization", "Bearer " + alpacaKey);
-
-      /* Execute order via HTTP POST request to alpaca paper endpoint */
-      AlpacaOrder alpacaOrder = null;
-      try {
-         StringEntity params = new StringEntity(
-             "{\"symbol\":\"" + order.getSymbol() + "\"," +
-             "\"qty\":" + order.getQty() + "," +
-             "\"side\":\"" + order.getSide() + "\"," +
-             "\"type\":\"" + order.getType() + "\"," +
-             "\"time_in_force\":\"day\"" +
-             "}"
-         );
-         params.setContentType("application/json");
-         httpPost.setEntity(params);
-
-         HttpResponse response = httpClient.execute(httpPost);
-         if (response.getStatusLine().getStatusCode() == 403) {
-            throw new AlpacaException(EntityUtils.toString(response.getEntity()));
-         }
-
-         //parse json response using gson
-         Gson gson = new Gson();
-         alpacaOrder = gson.fromJson(EntityUtils.toString(response.getEntity()), AlpacaOrder.class);
-         LOG.info("Alpaca order ({}) successfully placed {}:{}", alpacaOrder.getClientOrderId(), alpacaOrder.getSymbol(), alpacaOrder.getQty());
-         System.out.println(alpacaOrder.toString());
-
-      } catch (IOException e) {
-         e.printStackTrace();
-      }
-
       /* Build the transaction and persist */
       Transaction transaction = null;
       try {
          AlpacaAPI api = AlpacaSession.alpaca(alpacaKey);
+         Order alpacaOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
+
+         System.out.println(alpacaOrder.getClientOrderId());
 
          transaction = Transaction.builder()
-              .status(TransactionStatus.PENDING)
-              .purchasedAt(alpacaOrder.getCreatedAt())
-              .clientOrderId(alpacaOrder.getClientOrderId())
-              .moneyTreeOrderType(MoneyTreeOrderType.valueOf(alpacaOrder.getOrderType().toUpperCase()+"_"+alpacaOrder.getSide().toUpperCase()))
-              .quantity(alpacaOrder.getQty())
-              .fulfilledStocks(List.of(Stock.builder().asset(api.getAssetBySymbol(alpacaOrder.getSymbol())).build())) // populate the stock which this transaction fulfills. Only asset field is populated now
-              .build();
+                 .status(TransactionStatus.PENDING)
+                 .purchasedAt(alpacaOrder.getCreatedAt())
+                 .clientOrderId(alpacaOrder.getClientOrderId())
+                 .moneyTreeOrderType(MoneyTreeOrderType.valueOf(alpacaOrder.getType().toUpperCase()+"_"+alpacaOrder.getSide().toUpperCase()))
+                 .quantity(Float.parseFloat(alpacaOrder.getQty()))
+                 .fulfilledStocks(List.of(Stock.builder().asset(api.getAssetBySymbol(alpacaOrder.getSymbol())).build())) // populate the stock which this transaction fulfills. Only asset field is populated now
+                 .build();
       } catch (AlpacaAPIRequestException e) {
          e.printStackTrace();
       }
@@ -141,7 +113,6 @@ public class DefaultTransactionService implements TransactionService {
          user.setTransactions(transactions);
          userDao.save(user);
       }
-
       return transaction;
    }
 
