@@ -1,5 +1,6 @@
 package com.capstone.moneytree.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +14,9 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlpacaOrderResponse {
+public class AlpacaOrder {
     @SerializedName(value = "id")
+    @Expose
     private String id;
     @SerializedName(value = "client_order_id")
     private String clientOrderId;
@@ -32,8 +34,10 @@ public class AlpacaOrderResponse {
     private String filledQty;
     @SerializedName(value = "filled_avg_price")
     private String filledAvgPrice;
-    @SerializedName(value = "side")
+    @SerializedName(value = "order_type")
     private String orderType;
+    @SerializedName(value = "side")
+    private String side;
     @SerializedName(value = "time_in_force")
     private String timeInForce;
 }

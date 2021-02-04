@@ -2,24 +2,24 @@ package com.capstone.moneytree.service.impl;
 
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.http.HttpClient;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 
-import com.capstone.moneytree.model.AlpacaOAuthResponse;
-import com.capstone.moneytree.model.AlpacaOrderResponse;
+import com.capstone.moneytree.exception.AlpacaException;
+import com.capstone.moneytree.model.AlpacaOrder;
 import com.google.gson.Gson;
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.capstone.moneytree.dao.TransactionDao;
 import com.capstone.moneytree.dao.UserDao;
-import com.capstone.moneytree.exception.AlpacaException;
 import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.facade.AlpacaSession;
 import com.capstone.moneytree.model.MoneyTreeOrderType;
@@ -40,10 +39,10 @@ import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.service.api.TransactionService;
 
 import net.jacobpeterson.alpaca.AlpacaAPI;
-import net.jacobpeterson.alpaca.enums.OrderSide;
-import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
 import net.jacobpeterson.domain.alpaca.order.Order;
+
+import javax.ws.rs.ForbiddenException;
 
 @Service
 @Transactional
@@ -89,7 +88,7 @@ public class DefaultTransactionService implements TransactionService {
       httpPost.addHeader("Authorization", "Bearer " + alpacaKey);
 
       /* Execute order via HTTP POST request to alpaca paper endpoint */
-      AlpacaOrderResponse alpacaOrderResponse = null;
+      AlpacaOrder alpacaOrder = null;
       try {
          StringEntity params = new StringEntity(
              "{\"symbol\":\"" + order.getSymbol() + "\"," +
@@ -103,11 +102,15 @@ public class DefaultTransactionService implements TransactionService {
          httpPost.setEntity(params);
 
          HttpResponse response = httpClient.execute(httpPost);
+         if (response.getStatusLine().getStatusCode() == 403) {
+            throw new AlpacaException(EntityUtils.toString(response.getEntity()));
+         }
 
          //parse json response using gson
          Gson gson = new Gson();
-         alpacaOrderResponse = gson.fromJson(EntityUtils.toString(response.getEntity()), AlpacaOrderResponse.class);
-         LOG.info("Alpaca order ({}) successfully placed {}:{}", alpacaOrderResponse.getClientOrderId(), alpacaOrderResponse.getSymbol(), + alpacaOrderResponse.getQty());
+         alpacaOrder = gson.fromJson(EntityUtils.toString(response.getEntity()), AlpacaOrder.class);
+         LOG.info("Alpaca order ({}) successfully placed {}:{}", alpacaOrder.getClientOrderId(), alpacaOrder.getSymbol(), alpacaOrder.getQty());
+         System.out.println(alpacaOrder.toString());
 
       } catch (IOException e) {
          e.printStackTrace();
@@ -117,11 +120,14 @@ public class DefaultTransactionService implements TransactionService {
       Transaction transaction = null;
       try {
          AlpacaAPI api = AlpacaSession.alpaca(alpacaKey);
+
          transaction = Transaction.builder()
               .status(TransactionStatus.PENDING)
-              .purchasedAt(ZonedDateTime.parse(alpacaOrderResponse.getCreatedAt()))
-              .quantity(alpacaOrderResponse.getQty())
-              .fulfilledStocks(List.of(Stock.builder().asset(api.getAssetBySymbol(alpacaOrderResponse.getSymbol())).build())) // populate the stock which this transaction fulfills. Only asset field is populated now
+              .purchasedAt(alpacaOrder.getCreatedAt())
+              .clientOrderId(alpacaOrder.getClientOrderId())
+              .moneyTreeOrderType(MoneyTreeOrderType.valueOf(alpacaOrder.getOrderType().toUpperCase()+"_"+alpacaOrder.getSide().toUpperCase()))
+              .quantity(alpacaOrder.getQty())
+              .fulfilledStocks(List.of(Stock.builder().asset(api.getAssetBySymbol(alpacaOrder.getSymbol())).build())) // populate the stock which this transaction fulfills. Only asset field is populated now
               .build();
       } catch (AlpacaAPIRequestException e) {
          e.printStackTrace();
