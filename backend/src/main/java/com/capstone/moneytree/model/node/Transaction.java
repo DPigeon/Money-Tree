@@ -1,8 +1,8 @@
 package com.capstone.moneytree.model.node;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -15,7 +15,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import net.jacobpeterson.domain.alpaca.order.Order;
 
 @EqualsAndHashCode(callSuper = true)
 @NodeEntity
@@ -27,11 +26,11 @@ public class Transaction extends Entity {
 
    float quantity;
 
-   ZonedDateTime purchasedAt;
+   String purchasedAt;
 
    MoneyTreeOrderType moneyTreeOrderType;
 
-   Order alpacaOrder;
+   String clientOrderId;
 
    TransactionStatus status;
 
