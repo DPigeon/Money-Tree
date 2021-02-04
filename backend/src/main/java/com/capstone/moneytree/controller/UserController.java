@@ -26,7 +26,6 @@ import com.capstone.moneytree.handler.ExceptionMessage;
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.service.api.UserService;
 
-
 @MoneyTreeController
 @RequestMapping("/users")
 public class UserController {
@@ -69,7 +68,8 @@ public class UserController {
    }
 
    /**
-    * A method that updates a user with a new Alpaca key. This should be done only once at beginning
+    * A method that updates a user with a new Alpaca key. This should be done only
+    * once at beginning
     *
     * @param id  The user ID sent from the frontend
     * @param code The Alpaca API code sent from the frontend
@@ -90,12 +90,11 @@ public class UserController {
     * /login POST endpoint to authenticate a user
     *
     * @param credentials A User object with email and unencrypted password
-    * @return The full User object from the database if login is successful with 200 OK, 404 NOT_FOUND otherwise
+    * @return The full User object from the database if login is successful with
+    *         200 OK, 404 NOT_FOUND otherwise
     */
    @PostMapping("/login")
-   public User login(@RequestBody User credentials)
-           throws
-           CredentialNotFoundException {
+   public User login(@RequestBody User credentials) throws CredentialNotFoundException {
       return userService.login(credentials);
    }
 
@@ -108,12 +107,12 @@ public class UserController {
 
    @PostMapping("/profile-picture/{id}")
    ResponseEntity<User> editUserProfilePicture(@PathVariable Long id,
-                                               @RequestParam(required = false) MultipartFile imageFile) {
+         @RequestParam(required = false) MultipartFile imageFile, @RequestParam String selection) {
       User userToUpdate = this.userService.getUserById(id);
       if (imageFile == null || imageFile.isEmpty()) {
          throw new InvalidMediaFileException("The provided profile picture is null or empty");
       }
-      return ResponseEntity.ok(this.userService.editUserProfilePicture(userToUpdate, imageFile));
+      return ResponseEntity.ok(this.userService.editUserProfilePicture(userToUpdate, imageFile, selection));
    }
 
    @DeleteMapping("/delete-by-email/{email}")
