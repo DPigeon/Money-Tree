@@ -5,9 +5,9 @@ import com.capstone.moneytree.model.node.User
 class MoneyTreeTestUtils {
 
    /**
-    * Utility method to create a user
+    * Utility method to create a user with random ID
     */
-   static User createUser(Long id = new Random().nextLong(), String email, String username, String password, String firstName, String lastName, String alpacaApiKey) {
+   static User createUser(String email, String username, String password, String firstName, String lastName, String alpacaApiKey) {
       User user = User.builder()
               .email(email)
               .username(username)
@@ -16,7 +16,23 @@ class MoneyTreeTestUtils {
               .lastName(lastName)
               .alpacaApiKey(alpacaApiKey)
               .build()
-      user.setId(id)
+      user.setId(new Random().nextLong())
+      return user
+   }
+
+   /**
+    * Utility method to create a user
+    */
+   static User createUser(Long id, String email, String username, String password, String firstName, String lastName, String alpacaApiKey) {
+      User user = User.builder()
+              .email(email)
+              .username(username)
+              .password(password)
+              .firstName(firstName)
+              .lastName(lastName)
+              .alpacaApiKey(alpacaApiKey)
+              .build();
+      user.setId(id);
       return user
    }
 
