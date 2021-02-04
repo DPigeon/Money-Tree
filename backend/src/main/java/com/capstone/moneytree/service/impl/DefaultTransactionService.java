@@ -1,11 +1,29 @@
 package com.capstone.moneytree.service.impl;
 
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.http.HttpClient;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-import net.jacobpeterson.domain.alpaca.accountconfiguration.AccountConfiguration;
+
+import com.capstone.moneytree.model.AlpacaOAuthResponse;
+import com.capstone.moneytree.model.AlpacaOrderResponse;
+import com.google.gson.Gson;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +42,6 @@ import com.capstone.moneytree.service.api.TransactionService;
 import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.enums.OrderSide;
 import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
-import net.jacobpeterson.alpaca.enums.OrderType;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
 import net.jacobpeterson.domain.alpaca.order.Order;
 
@@ -35,6 +52,12 @@ public class DefaultTransactionService implements TransactionService {
 
    private final TransactionDao transactionDao;
    private final UserDao userDao;
+   @Value("${alpaca.base.api.url}")
+   private String alpacaPaperApiUrl;
+
+
+   private static final Logger LOG = LoggerFactory.getLogger(DefaultTransactionService.class);
+
 
    @Autowired
    public DefaultTransactionService(TransactionDao transactionDao, UserDao userDao) {
@@ -53,42 +76,66 @@ public class DefaultTransactionService implements TransactionService {
       return null;
    }
 
+
    @Override
    public Transaction execute(String userId, Order order) {
       /* Get user for that transaction*/
       User user = getUser(Long.parseLong(userId));
 
       String alpacaKey = user.getAlpacaApiKey();
-      //AlpacaAPI api = new AlpacaAPI("PKZVEATJSRHXR2AY4UWB", "LzIPiJmjAXju9DVuuRa9gBQcCXQwl9IrN5CfhloZ");
-      AlpacaAPI api = AlpacaSession.alpaca(alpacaKey);
 
-      /* Place the order to alpaca api */
-      Order placedOrder;
-      Transaction transaction;
+      CloseableHttpClient httpClient = HttpClients.createDefault();
+      HttpPost httpPost = new HttpPost(alpacaPaperApiUrl + "/v2/orders");
+      httpPost.addHeader("Authorization", "Bearer " + alpacaKey);
+
+      /* Execute order via HTTP POST request to alpaca paper endpoint */
+      AlpacaOrderResponse alpacaOrderResponse = null;
       try {
-         System.out.println("Buying Power: " + api.getAccount().getBuyingPower());
-         placedOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
-         //placedOrder = api.requestNewOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderType.valueOf(order.getType().toUpperCase()), OrderTimeInForce.DAY, null, null, null, null, null, null, null, null, null, null);
-         LOGGER.info("Placed order {}", placedOrder.getClientOrderId());
+         StringEntity params = new StringEntity(
+             "{\"symbol\":\"" + order.getSymbol() + "\"," +
+             "\"qty\":" + order.getQty() + "," +
+             "\"side\":\"" + order.getSide() + "\"," +
+             "\"type\":\"" + order.getType() + "\"," +
+             "\"time_in_force\":\"day\"" +
+             "}"
+         );
+         params.setContentType("application/json");
+         httpPost.setEntity(params);
 
-         /* Build the transaction and persist */
+         HttpResponse response = httpClient.execute(httpPost);
+
+         //parse json response using gson
+         Gson gson = new Gson();
+         alpacaOrderResponse = gson.fromJson(EntityUtils.toString(response.getEntity()), AlpacaOrderResponse.class);
+         LOG.info("Alpaca order ({}) successfully placed {}:{}", alpacaOrderResponse.getClientOrderId(), alpacaOrderResponse.getSymbol(), + alpacaOrderResponse.getQty());
+
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+
+      /* Build the transaction and persist */
+      Transaction transaction = null;
+      try {
+         AlpacaAPI api = AlpacaSession.alpaca(alpacaKey);
          transaction = Transaction.builder()
-                 .status(TransactionStatus.PENDING)
-                 .purchasedAt(placedOrder.getCreatedAt())
-                 .quantity(Float.parseFloat(placedOrder.getQty()))
-                 .fulfilledStocks(List.of(Stock.builder().asset(api.getAssetBySymbol(placedOrder.getSymbol())).build())) // populate the stock which this transaction fulfills. Only asset field is populated now
-                 .build();
+              .status(TransactionStatus.PENDING)
+              .purchasedAt(ZonedDateTime.parse(alpacaOrderResponse.getCreatedAt()))
+              .quantity(alpacaOrderResponse.getQty())
+              .fulfilledStocks(List.of(Stock.builder().asset(api.getAssetBySymbol(alpacaOrderResponse.getSymbol())).build())) // populate the stock which this transaction fulfills. Only asset field is populated now
+              .build();
+      } catch (AlpacaAPIRequestException e) {
+         e.printStackTrace();
+      }
 
-         /* Save the user with by appending new transaction */
-         List<Transaction> transactions = new java.util.ArrayList<>(List.of(transaction));
+      /* Save the user by appending new transaction */
+      if (transaction != null) {
+         List<Transaction> transactions = new ArrayList<>(List.of(transaction));
          if (user.getTransactions() != null)
             transactions.addAll(user.getTransactions());
          user.setTransactions(transactions);
          userDao.save(user);
-
-      } catch (AlpacaAPIRequestException ex) {
-         throw new AlpacaException(ex.getMessage());
       }
+
       return transaction;
    }
 
