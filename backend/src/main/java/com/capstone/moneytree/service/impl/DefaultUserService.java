@@ -177,7 +177,7 @@ public class DefaultUserService implements UserService {
    }
 
    @Override
-   public User editUserProfilePicture(User user, MultipartFile imageFile) {
+   public User editUserProfilePicture(User user, MultipartFile imageFile, String selection) {
       //since user exists, we can now upload image to s3 and save imageUrl into db
       String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
 
