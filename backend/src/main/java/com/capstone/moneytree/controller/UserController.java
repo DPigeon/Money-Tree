@@ -129,7 +129,7 @@ public class UserController {
 
    @PostMapping("/{userId}/follow/{userToFollowId}")
    ResponseEntity<Long> followUser(@PathVariable Long userId, @PathVariable Long userToFollowId) {
-      Long id = userService.followUser(userId, userToFollowId);
+      Long id = this.userService.followUser(userId, userToFollowId);
 
       return ResponseEntity.ok(id);
    }
@@ -141,9 +141,9 @@ public class UserController {
     * @return A response object
     */
 
-   @DeleteMapping("/{userId}/follow/{userToUnfollowId}")
+   @DeleteMapping("/{userId}/unfollow/{userToUnfollowId}")
    ResponseEntity<Long> unfollowUser(@PathVariable Long userId, @PathVariable Long userToUnfollowId) {
-      Long id = userService.unfollowUser(userId, userToUnfollowId);
+      Long id = this.userService.unfollowUser(userId, userToUnfollowId);
 
       return ResponseEntity.ok(id);
    }

@@ -5,6 +5,7 @@ import lombok.*;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -39,7 +40,7 @@ public class User extends Entity {
 
     String biography;
 
-    @Relationship(type = "FOLLOWS", direction = Relationship.INCOMING)
+    @Relationship(type = "FOLLOWS")
     Set<User> followers;
 
     @Relationship(type = "OWNS")
@@ -48,12 +49,22 @@ public class User extends Entity {
     @Relationship(type = "MADE")
     Set<Transaction> transactions;
 
+    @Override
+    public int hashCode() {
+        return Math.toIntExact(this.getId());
+    }
+
     public void follow(User user) {
-        this.getFollowers().add(user);
+        if (followers == null) {
+            followers = new HashSet<>();
+        }
+        followers.add(user);
     }
 
     public void unfollow(User user) {
-        this.getFollowers().remove(user);
+        if (followers != null && !followers.isEmpty()) {
+            followers.remove(user);
+        }
     }
 
     public void made(Transaction transaction) {
