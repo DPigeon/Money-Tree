@@ -50,6 +50,16 @@ public class User extends Entity {
     Set<Transaction> transactions;
 
     @Override
+    public boolean equals(Object object) {
+        if (object instanceof User){
+            User other = (User) object;
+            return this.getId().equals(other.getId());
+        }
+
+        return false;
+    }
+
+    @Override
     public int hashCode() {
         return Math.toIntExact(this.getId());
     }
