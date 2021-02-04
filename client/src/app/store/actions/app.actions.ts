@@ -49,3 +49,8 @@ export const setAppError = createAction(
   '[User] App Error',
   props<{ errorMessage: AppError }>()
 );
+
+export const updatePictureURL = createAction(
+  '[User] Photo URL updated for user',
+  props<{ id: number; image: File , typeSelection: string}>()
+);

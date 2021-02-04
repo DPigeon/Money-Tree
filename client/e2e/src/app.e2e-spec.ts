@@ -65,15 +65,4 @@ describe('workspace-project App', () => {
     page.navigateToStockDetailPage('AAPL');
     expect(page.getStockIndustry()).toBeTruthy();
   });
-
-  it('should display stock stats', () => {
-    expect(page.getStockStatOpen()).toBeTruthy();
-    expect(page.getStockStatHigh()).toBeTruthy();
-    expect(page.getStockStatLow()).toBeTruthy();
-    expect(page.getStockStatVol()).toBeTruthy();
-    expect(page.getStockStatMktCap()).toBeTruthy();
-    expect(page.getStockStat52weekHigh()).toBeTruthy();
-    expect(page.getStockStat52weekLow()).toBeTruthy();
-    expect(page.getStockStatAvgVol()).toBeTruthy();
-  });
 });

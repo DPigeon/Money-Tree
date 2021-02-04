@@ -50,7 +50,8 @@ export class UserService {
       firstName: response.firstName,
       lastName: response.lastName,
       username: response.username,
-      avatarUrl: response.avatarUrl,
+      avatarURL: response.avatarURL,
+      coverPhotoURL: response.coverPhotoURL,
       email: response.email,
       score: response.score,
       rank: response.rank,
@@ -60,7 +61,21 @@ export class UserService {
       followers: response.followers,
       portfolio: response.portfolio,
       transactions: response.transactions,
+      biography: response.biography,
     };
     return formattedUser;
+  }
+
+  updatePictureURL(
+    userId: number,
+    imageFile: File,
+    selection: string
+  ): Observable<any> {
+    const body = new FormData();
+    body.append('imageFile', imageFile);
+    body.append('selection', selection); // here selection must be either "avatarURL" or "coverPhotoURL"
+    return this.api
+      .post('users/profile-picture/' + userId.toString(), body)
+      .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 }

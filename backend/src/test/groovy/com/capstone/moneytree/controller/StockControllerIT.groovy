@@ -16,7 +16,7 @@ import spock.lang.Specification
 /**
  * Tests for the Stock Controller. Tests the StockMarketDataFacade as well.
  * */
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("dev")
 class StockControllerIT extends Specification {
 

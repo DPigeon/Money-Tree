@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SellOrBuyActionsComponent } from '../sell-buy-stock/sell-buy-actions.component';
 
