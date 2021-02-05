@@ -1,7 +1,12 @@
 package com.capstone.moneytree.service.impl;
 
+
 import javax.security.auth.login.CredentialNotFoundException;
 
+import com.capstone.moneytree.facade.MarketInteractionsFacade;
+import com.capstone.moneytree.model.AlpacaOAuthResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +26,16 @@ import com.capstone.moneytree.utils.MoneyTreePasswordEncryption;
 import com.capstone.moneytree.validator.UserValidator;
 import com.capstone.moneytree.validator.ValidatorFactory;
 
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 /**
  * {@inheritDoc}
  */
@@ -30,6 +45,14 @@ public class DefaultUserService implements UserService {
 
    private static final String USER_NOT_FOUND = "The requested user was not found";
    private static final String DEFAULT_PROFILE_NAME = "DEFAULT-profile.jpg";
+   private static final String AUTHORIZATION_CODE = "authorization_code";
+
+   @Value("${alpaca.client.id}")
+   private String clientId;
+   @Value("${aplaca.client.secret}")
+   private String clientSecret;
+   @Value("${spring.profiles.active}")
+   private String activeProfile;
 
    private final UserDao userDao;
    private final ValidatorFactory validatorFactory;
@@ -40,8 +63,7 @@ public class DefaultUserService implements UserService {
    private final String bucketName;
 
    @Autowired
-   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service,
-         @Value("${aws.profile.pictures.bucket}") String bucketName) {
+   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service, @Value("${aws.profile.pictures.bucket}") String bucketName) {
       this.userDao = userDao;
       this.validatorFactory = validatorFactory;
       this.passwordEncryption = new MoneyTreePasswordEncryption();
@@ -81,7 +103,6 @@ public class DefaultUserService implements UserService {
       String encryptedPassword = encryptData(password);
       user.setPassword(encryptedPassword);
       user.setAvatarURL(String.format("https://%s.s3.amazonaws.com/%s", bucketName, DEFAULT_PROFILE_NAME));
-      user.setCoverPhotoURL(String.format("https://%s.s3.amazonaws.com/%s", bucketName, DEFAULT_PROFILE_NAME)); // TODO: must be changed to a general cover photo
 
       userDao.save(user);
 
@@ -97,13 +118,13 @@ public class DefaultUserService implements UserService {
          throw new BadRequestException("The ID of the user in the payload is not the same as the ID in the path");
       }
 
-      // ensure that if username is changed, then it is changed to an unused username
+      //ensure that if username is changed, then it is changed to an unused username
       if (user.getUsername() != null && !user.getUsername().equals(userToUpdate.getUsername())) {
          getUserValidator().validateUsername(user);
          userToUpdate.setUsername(user.getUsername());
       }
 
-      // ensure that if email is changed, then it is changed to an unused email
+      //ensure that if email is changed, then it is changed to an unused email
       if (user.getEmail() != null && !user.getEmail().equals(userToUpdate.getEmail())) {
          getUserValidator().validateEmail(user);
          userToUpdate.setEmail(user.getEmail());
@@ -121,14 +142,6 @@ public class DefaultUserService implements UserService {
          userToUpdate.setAvatarURL(user.getAvatarURL());
       }
 
-      if (user.getCoverPhotoURL() != null) {
-         userToUpdate.setCoverPhotoURL(user.getCoverPhotoURL());
-      }
-
-      if (user.getBiography() != null) {
-         userToUpdate.setBiography(user.getBiography());
-      }
-
       if (user.getScore() != null) {
          userToUpdate.setScore(user.getScore());
       }
@@ -142,11 +155,7 @@ public class DefaultUserService implements UserService {
       }
 
       if (user.getPassword() != null) {
-         userToUpdate.setPassword(encryptData(user.getPassword()));
-      }
-
-      if (user.getAlpacaApiKey() != null) {
-         userToUpdate.setAlpacaApiKey(user.getAlpacaApiKey());
+         userToUpdate.setPassword(user.getPassword());
       }
 
       if (user.getFollowers() != null) {
@@ -164,56 +173,68 @@ public class DefaultUserService implements UserService {
       User updatedUser = userDao.save(userToUpdate);
       LOG.info("Updated user: {}", updatedUser.getUsername());
 
-      return userToUpdate;
+      return updatedUser;
    }
 
    @Override
    public User editUserProfilePicture(User user, MultipartFile imageFile, String selection) {
+      //since user exists, we can now upload image to s3 and save imageUrl into db
+      String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
 
-      switch (selection) {
-         case "avatarURL": {
-            // since user exists, we can now upload image to s3 and save imageUrl into db
-            String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
-            // if user already has a profile picture that is not the default picture, handle
-            // deleting old picture
-            if (StringUtils.isNotBlank(user.getAvatarURL()) && !user.getAvatarURL().contains(DEFAULT_PROFILE_NAME)) {
-               this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getAvatarURL());
-            }
-            // set new image url
-            user.setAvatarURL(imageUrl);
-            userDao.save(user);
-            LOG.info("Edited {}'s profile picture successfully!", user.getUsername());
-            break;
-         }
-         case "coverPhotoURL": {
-            String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
-            if (StringUtils.isNotBlank(user.getCoverPhotoURL())
-                  && !user.getCoverPhotoURL().contains(DEFAULT_PROFILE_NAME)) {
-               this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getCoverPhotoURL());
-            }
-            // set new image url
-            user.setCoverPhotoURL(imageUrl);
-            userDao.save(user);
-            LOG.info("Edited {}'s profile cover photo successfully!", user.getUsername());
-            break;
-         }
-         default:
-            LOG.info("Photo was not saved on Amazon S3!");
-            throw new BadRequestException(String.format("Wrong selection string was put as parameter."));
+      //if user already has a profile picture that is not the default picture, handle deleting old picture
+      if (StringUtils.isNotBlank(user.getAvatarURL()) && !user.getAvatarURL().contains(DEFAULT_PROFILE_NAME)) {
+         this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getAvatarURL());
       }
+
+      //set new image url
+      user.setAvatarURL(imageUrl);
+      userDao.save(user);
+
+      LOG.info("Edited {}'s profile successfully!", user.getUsername());
       return user;
    }
 
    @Override
-   public User registerAlpacaApiKey(Long id, String key) {
+   public User registerAlpacaApiKey(Long id, String code) {
       User userToUpdate = userDao.findUserById(id);
       if (userToUpdate == null) {
          throw new EntityNotFoundException(String.format("User with id %s not found", id));
       }
-      userToUpdate.setAlpacaApiKey(key);
-      userDao.save(userToUpdate);
+      try {
+         String redirectUri = activeProfile.equals("local") ? "http://localhost:4200/": activeProfile.equals("dev") ? "https://dev.money-tree.tech/":"https://money-tree.tech";
 
-      LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
+         HashMap<String, String> parameters = new HashMap<>();
+         parameters.put("grant_type", AUTHORIZATION_CODE);
+         parameters.put("code", code);
+         parameters.put("client_id", clientId);
+         parameters.put("client_secret", clientSecret);
+         parameters.put("redirect_uri", redirectUri);
+
+         String form = parameters.keySet().stream()
+                 .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
+                 .collect(Collectors.joining("&"));
+
+         HttpClient client = HttpClient.newHttpClient();
+
+         HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://api.alpaca.markets/oauth/token"))
+                 .headers("Content-Type", "application/x-www-form-urlencoded")
+                 .POST(HttpRequest.BodyPublishers.ofString(form)).build();
+         HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+         //parse json response using gson
+         Gson gson = new Gson();
+         AlpacaOAuthResponse alpacaOAuthResponse = gson.fromJson(response.body().toString(), AlpacaOAuthResponse.class);
+         LOG.info("Alpaca code successfully converted into OAuth token {}", alpacaOAuthResponse.getAccessToken());
+
+         //update alpacaApiKey; code => oauthToken
+         userToUpdate.setAlpacaApiKey(alpacaOAuthResponse.getAccessToken());
+         userDao.save(userToUpdate);
+         LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
+
+      }
+      catch(Exception exception) {
+         System.out.println(exception.getStackTrace());
+      }
 
       return userToUpdate;
    }
@@ -222,11 +243,12 @@ public class DefaultUserService implements UserService {
     * A method to verify given credentials against existing user records
     *
     * @param credentials A User object with email and unencrypted password
-    * @return The full User object from the database if login is successful, null
-    *         otherwise
+    * @return The full User object from the database if login is successful, null otherwise
     */
    @Override
-   public User login(User credentials) throws CredentialNotFoundException {
+   public User login(User credentials)
+           throws
+           CredentialNotFoundException {
       User user = userDao.findUserByEmail(credentials.getEmail());
       if (user != null && compareDigests(credentials.getPassword(), user.getPassword())) {
          return user;

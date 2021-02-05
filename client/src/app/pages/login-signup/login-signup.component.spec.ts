@@ -22,6 +22,7 @@ const mockStoreFacade = {
   userLogin: jest.fn(),
   createNewUser: jest.fn(),
   updateUser: jest.fn(),
+  getAlpacaOAuthToken: jest.fn()
 } as any;
 
 describe('LoginSignupComponent', () => {
@@ -111,14 +112,10 @@ describe('LoginSignupComponent Unit Test', () => {
   });
 
   it('should handle route data', () => {
-    spyOn(mockStoreFacade, 'updateUser').and.callThrough();
+    spyOn(mockStoreFacade, 'getAlpacaOAuthToken').and.callThrough();
     component.handleRouteData(null);
     expect(mockStoreFacade.updateUser).toHaveBeenCalledTimes(0);
     component.handleRouteData({ code: '123-456-789' });
-    const userParams = {
-      id: 0,
-      alpacaApiKey: '123-456-789',
-    };
-    expect(mockStoreFacade.updateUser).toHaveBeenCalledWith(userParams);
+    expect(mockStoreFacade.getAlpacaOAuthToken).toHaveBeenCalledTimes(1);
   });
 });

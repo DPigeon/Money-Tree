@@ -1,6 +1,8 @@
 package com.capstone.moneytree.handler;
 
-import static com.capstone.moneytree.handler.ExceptionMessage.*;
+import static com.capstone.moneytree.handler.ExceptionMessage.ALPACA_ERROR;
+import static com.capstone.moneytree.handler.ExceptionMessage.BAD_REQUEST_MESSAGE;
+import static com.capstone.moneytree.handler.ExceptionMessage.CREDENTIALS_NOT_FOUND;
 import static com.capstone.moneytree.handler.ExceptionMessage.ENTITY_NOT_FOUND;
 import static com.capstone.moneytree.handler.ExceptionMessage.FAILED_TO_UPLOAD_S3;
 import static com.capstone.moneytree.handler.ExceptionMessage.ILLEGAL_ARGUMENT;
@@ -8,15 +10,12 @@ import static com.capstone.moneytree.handler.ExceptionMessage.MISSING_FIELDS;
 import static com.capstone.moneytree.handler.ExceptionMessage.NULL_POINTER;
 import static com.capstone.moneytree.handler.ExceptionMessage.REQUEST_NOT_FOUND;
 import static com.capstone.moneytree.handler.ExceptionMessage.USER_ALREADY_EXISTS;
-import static com.capstone.moneytree.handler.ExceptionMessage.CREDENTIALS_NOT_FOUND;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-
 import javax.security.auth.login.CredentialNotFoundException;
 
-import com.capstone.moneytree.exception.*;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +23,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.capstone.moneytree.exception.AlpacaException;
+import com.capstone.moneytree.exception.BadRequestException;
+import com.capstone.moneytree.exception.EntityNotFoundException;
+import com.capstone.moneytree.exception.ExceptionAmazonS3;
+import com.capstone.moneytree.exception.InvalidMediaFileException;
+import com.capstone.moneytree.exception.MissingMandatoryFieldException;
+import com.capstone.moneytree.exception.UserAlreadyExistsException;
 import com.capstone.moneytree.utils.MoneyTreeError;
 
 import javassist.NotFoundException;
@@ -147,6 +153,22 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
               .status(NOT_FOUND)
               .debugMessage(ex.getMessage())
               .message(CREDENTIALS_NOT_FOUND.getMessage())
+              .build();
+      return buildResponseEntity(apiError);
+   }
+
+   /**
+    * Exception handler for alpacaAPI
+    *
+    * @param ex A AlpacaException
+    * @return 500 Internal server error
+    */
+   @ExceptionHandler(AlpacaException.class)
+   protected ResponseEntity<MoneyTreeError> handleAlpacaException(AlpacaException ex) {
+      MoneyTreeError apiError = MoneyTreeError.builder()
+              .status(INTERNAL_SERVER_ERROR)
+              .debugMessage(ex.getMessage())
+              .message(ALPACA_ERROR.getMessage())
               .build();
       return buildResponseEntity(apiError);
    }

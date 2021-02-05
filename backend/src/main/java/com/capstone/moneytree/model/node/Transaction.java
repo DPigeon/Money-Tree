@@ -1,15 +1,21 @@
 package com.capstone.moneytree.model.node;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 
-import java.util.Set;
-
-import lombok.*;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 import com.capstone.moneytree.model.Entity;
-import com.capstone.moneytree.model.OrderType;
+import com.capstone.moneytree.model.MoneyTreeOrderType;
 import com.capstone.moneytree.model.TransactionStatus;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import net.jacobpeterson.domain.alpaca.order.Order;
 
 @EqualsAndHashCode(callSuper = true)
 @NodeEntity
@@ -21,17 +27,18 @@ public class Transaction extends Entity {
 
    float quantity;
 
-   float purchasedAt;
+   ZonedDateTime purchasedAt;
 
-   OrderType orderType;
+   MoneyTreeOrderType moneyTreeOrderType;
+
+   String clientOrderId;
 
    TransactionStatus status;
 
    @Relationship(type = "FULFILLS")
-   Set<Stock> fulfilledStocks;
+   List<Stock> fulfilledStocks;
 
    public void fulfills(Stock stock) {
       this.getFulfilledStocks().add(stock);
    }
-
 }

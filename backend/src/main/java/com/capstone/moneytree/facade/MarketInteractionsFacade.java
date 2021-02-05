@@ -1,5 +1,21 @@
 package com.capstone.moneytree.facade;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
+
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.enums.PortfolioPeriodUnit;
@@ -14,26 +30,11 @@ import net.jacobpeterson.domain.alpaca.position.Position;
 import net.jacobpeterson.domain.alpaca.streaming.AlpacaStreamMessage;
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate;
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdateMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Component;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This facade abstracts the Alpaca API and exposes only the relevant
  * methods for MoneyTree.
  * */
-
 @Component
 public class MarketInteractionsFacade {
 
