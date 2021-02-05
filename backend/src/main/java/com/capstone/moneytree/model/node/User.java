@@ -1,12 +1,19 @@
 package com.capstone.moneytree.model.node;
 
-import com.capstone.moneytree.model.Entity;
-import lombok.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.capstone.moneytree.model.Entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(callSuper = true)
 @NodeEntity
@@ -44,10 +51,10 @@ public class User extends Entity {
     Set<User> followers;
 
     @Relationship(type = "OWNS")
-    Set<Stock> stocks;
+    List<Stock> stocks;
 
     @Relationship(type = "MADE")
-    Set<Transaction> transactions;
+    List<Transaction> transactions;
 
     @Override
     public boolean equals(Object object) {
@@ -84,8 +91,4 @@ public class User extends Entity {
     public void owns(Stock stock) {
         this.getStocks().add(stock);
     }
-}
-
-
-
-    
+}    

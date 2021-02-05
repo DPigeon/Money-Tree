@@ -34,6 +34,12 @@ export class UserService {
       .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 
+  getOAuthAlpacaToken(userId: number, alpacaCode: string): Observable<User> {
+    return this.api
+      .post('users/' + userId + '/register-alpaca-key/' + alpacaCode, {})
+      .pipe(map((res: Response) => this.userFormatter(res.body)));
+  }
+
   deleteUserByEmail(email: string): Observable<any> {
     return this.api.delete('users/delete-by-email/' + email);
   }
