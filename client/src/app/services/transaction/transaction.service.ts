@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../api/api.service';
 import { Transaction } from '../../interfaces/transaction';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -10,10 +11,9 @@ import { Observable, of } from 'rxjs';
 export class TransactionService {
   constructor(private api: ApiService) {}
 
-  processStockTransaction(transaction: Transaction): Observable<any> {
-    // return this.api........
-    // this should return a user object with their transactions and their updated balance
-    return of(null);
+  processStockTransaction(transaction: Transaction, userId: number): Observable<any> {
+    return this.api.post('transactions/execute/' + userId, transaction)
+    .pipe(map((res: Response) => console.log(res)));
   }
 
 }

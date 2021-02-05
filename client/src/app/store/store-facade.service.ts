@@ -86,7 +86,7 @@ export class StoreFacadeService {
       })
     );
   }
-  processStockTransaction(transaction: Transaction): void {
-    this.store.dispatch(appActions.processStockTransaction({ transaction }))
+  processStockTransaction(transaction: Transaction, userId: number): void {
+    this.store.dispatch(appActions.processStockTransaction({ transaction, userId }))
   }
 }

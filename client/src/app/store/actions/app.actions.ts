@@ -67,5 +67,5 @@ export const updatePictureURL = createAction(
 
 export const processStockTransaction = createAction(
   '[Transactions] New stock transaction for user',
-  props<{ transaction: Transaction}>()
+  props<{ transaction: Transaction, userId: number}>()
 );

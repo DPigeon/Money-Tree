@@ -173,7 +173,7 @@ export class Effects {
     this.actions$.pipe(
       ofType(appActions.processStockTransaction),
       switchMap((action) => {
-        return this.transactionService.processStockTransaction(action.transaction).pipe(
+        return this.transactionService.processStockTransaction(action.transaction, action.userId).pipe(
           map((data) => appActions.setCurrentUser({ user: data })), 
           catchError((data) =>
           of(
