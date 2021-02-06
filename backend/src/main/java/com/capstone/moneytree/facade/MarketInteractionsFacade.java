@@ -9,10 +9,15 @@ import java.util.Map;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.capstone.moneytree.dao.UserDao;
+import com.capstone.moneytree.exception.EntityNotFoundException;
+import com.capstone.moneytree.model.node.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +46,9 @@ public class MarketInteractionsFacade {
    private static final Logger LOGGER = LoggerFactory.getLogger(MarketInteractionsFacade.class);
    private final AlpacaAPI alpacaAPI;
    private final Map<String, AlpacaStreamListener> userIdToStream;
+
+   @Autowired
+   UserDao userDao;
 
    @Autowired
    public MarketInteractionsFacade(@Value("${alpaca.api.version}") String apiVersion,
@@ -164,9 +172,31 @@ public class MarketInteractionsFacade {
                   messageSender.convertAndSend(
                           "/queue/user-" + userId,
                           tradeUpdate.getOrder().getClientOrderId());
+                  sendOrderCompletedEmail(userId, tradeUpdate);
                }
             }
          }
       };
+   }
+
+   private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {
+      JavaMailSender mailSender = new JavaMailSenderImpl();
+      EmailSender emailSender = new EmailSender(mailSender);
+
+      String orderId = trade.getOrder().getClientOrderId();
+      String orderTotal = trade.getPrice();
+      String stockName = trade.getOrder().getSymbol();
+      String emailSubject = "Your Money-Tree order #" + orderId;
+      User user = getUserById(Long.parseLong(userId));
+      emailSender.sendOrderCompletedEmail(user, orderId, orderTotal, stockName, emailSubject);
+   }
+
+   private User getUserById(Long userId) {
+      User user = userDao.findUserById(userId);
+      if (user == null) {
+         throw new EntityNotFoundException("User does not exist!");
+      }
+
+      return user;
    }
 }
