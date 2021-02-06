@@ -181,7 +181,7 @@ public class MarketInteractionsFacade {
 
    private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {
       JavaMailSender mailSender = new JavaMailSenderImpl();
-      EmailSender emailSender = new EmailSender(mailSender);
+      EmailSender emailSender = new EmailSender(mailSender, System.getProperty("spring.profiles.active"));
 
       String orderId = trade.getOrder().getClientOrderId();
       String orderTotal = trade.getPrice();

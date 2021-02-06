@@ -18,13 +18,14 @@ public class EmailSender {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailSender.class);
 
     @Value("${spring.profiles.active}")
-    private String activeProfile;
+    private final String activeProfile;
 
     @Autowired
     private final JavaMailSender mailSender;
 
-    public EmailSender(JavaMailSender mailSender) {
+    public EmailSender(JavaMailSender mailSender, String activeProfile) {
         this.mailSender = mailSender;
+        this.activeProfile = activeProfile;
     }
 
     public void sendOrderCompletedEmail(User user, String orderId, String orderTotal, String stockName, String subject) {
@@ -38,14 +39,16 @@ public class EmailSender {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
-            messageHelper.setFrom(System.getenv().get("SPRING_BOOT_EMAIL"));
+            String from = System.getenv().get("SPRING_BOOT_EMAIL");
+            messageHelper.setFrom(from);
             messageHelper.setTo(to);
             messageHelper.setSubject(subject);
             messageHelper.setText(text);
 
             mailSender.send(mimeMessage);
+            LOGGER.info("Email sent to {}", to);
         } catch (MessagingException e) {
-            LOGGER.error("Error creating email message: {}", e.getMessage());
+            LOGGER.error("Error sending email: {}", e.getMessage());
         }
     }
 
