@@ -20,6 +20,7 @@ import com.capstone.moneytree.model.node.User
 import spock.lang.Ignore
 import spock.lang.Specification
 
+@Ignore
 @SpringBootTest
 @ActiveProfiles("dev")
 class UserControllerIT extends Specification {
