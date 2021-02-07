@@ -1,5 +1,7 @@
 package com.capstone.moneytree.controller
 
+import org.junit.Test
+
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
 
 import org.junit.Rule
@@ -18,7 +20,6 @@ import com.capstone.moneytree.model.node.User
 import spock.lang.Ignore
 import spock.lang.Specification
 
-@Ignore
 @SpringBootTest
 @ActiveProfiles("dev")
 class UserControllerIT extends Specification {
@@ -92,5 +93,41 @@ class UserControllerIT extends Specification {
 
       cleanup: "delete the created user"
       userDao.delete(persistedUser)
+   }
+
+   @Test
+   def "a search request is made to retrieve only the essential properties of a User"() {
+      setup: "Persist an initial set of users"
+      userDao.save(createUser("test@test909234sd202.com", "raz23452", "pass2345", "razine2345234", "bensari2345", null))
+      userDao.save(createUser("test@test2156ds587482.com", "raz54612", "pass1235", "razine8453123", "bensari2315", null))
+      List<User> persistedUsers = new ArrayList<User>()
+      persistedUsers.push(userDao.findUserByEmail("test@test909234sd202.com"))
+      persistedUsers.push(userDao.findUserByEmail("test@test2156ds587482.com"))
+
+      when: "we obtain the search users"
+      def searchUsers = userDao.getSearchUsers()
+
+      then: "each persisted user should be return represented with only the essential fields for the search list"
+      for (Map<String, String> user:searchUsers) {
+         for (User persistedUser:persistedUsers) {
+            if (user.get("id") == Long.toString(persistedUser.getId())) {
+               assert user.get("id") == Long.toString(persistedUser.getId())
+               assert user.get("firstName") == persistedUser.getFirstName()
+               assert user.get("lastName") == persistedUser.getLastName()
+               assert user.get("email") == persistedUser.getEmail()
+               assert user.get("username") == persistedUser.getUsername()
+               assert user.get("avatarURL") == persistedUser.getAvatarURL()
+               assert user.get("alpacaApiKey") == null
+               assert user.get("balance") == null
+               assert user.get("score") == null
+               assert user.get("rank") == null
+               assert user.get("password") == null
+            }
+         }
+      }
+
+      cleanup: "delete the created user"
+      for (User persistedUser:persistedUsers)
+         userDao.deleteAll()
    }
 }
