@@ -33,6 +33,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -282,4 +283,10 @@ public class DefaultUserService implements UserService {
    public String getBucketName() {
       return bucketName;
    }
+
+   @Override
+   public List<Map<String, String>> getSearchUsers() {
+      return userDao.getSearchUsers();
+   }
+
 }
