@@ -20,9 +20,9 @@
     </mat-radio-group>
 
     <div class="sell-buy-field">Available Balance: <span>{{ balance }}</span></div>
-    <div class="sell-buy-field">Company Name:<span>{{ currentStock.companyName }}</span></div>
+    <div class="sell-buy-field">Company Name:<span>{{ stockName }}</span></div>
     <div *ngIf="isMarketOrder" class="sell-buy-field">
-      Current Price:<span>$ {{getStockPrice()}}</span>
+      Current Price:<span>$ {{ stockPrice }}</span>
     </div>
     <div *ngIf="!isMarketOrder" class="sell-buy-field">
       Price:

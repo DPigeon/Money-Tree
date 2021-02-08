@@ -7,7 +7,7 @@
   ></app-stock-detail-header>
 
   <div fxFlex="35%" fxFlex.lt-sm="100%">
-    <app-user-stocks [userInfo]="userInfo$" [stockInfo]="stockInfo$ | async" ></app-user-stocks>
+    <app-user-stocks [userInfo]="userInfo$ | async" [stockInfo]="stockInfo$ | async" ></app-user-stocks>
     <app-stock-stats [stockInfo]="stockInfo$ | async" ></app-stock-stats>
   </div>
 </div>
