@@ -80,16 +80,26 @@ public class DefaultTransactionService implements TransactionService {
 
    @Override
    public Transaction execute(String userId, Order order) {
+      LOG.error("Inside the service now ....");
+
       /* Get user for that transaction*/
       User user = getUser(Long.parseLong(userId));
+
+      LOG.error("Got the user from DB!");
+
 
       String alpacaKey = user.getAlpacaApiKey();
 
       /* Build the transaction and persist */
       Transaction transaction = null;
       try {
+         LOG.error("Getting the alpaca api suing alpacaey {}", alpacaKey);
          AlpacaAPI api = AlpacaSession.alpaca(alpacaKey);
+         LOG.error("Got alpaca client!!! succesfully");
+
+         LOG.error("Making the alpaca request");
          Order alpacaOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
+         LOG.error("Executed the alpaca request");
 
          System.out.println(alpacaOrder.getClientOrderId());
 
@@ -111,7 +121,12 @@ public class DefaultTransactionService implements TransactionService {
          if (user.getTransactions() != null)
             transactions.addAll(user.getTransactions());
          user.setTransactions(transactions);
+         LOG.error("Saving the transaction");
+
          userDao.save(user);
+
+         LOG.error(" transaction saved");
+
       }
       return transaction;
    }

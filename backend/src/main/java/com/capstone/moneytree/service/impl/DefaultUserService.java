@@ -49,7 +49,7 @@ public class DefaultUserService implements UserService {
 
    @Value("${alpaca.client.id}")
    private String clientId;
-   @Value("${aplaca.client.secret}")
+   @Value("${alpaca.client.secret}")
    private String clientSecret;
    @Value("${spring.profiles.active}")
    private String activeProfile;
