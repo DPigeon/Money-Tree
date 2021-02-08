@@ -3,10 +3,10 @@ package com.capstone.moneytree.service.impl;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
-import com.capstone.moneytree.facade.MarketInteractionsFacade;
+import com.capstone.moneytree.exception.AlpacaException;
 import com.capstone.moneytree.model.AlpacaOAuthResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +26,8 @@ import com.capstone.moneytree.utils.MoneyTreePasswordEncryption;
 import com.capstone.moneytree.validator.UserValidator;
 import com.capstone.moneytree.validator.ValidatorFactory;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -33,8 +35,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * {@inheritDoc}
@@ -46,6 +48,10 @@ public class DefaultUserService implements UserService {
    private static final String USER_NOT_FOUND = "The requested user was not found";
    private static final String DEFAULT_PROFILE_NAME = "DEFAULT-profile.jpg";
    private static final String AUTHORIZATION_CODE = "authorization_code";
+
+   private static final String LOCAL_APP_URL = "http://localhost:4200/";
+   private static final String DEV_APP_URL = "https://dev.money-tree.tech/";
+   private static final String PROD_APP_URL = "https://money-tree.tech/";
 
    @Value("${alpaca.client.id}")
    private String clientId;
@@ -113,62 +119,17 @@ public class DefaultUserService implements UserService {
 
    @Override
    public User updateUser(User userToUpdate, User user) {
-      // ensure user in payload has the same id as in the path
-      if (!userToUpdate.getId().equals(user.getId())) {
-         throw new BadRequestException("The ID of the user in the payload is not the same as the ID in the path");
+      if (user.getId() != null) {
+         throw new BadRequestException("Forbidden to provide ID field in the request");
       }
-
-      //ensure that if username is changed, then it is changed to an unused username
-      if (user.getUsername() != null && !user.getUsername().equals(userToUpdate.getUsername())) {
+      else if (user.getUsername() != null ) {
          getUserValidator().validateUsername(user);
-         userToUpdate.setUsername(user.getUsername());
       }
-
-      //ensure that if email is changed, then it is changed to an unused email
-      if (user.getEmail() != null && !user.getEmail().equals(userToUpdate.getEmail())) {
+      else if (user.getEmail() != null) {
          getUserValidator().validateEmail(user);
-         userToUpdate.setEmail(user.getEmail());
       }
 
-      if (user.getFirstName() != null) {
-         userToUpdate.setFirstName(user.getFirstName());
-      }
-
-      if (user.getLastName() != null) {
-         userToUpdate.setLastName(user.getLastName());
-      }
-
-      if (user.getAvatarURL() != null) {
-         userToUpdate.setAvatarURL(user.getAvatarURL());
-      }
-
-      if (user.getScore() != null) {
-         userToUpdate.setScore(user.getScore());
-      }
-
-      if (user.getRank() != null) {
-         userToUpdate.setRank(user.getRank());
-      }
-
-      if (user.getBalance() != null) {
-         userToUpdate.setBalance(user.getBalance());
-      }
-
-      if (user.getPassword() != null) {
-         userToUpdate.setPassword(user.getPassword());
-      }
-
-      if (user.getFollowers() != null) {
-         userToUpdate.setFollowers(user.getFollowers());
-      }
-
-      if (user.getStocks() != null) {
-         userToUpdate.setStocks(user.getStocks());
-      }
-
-      if (user.getTransactions() != null) {
-         userToUpdate.setTransactions(user.getTransactions());
-      }
+      updateUserFields(userToUpdate, user);
 
       User updatedUser = userDao.save(userToUpdate);
       LOG.info("Updated user: {}", updatedUser.getUsername());
@@ -201,41 +162,14 @@ public class DefaultUserService implements UserService {
          throw new EntityNotFoundException(String.format("User with id %s not found", id));
       }
       try {
-         String redirectUri = activeProfile.equals("local") ? "http://localhost:4200/": activeProfile.equals("dev") ? "https://dev.money-tree.tech/":"https://money-tree.tech";
+         AlpacaOAuthResponse alpacaOAuthResponse = exchangeCodeForToken(code);
 
-         HashMap<String, String> parameters = new HashMap<>();
-         parameters.put("grant_type", AUTHORIZATION_CODE);
-         parameters.put("code", code);
-         parameters.put("client_id", clientId);
-         parameters.put("client_secret", clientSecret);
-         parameters.put("redirect_uri", redirectUri);
-
-         String form = parameters.keySet().stream()
-                 .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
-                 .collect(Collectors.joining("&"));
-
-         HttpClient client = HttpClient.newHttpClient();
-
-         HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://api.alpaca.markets/oauth/token"))
-                 .headers("Content-Type", "application/x-www-form-urlencoded")
-                 .POST(HttpRequest.BodyPublishers.ofString(form)).build();
-         HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-         //parse json response using gson
-         Gson gson = new Gson();
-         AlpacaOAuthResponse alpacaOAuthResponse = gson.fromJson(response.body().toString(), AlpacaOAuthResponse.class);
          LOG.info("Alpaca code successfully converted into OAuth token {}", alpacaOAuthResponse.getAccessToken());
-
-         //update alpacaApiKey; code => oauthToken
          userToUpdate.setAlpacaApiKey(alpacaOAuthResponse.getAccessToken());
          userDao.save(userToUpdate);
-         LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
-
+      } catch (Exception exception) {
+         LOG.error(exception.getMessage());
       }
-      catch(Exception exception) {
-         System.out.println(exception.getStackTrace());
-      }
-
       return userToUpdate;
    }
 
@@ -269,6 +203,71 @@ public class DefaultUserService implements UserService {
    @Override
    public UserValidator getUserValidator() {
       return validatorFactory.getUserValidator();
+   }
+
+   private AlpacaOAuthResponse exchangeCodeForToken(String code) throws IOException, InterruptedException {
+      HttpClient client = HttpClient.newHttpClient();
+      HttpRequest request = setUpRequest(code);
+      HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+      if (response.statusCode() != 200) {
+         String errorMessage = "Could not get alpaca API Key!";
+         LOG.error(errorMessage);
+         throw new AlpacaException(errorMessage);
+      }
+
+      //parse json response using gson
+      Gson gson = new Gson();
+      return gson.fromJson(response.body().toString(), AlpacaOAuthResponse.class);
+   }
+
+   private HttpRequest setUpRequest(String code) {
+      String redirectUri = getRedirectURI();
+
+      HashMap<String, String> parameters = new HashMap<>();
+      parameters.put("grant_type", AUTHORIZATION_CODE);
+      parameters.put("code", code);
+      parameters.put("client_id", clientId);
+      parameters.put("client_secret", clientSecret);
+      parameters.put("redirect_uri", redirectUri);
+
+      String form = parameters.keySet().stream()
+              .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
+              .collect(Collectors.joining("&"));
+
+      return HttpRequest.newBuilder().uri(URI.create("https://api.alpaca.markets/oauth/token"))
+              .headers("Content-Type", "application/x-www-form-urlencoded")
+              .POST(HttpRequest.BodyPublishers.ofString(form)).build();
+   }
+
+   private void updateUserFields(User userToUpdate, User user) {
+      Stream.of(user.getClass().getDeclaredFields())
+              .forEach(field -> setFieldValue(userToUpdate, user, field));
+   }
+
+   private void setFieldValue(User userToUpdate, User user, Field field) {
+      try {
+         if (field.get(field) != null) {
+            Field fieldToUpdate = userToUpdate.getClass().getDeclaredField(field.getName());
+            fieldToUpdate.set(userToUpdate, field.get(user));
+         }
+      } catch (Exception e) {
+         LOG.error(e.getMessage());
+         throw new BadRequestException(e.getMessage());
+      }
+   }
+
+   private String getRedirectURI() {
+      switch(activeProfile) {
+         case "local":
+            return LOCAL_APP_URL;
+         case "dev":
+            return DEV_APP_URL;
+         case "prod":
+            return PROD_APP_URL;
+         default:
+            return "";
+      }
    }
 
    public String encryptData(String text) {

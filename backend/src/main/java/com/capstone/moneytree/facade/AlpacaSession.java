@@ -24,7 +24,7 @@ public class AlpacaSession {
    /**
     * Utility method to instantiate a Alpaca client using the client's oauth token
     *
-    * @param userToken
+    * @param userToken the oauth token provided by alpaca
     * @return the alpaca client
     */
    public static AlpacaAPI alpaca(String userToken) {
