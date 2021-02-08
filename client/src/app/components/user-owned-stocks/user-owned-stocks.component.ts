@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Stock } from 'src/app/interfaces/stock';
 import { User } from 'src/app/interfaces/user';
@@ -50,14 +50,17 @@ export class UserOwnedStocksComponent {
     return true ? 'negative-change' : 'positive-change';
   }
 
-  openSellOrBuyActionsModal(type: string, stock: Stock): void {
-    console.log("Type: ", type, "Stock:", stock)
+  openSellOrBuyActionsModal(type: string): void {
+    console.log("Type: ", type, "Stock:", this.stockInfo)
+    const stockInfo = this.stockInfo;
+    const userInfo = this.userInfo;
+
     const dialogRef = this.dialog.open(SellOrBuyActionsComponent, {
-      // data to be passed into modal
       data: {
-        type, stock
+        type, stockInfo, userInfo
       },
     });
+
     dialogRef.afterClosed().subscribe((result) => {
       // returned results
     });
