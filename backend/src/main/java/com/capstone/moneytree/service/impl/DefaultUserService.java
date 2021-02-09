@@ -258,6 +258,34 @@ public class DefaultUserService implements UserService {
    }
 
    @Override
+   public Long followUser(Long userId, Long userToFollowId) {
+      User user = userDao.findUserById(userId);
+      User userToFollow = userDao.findUserById(userToFollowId);
+      if (user == null || userToFollow == null) {
+         throw new EntityNotFoundException(USER_NOT_FOUND);
+      }
+
+      user.follow(userToFollow);
+      userDao.save(user);
+
+      return userToFollowId;
+   }
+
+   @Override
+   public Long unfollowUser(Long userId, Long userToUnfollowId) {
+      User user = userDao.findUserById(userId);
+      User userToUnfollow = userDao.findUserById(userToUnfollowId);
+      if (user == null || userToUnfollow == null) {
+         throw new EntityNotFoundException(USER_NOT_FOUND);
+      }
+
+      user.unfollow(userToUnfollow);
+      userDao.save(user);
+
+      return userToUnfollowId;
+   }
+
+   @Override
    public void deleteUserByEmail(String email) {
       User existingUser = userDao.findUserByEmail(email);
       if (existingUser == null) {

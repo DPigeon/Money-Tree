@@ -1,5 +1,7 @@
 package com.capstone.moneytree.controller
 
+import org.springframework.http.HttpStatus
+
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
 
 import org.junit.Rule
@@ -92,5 +94,63 @@ class UserControllerIT extends Specification {
 
       cleanup: "delete the created user"
       userDao.delete(persistedUser)
+   }
+
+   def "a user can follow another user in the database"() {
+      setup: "Persist an initial user"
+      userDao.save(createUser(12345678,"test@test.com", "dave", "pass", "Dave", "Bas", "74hgf8734gr-"))
+      def user1 = userDao.findUserById(12345678)
+
+      and: "the other user we want to follow"
+      Long id = 12345679
+      String newEmail = "test@test2123.com"
+      String username = "razine123"
+      String password = "encrypted"
+      String firstName = "razineFristName"
+      String lastName = "BENSARI-razine"
+      User user2 = createUser(id, newEmail, username, password, firstName, lastName, "258459fr2w-")
+      userDao.save(user2)
+
+      when: "following another user"
+      def response = userController.followUser(user1.getId(), user2.getId())
+
+      then: "user 1 should be following user 2"
+      assert user1.getFollowers().contains(user2)
+      assert user1.getFollowers().size() == 1
+      assert response.statusCode == HttpStatus.OK
+      assert response.body == user2.getId()
+
+      cleanup: "delete the created users"
+      userDao.delete(user1)
+      userDao.delete(user2)
+   }
+
+   def "a user can unfollow another user in the database"() {
+      setup: "Persist an initial user"
+      userDao.save(createUser(12345678,"test@test.com", "dave", "pass", "Dave", "Bas", "74hgf8734gr-"))
+      def user1 = userDao.findUserById(12345678)
+
+      and: "persist the other user we want to follow & follow it"
+      Long id = 12345679
+      String newEmail = "test@test2123.com"
+      String username = "razine123"
+      String password = "encrypted"
+      String firstName = "razineFristName"
+      String lastName = "BENSARI-razine"
+      User user2 = createUser(id, newEmail, username, password, firstName, lastName, "258459fr2w-")
+      userDao.save(user2)
+      userController.followUser(user1.getId(), user2.getId())
+
+      when: "unfollowing the user"
+      def response = userController.unfollowUser(user1.getId(), user2.getId())
+
+      then: "user 1 should unfollow user 2"
+      assert user1.getFollowers().isEmpty()
+      assert response.statusCode == HttpStatus.OK
+      assert response.body == user2.getId()
+
+      cleanup: "delete the created users"
+      userDao.delete(user1)
+      userDao.delete(user2)
    }
 }
