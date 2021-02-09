@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.capstone.moneytree.dao.UserDao;
 import com.capstone.moneytree.model.node.Transaction;
+import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.service.api.TransactionService;
 
 import net.jacobpeterson.domain.alpaca.order.Order;
@@ -35,7 +37,7 @@ public class TransactionController {
     * }
     */
    @PostMapping("/execute/{userId}")
-   public Transaction executeTransaction(@PathVariable String userId, @RequestBody Order order) {
+   public User executeTransaction(@PathVariable String userId, @RequestBody Order order) {
       return this.transactionService.execute(userId, order);
    }
 }
