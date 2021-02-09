@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { StoreFacadeService } from 'src/app/store/store-facade.service';
 import { Stock } from '../../interfaces/stock';
@@ -10,13 +10,12 @@ import { User } from 'src/app/interfaces/user';
   templateUrl: './sell-buy-actions.component.html',
   styleUrls: ['./sell-buy-actions.component.scss'],
 })
-export class SellOrBuyActionsComponent {
+export class SellOrBuyActionsComponent implements OnInit {
   isMarketOrder = true;
   quantity = 0;
   price = 0;
-  total = 0;
   currentStock: Stock;
-  balance: number = 5000; // Faking this value for now, will have to get this from alpaca
+  balance: number = 0;
   remainingBalance: number = 0
   
   constructor(
@@ -27,10 +26,12 @@ export class SellOrBuyActionsComponent {
       stockInfo: Stock,
       userInfo: User
     }
-  ) {
-    this.currentStock = data.stockInfo;
+  ) {}
+
+  ngOnInit() {
+    this.currentStock = this.data ? this.data.stockInfo : null;
     this.price = this.currentStock ? this.currentStock.stockValue : 0;
-    this.remainingBalance = this.balance;
+    this.balance = this.data && this.data.userInfo && this.data.userInfo.balance ? this.data.userInfo.balance : 100000; // BUG: Initial balance not gotten because balance updates after each transaction
   }
 
   get stockPrice(): number {
@@ -47,7 +48,7 @@ export class SellOrBuyActionsComponent {
   }
 
   getProcessActionType(): string {
-    return this.data.type === 'sell' ? 'Sell' : 'Buy';
+    return this.data.type.charAt(0).toUpperCase() + this.data.type.slice(1);
   }
 
   processActions(): void {
@@ -67,8 +68,7 @@ export class SellOrBuyActionsComponent {
   }
 
   getRemainingBalance(): number {
-    this.remainingBalance = this.balance - this.total;
-    return this.remainingBalance
+    return this.balance - this.getTotal();
   }
 
   getStockPrice(): number {
