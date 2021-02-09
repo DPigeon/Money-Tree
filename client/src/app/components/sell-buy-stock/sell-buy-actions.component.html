@@ -19,7 +19,7 @@
       <mat-radio-button [value]="false">Limit Order</mat-radio-button>
     </mat-radio-group>
 
-    <div class="sell-buy-field">Available Balance: <span>{{ balance }}</span></div>
+    <div class="sell-buy-field">Available Balance: <span>{{ balance | currency:'USD' }}</span></div>
     <div class="sell-buy-field">Company Name:<span>{{ stockName }}</span></div>
     <div *ngIf="isMarketOrder" class="sell-buy-field">
       Current Price:<span>$ {{ stockPrice }}</span>
@@ -50,12 +50,12 @@
       >Only Positive Number</span
     >
     <div *ngIf="isMarketOrder" class="sell-buy-field">
-      Estimated Total:<span>{{getTotal()}}</span>
+      Estimated Total:<span>{{getTotal() | currency:'USD'}}</span>
     </div>
     <div *ngIf="!isMarketOrder" class="sell-buy-field">
-      Total:<span>{{getTotal()}}</span>
+      Total:<span>{{getTotal() | currency:'USD' }}</span>
     </div>
-    <div class="sell-buy-field">Remaining Balance:<span>{{getRemainingBalance() | number: '3.1-5'}}</span></div>
+    <div class="sell-buy-field">Remaining Balance:<span>{{getRemainingBalance() | currency:'USD'}}</span></div>
   </div>
   <div mat-dialog-actions>
     <button

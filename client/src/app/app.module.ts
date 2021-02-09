@@ -20,6 +20,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 // Component imports:
 import { AppComponent } from './app.component';
@@ -85,6 +87,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     MatDialogModule,
     MatAutocompleteModule,
     MatRadioModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent],
