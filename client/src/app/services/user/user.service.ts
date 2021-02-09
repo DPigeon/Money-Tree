@@ -44,6 +44,19 @@ export class UserService {
     return this.api.delete('users/delete-by-email/' + email);
   }
 
+  updatePictureURL(
+    userId: number,
+    imageFile: File,
+    selection: string
+  ): Observable<any> {
+    const body = new FormData();
+    body.append('imageFile', imageFile);
+    body.append('selection', selection); // here selection must be either "avatarURL" or "coverPhotoURL"
+    return this.api
+      .post('users/profile-picture/' + userId.toString(), body)
+      .pipe(map((res: Response) => this.userFormatter(res.body)));
+  }
+
   userFormatter(response: any): User {
     const formattedUser: User = {
       id: response.id,
@@ -64,18 +77,5 @@ export class UserService {
       biography: response.biography,
     };
     return formattedUser;
-  }
-
-  updatePictureURL(
-    userId: number,
-    imageFile: File,
-    selection: string
-  ): Observable<any> {
-    const body = new FormData();
-    body.append('imageFile', imageFile);
-    body.append('selection', selection); // here selection must be either "avatarURL" or "coverPhotoURL"
-    return this.api
-      .post('users/profile-picture/' + userId.toString(), body)
-      .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 }

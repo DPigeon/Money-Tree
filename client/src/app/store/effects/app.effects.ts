@@ -42,12 +42,7 @@ export class Effects {
         return this.stockService.loadMarketClock().pipe(
           map((data: any) =>
             appActions.loadMarketClockSuccess({
-              marketClock: {
-                isOpen: data.body.isOpen,
-                nextClose: data.body.nextClose,
-                nextOpen: data.body.nextOpen,
-                timestamp: data.body.timestamp,
-              },
+              marketClock: data,
             })
           ),
           catchError((data) =>
@@ -173,6 +168,7 @@ export class Effects {
       })
     )
   );
+
   mirrorError(backendError): AppError {
     if (backendError && backendError.error) {
       const errorMessage: AppError = {

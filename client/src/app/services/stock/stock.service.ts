@@ -18,7 +18,9 @@ export class StockService {
   }
 
   loadMarketClock(): Observable<MarketClock> {
-    return this.api.get('alpaca/market-status');
+    return this.api
+      .get('alpaca/market-status')
+      .pipe(map((res: Response) => this.marketClockFormatter(res)));
   }
 
   // This will need to be discussed: formatting responses frontend vs backend, same models?
@@ -44,5 +46,14 @@ export class StockService {
       },
     };
     return stock;
+  }
+  marketClockFormatter(response: any): MarketClock {
+    const fromattedMarketClock: MarketClock = {
+      isOpen: response.body.isOpen,
+      nextClose: response.body.nextClose,
+      nextOpen: response.body.nextOpen,
+      timestamp: response.body.timestamp,
+    };
+    return fromattedMarketClock;
   }
 }

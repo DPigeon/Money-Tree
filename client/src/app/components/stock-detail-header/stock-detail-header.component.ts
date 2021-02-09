@@ -55,9 +55,8 @@ export class StockDetailHeaderComponent {
     return '';
   }
   nextOpen(): string {
-    if (this.marketClock) {
-      return this.marketClock.nextOpen.replace('T', ' at ').split(':00-')[0];
-    }
-    return '';
+    return this.marketClock
+      ? this.marketClock.nextOpen.replace('T', ' at ').split(':00-')[0]
+      : '';
   }
 }
