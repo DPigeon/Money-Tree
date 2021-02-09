@@ -22,12 +22,12 @@ export class WebsocketAPIService {
     const topic = '/queue/user-' + this.userId;
     const ws = new SockJS(this.webSocketEndPoint);
     this.stompClient = Stomp.over(ws);
-    const _this = this;
-    _this.stompClient.connect(
+    const thisL = this;
+    thisL.stompClient.connect(
       {},
-      function (frame) {
-        _this.stompClient.subscribe(topic, function (sdkEvent) {
-          _this.onMessageReceived(sdkEvent);
+      (frame) => {
+        thisL.stompClient.subscribe(topic, (sdkEvent) => {
+          thisL.onMessageReceived(sdkEvent);
         });
       },
       this.errorCallBack
@@ -35,7 +35,7 @@ export class WebsocketAPIService {
   }
 
   // Disconnects the user from the client and the backend
-  disconnect() {
+  disconnect(): void {
     if (this.stompClient !== null && this.userId) {
       this.stompClient.send(
         '/app/trade/disconnect',
@@ -49,7 +49,7 @@ export class WebsocketAPIService {
   }
 
   // on error, schedule a reconnection attempt
-  errorCallBack(error) {
+  errorCallBack(error): void {
     console.log('errorCallBack -> ' + error);
     setTimeout(() => {
       this.connect();
@@ -57,7 +57,7 @@ export class WebsocketAPIService {
     }, 5000);
   }
 
-  onMessageReceived(message) {
+  onMessageReceived(message): void {
     console.log('Message Recieved from Server :: ', message);
     // will dispatch actions to the storeFacade when recieving messages
   }

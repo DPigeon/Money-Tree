@@ -26,14 +26,14 @@ export class AppComponent implements OnInit {
       );
     });
 
-    this.storeFacade.currentUser$.subscribe(user => {
-      if( user && user.id) {
+    this.storeFacade.currentUser$.subscribe((user) => {
+      if (user && user.id) {
         this.websocketAPI.setWebsocketUserId(user.id);
         this.websocketAPI.connect();
-      } else if(this.websocketAPI){
+      } else if (this.websocketAPI) {
         this.websocketAPI.disconnect();
       }
-    })
+    });
   }
 
   landingPageNavigator(
