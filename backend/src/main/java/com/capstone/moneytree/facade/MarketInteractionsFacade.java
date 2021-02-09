@@ -47,7 +47,8 @@ public class MarketInteractionsFacade {
    public MarketInteractionsFacade(@Value("${alpaca.api.version}") String apiVersion,
          @Value("${alpaca.key.id}") String keyId, @Value("${alpaca.secret}") String secretKey,
          @Value("${alpaca.base.api.url}") String baseApiUrl, @Value("${alpaca.base.data.url}") String baseDataUrl) {
-      alpacaAPI = new AlpacaAPI(apiVersion, keyId, secretKey, baseApiUrl, baseDataUrl);
+      alpacaAPI = new AlpacaAPI(keyId, secretKey, null, baseApiUrl, baseDataUrl);
+
       userIdToStream = new HashMap<>();
    }
 
