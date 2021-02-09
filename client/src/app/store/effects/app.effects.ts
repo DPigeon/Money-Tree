@@ -35,6 +35,32 @@ export class Effects {
       })
     )
   );
+  loadMarketClock$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadMarketClock),
+      switchMap((action) => {
+        return this.stockService.loadMarketClock().pipe(
+          map((data: any) =>
+            appActions.loadMarketClockSuccess({
+              marketClock: {
+                isOpen: data.body.isOpen,
+                nextClose: data.body.nextClose,
+                nextOpen: data.body.nextOpen,
+                timestamp: data.body.timestamp,
+              },
+            })
+          ),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
+            )
+          )
+        );
+      })
+    )
+  );
 
   createNewUser$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(

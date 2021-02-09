@@ -1,5 +1,8 @@
 package com.capstone.moneytree.facade;
 
+import com.capstone.moneytree.exception.AlpacaClockException;
+import com.capstone.moneytree.handler.ExceptionMessage;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,9 +47,9 @@ public class MarketInteractionsFacade {
    private final Map<String, AlpacaStreamListener> userIdToStream;
 
    @Autowired
-   public MarketInteractionsFacade(@Value("${alpaca.api.version}") String apiVersion,
-         @Value("${alpaca.key.id}") String keyId, @Value("${alpaca.secret}") String secretKey,
-         @Value("${alpaca.base.api.url}") String baseApiUrl, @Value("${alpaca.base.data.url}") String baseDataUrl) {
+   public MarketInteractionsFacade(@Value("${alpaca.key.id}") String keyId, @Value("${alpaca.secret}") String secretKey,
+         @Value("${alpaca.api.version}") String apiVersion, @Value("${alpaca.base.api.url}") String baseApiUrl,
+         @Value("${alpaca.base.data.url}") String baseDataUrl) {
       alpacaAPI = new AlpacaAPI(keyId, secretKey, null, baseApiUrl, baseDataUrl);
 
       userIdToStream = new HashMap<>();
@@ -78,12 +81,11 @@ public class MarketInteractionsFacade {
       Clock marketClock = null;
       try {
          marketClock = alpacaAPI.getClock();
-         System.out.println(marketClock);
          LOGGER.info("Get market clock: {}", marketClock);
-      } catch (AlpacaAPIRequestException e) {
+      } catch (Exception e) {
          LOGGER.error("Error getting the Alpaca market clock: {}", e.getMessage());
+         throw new AlpacaClockException(ExceptionMessage.ALPACA_CLOCK_ERROR.getMessage());
       }
-
       return marketClock;
    }
 

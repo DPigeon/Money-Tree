@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Stock } from 'src/app/interfaces/stock';
 import { ApiService } from '../api/api.service';
+import { MarketClock } from './../../interfaces/market-clock';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class StockService {
       .pipe(map((res: Response) => this.IEXtoModel(res.body)));
   }
 
-  loadMarketClock(): Observable<string> {
+  loadMarketClock(): Observable<MarketClock> {
     return this.api.get('alpaca/market-status');
   }
 

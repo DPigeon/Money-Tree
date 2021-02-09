@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { Stock } from 'src/app/interfaces/stock';
 import { User } from 'src/app/interfaces/user';
 import { AppError } from 'src/app/interfaces/app-error';
+import { MarketClock } from 'src/app/interfaces/market-clock';
 
 export const loadStockInfo = createAction(
   '[Stock Info] Load Stock Info',
@@ -11,6 +12,14 @@ export const loadStockInfo = createAction(
 export const stockInfoLoadSuccess = createAction(
   '[Stock Info] Load Stock Info Success',
   props<{ stock: Stock }>()
+);
+
+export const loadMarketClock = createAction(
+  '[Market Clock] Load Market Clock Info'
+);
+export const loadMarketClockSuccess = createAction(
+  '[Market Clock] Load Market Clock Success',
+  props<{ marketClock: MarketClock }>()
 );
 
 export const createNewUser = createAction(
@@ -35,7 +44,7 @@ export const upadateUser = createAction(
 
 export const getAlpacaOAuthToken = createAction(
   '[User] Get OAuthToken',
-  props<{ userId: number, alpacaToken: string }>()
+  props<{ userId: number; alpacaToken: string }>()
 );
 
 export const setCurrentUser = createAction(
@@ -52,5 +61,5 @@ export const setAppError = createAction(
 
 export const updatePictureURL = createAction(
   '[User] Photo URL updated for user',
-  props<{ id: number; image: File , typeSelection: string}>()
+  props<{ id: number; image: File; typeSelection: string }>()
 );

@@ -7,13 +7,13 @@
   </div>
   <div class="chips-container">
     <mat-chip-list>
-      <mat-chip class="open-market" *ngIf='marketStatus'>Open Market</mat-chip>
-      <mat-chip class="closed-market" *ngIf='!marketStatus'>Closed Market</mat-chip>
+      <mat-chip class="open-market" *ngIf='marketClock && marketClock.isOpen'>Open Market</mat-chip>
+      <mat-chip class="closed-market" *ngIf='marketClock && !marketClock.isOpen'>Closed Market</mat-chip>
       <mat-chip class='stock-industry'>{{ stockIndustry }}</mat-chip>
-
     </mat-chip-list>
   </div>
 </div>
+<p class="next-opening-message" *ngIf="marketClock && !marketClock.isOpen">Next market openning: {{nextOpen()}}</p>
 <mat-card>
   <div class="stock-pricing">
     <span class="stock-value">${{ stockValue }}</span>

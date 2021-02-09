@@ -1,6 +1,6 @@
+import { MarketClock } from './../../interfaces/market-clock';
 import { Component, Input } from '@angular/core';
 import { Stock } from './../../interfaces/stock';
-import { StockService } from '../../services/stock/stock.service';
 
 @Component({
   selector: 'app-stock-detail-header',
@@ -9,12 +9,10 @@ import { StockService } from '../../services/stock/stock.service';
 })
 export class StockDetailHeaderComponent {
   @Input() stockInfo: Stock;
-  // will be moved to the parent component in future commits
-  marketStatus: any = null;
-  constructor(stockService: StockService) {
-  this.marketStatus = stockService.loadMarketClock().subscribe((data)=> console.log(data));
-  }
-  
+  @Input() marketClock: MarketClock;
+
+  constructor() {}
+
   get companyLogo(): string {
     return this.stockInfo ? 'url(' + this.stockInfo.logo + ')' : '';
   }
@@ -56,7 +54,10 @@ export class StockDetailHeaderComponent {
     }
     return '';
   }
-  marketStatusChip(): boolean { 
-    return this.marketStatus;
+  nextOpen(): string {
+    if (this.marketClock) {
+      return this.marketClock.nextOpen.replace('T', ' at ').split(':00-')[0];
+    }
+    return '';
   }
 }
