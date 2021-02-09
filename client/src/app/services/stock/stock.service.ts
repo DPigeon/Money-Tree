@@ -16,6 +16,10 @@ export class StockService {
       .pipe(map((res: Response) => this.IEXtoModel(res.body)));
   }
 
+  loadMarketClock(): Observable<string> {
+    return this.api.get('alpaca/market-status');
+  }
+
   // This will need to be discussed: formatting responses frontend vs backend, same models?
   IEXtoModel(iex: any): Stock {
     const stock: Stock = {

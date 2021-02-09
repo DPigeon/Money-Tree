@@ -5,9 +5,14 @@
       <span class="ticker">{{ companySymbol }}</span> {{ companyName }}
     </h1>
   </div>
-  <mat-chip-list>
-    <mat-chip>{{ stockIndustry }}</mat-chip>
-  </mat-chip-list>
+  <div class="chips-container">
+    <mat-chip-list>
+      <mat-chip class="open-market" *ngIf='marketStatus'>Open Market</mat-chip>
+      <mat-chip class="closed-market" *ngIf='!marketStatus'>Closed Market</mat-chip>
+      <mat-chip class='stock-industry'>{{ stockIndustry }}</mat-chip>
+
+    </mat-chip-list>
+  </div>
 </div>
 <mat-card>
   <div class="stock-pricing">

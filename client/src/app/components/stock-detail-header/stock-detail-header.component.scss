@@ -31,6 +31,24 @@
       margin-right: 10px;
     }
   }
+  .chips-container .mat-chip {
+    color: $primary-color;
+    background-color: white;
+    border: lightgoldenrodyellow solid 0.01px;
+    max-width: 120px;
+    align-items: center;
+    overflow: hidden;
+    display: inline-flex;
+  }
+
+  .open-market {
+    color: rgba(2, 131, 38, 0.87) !important;
+    background-color: rgba(210, 252, 207, 1) !important;
+  }
+  .closed-market {
+    color: rgb(97, 35, 35) !important;
+    background-color: rgb(241, 184, 182) !important;
+  }
 }
 
 .stock-pricing {
