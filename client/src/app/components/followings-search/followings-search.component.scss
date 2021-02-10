@@ -2,8 +2,9 @@
 
 .followings-container {
   padding: 10px;
-  height: 80vh;
+  height: calc(90vh - 100px) ;
   margin-bottom: 20px;
+  overflow-y: hidden;
 
   .followings-search {
     padding: 5px;
@@ -12,7 +13,7 @@
   }
   .users-following-container {
     overflow-y: auto;
-    height: 85%;
+    height: calc(100% - 100px);
 
     .following-container {
       display: flex;

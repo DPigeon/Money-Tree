@@ -26,6 +26,15 @@ export class FollowingsSearchComponent implements OnInit {
     { firstName: 'Walter', lastName: 'Fleury' },
     { firstName: 'Hossein', lastName: 'Noor' },
     { firstName: 'Lindsay', lastName: 'Bangs' },
+    { firstName: 'Marwan', lastName: 'Ayadi' },
+    { firstName: 'Razine', lastName: 'Bensari' },
+    { firstName: 'Arthur', lastName: 'Tourneyrie' },
+    { firstName: 'Alessandro', lastName: 'Kreslin' },
+    { firstName: 'David ', lastName: 'Pigeon' },
+    { firstName: 'Abdulrahim', lastName: 'Mansour' },
+    { firstName: 'Walter', lastName: 'Fleury' },
+    { firstName: 'Hossein', lastName: 'Noor' },
+    { firstName: 'Lindsay', lastName: 'Bangs' },
   ]; // to be changed
   followingSearch = '';
 
