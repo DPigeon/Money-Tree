@@ -1,10 +1,20 @@
-<app-header [userPhotoURL]='userPhotoURL'></app-header>
-<h1>Welcome to home page!</h1>
-<button mat-raised-button (click)="openDialog()">Edit Profile</button>
+<div class="header-container">
+  <app-header [userPhotoURL]="userPhotoURL"></app-header>
+</div>
 
-<div *ngIf="currentUser$ | async as user">
+<div fxLayout="row wrap" fxLayoutAlign="center stretch">
+  <div fxFlex="20%" fxFlex.lt-sm="100%">
+    <button mat-raised-button (click)="openDialog()">Edit Profile</button>
+  </div>
+  <div fxFlex="58%" fxFlex.lt-sm="100%" *ngIf="currentUser$ | async as user">
+    <h1>Welcome to home page!</h1>
     <h1>This is a test to see user state</h1>
-    <div>{{user.firstName}}</div>
-    <div>{{user.username}}</div>
-    <div>{{user.email}}</div>
+    <div>{{ user.firstName }}</div>
+    <div>{{ user.username }}</div>
+    <div>{{ user.email }}</div>
+  </div>
+
+  <div fxFlex="20%" fxFlex.lt-sm="100%">
+    <app-followings-search></app-followings-search>
+  </div>
 </div>

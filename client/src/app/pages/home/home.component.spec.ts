@@ -10,6 +10,7 @@ import {
 import { StockSearchComponent } from '../../components/stock-search/stock-search.component';
 import { EditProfileComponent } from './../../components/edit-profile/edit-profile.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { FollowingsSearchComponent } from 'src/app/components/followings-search/followings-search.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -27,6 +28,7 @@ describe('HomeComponent', () => {
         HeaderComponent,
         StockSearchComponent,
         EditProfileComponent,
+        FollowingsSearchComponent,
       ],
       providers: [
         NGRX_STORE_MODULE,

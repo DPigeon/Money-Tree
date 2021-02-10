@@ -1,0 +1,76 @@
+@import "../../../styles.scss";
+
+.followings-container {
+  padding: 10px;
+  height: 80vh;
+  margin-bottom: 20px;
+
+  .followings-search {
+    padding: 5px;
+    width: 90%;
+    margin-bottom: 20px;
+  }
+  .users-following-container {
+    overflow-y: auto;
+    height: 85%;
+
+    .following-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 10px;
+
+      .following-picture {
+        border-radius: 50%;
+        margin-right: 5px;
+        margin-right: 10px;
+      }
+
+      .following-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+
+        .following-name {
+          color: $primary-color;
+          outline: none;
+          cursor: pointer;
+          font-weight: 500;
+        }
+
+        .following-score-label {
+          color: $mt-red;
+          font-weight: 400;
+        }
+
+        .following-score {
+          color: $primary-color;
+          font-weight: 400;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
