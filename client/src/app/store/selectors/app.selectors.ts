@@ -24,15 +24,23 @@ export const selectAppError = createSelector(
 
 export const selectShouldAlpacaRedirect = createSelector(
   selectAppState,
-  (appState: State) => (!!appState.user && !appState.user.alpacaApiKey)
+  (appState: State) => !!appState.user && !appState.user.alpacaApiKey
 );
 
 export const isUserLoggedIn = createSelector(
   selectAppState,
-  (appState: State) => (!!appState.user && !!appState.user.alpacaApiKey)
+  (appState: State) => !!appState.user && !!appState.user.alpacaApiKey
 );
 
 export const selectAuthenticationInformation = createSelector(
   selectAppState,
-  (appState: State) => ({userExists: !!appState.user, hasAlpacaCode: !!(appState.user && appState.user.alpacaApiKey)})
+  (appState: State) => ({
+    userExists: !!appState.user,
+    hasAlpacaCode: !!(appState.user && appState.user.alpacaApiKey),
+  })
+);
+
+export const selectCurrentMarketClock = createSelector(
+  selectAppState,
+  (appState: State) => appState.currentMarketClock
 );

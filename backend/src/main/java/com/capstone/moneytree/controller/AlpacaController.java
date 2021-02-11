@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.capstone.moneytree.facade.MarketInteractionsFacade;
 
 import net.jacobpeterson.domain.alpaca.account.Account;
+import net.jacobpeterson.domain.alpaca.clock.Clock;
 import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
 import net.jacobpeterson.domain.alpaca.position.Position;
 
@@ -106,4 +107,17 @@ public class AlpacaController {
    public void disconnectFromTradeUpdates(String userId) {
       marketInteractionsFacade.disconnectFromStream(userId);
    }
+
+   /**
+    *  Gets the market status (open/closed).
+    *
+    * @return market status.
+    */
+    @GetMapping("/market-status")
+    public ResponseEntity<Clock> getMarketClock() {
+      Clock marketClock = marketInteractionsFacade.getMarketClock();
+      return ResponseEntity.ok(marketClock);
+    }
+
 }
+
