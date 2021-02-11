@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { WebsocketAPIService } from './services/websocket-api/websocket-api.service';
 import { StoreFacadeService } from './store/store-facade.service';
 
 @Component({
@@ -10,7 +11,8 @@ import { StoreFacadeService } from './store/store-facade.service';
 export class AppComponent implements OnInit {
   constructor(
     private storeFacade: StoreFacadeService,
-    private router: Router
+    private router: Router,
+    private websocketAPI: WebsocketAPIService
   ) {}
 
   ngOnInit(): void {
@@ -22,6 +24,15 @@ export class AppComponent implements OnInit {
         info.hasAlpacaCode,
         localUserId
       );
+    });
+
+    this.storeFacade.currentUser$.subscribe((user) => {
+      if (user && user.id) {
+        this.websocketAPI.setWebsocketUserId(user.id);
+        this.websocketAPI.connect();
+      } else if (this.websocketAPI) {
+        this.websocketAPI.disconnect();
+      }
     });
   }
 
