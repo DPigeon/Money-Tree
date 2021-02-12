@@ -130,7 +130,7 @@ describe('SellOrBuyActionsComponent unit test', () => {
     component.data = mockDialogData;
     component.quantity = 2;
     component.isMarketOrder = true;
-    expect(component.getRemainingBalance()).toBe(component.balance - component.getTotal());
+    expect(component.getRemainingBalance()).toBe(component.balance + component.getTotal());
   });
 
 
