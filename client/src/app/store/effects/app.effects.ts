@@ -8,6 +8,7 @@ import { UserService } from '../../services/user/user.service';
 import * as appActions from '../actions/app.actions';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { AppError } from 'src/app/interfaces/app-error';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
 export class Effects {
@@ -15,7 +16,8 @@ export class Effects {
     private actions$: Actions,
     private stockService: StockService,
     private transactionService: TransactionService,
-    private userService: UserService
+    private userService: UserService,
+    private snackBar: MatSnackBar
   ) {}
 
   getStock$: Observable<Action> = createEffect(() =>
@@ -164,6 +166,30 @@ export class Effects {
                 })
               )
             )
+          );
+      })
+    )
+  );
+
+  createStockTransaction$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.processStockTransaction),
+      switchMap((action) => {
+        return this.transactionService
+          .processStockTransaction(action.transaction, action.userId)
+          .pipe(
+            map((data) => {
+              this.snackBar.open('Transaction Successfully Placed', 'Close', {duration: 5000});
+              return appActions.setCurrentUser({ user: data });
+            }),
+            catchError((data) => {
+              this.snackBar.open('Error with Transaction', 'Close', {duration: 5000});
+              return of(
+                appActions.setAppError({
+                  errorMessage: this.mirrorError(data),
+                })
+              );
+            })
           );
       })
     )

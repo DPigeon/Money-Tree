@@ -175,9 +175,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <fork>false</fork>
-                </configuration>
                 <version>2.4.1</version>
             </plugin>
             <!-- build plugin to use groovy to compile and run tests -->
