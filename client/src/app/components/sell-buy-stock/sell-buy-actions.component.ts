@@ -69,7 +69,8 @@ export class SellOrBuyActionsComponent implements OnInit {
   }
 
   getRemainingBalance(): number {
-    return this.balance - this.getTotal();
+
+    return this.data.type === 'buy' ? this.balance - this.getTotal() : this.balance + this.getTotal();
   }
 
 }
