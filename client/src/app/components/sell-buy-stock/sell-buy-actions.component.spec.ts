@@ -92,7 +92,7 @@ describe('SellOrBuyActionsComponent', () => {
   });
 });
 
-describe('SellOrBuyActionsComponent', () => {
+describe('SellOrBuyActionsComponent unit test', () => {
   let component: SellOrBuyActionsComponent;
 
   beforeEach(()=> {
@@ -106,4 +106,38 @@ describe('SellOrBuyActionsComponent', () => {
     component.data = mockDialogData;
     expect(component.stockPrice).toBe(mockDialogData.stockInfo.stockValue);
   })
+
+  it('should return the right stock name', () => {
+    component.data = null;
+    component.ngOnInit();
+    expect(component.stockName).toBe('');
+    component.data = mockDialogData;
+    expect(component.stockName).toBe(component.data.stockInfo.companyName);
+  })
+  
+  it('should return the total', () => {
+    component.ngOnInit();
+    expect(component.getTotal()).toBe(0);
+    component.data.stockInfo = mockDialogData.stockInfo;
+    component.quantity = 2; 
+    component.isMarketOrder = true;
+    expect(component.getTotal()).toBe(mockDialogData.stockInfo.stockValue * component.quantity);
+  })
+
+  it('should return the remaining balance', () => {
+    component.ngOnInit();
+    expect(component.getRemainingBalance()).toBe(component.balance);
+    component.data = mockDialogData;
+    component.quantity = 2; 
+    component.isMarketOrder = true;
+    expect(component.getRemainingBalance()).toBe(component.balance - component.getTotal());
+  })
+
+
+  it('should return Buy or Sell', () => {
+    component.ngOnInit();
+    component.data = mockDialogData;
+    expect(component.getProcessActionType()).toBe('Sell');
+  })
+
 });

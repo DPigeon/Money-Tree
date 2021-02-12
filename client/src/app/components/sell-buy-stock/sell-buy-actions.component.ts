@@ -47,7 +47,7 @@ export class SellOrBuyActionsComponent implements OnInit {
     this.price = 0;
   }
 
-  getProcessActionType(): string {
+  getProcessActionType(): string { 
     return this.data.type.charAt(0).toUpperCase() + this.data.type.slice(1);
   }
 
@@ -63,15 +63,12 @@ export class SellOrBuyActionsComponent implements OnInit {
     this.dialogRef.close();
   }
   
-  getTotal(): number {
+  getTotal(): number { 
     return this.isMarketOrder && this.currentStock ? this.quantity * this.currentStock.stockValue : this.quantity * this.price;
   }
 
-  getRemainingBalance(): number {
+  getRemainingBalance(): number { 
     return this.balance - this.getTotal();
   }
 
-  getStockPrice(): number {
-    return (this.data && this.data.stockInfo && this.data.stockInfo.stockValue) ? this.data.stockInfo.stockValue : 0;
-  }
 }
