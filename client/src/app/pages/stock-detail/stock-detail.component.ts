@@ -16,8 +16,7 @@ import { filter } from 'rxjs/operators';
 export class StockDetailComponent implements OnInit {
   stockInfo$ = this.storeFacade.currentStockLoaded$;
   marketClock$ = this.storeFacade.currentMarketClock$;
-  userInfo$ = this.storeFacade.currentUser$
-  
+  userInfo$ = this.storeFacade.currentUser$;
   constructor(
     private storeFacade: StoreFacadeService,
     private route: ActivatedRoute,

@@ -73,4 +73,7 @@ export class SellOrBuyActionsComponent implements OnInit {
     return this.data.type === 'buy' ? this.balance - this.getTotal() : this.balance + this.getTotal();
   }
 
+  buySellVerify() {
+    return this.quantity <= 0 || this.price < 0 || this.getRemainingBalance() < 0 ? false : true;
+   }
 }

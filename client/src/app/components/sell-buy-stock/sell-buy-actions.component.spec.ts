@@ -120,8 +120,11 @@ describe('SellOrBuyActionsComponent unit test', () => {
     expect(component.getTotal()).toBe(0);
     component.data.stockInfo = mockDialogData.stockInfo;
     component.quantity = 2;
+    component.price = 10;
     component.isMarketOrder = true;
     expect(component.getTotal()).toBe(mockDialogData.stockInfo.stockValue * component.quantity);
+    component.isMarketOrder = false;
+    expect(component.getTotal()).toBe(component.price  * component.quantity);
   });
 
   it('should return the remaining balance', () => {
@@ -140,4 +143,15 @@ describe('SellOrBuyActionsComponent unit test', () => {
     expect(component.getProcessActionType()).toBe('Sell');
   });
 
+  it('should return true or false if transaction is valid or not', () =>{
+    component.ngOnInit();
+    component.data = mockDialogData;
+    component.price = -2;
+    component.quantity = 1;
+    expect(component.buySellVerify()).toBe(false);
+    component.isMarketOrder = true;
+    component.price = 2;
+    component.quantity = 1;
+    expect(component.buySellVerify()).toBe(true);
+  });
 });
