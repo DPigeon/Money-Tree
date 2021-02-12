@@ -63,7 +63,7 @@
       mat-flat-button
       color="primary"
       (click)="processActions()"
-      [disabled]="quantity <= 0 || price < 0 || getRemainingBalance() < 0"
+      [disabled]="buySellVerify()"
     >
       {{ getProcessActionType().toUpperCase() }}
     </button>

@@ -143,15 +143,15 @@ describe('SellOrBuyActionsComponent unit test', () => {
     expect(component.getProcessActionType()).toBe('Sell');
   });
 
-  it('should return true or false if transaction is valid or not', () =>{
+  it('should return true or false if transaction is valid or not', () => {
     component.ngOnInit();
     component.data = mockDialogData;
     component.price = -2;
     component.quantity = 1;
-    expect(component.buySellVerify()).toBe(false);
+    expect(component.buySellVerify()).toBe(true);
     component.isMarketOrder = true;
     component.price = 2;
     component.quantity = 1;
-    expect(component.buySellVerify()).toBe(true);
+    expect(component.buySellVerify()).toBe(false);
   });
 });
