@@ -1,6 +1,8 @@
 package com.capstone.moneytree.facade;
 
 import com.capstone.moneytree.model.node.User;
+import net.jacobpeterson.domain.alpaca.order.Order;
+import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.time.ZonedDateTime;
 
 @Component
 public class EmailSender {
@@ -28,10 +31,10 @@ public class EmailSender {
         this.activeProfile = activeProfile;
     }
 
-    public void sendOrderCompletedEmail(User user, String orderId, String orderTotal, String stockName, String subject) {
+    public void sendOrderCompletedEmail(User user, TradeUpdate trade, String subject) {
         String username = user.getUsername();
         String toEmail = user.getEmail();
-        String text = setOrderCompletedTemplate(username, orderId, orderTotal, stockName);
+        String text = setOrderCompletedTemplate(username, trade);
         send(toEmail, subject, text);
     }
 
@@ -52,7 +55,14 @@ public class EmailSender {
         }
     }
 
-    private String setOrderCompletedTemplate(String username, String orderId, String orderTotal, String stockName) {
+    private String setOrderCompletedTemplate(String username, TradeUpdate trade) {
+        Order order = trade.getOrder();
+        String stockName = order.getSymbol();
+        String quantity = order.getQty();
+        String action = order.getType();
+        String avgPrice = order.getFilledAvgPrice();
+        ZonedDateTime timestamp = trade.getTimestamp();
+        String totalAmount = trade.getPrice();
         String urlEnv = activeProfile.equals("local") ? "http://localhost:4200/": activeProfile.equals("dev")
                 ? "https://dev.money-tree.tech/":"https://money-tree.tech";
 
@@ -60,9 +70,12 @@ public class EmailSender {
                 "Thank you for trading with us. Your order details are indicated below." +
                 " If you would like to view the status of your order, please visit " +
                 "<a href='" + urlEnv + "'>Your Orders</a>.\n\n" +
-                "Order ID: " + orderId + "\n" +
-                "Order Total: " + orderTotal + "\n" +
-                "Stock Purchased: " + stockName + "\n\n" +
+                "Stock Purchased: " + stockName + "\n" +
+                "Quantity: " + quantity + "\n" +
+                "Average Share Price: " + avgPrice + "\n" +
+                "Timestamp: " + timestamp.toString() + "\n" +
+                "Total Amount: " + totalAmount + "\n" +
+                "Action: " + action + "\n\n" +
                 "We hope that you trade with us again soon!\n" +
                 "<b>Money-Tree.tech</b>";
     }

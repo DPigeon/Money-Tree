@@ -1,6 +1,7 @@
 package com.capstone.moneytree.facade;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -184,11 +185,9 @@ public class MarketInteractionsFacade {
       EmailSender emailSender = new EmailSender(mailSender, System.getProperty("spring.profiles.active"));
 
       String orderId = trade.getOrder().getClientOrderId();
-      String orderTotal = trade.getPrice();
-      String stockName = trade.getOrder().getSymbol();
       String emailSubject = "Your Money-Tree order #" + orderId;
       User user = getUserById(Long.parseLong(userId));
-      emailSender.sendOrderCompletedEmail(user, orderId, orderTotal, stockName, emailSubject);
+      emailSender.sendOrderCompletedEmail(user, trade, emailSubject);
    }
 
    private User getUserById(Long userId) {
