@@ -13,7 +13,7 @@ import { SellOrBuyActionsComponent } from '../sell-buy-stock/sell-buy-actions.co
 export class UserOwnedStocksComponent {
   @Input() stockInfo: Stock;
   @Input() userInfo: User;
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) { }
 
   get stockSymbol(): string {
     return 'AAPL'; // to be changed
@@ -51,10 +51,8 @@ export class UserOwnedStocksComponent {
   }
 
   openSellOrBuyActionsModal(type: string): void {
-    console.log("Type: ", type, "Stock:", this.stockInfo)
     const stockInfo = this.stockInfo;
     const userInfo = this.userInfo;
-
     const dialogRef = this.dialog.open(SellOrBuyActionsComponent, {
       data: {
         type, stockInfo, userInfo
