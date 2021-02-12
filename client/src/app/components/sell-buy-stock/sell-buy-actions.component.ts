@@ -15,23 +15,24 @@ export class SellOrBuyActionsComponent implements OnInit {
   quantity = 0;
   price = 0;
   currentStock: Stock;
-  balance: number = 0;
-  remainingBalance: number = 0
-  
+  balance = 0;
+  remainingBalance = 0;
+
   constructor(
     public dialogRef: MatDialogRef<SellOrBuyActionsComponent>,
     private storeFacade: StoreFacadeService,
     @Inject(MAT_DIALOG_DATA) public data: {
       type: string,
       stockInfo: Stock,
-      userInfo: User
+      userInfo: User,
     }
-  ) {}
+  ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.currentStock = this.data ? this.data.stockInfo : null;
     this.price = this.currentStock ? this.currentStock.stockValue : 0;
-    this.balance = this.data && this.data.userInfo && this.data.userInfo.balance ? this.data.userInfo.balance : 100000; // BUG: Initial balance not gotten because balance updates after each transaction
+    this.balance = this.data && this.data.userInfo && this.data.userInfo.balance ? this.data.userInfo.balance : 100000;
+    // BUG: Initial balance not gotten because balance updates after each transaction
   }
 
   get stockPrice(): number {
@@ -47,7 +48,7 @@ export class SellOrBuyActionsComponent implements OnInit {
     this.price = 0;
   }
 
-  getProcessActionType(): string { 
+  getProcessActionType(): string {
     return this.data.type.charAt(0).toUpperCase() + this.data.type.slice(1);
   }
 
@@ -56,18 +57,18 @@ export class SellOrBuyActionsComponent implements OnInit {
       symbol: this.data.stockInfo.tickerSymbol,
       qty: this.quantity,
       side: this.data.type,
-      type: this.isMarketOrder ? "market" : "limit",
-      time_in_force: "day"
-    }
+      type: this.isMarketOrder ? 'market' : 'limit',
+      time_in_force: 'day'
+    };
     this.storeFacade.processStockTransaction(transaction, this.data.userInfo.id);
     this.dialogRef.close();
   }
-  
-  getTotal(): number { 
+
+  getTotal(): number {
     return this.isMarketOrder && this.currentStock ? this.quantity * this.currentStock.stockValue : this.quantity * this.price;
   }
 
-  getRemainingBalance(): number { 
+  getRemainingBalance(): number {
     return this.balance - this.getTotal();
   }
 
