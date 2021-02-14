@@ -6,13 +6,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.capstone.moneytree.service.api.YahooFinanceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.gateway.mvc.ProxyExchange;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.capstone.moneytree.service.api.StockMarketDataService;
 
@@ -24,18 +24,21 @@ import pl.zankowski.iextrading4j.api.stocks.Quote;
 import pl.zankowski.iextrading4j.api.stocks.v1.BatchStocks;
 import pl.zankowski.iextrading4j.api.stocks.v1.KeyStats;
 import pl.zankowski.iextrading4j.api.stocks.v1.News;
+import reactor.core.publisher.Mono;
 
 @MoneyTreeController
 @RequestMapping("/stockmarket")
 public class StockController {
 
 
-   private StockMarketDataService stockMarketDataService;
+   private final StockMarketDataService stockMarketDataService;
+   private final YahooFinanceService yahooFinanceService;
 
    private static final Logger LOG = LoggerFactory.getLogger(StockController.class);
 
    @Autowired
-   public StockController(StockMarketDataService stockMarketDataService) {
+   public StockController(StockMarketDataService stockMarketDataService, YahooFinanceService yahooFinanceService) {
+      this.yahooFinanceService = yahooFinanceService;
       LOG.info("Initializing StockController");
       this.stockMarketDataService = stockMarketDataService;
    }
@@ -93,5 +96,23 @@ public class StockController {
    public ResponseEntity<Logo> getLogo(@PathVariable(name = "symbol") @Valid @NotBlank @Size(max = 5) String symbol) {
       Logo logo = stockMarketDataService.getLogo(symbol);
       return ResponseEntity.ok(logo);
+   }
+
+   /*
+   Valid ranges: [1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max]
+   Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]
+   */
+   @GetMapping(value = "/chart1/{symbol}", produces = {"application/json"})
+   public Mono<String> getChart1(@PathVariable String symbol, @RequestParam String range, @RequestParam String interval){
+      return yahooFinanceService.getHistoricalGraphData(symbol, range, interval);
+   }
+   
+   /*
+   Valid ranges: [1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max]
+   Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]
+   */
+   @GetMapping(value = "/chart2/{symbol}", produces = {"application/json"})
+   public ResponseEntity<String> getChart2(ProxyExchange<String> proxy, @PathVariable String symbol, @RequestParam String range, @RequestParam String interval) {
+      return proxy.uri("https://query1.finance.yahoo.com/v8/finance/chart/" + symbol + "?range=" + range + "&interval=" + interval).get();
    }
 }
