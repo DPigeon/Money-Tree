@@ -1,3 +1,22 @@
+@import "../../../styles.scss";
 .header-container {
   margin-bottom: 20px;
+}
+.container{
+    position: relative;
+}
+.transaction-history-container{
+    position: absolute;
+    right: 2em;
+    top: 24em;
+    width: 25em;
+    
+    mat-card-title {
+        text-align: center;
+    }
+    hr { 
+        background-color: $primary-color ; 
+        border: none; 
+        height: 1px;
+    } 
 }
