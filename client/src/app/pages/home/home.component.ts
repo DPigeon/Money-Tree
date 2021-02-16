@@ -4,6 +4,7 @@ import { User } from 'src/app/interfaces/user';
 import { StoreFacadeService } from '../../store/store-facade.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditProfileComponent } from '../../components/edit-profile/edit-profile.component';
+import { Transaction } from '../../interfaces/transaction'
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -15,6 +16,7 @@ export class HomeComponent implements OnInit {
 
   currentUser$: Observable<User>;
   currentUser: User;
+  transactionHistory: Transaction[];
 
   constructor(
     private storeFacade: StoreFacadeService,
@@ -30,6 +32,8 @@ export class HomeComponent implements OnInit {
         this.currentUser = user;
         this.userPhotoURL = this.currentUser.avatarURL;
         this.coverPhotoURL = this.currentUser.coverPhotoURL;
+        this.transactionHistory = this.currentUser.transactions;
+        console.log(this.transactionHistory);
       }
     });
   }
@@ -61,5 +65,15 @@ export class HomeComponent implements OnInit {
         this.storeFacade.updateUser(updatedUserInfo);
       }
     );
+  }
+
+  printTransaction(transaction: Transaction): string{
+    console.log('This is print Transaction ',transaction)
+   // let printedTransaction = '';
+   // transaction.side === 'buy' ? printedTransaction +='Bought ' : printedTransaction +='Sold '; 
+   // printedTransaction += 'shares of ' + transaction.stockFulfilled.tickerSymbol + 'at an average of ' + transaction.averagePricePerShare + ' per share.'; 
+
+   // return transaction ? printedTransaction : '';
+   return '';
   }
 }

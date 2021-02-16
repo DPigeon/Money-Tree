@@ -1,10 +1,38 @@
 <app-header [userPhotoURL]='userPhotoURL'></app-header>
-<h1>Welcome to home page!</h1>
-<button mat-raised-button (click)="openDialog()">Edit Profile</button>
+<div class="container">
+    <h1>Welcome to home page!</h1>
+    <button mat-raised-button (click)="openDialog()">Edit Profile</button>
 
-<div *ngIf="currentUser$ | async as user">
-    <h1>This is a test to see user state</h1>
-    <div>{{user.firstName}}</div>
-    <div>{{user.username}}</div>
-    <div>{{user.email}}</div>
+    <div *ngIf="currentUser$ | async as user">
+        <h1>This is a test to see user state</h1>
+        <div>{{user.firstName}}</div>
+        <div>{{user.username}}</div>
+        <div>{{user.email}}</div>
+    </div>
+
+    <div class="transaction-history-container">
+        <mat-card>
+            <mat-card-title>Transaction History</mat-card-title>
+            <div *ngFor="let transaction of transactionHistory"> 
+            <p> {{printTransaction(transaction)}}></p> 
+            <hr>
+        </div>
+            <p>
+                Sold 245 shares of BHF at an average of 13.26$ per share.
+            </p>
+            <hr>
+            <p>
+                Sold 245 shares of BHF at an average of 13.26$ per share.
+            </p>
+            <hr>
+            <p>
+                Sold 245 shares of BHF at an average of 13.26$ per share.
+            </p>
+            <hr>
+            <p>
+                Sold 245 shares of BHF at an average of 13.26$ per share.
+            </p>
+            <hr>
+        </mat-card>
+    </div>
 </div>
