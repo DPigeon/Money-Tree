@@ -13,20 +13,28 @@ export interface Follower {
 })
 export class StockAdditionalInfoComponent {
   @Input() type: string;
-  list: any=[{ firstName: 'Marwan', lastName: 'Ayadi' },
-  { firstName: 'Razine', lastName: 'Bensari' },
-  { firstName: 'Arthur', lastName: 'Tourneyrie' },
-  { firstName: 'Alessandro', lastName: 'Kreslin' },
-  { firstName: 'David ', lastName: 'Pigeon' },
-  { firstName: 'Abdulrahim', lastName: 'Mansour' },
-  { firstName: 'Walter', lastName: 'Fleury' },
-  { firstName: 'Hossein', lastName: 'Noor' },
-  { firstName: 'Lindsay', lastName: 'Bangs' },];
+  //list to be changed
+  list: any = [
+    { firstName: 'Marwan', lastName: 'Ayadi' },
+    { firstName: 'Razine', lastName: 'Bensari' },
+    { firstName: 'Arthur', lastName: 'Tourneyrie' },
+    { firstName: 'Alessandro', lastName: 'Kreslin' },
+    { firstName: 'David ', lastName: 'Pigeon' },
+    { firstName: 'Abdulrahim', lastName: 'Mansour' },
+    { firstName: 'Walter', lastName: 'Fleury' },
+    { firstName: 'Hossein', lastName: 'Noor' },
+    { firstName: 'Lindsay', lastName: 'Bangs' },
+  ];
 
   constructor(private router: Router) {}
 
-  navigateToadditionalProfile(user: string): void {
-    this.router.navigate(['/user-profile/' + user]);
+  navigateToadditionalProfile(entityId: string, type: string): void {
+    if (type === 'followers' || type === 'investors') {
+      // to be changed to prolipe page
+      this.router.navigate(['/home']);
+    } else {
+      this.router.navigate(['/stock-detail/' + entityId]);
+    }
   }
   getTitleByType() {
     if (this.type === 'followers') {
@@ -37,14 +45,13 @@ export class StockAdditionalInfoComponent {
       return 'People who owns this stock also own these stocks';
     }
   }
-  getIconByType(){
+  getIconByType() {
     if (this.type === 'followers') {
-      return 'group_add'
+      return 'group_add';
     } else if (this.type === 'investors') {
-      return 'trending_up'
+      return 'trending_up';
     } else {
-      return 'domain'
+      return 'domain';
     }
-   
   }
 }

@@ -5,8 +5,9 @@
   </div>
   <div class="users-additional-container">
     <ng-container *ngFor="let entity of list">
-      <div *ngIf="type !== 'similar'" class="additional-container">
+      <div *ngIf="type !== 'stocks'" class="additional-container">
         <div class="additional-info">
+          <!-- image src to be changed -->
           <img
             class="additional-picture"
             alt="Profile Picture"
@@ -18,19 +19,18 @@
           />
           <span
             class="additional-name"
-            (click)="navigateToadditionalProfile(entity.firstName)"
+            (click)="navigateToadditionalProfile(entity.firstName, 'followers')"
             >{{ entity.firstName + " " + entity.lastName }}</span
           >
         </div>
       </div>
-      <div *ngIf="type == 'similar'" class="additional-container">
-        <span>{{ entity.firstName }}</span
+      <div *ngIf="type == 'stocks'" class="additional-container">
+        <span
+          class="additional-symbol"
+          (click)="navigateToadditionalProfile(entity.firstName, 'stocks')"
+          >{{ entity.firstName }}</span
         ><span>%81</span>
       </div>
       <mat-divider [inset]="true"></mat-divider>
     </ng-container></div
 ></mat-card>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item 2</button>
-</mat-menu>

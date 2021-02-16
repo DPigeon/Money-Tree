@@ -7,16 +7,22 @@
   align-items: center;
   flex-wrap: nowrap;
 }
+
 .additionals-container {
-  padding: 10px;
-  height:350px;
-  width:260px;
+  height: 350px;
+  width: 260px;
   margin-bottom: 20px;
 
   .additionals-search {
     padding: 5px;
     width: 90%;
     margin-bottom: 20px;
+  }
+  .additional-symbol {
+    color: $primary-color;
+    outline: none;
+    cursor: pointer;
+    font-weight: 500;
   }
   .users-additional-container {
     overflow-y: auto;
@@ -48,7 +54,6 @@
           font-weight: 500;
         }
       }
-      
     }
   }
 
