@@ -19,10 +19,10 @@
       <mat-radio-button [value]="false">Limit Order</mat-radio-button>
     </mat-radio-group>
 
-    <div class="sell-buy-field">Available Balance: <span>$ 156.23</span></div>
-    <div class="sell-buy-field">Company Name:<span>AC</span></div>
+    <div class="sell-buy-field">Available Balance: <span>{{ balance | currency:'USD' }}</span></div>
+    <div class="sell-buy-field">Company Name:<span>{{ stockName }}</span></div>
     <div *ngIf="isMarketOrder" class="sell-buy-field">
-      Current Price:<span>$ 16.17</span>
+      Current Price:<span>$ {{ stockPrice }}</span>
     </div>
     <div *ngIf="!isMarketOrder" class="sell-buy-field">
       Price:
@@ -50,12 +50,12 @@
       >Only Positive Number</span
     >
     <div *ngIf="isMarketOrder" class="sell-buy-field">
-      Estimated Total:<span>-------</span>
+      Estimated Total:<span>{{getTotal() | currency:'USD'}}</span>
     </div>
     <div *ngIf="!isMarketOrder" class="sell-buy-field">
-      Total:<span>-------</span>
+      Total:<span>{{getTotal() | currency:'USD' }}</span>
     </div>
-    <div class="sell-buy-field">Remaining Balance:<span>$ 156.23</span></div>
+    <div class="sell-buy-field">Remaining Balance:<span>{{getRemainingBalance() | currency:'USD'}}</span></div>
   </div>
   <div mat-dialog-actions>
     <button
@@ -63,7 +63,7 @@
       mat-flat-button
       color="primary"
       (click)="processActions()"
-      [disabled]="quantity <= 0 || price < 0"
+      [disabled]="buySellVerify()"
     >
       {{ getProcessActionType().toUpperCase() }}
     </button>

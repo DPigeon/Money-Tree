@@ -6,7 +6,10 @@ export class StockDetail {
   }
 
   getFirstSearchResult(): Promise<string> {
-    return element.all(by.css('.option-container')).get(0).getText() as Promise<string>;
+    return element
+      .all(by.css('.option-container'))
+      .get(0)
+      .getText() as Promise<string>;
   }
 
   navigateToStockDetailPage(ticker: string): Promise<unknown> {
@@ -44,5 +47,14 @@ export class StockDetail {
 
   getStockStatAvgVol(): string {
     return by.id('stat-avg-Vol').toString();
+  }
+  getOpenMarketChip(): ElementFinder {
+    return element(by.id('chip-open-market'));
+  }
+  getClosedMarketChip(): ElementFinder {
+    return element(by.id('chip-closed-market'));
+  }
+  getMarketNextOpenMsg(): ElementFinder {
+    return element(by.id('market-next-open-msg'));
   }
 }

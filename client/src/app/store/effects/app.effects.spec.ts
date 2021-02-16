@@ -6,6 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { StockService } from '../../services/stock/stock.service';
 import { Effects } from './app.effects';
 import { UserService } from 'src/app/services/user/user.service';
+import { MATERIAL_MODULE_DEPENDENCIES } from 'src/app/shared.module';
 
 const stockInfo = {
   tickerSymbol: 'AC',
@@ -62,7 +63,7 @@ describe('Effects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MATERIAL_MODULE_DEPENDENCIES],
       providers: [
         Effects,
         provideMockActions(() => actions$),

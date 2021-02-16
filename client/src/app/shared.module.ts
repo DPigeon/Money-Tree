@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export const MATERIAL_MODULE_DEPENDENCIES = [
   MatIconModule,
@@ -28,6 +29,7 @@ export const MATERIAL_MODULE_DEPENDENCIES = [
   BrowserAnimationsModule,
   MatAutocompleteModule,
   MatRadioModule,
+  MatSnackBarModule
 ];
 
 export const NGRX_STORE_MODULE = provideMockStore({ initialState });

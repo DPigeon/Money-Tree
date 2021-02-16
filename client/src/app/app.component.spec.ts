@@ -21,6 +21,12 @@ const fakeRoute = {
   navigate: jest.fn(),
 } as any;
 
+const fakeWebsocketAPI = {
+  setWebsocketUserId: jest.fn(),
+  connect: jest.fn(),
+  disconnect: jest.fn()
+} as any;
+
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -43,7 +49,7 @@ describe('AppComponent Login Logic', () => {
   const storeSpy = jest.spyOn(mockStoreFacade, 'getCurrentUser');
 
   beforeEach(() => {
-    component = new AppComponent(mockStoreFacade, fakeRoute);
+    component = new AppComponent(mockStoreFacade, fakeRoute, fakeWebsocketAPI);
   });
 
   afterEach(() => {

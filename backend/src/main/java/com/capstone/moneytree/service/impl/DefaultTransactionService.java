@@ -79,19 +79,29 @@ public class DefaultTransactionService implements TransactionService {
 
 
    @Override
-   public Transaction execute(String userId, Order order) {
+   public User execute(String userId, Order order) {
+      LOG.error("Inside the service now ....");
+
       /* Get user for that transaction*/
       User user = getUser(Long.parseLong(userId));
+
+      LOG.error("Got the user from DB!");
+
 
       String alpacaKey = user.getAlpacaApiKey();
 
       /* Build the transaction and persist */
       Transaction transaction = null;
       try {
+         LOG.info("Getting the alpaca api suing alpacaey {}", alpacaKey);
          AlpacaAPI api = AlpacaSession.alpaca(alpacaKey);
-         Order alpacaOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
+         LOG.info("Got alpaca client!!! succesfully");
 
-         System.out.println(alpacaOrder.getClientOrderId());
+         LOG.info("Making the alpaca request");
+         Order alpacaOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
+         LOG.info("Executed the alpaca request");
+
+         LOG.info("Client Order Id {}",alpacaOrder.getClientOrderId());
 
          transaction = Transaction.builder()
                  .status(TransactionStatus.PENDING)
@@ -101,19 +111,22 @@ public class DefaultTransactionService implements TransactionService {
                  .quantity(Float.parseFloat(alpacaOrder.getQty()))
                  .fulfilledStocks(List.of(Stock.builder().asset(api.getAssetBySymbol(alpacaOrder.getSymbol())).build())) // populate the stock which this transaction fulfills. Only asset field is populated now
                  .build();
+
+         /* Save the user by appending new transaction */
+         if (transaction != null) {
+            List<Transaction> transactions = new ArrayList<>(List.of(transaction));
+            if (user.getTransactions() != null)
+               transactions.addAll(user.getTransactions());
+            user.setTransactions(transactions);
+            LOG.info("Saving the transaction");
+            user.setBalance(Float.parseFloat(api.getAccount().getCash()));
+            userDao.save(user);
+            LOG.info(" transaction saved");
+         }
       } catch (AlpacaAPIRequestException e) {
          e.printStackTrace();
       }
-
-      /* Save the user by appending new transaction */
-      if (transaction != null) {
-         List<Transaction> transactions = new ArrayList<>(List.of(transaction));
-         if (user.getTransactions() != null)
-            transactions.addAll(user.getTransactions());
-         user.setTransactions(transactions);
-         userDao.save(user);
-      }
-      return transaction;
+      return user;
    }
 
    private User getUser(Long userId) {

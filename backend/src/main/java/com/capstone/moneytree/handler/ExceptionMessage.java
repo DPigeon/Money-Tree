@@ -10,7 +10,8 @@ public enum ExceptionMessage {
     FAILED_TO_UPLOAD_S3("Failed to upload image to S3"),
     BAD_REQUEST_MESSAGE("Bad request!"),
     CREDENTIALS_NOT_FOUND("Credentials not found"),
-    ALPACA_ERROR("A erquest to alpaca failed");
+    ALPACA_ERROR("A request to alpaca failed"),
+    ALPACA_CLOCK_ERROR("Getting Alpaca market clock info failed");
 
     private final String message;
 

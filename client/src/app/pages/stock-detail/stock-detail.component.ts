@@ -15,16 +15,18 @@ import { filter } from 'rxjs/operators';
 })
 export class StockDetailComponent implements OnInit {
   stockInfo$ = this.storeFacade.currentStockLoaded$;
-
+  marketClock$ = this.storeFacade.currentMarketClock$;
+  userInfo$ = this.storeFacade.currentUser$;
   constructor(
     private storeFacade: StoreFacadeService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     let ticker = this.route.snapshot.paramMap.get('ticker');
     this.storeFacade.loadCurrentStock(ticker);
+    this.storeFacade.loadMarketClock();
     this.router.events
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
       .subscribe(() => {
