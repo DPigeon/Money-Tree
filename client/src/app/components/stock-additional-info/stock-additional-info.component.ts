@@ -13,7 +13,7 @@ export interface Follower {
 })
 export class StockAdditionalInfoComponent {
   @Input() type: string;
-  //list to be changed
+  // list to be changed
   list: any = [
     { firstName: 'Marwan', lastName: 'Ayadi' },
     { firstName: 'Razine', lastName: 'Bensari' },
@@ -36,7 +36,7 @@ export class StockAdditionalInfoComponent {
       this.router.navigate(['/stock-detail/' + entityId]);
     }
   }
-  getTitleByType() {
+  getTitleByType(): string {
     if (this.type === 'followers') {
       return 'Followers';
     } else if (this.type === 'investors') {
@@ -45,7 +45,7 @@ export class StockAdditionalInfoComponent {
       return 'People who owns this stock also own these stocks';
     }
   }
-  getIconByType() {
+  getIconByType(): string {
     if (this.type === 'followers') {
       return 'group_add';
     } else if (this.type === 'investors') {
