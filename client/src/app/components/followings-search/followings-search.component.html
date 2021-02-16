@@ -1,10 +1,26 @@
 <mat-card class="followings-container">
-  <h3>Followings ({{ followings.length }})</h3>
-  <input
-    class="followings-search"
-    [(ngModel)]="followingSearch"
-    matInput
-    placeholder="Search for followings" />
+  <h3 class="title">Followings ({{ followings.length }})</h3>
+  <mat-form-field appearance="outline">
+    <button class="search-icon" mat-icon-button matPrefix disabled>
+      <mat-icon>search</mat-icon>
+    </button>
+    <input
+      class="search-following"
+      [(ngModel)]="followingSearch"
+      matInput
+      placeholder="Search for followings"
+    />
+    <button
+      class="clear-icon"
+      mat-icon-button
+      *ngIf="followingSearch"
+      matSuffix
+      (click)="followingSearch = ''"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
   <div class="users-following-container">
     <ng-container *ngFor="let following of followings">
       <div class="following-container" *ngIf="isSearchedFollowings(following)">

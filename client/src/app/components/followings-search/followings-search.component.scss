@@ -1,17 +1,31 @@
 @import "../../../styles.scss";
 
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.8em 0 0.8em 0;
+}
+.title {
+  margin-left: 5px;
+  font-weight: 500;
+}
 .followings-container {
   padding: 10px;
-  height: calc(90vh - 100px) ;
+  height: calc(90vh - 100px);
   margin-bottom: 20px;
   overflow-y: hidden;
 
-  .followings-search {
-    padding: 5px;
-    width: 90%;
-    margin-bottom: 20px;
+  .mat-form-field {
+    width: 100% !important;
+    line-height: 1;
+
+    .search-icon {
+      color: $placeholder-color;
+    }
+    .clear-icon {
+      color: $placeholder-color;
+    }
   }
   .users-following-container {
+    margin-top: 10px;
     overflow-y: auto;
     height: calc(100% - 100px);
 
@@ -35,7 +49,6 @@
         align-items: flex-start;
 
         .following-name {
-          color: $primary-color;
           outline: none;
           cursor: pointer;
           font-weight: 500;
@@ -43,12 +56,14 @@
 
         .following-score-label {
           color: $mt-red;
-          font-weight: 400;
+          font-weight: 500;
+          font-size: 12px;
         }
 
         .following-score {
           color: $primary-color;
-          font-weight: 400;
+          font-weight: 500;
+          font-size: 12px;
           margin-left: 5px;
         }
       }

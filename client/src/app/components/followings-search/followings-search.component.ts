@@ -44,6 +44,7 @@ export class FollowingsSearchComponent implements OnInit {
   navigateToFollowingProfile(following: string): void {
     this.router.navigate(['/user-profile/' + following]);
   }
+  // to be changed
   isSearchedFollowings(following): boolean {
     return (
       following.firstName
