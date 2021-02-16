@@ -4,7 +4,6 @@ import { User } from 'src/app/interfaces/user';
 import { StoreFacadeService } from '../../store/store-facade.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditProfileComponent } from '../../components/edit-profile/edit-profile.component';
-import { Transaction } from '../../interfaces/transaction'
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -72,6 +71,5 @@ export class HomeComponent implements OnInit {
       }
     );
   }
-
 
 }
