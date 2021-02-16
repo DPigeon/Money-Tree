@@ -79,4 +79,14 @@ export class HomeComponent implements OnInit {
       }
     );
   }
+
+  printTransaction(transaction: Transaction): string{
+    console.log('This is print Transaction ',transaction)
+   // let printedTransaction = '';
+   // transaction.side === 'buy' ? printedTransaction +='Bought ' : printedTransaction +='Sold '; 
+   // printedTransaction += 'shares of ' + transaction.stockFulfilled.tickerSymbol + 'at an average of ' + transaction.averagePricePerShare + ' per share.'; 
+
+   // return transaction ? printedTransaction : '';
+   return '';
+  }
 }
