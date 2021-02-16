@@ -1,0 +1,52 @@
+<mat-card class="followings-container">
+  <h3 class="title">Followings ({{ followings.length }})</h3>
+  <mat-form-field appearance="outline">
+    <button class="search-icon" mat-icon-button matPrefix disabled>
+      <mat-icon>search</mat-icon>
+    </button>
+    <input
+      [(ngModel)]="followingSearch"
+      matInput
+      placeholder="Search for followings"
+    />
+    <button
+      class="clear-icon"
+      mat-icon-button
+      *ngIf="followingSearch"
+      matSuffix
+      (click)="followingSearch = ''"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <div class="users-following-container">
+    <ng-container *ngFor="let following of followings">
+      <div class="following-container" *ngIf="isSearchedFollowings(following)">
+        <img
+          class="following-picture"
+          alt="Profile Picture"
+          width="40"
+          height="40"
+          [src]="
+            'https://static.wikia.nocookie.net/bleachuntoldstories/images/2/24/Hitsugaya_toshiro_profile.png'
+          "
+        />
+        <div class="following-info">
+          <span
+            class="following-name"
+            (click)="navigateToFollowingProfile(following.firstName)"
+            >{{ following.firstName + " " + following.lastName }}</span
+          >
+          <div>
+            <span class="following-score-label">SCORE:</span>
+            <span class="following-score">187</span>
+          </div>
+        </div>
+      </div>
+      <mat-divider
+        *ngIf="isSearchedFollowings(following)"
+        [inset]="true"
+      ></mat-divider>
+    </ng-container></div
+></mat-card>
