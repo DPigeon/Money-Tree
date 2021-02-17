@@ -21,15 +21,11 @@ class AlpacaControllerTest extends Specification {
 
     def marketInteractionsFacade = new MarketInteractionsFacade(API_VERSION, KEY_ID, SECRET, BASE_API_URL, BASE_DATA_URL)
 
-    private EmailSender emailSender
-    private JavaMailSender mailSender;
     private AlpacaController alpacaController
     private UserDao userDao
 
     def setup() {
         alpacaController = new AlpacaController(marketInteractionsFacade, messageSender)
-        mailSender = new JavaMailSenderImpl()
-        emailSender = new EmailSender(mailSender, "dev")
         userDao = Mock()
     }
 

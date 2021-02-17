@@ -6,7 +6,6 @@ import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -20,16 +19,8 @@ public class EmailSender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailSender.class);
 
-    @Value("${spring.profiles.active}")
-    private final String activeProfile;
-
     @Autowired
-    private final JavaMailSender mailSender;
-
-    public EmailSender(JavaMailSender mailSender, String activeProfile) {
-        this.mailSender = mailSender;
-        this.activeProfile = activeProfile;
-    }
+    private JavaMailSender mailSender;
 
     public void sendOrderCompletedEmail(User user, TradeUpdate trade, String subject) {
         String username = user.getUsername();
@@ -63,20 +54,18 @@ public class EmailSender {
         String avgPrice = order.getFilledAvgPrice();
         ZonedDateTime timestamp = trade.getTimestamp();
         String totalAmount = trade.getPrice();
-        String urlEnv = activeProfile.equals("local") ? "http://localhost:4200/": activeProfile.equals("dev")
-                ? "https://dev.money-tree.tech/":"https://money-tree.tech";
 
         return "Hello " + username + ",\n" +
-                "Thank you for trading with us. Your order details are indicated below." +
-                " If you would like to view the status of your order, please visit " +
-                "<a href='" + urlEnv + "'>Your Orders</a>.\n\n" +
+                "Thank you for trading with us. Your order details are indicated below.\n" +
+                "If you would like to view the status of your order, please visit http://money-tree.tech.\n\n" +
                 "Stock Purchased: " + stockName + "\n" +
                 "Quantity: " + quantity + "\n" +
                 "Average Share Price: " + avgPrice + "\n" +
-                "Timestamp: " + timestamp.toString() + "\n" +
+                "Time of Purchase: " + timestamp.getMonth().getValue() + "/" + timestamp.getDayOfMonth() + "/" + timestamp.getYear() +
+                " at " + timestamp.getHour() + ":" + timestamp.getMinute() + ":" + timestamp.getSecond() + "\n" +
                 "Total Amount: " + totalAmount + "\n" +
                 "Action: " + action + "\n\n" +
                 "We hope that you trade with us again soon!\n" +
-                "<b>Money-Tree.tech</b>";
+                "Money-Tree.tech";
     }
 }
