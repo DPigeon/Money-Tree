@@ -21,7 +21,7 @@ import com.icegreen.greenmail.util.ServerSetup;
 import org.junit.rules.ExternalResource;
 import javax.mail.internet.MimeMessage;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 class EmailSenderIT extends Specification {
 
