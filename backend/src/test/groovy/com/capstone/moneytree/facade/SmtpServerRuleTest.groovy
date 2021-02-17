@@ -1,14 +1,13 @@
-package com.capstone.moneytree.utils
+package com.capstone.moneytree.facade
 
-import com.capstone.moneytree.facade.SmtpServerRuleUtils
 import org.junit.Test
 import spock.lang.Specification
 
 import javax.mail.internet.MimeMessage
 
-class SmtpServerRuleUtilsTest extends Specification {
+class SmtpServerRuleTest extends Specification {
 
-    private SmtpServerRuleUtils smtpServerRuleUtils
+    private SmtpServerRule smtpServerRuleUtils
 
     @Test
     def "It should initialize the smtpServer"() {
@@ -16,7 +15,7 @@ class SmtpServerRuleUtilsTest extends Specification {
         int port = 2525
 
         when: "Initializes the smtpServer"
-        smtpServerRuleUtils = new SmtpServerRuleUtils(port)
+        smtpServerRuleUtils = new SmtpServerRule(port)
 
         then:
         assert smtpServerRuleUtils != null
@@ -26,7 +25,7 @@ class SmtpServerRuleUtilsTest extends Specification {
     def "It should get messages from smtpServer"() {
         given: "A mocked port for emails and a server"
         int port = 2525
-        smtpServerRuleUtils = new SmtpServerRuleUtils(port)
+        smtpServerRuleUtils = new SmtpServerRule(port)
         smtpServerRuleUtils.before()
 
         when: "retrieving the messages"

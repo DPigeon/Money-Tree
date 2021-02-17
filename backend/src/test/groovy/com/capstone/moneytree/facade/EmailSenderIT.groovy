@@ -1,6 +1,6 @@
 package com.capstone.moneytree.facade
 
-import com.capstone.moneytree.utils.SmtpServerRuleUtils
+
 import com.icegreen.greenmail.util.GreenMailUtil
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate
 import org.junit.Rule
@@ -8,22 +8,25 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
-import javax.mail.internet.MimeMessage
 import java.time.ZonedDateTime
 
-import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createTradeUpdate
-import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.*
 
 import com.capstone.moneytree.model.node.User
 import org.junit.Test
 import spock.lang.Specification
+
+import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.ServerSetup;
+import org.junit.rules.ExternalResource;
+import javax.mail.internet.MimeMessage;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 class EmailSenderIT extends Specification {
 
     @Rule
-    public SmtpServerRuleUtils smtpServerRule = new SmtpServerRuleUtils(2525);
+    public SmtpServerRule smtpServerRule = new SmtpServerRule(2525);
 
     @Autowired
     private EmailSender emailSender
@@ -77,3 +80,35 @@ class EmailSenderIT extends Specification {
         assert receivedMessages.length == 0
     }
 }
+
+/**
+ * Used for integration tests with sending emails
+ */
+class SmtpServerRule extends ExternalResource {
+
+    private GreenMail smtpServer;
+    private final int port;
+
+    SmtpServerRule(int port) {
+        this.port = port;
+    }
+
+    @Override
+    protected void before() throws Throwable {
+        super.before();
+        smtpServer = new GreenMail(new ServerSetup(port, null, "smtp"));
+        smtpServer.setUser("username", "secret"); // Same as application-test.properties
+        smtpServer.start();
+    }
+
+    MimeMessage[] getMessages() {
+        return smtpServer.getReceivedMessages();
+    }
+
+    @Override
+    protected void after() {
+        super.after();
+        smtpServer.stop();
+    }
+}
+
