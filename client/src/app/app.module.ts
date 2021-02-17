@@ -46,6 +46,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
 
 // analytics
 import { NgxHotjarModule } from 'ngx-hotjar';
+import { FollowingsSearchComponent } from './components/followings-search/followings-search.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     HomeComponent,
     EditProfileComponent,
     SellOrBuyActionsComponent,
+    FollowingsSearchComponent,
   ],
   imports: [
     BrowserModule,
