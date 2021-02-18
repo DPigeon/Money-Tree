@@ -102,17 +102,8 @@ public class StockController {
    Valid ranges: [1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max]
    Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]
    */
-   @GetMapping(value = "/chart1/{symbol}", produces = {"application/json"})
-   public Mono<String> getChart1(@PathVariable String symbol, @RequestParam String range, @RequestParam String interval){
+   @GetMapping(value = "/yahooChart/{symbol}", produces = {"application/json"})
+   public Mono<String> getYahooChart(@PathVariable String symbol, @RequestParam String range, @RequestParam String interval){
       return yahooFinanceService.getHistoricalGraphData(symbol, range, interval);
-   }
-   
-   /*
-   Valid ranges: [1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max]
-   Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]
-   */
-   @GetMapping(value = "/chart2/{symbol}", produces = {"application/json"})
-   public ResponseEntity<String> getChart2(ProxyExchange<String> proxy, @PathVariable String symbol, @RequestParam String range, @RequestParam String interval) {
-      return proxy.uri("https://query1.finance.yahoo.com/v8/finance/chart/" + symbol + "?range=" + range + "&interval=" + interval).get();
    }
 }
