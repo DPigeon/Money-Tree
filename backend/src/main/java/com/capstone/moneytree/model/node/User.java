@@ -71,16 +71,16 @@ public class User extends Entity {
         return Math.toIntExact(this.getId());
     }
 
-    public void follow(User user) {
-        if (followers == null) {
-            followers = new HashSet<>();
+    public void follow(User userToFollow) {
+        if (userToFollow.followers == null) {
+            userToFollow.followers = new HashSet<>();
         }
-        followers.add(user);
+        userToFollow.followers.add(this);
     }
 
-    public void unfollow(User user) {
-        if (followers != null && !followers.isEmpty()) {
-            followers.remove(user);
+    public void unfollow(User userToUnfollow) {
+        if (userToUnfollow.followers != null && !userToUnfollow.followers.isEmpty()) {
+            userToUnfollow.followers.removeIf(user -> user.equals(this));
         }
     }
 

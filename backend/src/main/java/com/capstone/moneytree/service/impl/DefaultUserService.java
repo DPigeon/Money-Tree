@@ -266,7 +266,7 @@ public class DefaultUserService implements UserService {
       }
 
       user.follow(userToFollow);
-      userDao.save(user);
+      userDao.save(userToFollow);
 
       return userToFollowId;
    }
@@ -280,7 +280,7 @@ public class DefaultUserService implements UserService {
       }
 
       user.unfollow(userToUnfollow);
-      userDao.save(user);
+      userDao.save(userToUnfollow);
 
       return userToUnfollowId;
    }
