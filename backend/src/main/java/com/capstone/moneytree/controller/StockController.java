@@ -1,30 +1,25 @@
 package com.capstone.moneytree.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
+import com.capstone.moneytree.service.api.StockMarketDataService;
 import com.capstone.moneytree.service.api.YahooFinanceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.gateway.mvc.ProxyExchange;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import com.capstone.moneytree.service.api.StockMarketDataService;
-
-import pl.zankowski.iextrading4j.api.stocks.Book;
-import pl.zankowski.iextrading4j.api.stocks.Chart;
-import pl.zankowski.iextrading4j.api.stocks.Company;
-import pl.zankowski.iextrading4j.api.stocks.Logo;
-import pl.zankowski.iextrading4j.api.stocks.Quote;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import pl.zankowski.iextrading4j.api.stocks.*;
 import pl.zankowski.iextrading4j.api.stocks.v1.BatchStocks;
 import pl.zankowski.iextrading4j.api.stocks.v1.KeyStats;
 import pl.zankowski.iextrading4j.api.stocks.v1.News;
 import reactor.core.publisher.Mono;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 @MoneyTreeController
 @RequestMapping("/stockmarket")
@@ -102,7 +97,7 @@ public class StockController {
    Valid ranges: [1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max]
    Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]
    */
-   @GetMapping(value = "/yahooChart/{symbol}", produces = {"application/json"})
+   @GetMapping(value = "/yahoochart/{symbol}", produces = {"application/json"})
    public Mono<String> getYahooChart(@PathVariable String symbol, @RequestParam String range, @RequestParam String interval){
       return yahooFinanceService.getHistoricalGraphData(symbol, range, interval);
    }

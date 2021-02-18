@@ -1,5 +1,6 @@
 package com.capstone.moneytree.facade;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -9,6 +10,7 @@ public class YahooFinanceFacade {
 
     private final WebClient webClient;
 
+    @Autowired
     public YahooFinanceFacade(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("https://query1.finance.yahoo.com").build();
     }

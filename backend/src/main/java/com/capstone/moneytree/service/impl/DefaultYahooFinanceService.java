@@ -8,12 +8,8 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class DefaultYahooFinanceService implements YahooFinanceService {
-    private final YahooFinanceFacade yahooFinanceFacade;
-
     @Autowired
-    public DefaultYahooFinanceService(YahooFinanceFacade yahooFinanceFacade) {
-        this.yahooFinanceFacade = yahooFinanceFacade;
-    }
+    YahooFinanceFacade yahooFinanceFacade;
 
     @Override
     public Mono<String> getHistoricalGraphData(String ticker, String range, String interval) {
