@@ -1,6 +1,8 @@
 package com.capstone.moneytree.facade;
 
+import com.capstone.moneytree.dao.UserDao;
 import com.capstone.moneytree.exception.AlpacaClockException;
+import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.handler.ExceptionMessage;
 
 import java.time.LocalDate;
@@ -12,10 +14,11 @@ import java.util.Map;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.capstone.moneytree.model.node.User;
+import com.capstone.moneytree.service.impl.DefaultUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -43,16 +46,21 @@ import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdateMessage;
 public class MarketInteractionsFacade {
 
    private static final Logger LOGGER = LoggerFactory.getLogger(MarketInteractionsFacade.class);
-   private final AlpacaAPI alpacaAPI;
+
+   private final UserDao userDao;
+   private AlpacaAPI alpacaAPI;
    private final Map<String, AlpacaStreamListener> userIdToStream;
 
    @Autowired
-   public MarketInteractionsFacade(@Value("${alpaca.key.id}") String keyId, @Value("${alpaca.secret}") String secretKey,
-         @Value("${alpaca.api.version}") String apiVersion, @Value("${alpaca.base.api.url}") String baseApiUrl,
-         @Value("${alpaca.base.data.url}") String baseDataUrl) {
-      alpacaAPI = new AlpacaAPI(keyId, secretKey, null, baseApiUrl, baseDataUrl);
-
+   public MarketInteractionsFacade(UserDao userDao) {
+      this.userDao = userDao;
       userIdToStream = new HashMap<>();
+   }
+
+   private void initializeAlpacaSession(String userId) {
+      User user = getUser(Long.parseLong(userId));
+      String alpacaKey = user.getAlpacaApiKey();
+      alpacaAPI = AlpacaSession.alpaca(alpacaKey);
    }
 
    /**
@@ -60,7 +68,8 @@ public class MarketInteractionsFacade {
     * 
     * @return An Account.
     */
-   public Account getAccount() {
+   public Account getAccount(String userId) {
+      initializeAlpacaSession(userId);
       Account account = null;
       try {
          account = alpacaAPI.getAccount();
@@ -77,8 +86,9 @@ public class MarketInteractionsFacade {
     * 
     * @return market status.
     */
-   public Clock getMarketClock() {
-      Clock marketClock = null;
+   public Clock getMarketClock(String userId) {
+      initializeAlpacaSession(userId);
+      Clock marketClock;
       try {
          marketClock = alpacaAPI.getClock();
          LOGGER.info("Get market clock: {}", marketClock);
@@ -94,7 +104,8 @@ public class MarketInteractionsFacade {
     * 
     * @return List of available positions.
     */
-   public List<Position> getOpenPositions() {
+   public List<Position> getOpenPositions(String userId) {
+      initializeAlpacaSession(userId);
       ArrayList<Position> positions = null;
       try {
          positions = alpacaAPI.getOpenPositions();
@@ -118,9 +129,10 @@ public class MarketInteractionsFacade {
     *                      timeframe less than 1D.
     * @return A PortfolioHistory of timeseries
     */
-   public PortfolioHistory getPortfolioHistory(@NotNull @NotBlank int periodLength,
+   public PortfolioHistory getPortfolioHistory(String userId, @NotNull @NotBlank int periodLength,
          @NotNull @NotBlank String periodUnit, @NotNull @NotBlank String timeFrame,
          @NotNull @NotBlank LocalDate dateEnd, @NotNull @NotBlank boolean extendedHours) {
+      initializeAlpacaSession(userId);
       PortfolioHistory portfolioHistory = null;
       PortfolioPeriodUnit portfolioPeriodUnit = PortfolioPeriodUnit.valueOf(periodUnit);
       PortfolioTimeFrame portfolioTimeFrame = PortfolioTimeFrame.valueOf(timeFrame);
@@ -141,6 +153,7 @@ public class MarketInteractionsFacade {
     */
    public void listenToStreamUpdates(String userId, SimpMessagingTemplate messageSender) {
       try {
+         initializeAlpacaSession(userId);
          AlpacaStreamListener streamListener = createStreamListener(userId, messageSender,
                AlpacaStreamMessageType.TRADE_UPDATES);
          alpacaAPI.addAlpacaStreamListener(streamListener);
@@ -156,6 +169,7 @@ public class MarketInteractionsFacade {
    }
 
    public void disconnectFromStream(String userId) {
+      initializeAlpacaSession(userId);
       if (userIdToStream.containsKey(userId)) {
          AlpacaStreamListener streamListener = userIdToStream.get(userId);
          try {
@@ -184,9 +198,18 @@ public class MarketInteractionsFacade {
                TradeUpdate tradeUpdate = tradeMessage.getData();
                if (tradeUpdate.getEvent().equals("fill")) {
                   messageSender.convertAndSend("/queue/user-" + userId, tradeUpdate.getOrder().getClientOrderId());
+                  LOGGER.info("Order filled by user id {}", userId);
                }
             }
          }
       };
+   }
+
+   private User getUser(Long userId) {
+      User user = userDao.findUserById(userId);
+      if (user == null) {
+         throw new EntityNotFoundException("Did not find user for transaction");
+      }
+      return user;
    }
 }

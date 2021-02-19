@@ -1,9 +1,16 @@
 package com.capstone.moneytree.controller
 
+import com.capstone.moneytree.dao.UserDao
+import com.capstone.moneytree.model.node.User
 import com.capstone.moneytree.testconfig.DefaultStompFrameHandlerConfig
 import com.capstone.moneytree.testconfig.WebSocketClientConfig
+import org.junit.Rule
+import org.neo4j.harness.junit.rule.Neo4jRule
+import org.neo4j.ogm.config.Configuration
+import org.neo4j.ogm.session.Session
+import org.neo4j.ogm.session.SessionFactory
+import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Ignore
-import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.messaging.simp.stomp.StompSession
 
 import java.time.LocalDate
@@ -14,8 +21,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
 
-import com.capstone.moneytree.facade.MarketInteractionsFacade
-
 import net.jacobpeterson.domain.alpaca.account.Account
 import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory
 import net.jacobpeterson.domain.alpaca.position.Position
@@ -24,42 +29,64 @@ import spock.lang.Specification
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingDeque
 
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
+
 /**
  * Integration Tests for the Alpaca Controller. Tests the MarketInteractionFacade as well.
  */
 
+@Ignore
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("dev")
 class AlpacaControllerIT extends Specification {
 
-    private static final String API_VERSION = "v2"
-    private static final String KEY_ID = System.getenv().get("ALPACA_KEY_ID")
-    private static final String SECRET = System.getenv().get("ALPACA_SECRET_ID")
-    private static final String BASE_API_URL = "https://paper-api.alpaca.markets"
-    private static final String BASE_DATA_URL = "https://data.alpaca.markets"
+    // TODO: move those into a test properties file later
+    private static final O_AUTH_TOKEN_TEST = "b9474f2b-b256-4166-b851-306600a17671"
 
     private static final String WS_CHANNEL_TRADE_UPDATES = "/queue/user-";
     private static final String MESSAGE_MAPPING_TRADE_UPDATES = "/app/trade/updates"
     private static final String MESSAGE_MAPPING_DISCONNECT = "/app/trade/disconnect"
 
-    SimpMessagingTemplate messageSender
+    @Autowired
+    private AlpacaController alpacaController
 
-    def marketInteractionsFacade = new MarketInteractionsFacade(API_VERSION, KEY_ID, SECRET, BASE_API_URL, BASE_DATA_URL)
-    def alpacaController = new AlpacaController(marketInteractionsFacade, messageSender);
+    @Autowired
+    UserDao userDao
 
-    @Ignore("Fails, needs to be fixed")
+    @Rule
+    public Neo4jRule neoServer = new Neo4jRule()
+
+    private Session session
+
+    def setup() {
+        Configuration configuration = new Configuration.Builder()
+                .uri(neoServer.boltURI().toString())
+                .build()
+
+        SessionFactory sessionFactory = new SessionFactory(configuration, User.class.getPackage().getName());
+        session = sessionFactory.openSession();
+        session.purgeDatabase()
+    }
+
     def "Should retrieve an Alpaca account successfully"() {
+        setup: "Create the user"
+        userDao.save(createUser(14303,"test@money.com", "Raz", "pass", "Raz", "Ben", O_AUTH_TOKEN_TEST))
+        def user = userDao.findUserByEmail("test@money.com")
+
         when: "Getting an Alpaca account"
-        ResponseEntity<Account> response = alpacaController.getAccount()
+        ResponseEntity<Account> response = alpacaController.getAccount(user.getId().toString())
 
         then: "The account should be retrieved"
         assert response.statusCode == HttpStatus.OK
+
+        cleanup: "Delete the created user"
+        userDao.delete(user)
     }
 
-    @Ignore("Fails, needs to be fixed")
     def "Should retrieve a list of positions successfully"() {
         when: "Getting a list of positions"
-        ResponseEntity<List<Position>> response = alpacaController.getPositions()
+
+        ResponseEntity<List<Position>> response = alpacaController.getPositions(userId)
 
         then: "The positions should be retrieved"
         assert response.statusCode == HttpStatus.OK
@@ -76,6 +103,7 @@ class AlpacaControllerIT extends Specification {
 
         when: "Getting the portfolio"
         ResponseEntity<PortfolioHistory> response = alpacaController.getPortfolio(
+                "1",
                 period,
                 unit,
                 timeFrame,
@@ -159,6 +187,7 @@ class AlpacaControllerIT extends Specification {
     // TODO: Make a class later that creates and encapsulates our requests with methods like this one below to be reusable
     def createPortfolioRequest(int period, String unit, String timeFrame, LocalDate localDate, String extended) {
         ResponseEntity<PortfolioHistory> response = alpacaController.getPortfolio(
+                "1",
                 period,
                 unit,
                 timeFrame,

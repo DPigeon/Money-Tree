@@ -47,9 +47,9 @@ public class DefaultUserService implements UserService {
    private static final String DEFAULT_PROFILE_NAME = "DEFAULT-profile.jpg";
    private static final String AUTHORIZATION_CODE = "authorization_code";
 
-   @Value("${alpaca.client.id}")
+   @Value("${alpaca.key.id}")
    private String clientId;
-   @Value("${alpaca.client.secret}")
+   @Value("${alpaca.secret}")
    private String clientSecret;
    @Value("${spring.profiles.active}")
    private String activeProfile;
