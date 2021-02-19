@@ -1,7 +1,7 @@
 <mat-card class="additionals-container">
-  <div class="card-title" mat-card-subtitle>
-    <span style="width: 70%">{{ getTitleByType() }}</span
-    ><mat-icon>{{ getIconByType() }}</mat-icon>
+  <div class="card-title">
+    <h3 class="title">{{ getTitleByType() }}</h3>
+    <mat-icon>{{ getIconByType() }}</mat-icon>
   </div>
   <div class="users-additional-container">
     <ng-container *ngFor="let entity of list">
