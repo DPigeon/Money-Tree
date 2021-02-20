@@ -1,5 +1,6 @@
 package com.capstone.moneytree.model.node;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +15,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @EqualsAndHashCode(callSuper = true)
 @NodeEntity
@@ -85,10 +87,16 @@ public class User extends Entity {
     }
 
     public void made(Transaction transaction) {
+        if (this.transactions == null) {
+            this.transactions = Collections.emptyList();
+        }
         this.getTransactions().add(transaction);
     }
 
     public void owns(Stock stock) {
+        if (this.stocks == null) {
+            this.stocks = Collections.emptyList();
+        }
         this.getStocks().add(stock);
     }
 }    

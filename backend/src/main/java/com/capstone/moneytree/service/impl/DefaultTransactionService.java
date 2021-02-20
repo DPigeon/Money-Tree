@@ -53,12 +53,6 @@ public class DefaultTransactionService implements TransactionService {
 
    private final TransactionDao transactionDao;
    private final UserDao userDao;
-   @Value("${alpaca.base.api.url}")
-   private String alpacaPaperApiUrl;
-
-
-   private static final Logger LOG = LoggerFactory.getLogger(DefaultTransactionService.class);
-
 
    @Autowired
    public DefaultTransactionService(TransactionDao transactionDao, UserDao userDao) {
@@ -80,53 +74,48 @@ public class DefaultTransactionService implements TransactionService {
 
    @Override
    public User execute(String userId, Order order) {
-      LOG.error("Inside the service now ....");
-
       /* Get user for that transaction*/
       User user = getUser(Long.parseLong(userId));
-
-      LOG.error("Got the user from DB!");
-
 
       String alpacaKey = user.getAlpacaApiKey();
 
       /* Build the transaction and persist */
-      Transaction transaction = null;
-      try {
-         LOG.info("Getting the alpaca api suing alpacaey {}", alpacaKey);
-         AlpacaAPI api = AlpacaSession.alpaca(alpacaKey);
-         LOG.info("Got alpaca client!!! succesfully");
+      Transaction transaction = executeTransaction(alpacaKey, order);
 
-         LOG.info("Making the alpaca request");
-         Order alpacaOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
-         LOG.info("Executed the alpaca request");
-
-         LOG.info("Client Order Id {}",alpacaOrder.getClientOrderId());
-
-         transaction = Transaction.builder()
-                 .status(TransactionStatus.PENDING)
-                 .purchasedAt(alpacaOrder.getCreatedAt())
-                 .clientOrderId(alpacaOrder.getClientOrderId())
-                 .moneyTreeOrderType(MoneyTreeOrderType.valueOf(alpacaOrder.getType().toUpperCase()+"_"+alpacaOrder.getSide().toUpperCase()))
-                 .quantity(Float.parseFloat(alpacaOrder.getQty()))
-                 .fulfilledStocks(List.of(Stock.builder().asset(api.getAssetBySymbol(alpacaOrder.getSymbol())).build())) // populate the stock which this transaction fulfills. Only asset field is populated now
-                 .build();
-
-         /* Save the user by appending new transaction */
-         if (transaction != null) {
-            List<Transaction> transactions = new ArrayList<>(List.of(transaction));
-            if (user.getTransactions() != null)
-               transactions.addAll(user.getTransactions());
-            user.setTransactions(transactions);
-            LOG.info("Saving the transaction");
-            user.setBalance(Float.parseFloat(api.getAccount().getCash()));
-            userDao.save(user);
-            LOG.info(" transaction saved");
-         }
-      } catch (AlpacaAPIRequestException e) {
-         e.printStackTrace();
+      /* Save the user by appending new transaction */
+      if (transaction != null) {
+         user.made(transaction);
+         user = userDao.save(user);
       }
       return user;
+   }
+
+   private Transaction executeTransaction(String alpacaKey, Order order) {
+      Transaction transaction;
+      try {
+         AlpacaAPI api = AlpacaSession.alpaca(alpacaKey);
+         Order alpacaOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
+
+         LOGGER.info("Executed order {}", alpacaOrder.getClientOrderId());
+
+         transaction = constructTransactionFromOrder(alpacaOrder, api);
+
+      } catch (AlpacaAPIRequestException e) {
+         throw new AlpacaException(e.getMessage());
+      }
+      return transaction;
+   }
+
+   private Transaction constructTransactionFromOrder(Order alpacaOrder, AlpacaAPI api) throws AlpacaAPIRequestException {
+      return Transaction.builder()
+              .status(TransactionStatus.PENDING)
+              .purchasedAt(alpacaOrder.getCreatedAt())
+              .clientOrderId(alpacaOrder.getClientOrderId())
+              .moneyTreeOrderType(MoneyTreeOrderType.valueOf(alpacaOrder.getType().toUpperCase()+"_"+alpacaOrder.getSide().toUpperCase()))
+              .quantity(Float.parseFloat(alpacaOrder.getQty()))
+              // populate the stock which this transaction fulfills. Only asset field is populated for now
+              .fulfilledStocks(List.of(Stock.builder().asset(api.getAssetBySymbol(alpacaOrder.getSymbol())).build()))
+              .build();
    }
 
    private User getUser(Long userId) {
