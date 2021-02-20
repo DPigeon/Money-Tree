@@ -40,17 +40,16 @@ class EmailSenderIT extends Specification {
     @Test
     def "It should send an email successfully"() {
         given: "A user that has an order completed"
-        String email = "tester@money-tree.tech"
+        String email = "test@money-tree.tech"
         String username = "Dud"
         User user = createUser(1, email, username, "password", "Dude", "Joe", "F^ef3tS")
         String orderId = "1203432";
         ZonedDateTime timestamp = ZonedDateTime.now()
         String symbol = "AAPL"
         TradeUpdate trade = createTradeUpdate(orderId, "1", symbol, "5", "3", "Buy", "50", "30", "fill", "30", timestamp, "2")
-        String subject = "Your Money-Tree order #" + orderId
 
         when: "Money-Tree sends an email"
-        emailSender.sendOrderCompletedEmail(user, trade, subject)
+        emailSender.sendOrderCompletedEmail(user, trade)
 
         then: "Email is sent properly"
         MimeMessage[] receivedMessages = smtpServerRule.getMessages();
@@ -70,10 +69,9 @@ class EmailSenderIT extends Specification {
         ZonedDateTime timestamp = ZonedDateTime.now()
         String symbol = "AAPL"
         TradeUpdate trade = createTradeUpdate(orderId, "1", symbol, "5", "3", "Buy", "50", "30", "fill", "30", timestamp, "2")
-        String subject = "Your Money-Tree order #" + orderId
 
         when: "Send an email"
-        emailSender.sendOrderCompletedEmail(user, trade, subject)
+        emailSender.sendOrderCompletedEmail(user, trade)
 
         then: "Should give an illegal address error"
         MimeMessage[] receivedMessages = smtpServerRule.getMessages();

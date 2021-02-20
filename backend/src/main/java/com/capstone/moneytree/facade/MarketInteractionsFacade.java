@@ -200,10 +200,8 @@ public class MarketInteractionsFacade {
 
    private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {
       EmailSender emailSender = new EmailSender();
-      String orderId = trade.getOrder().getClientOrderId();
-      String emailSubject = "Your Money-Tree order #" + orderId;
       User user = getUserById(Long.parseLong(userId));
-      emailSender.sendOrderCompletedEmail(user, trade, emailSubject);
+      emailSender.sendOrderCompletedEmail(user, trade);
    }
 
    private User getUserById(Long userId) {

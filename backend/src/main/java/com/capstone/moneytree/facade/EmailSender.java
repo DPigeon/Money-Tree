@@ -1,7 +1,7 @@
 package com.capstone.moneytree.facade;
 
+import com.capstone.moneytree.model.Mail;
 import com.capstone.moneytree.model.node.User;
-import net.jacobpeterson.domain.alpaca.order.Order;
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.time.ZonedDateTime;
 
 @Component
 public class EmailSender {
@@ -22,11 +21,21 @@ public class EmailSender {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendOrderCompletedEmail(User user, TradeUpdate trade, String subject) {
+    public void sendOrderCompletedEmail(User user, TradeUpdate trade) {
+        Mail mail = constructMail(user, trade);
+        String text = mail.toString();
+        send(mail.getEmail(), mail.getSubject(), text);
+    }
+
+    private Mail constructMail(User user, TradeUpdate trade) {
         String username = user.getUsername();
         String toEmail = user.getEmail();
-        String text = setOrderCompletedTemplate(username, trade);
-        send(toEmail, subject, text);
+        Mail mail = Mail.builder().build();
+        mail.setEmail(toEmail);
+        mail.setUsername(username);
+        mail.setTradeUpdate(trade);
+
+        return mail;
     }
 
     private void send(String to, String subject, String text) {
@@ -44,28 +53,5 @@ public class EmailSender {
         } catch (MessagingException e) {
             LOGGER.error("Error sending email: {}", e.getMessage());
         }
-    }
-
-    private String setOrderCompletedTemplate(String username, TradeUpdate trade) {
-        Order order = trade.getOrder();
-        String stockName = order.getSymbol();
-        String quantity = order.getQty();
-        String action = order.getType();
-        String avgPrice = order.getFilledAvgPrice();
-        ZonedDateTime timestamp = trade.getTimestamp();
-        String totalAmount = trade.getPrice();
-
-        return "Hello " + username + ",\n" +
-                "Thank you for trading with us. Your order details are indicated below.\n" +
-                "If you would like to view the status of your order, please visit http://money-tree.tech.\n\n" +
-                "Stock Purchased: " + stockName + "\n" +
-                "Quantity: " + quantity + "\n" +
-                "Average Share Price: " + avgPrice + "\n" +
-                "Time of Purchase: " + timestamp.getMonth().getValue() + "/" + timestamp.getDayOfMonth() + "/" + timestamp.getYear() +
-                " at " + timestamp.getHour() + ":" + timestamp.getMinute() + ":" + timestamp.getSecond() + "\n" +
-                "Total Amount: " + totalAmount + "\n" +
-                "Action: " + action + "\n\n" +
-                "We hope that you trade with us again soon!\n" +
-                "Money-Tree.tech";
     }
 }
