@@ -1,11 +1,8 @@
 package com.capstone.moneytree.service.impl;
 
-
 import javax.security.auth.login.CredentialNotFoundException;
 
-import com.capstone.moneytree.facade.MarketInteractionsFacade;
 import com.capstone.moneytree.model.AlpacaOAuthResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,9 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.capstone.moneytree.dao.UserDao;
+import com.capstone.moneytree.dao.FollowsDao;
+import com.capstone.moneytree.model.SanitizedUser;
 import com.capstone.moneytree.exception.BadRequestException;
 import com.capstone.moneytree.exception.EntityNotFoundException;
+import com.capstone.moneytree.exception.FollowsRelationshipException;
 import com.capstone.moneytree.model.node.User;
+import com.capstone.moneytree.model.relationship.Follows;
 import com.capstone.moneytree.service.api.AmazonS3Service;
 import com.capstone.moneytree.service.api.UserService;
 import com.capstone.moneytree.utils.MoneyTreePasswordEncryption;
@@ -32,8 +33,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -46,6 +49,9 @@ public class DefaultUserService implements UserService {
    private static final String USER_NOT_FOUND = "The requested user was not found";
    private static final String DEFAULT_PROFILE_NAME = "DEFAULT-profile.jpg";
    private static final String AUTHORIZATION_CODE = "authorization_code";
+   private static final String NOT_FOLLOWED_BY_THIS_USER = "The user is not followed";
+   private static final String USER_CANT_BE_FOLLOWED_BY_ITSELF = "User cannot followed by itself";
+   private static final String USER_ALREADY_FOLLOWED = "User already followed";
 
    @Value("${alpaca.client.id}")
    private String clientId;
@@ -55,6 +61,8 @@ public class DefaultUserService implements UserService {
    private String activeProfile;
 
    private final UserDao userDao;
+   private final FollowsDao followsDao;
+
    private final ValidatorFactory validatorFactory;
    private final MoneyTreePasswordEncryption passwordEncryption;
    private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
@@ -63,8 +71,10 @@ public class DefaultUserService implements UserService {
    private final String bucketName;
 
    @Autowired
-   public DefaultUserService(UserDao userDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service, @Value("${aws.profile.pictures.bucket}") String bucketName) {
+   public DefaultUserService(UserDao userDao, FollowsDao followsDao, ValidatorFactory validatorFactory,
+         AmazonS3Service amazonS3Service, @Value("${aws.profile.pictures.bucket}") String bucketName) {
       this.userDao = userDao;
+      this.followsDao = followsDao;
       this.validatorFactory = validatorFactory;
       this.passwordEncryption = new MoneyTreePasswordEncryption();
       this.amazonS3Service = amazonS3Service;
@@ -118,13 +128,13 @@ public class DefaultUserService implements UserService {
          throw new BadRequestException("The ID of the user in the payload is not the same as the ID in the path");
       }
 
-      //ensure that if username is changed, then it is changed to an unused username
+      // ensure that if username is changed, then it is changed to an unused username
       if (user.getUsername() != null && !user.getUsername().equals(userToUpdate.getUsername())) {
          getUserValidator().validateUsername(user);
          userToUpdate.setUsername(user.getUsername());
       }
 
-      //ensure that if email is changed, then it is changed to an unused email
+      // ensure that if email is changed, then it is changed to an unused email
       if (user.getEmail() != null && !user.getEmail().equals(userToUpdate.getEmail())) {
          getUserValidator().validateEmail(user);
          userToUpdate.setEmail(user.getEmail());
@@ -158,10 +168,6 @@ public class DefaultUserService implements UserService {
          userToUpdate.setPassword(user.getPassword());
       }
 
-      if (user.getFollowers() != null) {
-         userToUpdate.setFollowers(user.getFollowers());
-      }
-
       if (user.getStocks() != null) {
          userToUpdate.setStocks(user.getStocks());
       }
@@ -178,15 +184,16 @@ public class DefaultUserService implements UserService {
 
    @Override
    public User editUserProfilePicture(User user, MultipartFile imageFile, String selection) {
-      //since user exists, we can now upload image to s3 and save imageUrl into db
+      // since user exists, we can now upload image to s3 and save imageUrl into db
       String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
 
-      //if user already has a profile picture that is not the default picture, handle deleting old picture
+      // if user already has a profile picture that is not the default picture, handle
+      // deleting old picture
       if (StringUtils.isNotBlank(user.getAvatarURL()) && !user.getAvatarURL().contains(DEFAULT_PROFILE_NAME)) {
          this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getAvatarURL());
       }
 
-      //set new image url
+      // set new image url
       user.setAvatarURL(imageUrl);
       userDao.save(user);
 
@@ -201,7 +208,8 @@ public class DefaultUserService implements UserService {
          throw new EntityNotFoundException(String.format("User with id %s not found", id));
       }
       try {
-         String redirectUri = activeProfile.equals("local") ? "http://localhost:4200/": activeProfile.equals("dev") ? "https://dev.money-tree.tech/":"https://money-tree.tech";
+         String redirectUri = activeProfile.equals("local") ? "http://localhost:4200/"
+               : activeProfile.equals("dev") ? "https://dev.money-tree.tech/" : "https://money-tree.tech";
 
          HashMap<String, String> parameters = new HashMap<>();
          parameters.put("grant_type", AUTHORIZATION_CODE);
@@ -211,28 +219,27 @@ public class DefaultUserService implements UserService {
          parameters.put("redirect_uri", redirectUri);
 
          String form = parameters.keySet().stream()
-                 .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
-                 .collect(Collectors.joining("&"));
+               .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
+               .collect(Collectors.joining("&"));
 
          HttpClient client = HttpClient.newHttpClient();
 
          HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://api.alpaca.markets/oauth/token"))
-                 .headers("Content-Type", "application/x-www-form-urlencoded")
-                 .POST(HttpRequest.BodyPublishers.ofString(form)).build();
+               .headers("Content-Type", "application/x-www-form-urlencoded")
+               .POST(HttpRequest.BodyPublishers.ofString(form)).build();
          HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-         //parse json response using gson
+         // parse json response using gson
          Gson gson = new Gson();
          AlpacaOAuthResponse alpacaOAuthResponse = gson.fromJson(response.body().toString(), AlpacaOAuthResponse.class);
          LOG.info("Alpaca code successfully converted into OAuth token {}", alpacaOAuthResponse.getAccessToken());
 
-         //update alpacaApiKey; code => oauthToken
+         // update alpacaApiKey; code => oauthToken
          userToUpdate.setAlpacaApiKey(alpacaOAuthResponse.getAccessToken());
          userDao.save(userToUpdate);
          LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
 
-      }
-      catch(Exception exception) {
+      } catch (Exception exception) {
          System.out.println(exception.getStackTrace());
       }
 
@@ -243,12 +250,11 @@ public class DefaultUserService implements UserService {
     * A method to verify given credentials against existing user records
     *
     * @param credentials A User object with email and unencrypted password
-    * @return The full User object from the database if login is successful, null otherwise
+    * @return The full User object from the database if login is successful, null
+    *         otherwise
     */
    @Override
-   public User login(User credentials)
-           throws
-           CredentialNotFoundException {
+   public User login(User credentials) throws CredentialNotFoundException {
       User user = userDao.findUserByEmail(credentials.getEmail());
       if (user != null && compareDigests(credentials.getPassword(), user.getPassword())) {
          return user;
@@ -258,31 +264,78 @@ public class DefaultUserService implements UserService {
    }
 
    @Override
-   public Long followUser(Long userId, Long userToFollowId) {
+   public String followUser(Long userId, Long userToFollowId) {
+      if (userId == userToFollowId) {
+         throw new FollowsRelationshipException(USER_CANT_BE_FOLLOWED_BY_ITSELF);
+      }
       User user = userDao.findUserById(userId);
       User userToFollow = userDao.findUserById(userToFollowId);
       if (user == null || userToFollow == null) {
          throw new EntityNotFoundException(USER_NOT_FOUND);
       }
+      List<Follows> allFollowRels = followsDao.findAll();
+      // check to see if user already following the other user
+      for (Follows rel : allFollowRels) {
+         if (rel.getFollower().getId() == userId && rel.getUserToFollow().getId() == userToFollowId) {
+            throw new FollowsRelationshipException(USER_ALREADY_FOLLOWED);
+         }
+      }
+      Date currentDate = new Date();
+      Follows newFollowRel = new Follows(user, userToFollow, currentDate);
+      followsDao.save(newFollowRel);
 
-      user.follow(userToFollow);
-      userDao.save(userToFollow);
-
-      return userToFollowId;
+      return user.getUsername() + " followed " + userToFollow.getUsername();
    }
 
    @Override
-   public Long unfollowUser(Long userId, Long userToUnfollowId) {
+   public String unfollowUser(Long userId, Long userToUnfollowId) {
       User user = userDao.findUserById(userId);
       User userToUnfollow = userDao.findUserById(userToUnfollowId);
       if (user == null || userToUnfollow == null) {
          throw new EntityNotFoundException(USER_NOT_FOUND);
       }
 
-      user.unfollow(userToUnfollow);
-      userDao.save(userToUnfollow);
+      List<Follows> allFollowRels = followsDao.findAll();
 
-      return userToUnfollowId;
+      for (Follows rel : allFollowRels) {
+         if (rel.getFollower().getId() == userId && rel.getUserToFollow().getId() == userToUnfollowId) {
+            followsDao.delete(rel);
+            return user.getUsername() + " unfollowed " + userToUnfollow.getUsername();
+         }
+      }
+      throw new FollowsRelationshipException(NOT_FOLLOWED_BY_THIS_USER);
+
+   }
+
+   @Override
+   public List<SanitizedUser> getFollowings(Long userId) {
+      List<Follows> allFollowRels = followsDao.findAll();
+      List<SanitizedUser> thisUserFollowings = new ArrayList<SanitizedUser>();
+
+      for (Follows rel : allFollowRels) { // going through all follow relationships and return the followed user for
+                                          // when this user was the follower
+         if (rel.getFollower().getId() == userId) {
+            SanitizedUser sanitizedFollowed = new SanitizedUser(rel.getUserToFollow());
+            thisUserFollowings.add(sanitizedFollowed);
+         }
+      }
+      return thisUserFollowings;
+   }
+
+   @Override
+   public List<SanitizedUser> getFollowers(Long userId) {
+      List<Follows> allFollowRels = followsDao.findAll();
+      List<SanitizedUser> thisUserFollowers = new ArrayList<SanitizedUser>();
+
+      for (Follows rel : allFollowRels) {
+         // going through all follow relationships and return the followers for when this
+         // user was followed
+         if (rel.getUserToFollow().getId() == userId) {
+            SanitizedUser sanitizedFollower = new SanitizedUser(rel.getFollower());
+            thisUserFollowers.add(sanitizedFollower);
+         }
+      }
+      return thisUserFollowers;
    }
 
    @Override

@@ -1,11 +1,11 @@
 package com.capstone.moneytree.model.node;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+
 
 import com.capstone.moneytree.model.Entity;
 
@@ -32,7 +32,7 @@ public class User extends Entity {
     String avatarURL;
 
     String coverPhotoURL;
-    
+       
     String email;
 
     Double score;
@@ -47,9 +47,6 @@ public class User extends Entity {
 
     String biography;
 
-    @Relationship(type = "FOLLOWS")
-    Set<User> followers;
-
     @Relationship(type = "OWNS")
     List<Stock> stocks;
 
@@ -58,7 +55,7 @@ public class User extends Entity {
 
     @Override
     public boolean equals(Object object) {
-        if (object instanceof User){
+        if (object instanceof User) {
             User other = (User) object;
             return this.getId().equals(other.getId());
         }
@@ -71,19 +68,6 @@ public class User extends Entity {
         return Math.toIntExact(this.getId());
     }
 
-    public void follow(User userToFollow) {
-        if (userToFollow.followers == null) {
-            userToFollow.followers = new HashSet<>();
-        }
-        userToFollow.followers.add(this);
-    }
-
-    public void unfollow(User userToUnfollow) {
-        if (userToUnfollow.followers != null && !userToUnfollow.followers.isEmpty()) {
-            userToUnfollow.followers.removeIf(user -> user.equals(this));
-        }
-    }
-
     public void made(Transaction transaction) {
         this.getTransactions().add(transaction);
     }
@@ -91,4 +75,4 @@ public class User extends Entity {
     public void owns(Stock stock) {
         this.getStocks().add(stock);
     }
-}    
+}

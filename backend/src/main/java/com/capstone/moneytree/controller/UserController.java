@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.exception.InvalidMediaFileException;
 import com.capstone.moneytree.handler.ExceptionMessage;
+import com.capstone.moneytree.model.SanitizedUser;
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.service.api.UserService;
 
@@ -123,10 +124,10 @@ public class UserController {
     */
 
    @PostMapping("/{userId}/follow/{userToFollowId}")
-   ResponseEntity<Long> followUser(@PathVariable Long userId, @PathVariable Long userToFollowId) {
-      Long id = this.userService.followUser(userId, userToFollowId);
+   ResponseEntity<String> followUser(@PathVariable Long userId, @PathVariable Long userToFollowId) {
+      String res = this.userService.followUser(userId, userToFollowId);
 
-      return ResponseEntity.ok(id);
+      return ResponseEntity.ok(res);
    }
 
    /**
@@ -137,10 +138,10 @@ public class UserController {
     */
 
    @DeleteMapping("/{userId}/unfollow/{userToUnfollowId}")
-   ResponseEntity<Long> unfollowUser(@PathVariable Long userId, @PathVariable Long userToUnfollowId) {
-      Long id = this.userService.unfollowUser(userId, userToUnfollowId);
+   ResponseEntity<String> unfollowUser(@PathVariable Long userId, @PathVariable Long userToUnfollowId) {
+      String res = this.userService.unfollowUser(userId, userToUnfollowId);
 
-      return ResponseEntity.ok(id);
+      return ResponseEntity.ok(res);
    }
 
    @DeleteMapping("/delete-by-email/{email}")
@@ -152,4 +153,15 @@ public class UserController {
          throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage());
       }
    }
+   
+   @GetMapping("/followings/{id}")
+   List<SanitizedUser> getFollowings(@PathVariable Long id) {
+      return userService.getFollowings(id);
+   }
+
+   @GetMapping("/followers/{id}")
+   List<SanitizedUser> getFollowers(@PathVariable Long id) {
+      return userService.getFollowers(id);
+   }
+
 }
