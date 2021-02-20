@@ -1,5 +1,7 @@
 package com.capstone.moneytree.utils
 
+import com.capstone.moneytree.model.MoneyTreeOrderType
+import com.capstone.moneytree.model.node.Transaction
 import com.capstone.moneytree.model.node.User
 import net.jacobpeterson.domain.alpaca.order.Order
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate
@@ -41,6 +43,21 @@ class MoneyTreeTestUtils {
               .email(email)
               .password(password)
               .build()
+   }
+
+   /**
+    * Utility method to create transactions
+    */
+
+   static List<Transaction> buildTransactions() {
+      return [
+         Transaction.builder().moneyTreeOrderType(MoneyTreeOrderType.MARKET_BUY).build(),
+         Transaction.builder().moneyTreeOrderType(MoneyTreeOrderType.MARKET_BUY).build(),
+         Transaction.builder().moneyTreeOrderType(MoneyTreeOrderType.MARKET_BUY).build(),
+         Transaction.builder().moneyTreeOrderType(MoneyTreeOrderType.MARKET_SELL).build(),
+         Transaction.builder().moneyTreeOrderType(MoneyTreeOrderType.LIMIT_BUY).build()
+      ]
+
    }
 
    static TradeUpdate createTradeUpdate(String id, String clientId, String symbol, String qty, String filledQty, String type, String limitPrice, String avgPrice, String event, String price, ZonedDateTime timestamp, String position) {

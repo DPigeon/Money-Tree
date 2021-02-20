@@ -8,6 +8,8 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 
 import com.capstone.moneytree.exception.AlpacaException;
@@ -44,8 +46,6 @@ import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
 import net.jacobpeterson.domain.alpaca.order.Order;
 
-import javax.ws.rs.ForbiddenException;
-
 @Service
 @Transactional
 public class DefaultTransactionService implements TransactionService {
@@ -67,8 +67,12 @@ public class DefaultTransactionService implements TransactionService {
    }
 
    @Override
-   public Transaction getTransactionByOrderType(MoneyTreeOrderType moneyTreeOrderType) {
-      return null;
+   public List<Transaction> getTransactionsByOrderType(MoneyTreeOrderType moneyTreeOrderType) {
+      List<Transaction> allTransactions = transactionDao.findAll();
+
+      return allTransactions.stream()
+              .filter(transaction -> transaction.getMoneyTreeOrderType().equals(moneyTreeOrderType))
+              .collect(Collectors.toList());
    }
 
 
