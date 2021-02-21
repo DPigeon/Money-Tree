@@ -273,10 +273,10 @@ public class DefaultUserService implements UserService {
       if (user == null || userToFollow == null) {
          throw new EntityNotFoundException(USER_NOT_FOUND);
       }
-      List<Follows> allFollowRels = followsDao.findAll();
+      List<Follows> allFollowRels = followsDao.findFollowsByFollowerId(userId);
       // check to see if user already following the other user
       for (Follows rel : allFollowRels) {
-         if (rel.getFollower().getId() == userId && rel.getUserToFollow().getId() == userToFollowId) {
+         if (rel.getUserToFollow().getId() == userToFollowId) {
             throw new FollowsRelationshipException(USER_ALREADY_FOLLOWED);
          }
       }
@@ -295,10 +295,10 @@ public class DefaultUserService implements UserService {
          throw new EntityNotFoundException(USER_NOT_FOUND);
       }
 
-      List<Follows> allFollowRels = followsDao.findAll();
+      List<Follows> allFollowRels = followsDao.findFollowsByUserToFollowId(userToUnfollowId);
 
       for (Follows rel : allFollowRels) {
-         if (rel.getFollower().getId() == userId && rel.getUserToFollow().getId() == userToUnfollowId) {
+         if (rel.getFollower().getId() == userId) {
             followsDao.delete(rel);
             return user.getUsername() + " unfollowed " + userToUnfollow.getUsername();
          }
@@ -309,31 +309,28 @@ public class DefaultUserService implements UserService {
 
    @Override
    public List<SanitizedUser> getFollowings(Long userId) {
-      List<Follows> allFollowRels = followsDao.findAll();
+      List<Follows> allFollowRels = followsDao.findFollowsByFollowerId(userId);
       List<SanitizedUser> thisUserFollowings = new ArrayList<SanitizedUser>();
 
       for (Follows rel : allFollowRels) { // going through all follow relationships and return the followed user for
                                           // when this user was the follower
-         if (rel.getFollower().getId() == userId) {
-            SanitizedUser sanitizedFollowed = new SanitizedUser(rel.getUserToFollow());
-            thisUserFollowings.add(sanitizedFollowed);
-         }
+         SanitizedUser sanitizedFollowed = new SanitizedUser(rel.getUserToFollow());
+         thisUserFollowings.add(sanitizedFollowed);
       }
       return thisUserFollowings;
+
    }
 
    @Override
    public List<SanitizedUser> getFollowers(Long userId) {
-      List<Follows> allFollowRels = followsDao.findAll();
+      List<Follows> allFollowRels = followsDao.findFollowsByUserToFollowId(userId);
       List<SanitizedUser> thisUserFollowers = new ArrayList<SanitizedUser>();
 
       for (Follows rel : allFollowRels) {
          // going through all follow relationships and return the followers for when this
          // user was followed
-         if (rel.getUserToFollow().getId() == userId) {
-            SanitizedUser sanitizedFollower = new SanitizedUser(rel.getFollower());
-            thisUserFollowers.add(sanitizedFollower);
-         }
+         SanitizedUser sanitizedFollower = new SanitizedUser(rel.getFollower());
+         thisUserFollowers.add(sanitizedFollower);
       }
       return thisUserFollowers;
    }
