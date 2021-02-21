@@ -1,5 +1,6 @@
 package com.capstone.moneytree.service
 
+import com.capstone.moneytree.dao.StockDao
 import com.capstone.moneytree.dao.TransactionDao
 import com.capstone.moneytree.dao.UserDao
 import com.capstone.moneytree.exception.AlpacaException
@@ -7,16 +8,20 @@ import com.capstone.moneytree.exception.EntityNotFoundException
 import com.capstone.moneytree.facade.AlpacaSession
 import com.capstone.moneytree.model.MoneyTreeOrderType
 import com.capstone.moneytree.model.TransactionStatus
+import com.capstone.moneytree.model.node.Stock
 import com.capstone.moneytree.model.node.User
 import com.capstone.moneytree.service.api.TransactionService
 import com.capstone.moneytree.service.impl.DefaultTransactionService
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildMarketOrder
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildTransactions
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildAsset
+
 
 import net.jacobpeterson.alpaca.AlpacaAPI
 import net.jacobpeterson.alpaca.enums.OrderSide
 import net.jacobpeterson.alpaca.enums.OrderTimeInForce
+import net.jacobpeterson.domain.alpaca.account.Account
 import net.jacobpeterson.domain.alpaca.asset.Asset
 import spock.lang.Specification
 
@@ -61,12 +66,19 @@ class DefaultTransactionServiceTest extends Specification {
       and: "api returns a successful order"
       api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY) >> order
 
-      and: "api return empty asset for this symbol"
-      api.getAssetBySymbol(order.getSymbol()) >> new Asset()
+      and: "api return asset for this symbol"
+      Asset asset = buildAsset()
+      api.getAssetBySymbol(order.getSymbol()) >> asset
 
       and: "user dao returns a user"
       def user = new User()
       userDao.findUserById(_ as Long) >> user
+
+      and: "returns a balance"
+      def balance = "1234.56"
+      api.getAccount() >> Stub(Account) {
+         getCash() >> balance
+      }
 
       when: "execute is triggered"
       transactionService.execute("123456789", order)
@@ -74,7 +86,8 @@ class DefaultTransactionServiceTest extends Specification {
       then:
       1 * userDao.save(_)
       user.getTransactions().size() == 1
-      with(user.getTransactions()[0]) {
+      user.getBalance() == Float.parseFloat(balance)
+      user.getTransactions()[0].with {
          it.getStatus() == TransactionStatus.PENDING
          it.getMoneyTreeOrderType() == MoneyTreeOrderType.MARKET_BUY
       }
@@ -103,7 +116,7 @@ class DefaultTransactionServiceTest extends Specification {
       userDao.findUserById(_ as Long) >> user
 
       and: "api request throws exception"
-      api.requestNewMarketOrder(_,_,_,_) >> {
+      api.requestNewMarketOrder(_, _, _, _) >> {
          throw new Exception("for test")
       }
 
@@ -114,7 +127,11 @@ class DefaultTransactionServiceTest extends Specification {
       thrown(AlpacaException)
    }
 
-
-
-
+   Stock buildStock(Asset asset) {
+      return Stock.builder()
+              .status(asset.getStatus())
+              .symbol(asset.getSymbol())
+              .exchange(asset.getExchange())
+              .build()
+   }
 }

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -200,19 +199,27 @@ public class MarketInteractionsFacade {
                           tradeUpdate.getOrder().getClientOrderId());
                   sendOrderCompletedEmail(userId, tradeUpdate);
                   updateTransactionStatus(tradeUpdate.getOrder().getClientOrderId());
+
                }
             }
          }
       };
    }
 
+   // Refactor to different service. Add the relationship where user now owns the stock of a
+   // transaction that has been fulfilled
    private void updateTransactionStatus(String clientOrderId) {
       List<Transaction> transactions = transactionDao.findAll();
       transactions.stream()
               .filter(transaction -> transaction.getClientOrderId().equals(clientOrderId))
               .findFirst()
-              .ifPresent(fulfilledTransaction -> fulfilledTransaction.setStatus(TransactionStatus.COMPLETED));
+              .ifPresent(this::changeStatusAndSave);
       LOGGER.info("Updated transaction status for transaction {}", clientOrderId);
+   }
+
+   private void changeStatusAndSave(Transaction transaction) {
+      transaction.setStatus(TransactionStatus.COMPLETED);
+      transactionDao.save(transaction);
    }
 
    private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {

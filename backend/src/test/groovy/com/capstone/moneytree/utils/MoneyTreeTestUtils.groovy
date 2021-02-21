@@ -5,6 +5,7 @@ import com.capstone.moneytree.model.node.Transaction
 import com.capstone.moneytree.model.node.User
 
 import net.jacobpeterson.alpaca.enums.OrderTimeInForce
+import net.jacobpeterson.domain.alpaca.asset.Asset
 import net.jacobpeterson.domain.alpaca.order.Order
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate
 
@@ -72,8 +73,20 @@ class MoneyTreeTestUtils {
       order.setClientOrderId("clientId")
       order.setTimeInForce(OrderTimeInForce.DAY as String)
       order.setCreatedAt(ZonedDateTime.now())
+      order.setSubmittedAt(ZonedDateTime.now())
       order.setType("Market")
       return order
+   }
+
+   /**
+    * Utility method to build an asset
+    */
+   static buildAsset() {
+      def asset = new Asset()
+      asset.setSymbol("AAPL")
+      asset.setExchange("NASDAQ")
+      asset.setStatus("active")
+      return asset
    }
 
    static TradeUpdate createTradeUpdate(String id, String clientId, String symbol, String qty, String filledQty, String type, String limitPrice, String avgPrice, String event, String price, ZonedDateTime timestamp, String position) {

@@ -1,8 +1,6 @@
 package com.capstone.moneytree.model.node;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
@@ -35,13 +33,11 @@ public class Transaction extends Entity {
 
    TransactionStatus status;
 
-   @Relationship(type = "FULFILLS")
-   List<Stock> fulfilledStocks;
+   @Relationship(type = "FULFILLS", direction = Relationship.INCOMING)
+   Stock fulfilledStock;
 
-   public void fulfills(Stock stock) {
-      if (fulfilledStocks == null) {
-         this.fulfilledStocks = new ArrayList<>();
-      }
-      this.getFulfilledStocks().add(stock);
+   public Transaction fulfills(Stock stock) {
+      this.setFulfilledStock(stock);
+      return this;
    }
 }

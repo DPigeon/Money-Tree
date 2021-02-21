@@ -3,10 +3,9 @@ package com.capstone.moneytree.service.impl;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
-import com.capstone.moneytree.facade.MarketInteractionsFacade;
 import com.capstone.moneytree.model.AlpacaOAuthResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -46,6 +44,10 @@ public class DefaultUserService implements UserService {
    private static final String USER_NOT_FOUND = "The requested user was not found";
    private static final String DEFAULT_PROFILE_NAME = "DEFAULT-profile.jpg";
    private static final String AUTHORIZATION_CODE = "authorization_code";
+
+   private static final String LOCAL_APP_URL = "http://localhost:4200/";
+   private static final String DEV_APP_URL = "https://dev.money-tree.tech/";
+   private static final String PROD_APP_URL = "https://money-tree.tech";
 
    @Value("${alpaca.client.id}")
    private String clientId;
@@ -201,24 +203,10 @@ public class DefaultUserService implements UserService {
          throw new EntityNotFoundException(String.format("User with id %s not found", id));
       }
       try {
-         String redirectUri = activeProfile.equals("local") ? "http://localhost:4200/": activeProfile.equals("dev") ? "https://dev.money-tree.tech/":"https://money-tree.tech";
-
-         HashMap<String, String> parameters = new HashMap<>();
-         parameters.put("grant_type", AUTHORIZATION_CODE);
-         parameters.put("code", code);
-         parameters.put("client_id", clientId);
-         parameters.put("client_secret", clientSecret);
-         parameters.put("redirect_uri", redirectUri);
-
-         String form = parameters.keySet().stream()
-                 .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
-                 .collect(Collectors.joining("&"));
+         String redirectUri = getSpringProfile(activeProfile);
 
          HttpClient client = HttpClient.newHttpClient();
-
-         HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://api.alpaca.markets/oauth/token"))
-                 .headers("Content-Type", "application/x-www-form-urlencoded")
-                 .POST(HttpRequest.BodyPublishers.ofString(form)).build();
+         HttpRequest request = buildRequest(code, redirectUri);
          HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
          //parse json response using gson
@@ -231,9 +219,8 @@ public class DefaultUserService implements UserService {
          userDao.save(userToUpdate);
          LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
 
-      }
-      catch(Exception exception) {
-         System.out.println(exception.getStackTrace());
+      } catch (Exception exception) {
+         LOG.error("Error occurred while trying to process alpaca api key for user {}", exception.getMessage());
       }
 
       return userToUpdate;
@@ -309,5 +296,34 @@ public class DefaultUserService implements UserService {
 
    public String getBucketName() {
       return bucketName;
+   }
+
+   private String getSpringProfile(String profile) {
+      switch (profile) {
+         case "local":
+            return LOCAL_APP_URL;
+         case "dev":
+            return DEV_APP_URL;
+         default:
+            return PROD_APP_URL;
+      }
+   }
+
+   private HttpRequest buildRequest(String code, String redirectUri) {
+      HashMap<String, String> parameters = new HashMap<>();
+      parameters.put("grant_type", AUTHORIZATION_CODE);
+      parameters.put("code", code);
+      parameters.put("client_id", clientId);
+      parameters.put("client_secret", clientSecret);
+      parameters.put("redirect_uri", redirectUri);
+
+      String form = parameters.keySet().stream()
+              .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
+              .collect(Collectors.joining("&"));
+
+
+      return HttpRequest.newBuilder().uri(URI.create("https://api.alpaca.markets/oauth/token"))
+              .headers("Content-Type", "application/x-www-form-urlencoded")
+              .POST(HttpRequest.BodyPublishers.ofString(form)).build();
    }
 }
