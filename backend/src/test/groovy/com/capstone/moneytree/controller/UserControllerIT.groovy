@@ -6,6 +6,7 @@ import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 
 import com.capstone.moneytree.dao.UserDao
 import com.capstone.moneytree.exception.BadRequestException
@@ -14,6 +15,7 @@ import com.capstone.moneytree.model.node.User
 import spock.lang.Specification
 
 @SpringBootTest
+@ActiveProfiles("dev")
 class UserControllerIT extends Specification {
 
    @Autowired
