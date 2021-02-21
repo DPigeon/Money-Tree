@@ -1,7 +1,7 @@
 package com.capstone.moneytree.model.node;
 
 import java.time.ZonedDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -16,8 +16,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import net.jacobpeterson.domain.alpaca.order.Order;
 
 @EqualsAndHashCode(callSuper = true)
 @NodeEntity
@@ -42,7 +40,7 @@ public class Transaction extends Entity {
 
    public void fulfills(Stock stock) {
       if (fulfilledStocks == null) {
-         this.fulfilledStocks = Collections.emptyList();
+         this.fulfilledStocks = new ArrayList<>();
       }
       this.getFulfilledStocks().add(stock);
    }

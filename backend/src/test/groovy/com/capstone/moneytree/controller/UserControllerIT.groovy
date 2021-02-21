@@ -98,8 +98,7 @@ class UserControllerIT extends Specification {
       String password = "encrypted"
       String firstName = "razineFristName"
       String lastName = "BENSARI-razine"
-      User user2 = createUser(newEmail, username, password, firstName, lastName, "258459fr2w-")
-      userDao.save(user2)
+      User user2 = userDao.save(createUser(newEmail, username, password, firstName, lastName, "258459fr2w-"))
 
       when: "following another user"
       def response = userController.followUser(user1.getId(), user2.getId())
@@ -121,7 +120,6 @@ class UserControllerIT extends Specification {
       def user1 = userDao.save(createUser("test@test.com", "dave", "pass", "Dave", "Bas", "74hgf8734gr-"))
 
       and: "persist the other user we want to follow"
-      Long id = 12345679
       String newEmail = "test@test2123.com"
       String username = "razine123"
       String password = "encrypted"

@@ -2,12 +2,22 @@ package com.capstone.moneytree.service
 
 import com.capstone.moneytree.dao.TransactionDao
 import com.capstone.moneytree.dao.UserDao
+import com.capstone.moneytree.exception.AlpacaException
+import com.capstone.moneytree.exception.EntityNotFoundException
+import com.capstone.moneytree.facade.AlpacaSession
 import com.capstone.moneytree.model.MoneyTreeOrderType
+import com.capstone.moneytree.model.TransactionStatus
+import com.capstone.moneytree.model.node.User
 import com.capstone.moneytree.service.api.TransactionService
 import com.capstone.moneytree.service.impl.DefaultTransactionService
 
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildMarketOrder
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildTransactions
 
+import net.jacobpeterson.alpaca.AlpacaAPI
+import net.jacobpeterson.alpaca.enums.OrderSide
+import net.jacobpeterson.alpaca.enums.OrderTimeInForce
+import net.jacobpeterson.domain.alpaca.asset.Asset
 import spock.lang.Specification
 
 
@@ -15,7 +25,9 @@ class DefaultTransactionServiceTest extends Specification {
 
    TransactionDao transactionDao = Mock()
    UserDao userDao = Mock()
-   TransactionService transactionService = new DefaultTransactionService(transactionDao, userDao)
+   AlpacaSession session = Mock()
+   AlpacaAPI api = Mock()
+   TransactionService transactionService = new DefaultTransactionService(transactionDao, userDao, session)
 
    def "Validate that findAll calls the transactionDao"() {
       when:
@@ -38,6 +50,71 @@ class DefaultTransactionServiceTest extends Specification {
          it.getMoneyTreeOrderType() == MoneyTreeOrderType.MARKET_BUY
       })
    }
+
+   def "Validate the happy path when executing a transaction"() {
+      given: "The session returns the mock api"
+      session.alpaca(_) >> api
+
+      and: "a valid order"
+      def order = buildMarketOrder()
+
+      and: "api returns a successful order"
+      api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY) >> order
+
+      and: "api return empty asset for this symbol"
+      api.getAssetBySymbol(order.getSymbol()) >> new Asset()
+
+      and: "user dao returns a user"
+      def user = new User()
+      userDao.findUserById(_ as Long) >> user
+
+      when: "execute is triggered"
+      transactionService.execute("123456789", order)
+
+      then:
+      1 * userDao.save(_)
+      user.getTransactions().size() == 1
+      with(user.getTransactions()[0]) {
+         it.getStatus() == TransactionStatus.PENDING
+         it.getMoneyTreeOrderType() == MoneyTreeOrderType.MARKET_BUY
+      }
+   }
+
+   def "Should throw an exception when the userId does not exist"() {
+      given: "Database returns null (no user for that id)"
+      userDao.findUserById(123456789) >> null
+
+      when: "executing a transaction for a non existing user"
+      transactionService.execute("1234", null)
+
+      then:
+      thrown(EntityNotFoundException)
+   }
+
+   def "exception thrown by api when making call should be caught"() {
+      given: "The session returns the mock api"
+      session.alpaca(_) >> api
+
+      and: "a valid order"
+      def order = buildMarketOrder()
+
+      and: "user dao returns a user"
+      def user = new User()
+      userDao.findUserById(_ as Long) >> user
+
+      and: "api request throws exception"
+      api.requestNewMarketOrder(_,_,_,_) >> {
+         throw new Exception("for test")
+      }
+
+      when:
+      transactionService.execute("12345678", order)
+
+      then:
+      thrown(AlpacaException)
+   }
+
+
 
 
 }

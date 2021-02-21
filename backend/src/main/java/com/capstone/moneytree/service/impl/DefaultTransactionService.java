@@ -1,33 +1,19 @@
 package com.capstone.moneytree.service.impl;
 
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
 import com.capstone.moneytree.exception.AlpacaException;
-import com.capstone.moneytree.model.AlpacaOrder;
-import com.google.gson.Gson;
+
 import net.jacobpeterson.alpaca.enums.OrderSide;
 import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-import org.joda.time.format.ISODateTimeFormat;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,11 +39,13 @@ public class DefaultTransactionService implements TransactionService {
 
    private final TransactionDao transactionDao;
    private final UserDao userDao;
+   private final AlpacaSession session;
 
    @Autowired
-   public DefaultTransactionService(TransactionDao transactionDao, UserDao userDao) {
+   public DefaultTransactionService(TransactionDao transactionDao, UserDao userDao, AlpacaSession session) {
       this.transactionDao = transactionDao;
       this.userDao = userDao;
+      this.session = session;
    }
 
    @Override
@@ -97,14 +85,14 @@ public class DefaultTransactionService implements TransactionService {
    private Transaction executeTransaction(String alpacaKey, Order order) {
       Transaction transaction;
       try {
-         AlpacaAPI api = AlpacaSession.alpaca(alpacaKey);
+         AlpacaAPI api = session.alpaca(alpacaKey);
          Order alpacaOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
 
          LOGGER.info("Executed order {}", alpacaOrder.getClientOrderId());
 
          transaction = constructTransactionFromOrder(alpacaOrder, api);
 
-      } catch (AlpacaAPIRequestException e) {
+      } catch (Exception e) {
          throw new AlpacaException(e.getMessage());
       }
       return transaction;
