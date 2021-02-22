@@ -22,12 +22,16 @@ export class WebsocketAPIService {
     const topic = '/queue/user-' + this.userId;
     const ws = new SockJS(this.webSocketEndPoint);
     this.stompClient = Stomp.over(ws);
+
     const thisL = this;
     thisL.stompClient.connect(
       {},
       (frame) => {
+        thisL.stompClient.send("/app/trade/updates", {}, this.userId);
         thisL.stompClient.subscribe(topic, (sdkEvent) => {
           thisL.onMessageReceived(sdkEvent);
+        }, err =>{
+          console.log("WEBSOCKET ERROR", err);
         });
       },
       this.errorCallBack
@@ -58,7 +62,7 @@ export class WebsocketAPIService {
   }
 
   onMessageReceived(message): void {
-    console.log('Message Recieved from Server :: ', message);
+    console.log('Message Recieved from Server :: ', JSON.parse(message.body));
     // will dispatch actions to the storeFacade when recieving messages
   }
 }

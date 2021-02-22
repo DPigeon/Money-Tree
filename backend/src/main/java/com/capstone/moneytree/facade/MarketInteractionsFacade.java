@@ -197,7 +197,7 @@ public class MarketInteractionsFacade {
                TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
                TradeUpdate tradeUpdate = tradeMessage.getData();
                if (tradeUpdate.getEvent().equals("fill")) {
-                  messageSender.convertAndSend("/queue/user-" + userId, tradeUpdate.getOrder().getClientOrderId());
+                  messageSender.convertAndSend("/queue/user-" + userId, tradeUpdate.getOrder());
                   LOGGER.info("Order filled by user id {}", userId);
                }
             }
