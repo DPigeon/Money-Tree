@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
 
   currentUser$: Observable<User>;
   currentUser: User;
+  transactionHistory: Transaction[];
 
   constructor(
     private storeFacade: StoreFacadeService,
@@ -31,6 +32,8 @@ export class HomeComponent implements OnInit {
         this.currentUser = user;
         this.userPhotoURL = this.currentUser.avatarURL;
         this.coverPhotoURL = this.currentUser.coverPhotoURL;
+        this.transactionHistory = this.currentUser.transactions;
+        console.log(this.transactionHistory);
       }
     });
   }
@@ -63,6 +66,5 @@ export class HomeComponent implements OnInit {
       }
     );
   }
-
 
 }
