@@ -1,6 +1,8 @@
 package com.capstone.moneytree.model.node;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
@@ -45,8 +47,8 @@ public class User extends Entity {
 
     String biography;
 
-    @Relationship(type = "FOLLOWS", direction = Relationship.INCOMING)
-    List<User> followers;
+    @Relationship(type = "FOLLOWS")
+    Set<User> followers;
 
     @Relationship(type = "OWNS")
     List<Stock> stocks;
@@ -54,12 +56,32 @@ public class User extends Entity {
     @Relationship(type = "MADE")
     List<Transaction> transactions;
 
-    public void follows(User user) {
-        user.getFollowers().add(this);
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof User){
+            User other = (User) object;
+            return this.getId().equals(other.getId());
+        }
+
+        return false;
     }
 
-    public void followedBy(User user) {
-        this.getFollowers().add(user);
+    @Override
+    public int hashCode() {
+        return Math.toIntExact(this.getId());
+    }
+
+    public void follow(User user) {
+        if (followers == null) {
+            followers = new HashSet<>();
+        }
+        followers.add(user);
+    }
+
+    public void unfollow(User user) {
+        if (followers != null && !followers.isEmpty()) {
+            followers.remove(user);
+        }
     }
 
     public void made(Transaction transaction) {
@@ -69,8 +91,4 @@ public class User extends Entity {
     public void owns(Stock stock) {
         this.getStocks().add(stock);
     }
-}
-
-
-
-    
+}    

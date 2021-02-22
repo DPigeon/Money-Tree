@@ -1,5 +1,8 @@
 package com.capstone.moneytree.facade;
 
+import com.capstone.moneytree.exception.AlpacaClockException;
+import com.capstone.moneytree.handler.ExceptionMessage;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +12,9 @@ import java.util.Map;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.capstone.moneytree.dao.UserDao;
+import com.capstone.moneytree.exception.EntityNotFoundException;
+import com.capstone.moneytree.model.node.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +31,7 @@ import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListener;
 import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListenerAdapter;
 import net.jacobpeterson.alpaca.websocket.broker.message.AlpacaStreamMessageType;
 import net.jacobpeterson.domain.alpaca.account.Account;
+import net.jacobpeterson.domain.alpaca.clock.Clock;
 import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
 import net.jacobpeterson.domain.alpaca.position.Position;
 import net.jacobpeterson.domain.alpaca.streaming.AlpacaStreamMessage;
@@ -32,9 +39,9 @@ import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate;
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdateMessage;
 
 /**
- * This facade abstracts the Alpaca API and exposes only the relevant
- * methods for MoneyTree.
- * */
+ * This facade abstracts the Alpaca API and exposes only the relevant methods
+ * for MoneyTree.
+ */
 @Component
 public class MarketInteractionsFacade {
 
@@ -43,17 +50,19 @@ public class MarketInteractionsFacade {
    private final Map<String, AlpacaStreamListener> userIdToStream;
 
    @Autowired
-   public MarketInteractionsFacade(@Value("${alpaca.api.version}") String apiVersion,
-                                   @Value("${alpaca.key.id}") String keyId,
-                                   @Value("${alpaca.secret}") String secretKey,
-                                   @Value("${alpaca.base.api.url}") String baseApiUrl,
-                                   @Value("${alpaca.base.data.url}") String baseDataUrl) {
-      alpacaAPI = new AlpacaAPI(apiVersion, keyId, secretKey, baseApiUrl, baseDataUrl);
+   UserDao userDao;
+
+   @Autowired
+   public MarketInteractionsFacade(@Value("${alpaca.key.id}") String keyId, @Value("${alpaca.secret}") String secretKey,
+         @Value("${alpaca.api.version}") String apiVersion, @Value("${alpaca.base.api.url}") String baseApiUrl,
+         @Value("${alpaca.base.data.url}") String baseDataUrl) {
+      alpacaAPI = new AlpacaAPI(keyId, secretKey, null, baseApiUrl, baseDataUrl);
       userIdToStream = new HashMap<>();
    }
 
    /**
     * Gets the Alpaca user account.
+    * 
     * @return An Account.
     */
    public Account getAccount() {
@@ -69,7 +78,25 @@ public class MarketInteractionsFacade {
    }
 
    /**
+    * Gets the market status (open/closed).
+    * 
+    * @return market status.
+    */
+   public Clock getMarketClock() {
+      Clock marketClock;
+      try {
+         marketClock = alpacaAPI.getClock();
+         LOGGER.info("Get market clock: {}", marketClock);
+      } catch (Exception e) {
+         LOGGER.error("Error getting the Alpaca market clock: {}", e.getMessage());
+         throw new AlpacaClockException(ExceptionMessage.ALPACA_CLOCK_ERROR.getMessage());
+      }
+      return marketClock;
+   }
+
+   /**
     * Gets all stocks position for a user.
+    * 
     * @return List of available positions.
     */
    public List<Position> getOpenPositions() {
@@ -86,28 +113,25 @@ public class MarketInteractionsFacade {
 
    /**
     * Gets the timeseries data for the profile value of equity and profit loss.
-    * @param periodLength Duration of the data.
-    * @param periodUnit Either day (D), week (W), month (M) or year (A).
-    * @param timeFrame Resolution of the time window (1Min, 5Min, 15Min, 1H, 1D)
-    * @param dateEnd Date data is returned up to.
-    * @param extendedHours Includes extended hours in result. Works only for timeframe less than 1D.
+    * 
+    * @param periodLength  Duration of the data.
+    * @param periodUnit    Either day (D), week (W), month (M) or year (A).
+    * @param timeFrame     Resolution of the time window (1Min, 5Min, 15Min, 1H,
+    *                      1D)
+    * @param dateEnd       Date data is returned up to.
+    * @param extendedHours Includes extended hours in result. Works only for
+    *                      timeframe less than 1D.
     * @return A PortfolioHistory of timeseries
     */
    public PortfolioHistory getPortfolioHistory(@NotNull @NotBlank int periodLength,
-                                               @NotNull @NotBlank String periodUnit,
-                                               @NotNull @NotBlank String timeFrame,
-                                               @NotNull @NotBlank LocalDate dateEnd,
-                                               @NotNull @NotBlank boolean extendedHours) {
+         @NotNull @NotBlank String periodUnit, @NotNull @NotBlank String timeFrame,
+         @NotNull @NotBlank LocalDate dateEnd, @NotNull @NotBlank boolean extendedHours) {
       PortfolioHistory portfolioHistory = null;
       PortfolioPeriodUnit portfolioPeriodUnit = PortfolioPeriodUnit.valueOf(periodUnit);
       PortfolioTimeFrame portfolioTimeFrame = PortfolioTimeFrame.valueOf(timeFrame);
       try {
-         portfolioHistory = alpacaAPI.getPortfolioHistory(
-                 periodLength,
-                 portfolioPeriodUnit,
-                 portfolioTimeFrame,
-                 dateEnd,
-                 extendedHours);
+         portfolioHistory = alpacaAPI.getPortfolioHistory(periodLength, portfolioPeriodUnit, portfolioTimeFrame,
+               dateEnd, extendedHours);
          LOGGER.info("Get portfolio: {}", portfolioHistory);
       } catch (AlpacaAPIRequestException e) {
          LOGGER.error("Error getting the portfolio: {}", e.getMessage());
@@ -122,7 +146,8 @@ public class MarketInteractionsFacade {
     */
    public void listenToStreamUpdates(String userId, SimpMessagingTemplate messageSender) {
       try {
-         AlpacaStreamListener streamListener = createStreamListener(userId, messageSender, AlpacaStreamMessageType.TRADE_UPDATES);
+         AlpacaStreamListener streamListener = createStreamListener(userId, messageSender,
+               AlpacaStreamMessageType.TRADE_UPDATES);
          alpacaAPI.addAlpacaStreamListener(streamListener);
          if (userIdToStream.containsKey(userId)) {
             userIdToStream.replace(userId, streamListener);
@@ -150,10 +175,12 @@ public class MarketInteractionsFacade {
 
    /**
     * Creates a streamListenerAdapter for stream listeners
+    * 
     * @param messageType A list of AlpacaStreamMessageType
     * @return An AlpacaStreamListenerAdapter
     */
-   private AlpacaStreamListener createStreamListener(String userId, SimpMessagingTemplate messageSender, AlpacaStreamMessageType... messageType) {
+   private AlpacaStreamListener createStreamListener(String userId, SimpMessagingTemplate messageSender,
+         AlpacaStreamMessageType... messageType) {
       return new AlpacaStreamListenerAdapter(messageType) {
          @Override
          public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
@@ -164,9 +191,25 @@ public class MarketInteractionsFacade {
                   messageSender.convertAndSend(
                           "/queue/user-" + userId,
                           tradeUpdate.getOrder().getClientOrderId());
+                  sendOrderCompletedEmail(userId, tradeUpdate);
                }
             }
          }
       };
+   }
+
+   private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {
+      EmailSender emailSender = new EmailSender();
+      User user = getUserById(Long.parseLong(userId));
+      emailSender.sendOrderCompletedEmail(user, trade);
+   }
+
+   private User getUserById(Long userId) {
+      User user = userDao.findUserById(userId);
+      if (user == null) {
+         throw new EntityNotFoundException("User does not exist!");
+      }
+
+      return user;
    }
 }

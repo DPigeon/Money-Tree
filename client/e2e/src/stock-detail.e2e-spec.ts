@@ -39,4 +39,16 @@ describe('stock detail page system test', () => {
     expect(page.getStockStatAvgVol()).toBeTruthy();
     browser.sleep(5000);
   });
+  it('should show open market or closed market chip', () => {
+    page.navigateToStockDetailPage('aapl').then(() => {
+      if (page.getClosedMarketChip().isPresent()) {
+        expect(page.getOpenMarketChip().isPresent()).toBeFalsy();
+        expect(page.getMarketNextOpenMsg().isPresent()).toBeTruthy();
+      } else if (page.getOpenMarketChip().isPresent()) {
+        expect(page.getClosedMarketChip().isPresent()).toBeFalsy();
+        expect(page.getMarketNextOpenMsg().isPresent()).toBeFalsy();
+      }
+    });
+    browser.sleep(5000);
+  });
 });

@@ -50,7 +50,7 @@ public class DefaultUserService implements UserService {
 
    @Value("${alpaca.client.id}")
    private String clientId;
-   @Value("${aplaca.client.secret}")
+   @Value("${alpaca.client.secret}")
    private String clientSecret;
    @Value("${spring.profiles.active}")
    private String activeProfile;
@@ -256,6 +256,34 @@ public class DefaultUserService implements UserService {
       } else {
          throw new CredentialNotFoundException("Authentication failed for this email/pwd combination.");
       }
+   }
+
+   @Override
+   public Long followUser(Long userId, Long userToFollowId) {
+      User user = userDao.findUserById(userId);
+      User userToFollow = userDao.findUserById(userToFollowId);
+      if (user == null || userToFollow == null) {
+         throw new EntityNotFoundException(USER_NOT_FOUND);
+      }
+
+      user.follow(userToFollow);
+      userDao.save(user);
+
+      return userToFollowId;
+   }
+
+   @Override
+   public Long unfollowUser(Long userId, Long userToUnfollowId) {
+      User user = userDao.findUserById(userId);
+      User userToUnfollow = userDao.findUserById(userToUnfollowId);
+      if (user == null || userToUnfollow == null) {
+         throw new EntityNotFoundException(USER_NOT_FOUND);
+      }
+
+      user.unfollow(userToUnfollow);
+      userDao.save(user);
+
+      return userToUnfollowId;
    }
 
    @Override

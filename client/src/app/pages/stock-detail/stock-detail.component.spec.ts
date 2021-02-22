@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HeaderComponent } from 'src/app/components/header/header.component';
 import { UserOwnedStocksComponent } from 'src/app/components/user-owned-stocks/user-owned-stocks.component';
 import { StockSearchComponent } from 'src/app/components/stock-search/stock-search.component';
+import { StockAdditionalInfoComponent } from 'src/app/components/stock-additional-info/stock-additional-info.component';
 import { RouterTestingModule } from '@angular/router/testing';
 
 const fakeActivatedRoute = {
@@ -40,6 +41,7 @@ describe('StockDetailComponent', () => {
         StockDetailHeaderComponent,
         StockStatsComponent,
         UserOwnedStocksComponent,
+        StockAdditionalInfoComponent,
         HeaderComponent,
         StockSearchComponent,
       ],

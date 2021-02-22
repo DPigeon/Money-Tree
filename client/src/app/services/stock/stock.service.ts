@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Stock } from 'src/app/interfaces/stock';
 import { ApiService } from '../api/api.service';
+import { MarketClock } from './../../interfaces/market-clock';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,12 @@ export class StockService {
     return this.api
       .get('stockmarket/batch/' + stockTicker.toUpperCase())
       .pipe(map((res: Response) => this.IEXtoModel(res.body)));
+  }
+
+  loadMarketClock(): Observable<MarketClock> {
+    return this.api
+      .get('alpaca/market-status')
+      .pipe(map((res: Response) => this.marketClockFormatter(res)));
   }
 
   // This will need to be discussed: formatting responses frontend vs backend, same models?
@@ -39,5 +46,14 @@ export class StockService {
       },
     };
     return stock;
+  }
+  marketClockFormatter(response: any): MarketClock {
+    const fromattedMarketClock: MarketClock = {
+      isOpen: response.body.isOpen,
+      nextClose: response.body.nextClose,
+      nextOpen: response.body.nextOpen,
+      timestamp: response.body.timestamp,
+    };
+    return fromattedMarketClock;
   }
 }

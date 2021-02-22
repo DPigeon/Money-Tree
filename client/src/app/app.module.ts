@@ -20,6 +20,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 // Component imports:
 import { AppComponent } from './app.component';
@@ -35,6 +37,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { StockSearchComponent } from './components/stock-search/stock-search.component';
 import { UserOwnedStocksComponent } from './components/user-owned-stocks/user-owned-stocks.component';
 import { SellOrBuyActionsComponent } from './components/sell-buy-stock/sell-buy-actions.component';
+import { FollowingsSearchComponent } from './components/followings-search/followings-search.component';
+import { StockAdditionalInfoComponent } from './components/stock-additional-info/stock-additional-info.component';
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
@@ -44,6 +48,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
 
 // analytics
 import { NgxHotjarModule } from 'ngx-hotjar';
+
 
 @NgModule({
   declarations: [
@@ -61,6 +66,8 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     HomeComponent,
     EditProfileComponent,
     SellOrBuyActionsComponent,
+    FollowingsSearchComponent,
+    StockAdditionalInfoComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,6 +92,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     MatDialogModule,
     MatAutocompleteModule,
     MatRadioModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent],

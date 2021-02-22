@@ -1,0 +1,82 @@
+@import "../../../styles.scss";
+
+.card-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+
+  .title {
+    font-weight: 500;
+  }
+}
+
+.additionals-container {
+  height: 350px;
+  margin-bottom: 20px;
+
+  .additionals-search {
+    padding: 5px;
+    width: 90%;
+    margin-bottom: 20px;
+  }
+  .additional-symbol {
+    color: $primary-color;
+    outline: none;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .users-additional-container {
+    overflow-y: auto;
+    height: 85%;
+
+    .additional-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+
+      .additional-picture {
+        border-radius: 50%;
+        margin-right: 5px;
+        margin-right: 10px;
+      }
+
+      .additional-info {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        .additional-name {
+          color: $primary-color;
+          outline: none;
+          cursor: pointer;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}

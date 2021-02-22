@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 import { Stock } from '../interfaces/stock';
 import { User } from '../interfaces/user';
 import { AppError } from '../interfaces/app-error';
+import { MarketClock } from './../interfaces/market-clock';
+import { Transaction } from '../interfaces/transaction';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +23,7 @@ export class StoreFacadeService {
     userExists: boolean;
     hasAlpacaCode: boolean;
   }>;
+  currentMarketClock$: Observable<MarketClock>;
 
   constructor(private store: Store<{ appState: State }>) {
     this.currentStockLoaded$ = this.store.select(
@@ -35,10 +38,17 @@ export class StoreFacadeService {
     this.authenticationInformation$ = this.store.select(
       appSelectors.selectAuthenticationInformation
     );
+    this.currentMarketClock$ = this.store.select(
+      appSelectors.selectCurrentMarketClock
+    );
   }
 
   loadCurrentStock(ticker: string): void {
     this.store.dispatch(appActions.loadStockInfo({ stockTicker: ticker }));
+  }
+
+  loadMarketClock(): void {
+    this.store.dispatch(appActions.loadMarketClock());
   }
 
   createNewUser(user: User): void {
@@ -54,7 +64,9 @@ export class StoreFacadeService {
   }
 
   getAlpacaOAuthToken(userId: number, alpacaToken: string): void {
-    this.store.dispatch(appActions.getAlpacaOAuthToken({userId, alpacaToken}));
+    this.store.dispatch(
+      appActions.getAlpacaOAuthToken({ userId, alpacaToken })
+    );
   }
 
   getCurrentUser(userId: number): void {
@@ -73,5 +85,8 @@ export class StoreFacadeService {
         typeSelection: selection,
       })
     );
+  }
+  processStockTransaction(transaction: Transaction, userId: number): void {
+    this.store.dispatch(appActions.processStockTransaction({ transaction, userId }));
   }
 }
