@@ -140,10 +140,10 @@ export class Effects {
           map((data: any) =>
             appActions.setCurrentFollowers({ userFollowers: data })
           ),
-          catchError((data) =>
+          catchError((err) =>
             of(
               appActions.setAppError({
-                errorMessage: this.mirrorError(data),
+                errorMessage: this.mirrorError(err),
               })
             )
           )
@@ -160,10 +160,10 @@ export class Effects {
           map((data: any) =>
             appActions.setCurrentFollowings({ userFollowings: data })
           ),
-          catchError((data) =>
+          catchError((error) =>
             of(
               appActions.setAppError({
-                errorMessage: this.mirrorError(data),
+                errorMessage: this.mirrorError(error),
               })
             )
           )

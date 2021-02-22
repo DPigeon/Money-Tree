@@ -1,18 +1,10 @@
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FollowingsSearchComponent } from './followings-search.component';
 import {
   FORM_MODULE_DPENDENCEIES,
   MATERIAL_MODULE_DEPENDENCIES,
 } from '../../shared.module';
 import { RouterTestingModule } from '@angular/router/testing';
-import { User } from 'src/app/interfaces/user';
-import { of, Observable } from 'rxjs';
-import { delay } from 'rxjs/operators';
 
 // integration tests
 describe('FollowingsSearchComponent', () => {
