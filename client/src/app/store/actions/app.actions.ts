@@ -15,6 +15,16 @@ export const stockInfoLoadSuccess = createAction(
   props<{ stock: Stock }>()
 );
 
+export const loadStockHistoricalData = createAction(
+  '[Stock History] Load Stock Historical Data',
+  props<{ stockTicker: string}>()
+);
+
+export const stockHistoricalDataLoadSuccess = createAction(
+  '[Stock History] Load Stock Historical Data Success',
+  props<{ stockHistoricalData: any }>()
+);
+
 export const loadMarketClock = createAction(
   '[Market Clock] Load Market Clock Info',
   props<{ userId: number }>()

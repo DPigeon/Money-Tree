@@ -42,15 +42,19 @@ import { StockAdditionalInfoComponent } from './components/stock-additional-info
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
 import { ListOfFollowsComponent } from './components/list-of-follows/list-of-follows.component';
+import { StockHistoricalChartComponent } from './components/stock-historical-chart/stock-historical-chart.component';
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
 import { environment } from '../environments/environment';
 import { reducer } from './store/reducers/app.reducer';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { NgxEchartsModule } from 'ngx-echarts';
+import * as echarts from 'echarts';
 
 // analytics
 import { NgxHotjarModule } from 'ngx-hotjar';
+
 
 
 @NgModule({
@@ -74,7 +78,9 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     ProfileComponent,
     TransactionHistoryComponent,
     ListOfFollowsComponent,
+    StockHistoricalChartComponent,
   ],
+  
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -98,7 +104,10 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     MatDialogModule,
     MatAutocompleteModule,
     MatRadioModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgxEchartsModule.forRoot({
+      echarts,
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],

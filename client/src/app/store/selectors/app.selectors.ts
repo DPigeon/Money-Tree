@@ -12,6 +12,11 @@ export const selectCurrentStock = createSelector(
   (appState: State) => appState.currentStockLoaded
 );
 
+export const selectStockHistory = createSelector(
+  selectAppState,
+  (appState: State) => appState.stockHistoricalDataLoaded
+);
+
 export const selectCurrentUser = createSelector(
   selectAppState,
   (appState: State) => appState.user

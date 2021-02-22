@@ -23,6 +23,12 @@ export class StockService {
       .pipe(map((res: Response) => this.marketClockFormatter(res)));
   }
 
+  loadStockHistory(stockTicker: string): Observable<any> {
+    return this.api
+      .getStockHistoricalData('https://query1.finance.yahoo.com/v8/finance/chart/' + stockTicker.toUpperCase())
+      .pipe(map((res: Response) => res.body));
+  }
+
   getUserOwnedStocks(userId: number): Observable<Stock[]> {
     return this.api
       .get('stock/owned-stocks/' + userId)

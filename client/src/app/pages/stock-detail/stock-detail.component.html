@@ -5,7 +5,7 @@
     <app-stock-detail-header [stockInfo]="stockInfo$ | async" [marketClock]="marketClock$ | async">
     </app-stock-detail-header>
     <br />
-    <mat-card style="height: 300px"></mat-card>
+    <app-stock-historical-chart *ngIf="showStockChart" [historicalData]="stockHistory$ | async"></app-stock-historical-chart>
   </div>
   <div fxFlex="35%" fxFlex.lt-sm="100%">
     <app-user-stocks [userInfo]="userInfo$ | async" [userOwnedStocks]="userOwnedStocks$ | async"

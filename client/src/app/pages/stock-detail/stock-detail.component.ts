@@ -15,10 +15,12 @@ import { User } from 'src/app/interfaces/user';
   styleUrls: ['./stock-detail.component.scss'],
 })
 export class StockDetailComponent implements OnInit {
+  stockHistory$ = this.storeFacade.stockHistoryLoaded$;
   stockInfo$ = this.storeFacade.currentStockLoaded$;
   marketClock$ = this.storeFacade.currentMarketClock$;
   userInfo$ = this.storeFacade.currentUser$;
   userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
+  showStockChart=false;
   constructor(
     private storeFacade: StoreFacadeService,
     private route: ActivatedRoute,
@@ -26,6 +28,7 @@ export class StockDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     let ticker = this.route.snapshot.paramMap.get('ticker');
     this.storeFacade.loadCurrentStock(ticker);
     this.storeFacade.loadMarketClock(Number(localStorage.getItem('userId')));
@@ -33,11 +36,19 @@ export class StockDetailComponent implements OnInit {
       Number(localStorage.getItem('userId'))
     );
 
+    this.storeFacade.loadCurrentStockHistoricalData(ticker);
     this.router.events
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
       .subscribe(() => {
         ticker = this.route.snapshot.paramMap.get('ticker');
         this.storeFacade.loadCurrentStock(ticker);
+        this.storeFacade.loadCurrentStockHistoricalData(ticker);
       });
+      this.stockHistory$.subscribe(
+        (hist)=>{
+          if(!!hist){
+            this.showStockChart=true;
+          }  
+         }); 
   }
 }
