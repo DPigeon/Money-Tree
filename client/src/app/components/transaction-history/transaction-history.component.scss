@@ -1,0 +1,9 @@
+@import "../../../styles.scss";
+    mat-card-title {
+        text-align: center;
+    }
+    hr { 
+        background-color: $primary-color ; 
+        border: none; 
+        height: 1px;
+    } 
