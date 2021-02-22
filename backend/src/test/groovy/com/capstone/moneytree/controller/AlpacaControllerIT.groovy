@@ -1,7 +1,7 @@
 package com.capstone.moneytree.controller
 
-import com.capstone.moneytree.testconfig.DefaultStompFrameHandlerConfig
-import com.capstone.moneytree.testconfig.WebSocketClientConfig
+import com.capstone.moneytree.config.DefaultStompFrameHandlerConfig
+import com.capstone.moneytree.config.WebSocketClientConfig
 import spock.lang.Ignore
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.messaging.simp.stomp.StompSession

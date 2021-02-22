@@ -23,5 +23,4 @@ public interface Validator {
     * @param var1 A class to validate
     */
    void validate(Object var1);
-
 }

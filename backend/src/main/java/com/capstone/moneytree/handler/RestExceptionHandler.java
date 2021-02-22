@@ -160,7 +160,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
    /**
     * Exception handler for alpacaAPI
     *
-    * @param ex A AlpacaException
+    * @param ex An AlpacaException
     * @return 500 Internal server error
     */
    @ExceptionHandler(AlpacaException.class)
