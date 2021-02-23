@@ -1,4 +1,4 @@
-package com.capstone.moneytree.testconfig;
+package com.capstone.moneytree.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

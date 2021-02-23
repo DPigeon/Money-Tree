@@ -37,6 +37,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { StockSearchComponent } from './components/stock-search/stock-search.component';
 import { UserOwnedStocksComponent } from './components/user-owned-stocks/user-owned-stocks.component';
 import { SellOrBuyActionsComponent } from './components/sell-buy-stock/sell-buy-actions.component';
+import { FollowingsSearchComponent } from './components/followings-search/followings-search.component';
+import { StockAdditionalInfoComponent } from './components/stock-additional-info/stock-additional-info.component';
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
@@ -46,7 +48,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
 
 // analytics
 import { NgxHotjarModule } from 'ngx-hotjar';
-import { FollowingsSearchComponent } from './components/followings-search/followings-search.component';
+
 
 @NgModule({
   declarations: [
@@ -65,6 +67,7 @@ import { FollowingsSearchComponent } from './components/followings-search/follow
     EditProfileComponent,
     SellOrBuyActionsComponent,
     FollowingsSearchComponent,
+    StockAdditionalInfoComponent,
   ],
   imports: [
     BrowserModule,

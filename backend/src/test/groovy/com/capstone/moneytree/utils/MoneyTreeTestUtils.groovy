@@ -1,6 +1,10 @@
 package com.capstone.moneytree.utils
 
 import com.capstone.moneytree.model.node.User
+import net.jacobpeterson.domain.alpaca.order.Order
+import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate
+
+import java.time.ZonedDateTime
 
 class MoneyTreeTestUtils {
 
@@ -15,6 +19,7 @@ class MoneyTreeTestUtils {
               .firstName(firstName)
               .lastName(lastName)
               .alpacaApiKey(alpacaApiKey)
+              .avatarURL("https://moneytree-profile-pictures.s3.amazonaws.com/DEFAULT-profile.jpg")
               .build()
       user.setId(new Random().nextLong())
       return user
@@ -54,5 +59,10 @@ class MoneyTreeTestUtils {
               .email(email)
               .password(password)
               .build()
+   }
+
+   static TradeUpdate createTradeUpdate(String id, String clientId, String symbol, String qty, String filledQty, String type, String limitPrice, String avgPrice, String event, String price, ZonedDateTime timestamp, String position) {
+      Order order = new Order(id, clientId, null, null, null, null, null, null, null, null, null, null, null, symbol, null, qty, filledQty, type, null, null, limitPrice, null, avgPrice, null, null, null, null, null, null)
+      return new TradeUpdate(event, price, timestamp, position, order)
    }
 }

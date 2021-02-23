@@ -15,7 +15,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.capstone.moneytree.model.node.User;
-import com.capstone.moneytree.service.impl.DefaultUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -198,6 +197,7 @@ public class MarketInteractionsFacade {
                TradeUpdate tradeUpdate = tradeMessage.getData();
                if (tradeUpdate.getEvent().equals("fill")) {
                   messageSender.convertAndSend("/queue/user-" + userId, tradeUpdate.getOrder());
+                  sendOrderCompletedEmail(userId, tradeUpdate);
                   LOGGER.info("Order filled by user id {}", userId);
                }
             }
@@ -205,11 +205,18 @@ public class MarketInteractionsFacade {
       };
    }
 
+   private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {
+      EmailSender emailSender = new EmailSender();
+      User user = getUser(Long.parseLong(userId));
+      emailSender.sendOrderCompletedEmail(user, trade);
+   }
+
    private User getUser(Long userId) {
       User user = userDao.findUserById(userId);
       if (user == null) {
-         throw new EntityNotFoundException("Did not find user for transaction");
+         throw new EntityNotFoundException("User does not exist!");
       }
+
       return user;
    }
 }

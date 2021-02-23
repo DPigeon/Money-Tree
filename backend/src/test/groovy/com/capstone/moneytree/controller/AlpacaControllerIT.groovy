@@ -2,14 +2,14 @@ package com.capstone.moneytree.controller
 
 import com.capstone.moneytree.dao.UserDao
 import com.capstone.moneytree.model.node.User
-import com.capstone.moneytree.testconfig.DefaultStompFrameHandlerConfig
-import com.capstone.moneytree.testconfig.WebSocketClientConfig
 import org.junit.Rule
 import org.neo4j.harness.junit.rule.Neo4jRule
 import org.neo4j.ogm.config.Configuration
 import org.neo4j.ogm.session.Session
 import org.neo4j.ogm.session.SessionFactory
 import org.springframework.beans.factory.annotation.Autowired
+import com.capstone.moneytree.config.DefaultStompFrameHandlerConfig
+import com.capstone.moneytree.config.WebSocketClientConfig
 import spock.lang.Ignore
 import org.springframework.messaging.simp.stomp.StompSession
 
