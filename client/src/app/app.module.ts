@@ -22,7 +22,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-
 // Component imports:
 import { AppComponent } from './app.component';
 import { StockDetailComponent } from './pages/stock-detail/stock-detail.component';
@@ -55,8 +54,6 @@ import * as echarts from 'echarts';
 // analytics
 import { NgxHotjarModule } from 'ngx-hotjar';
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -80,7 +77,6 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     ListOfFollowsComponent,
     StockHistoricalChartComponent,
   ],
-  
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -1,0 +1,21 @@
+@import "../../../styles.scss";
+
+.chartOptionsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+.range-option-selected {
+  text-align: center;
+  width: 60px;
+  border-bottom: 2px solid $action-color;
+  padding-bottom: 5px;
+  cursor: pointer;
+}
+.range-option {
+  text-align: center;
+  width: 60px;
+  border-bottom: none;
+  cursor: pointer;
+}

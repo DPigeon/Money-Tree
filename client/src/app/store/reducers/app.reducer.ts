@@ -40,11 +40,13 @@ export const reducer = createReducer(
     ...state,
     currentStockLoaded: stock,
   })),
-
-  on(appActions.stockHistoricalDataLoadSuccess, (state, { stockHistoricalData }) => ({
-    ...state,  
-    stockHistoryLoaded: stockHistoricalData,
-  })),
+  on(
+    appActions.stockHistoricalDataLoadSuccess,
+    (state, { stockHistoricalData }) => ({
+      ...state,
+      stockHistoricalDataLoaded: stockHistoricalData,
+    })
+  ),
   on(appActions.loadMarketClockSuccess, (state, { marketClock }) => ({
     ...state,
     currentMarketClock: marketClock,

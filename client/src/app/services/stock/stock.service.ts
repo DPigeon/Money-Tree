@@ -23,9 +23,20 @@ export class StockService {
       .pipe(map((res: Response) => this.marketClockFormatter(res)));
   }
 
-  loadStockHistory(stockTicker: string): Observable<any> {
+  loadStockHistoricalData(
+    stockTicker: string,
+    range: string,
+    interval: string
+  ): Observable<any> {
     return this.api
-      .getStockHistoricalData('https://query1.finance.yahoo.com/v8/finance/chart/' + stockTicker.toUpperCase())
+      .getStockHistoricalData(
+        'stockmarket/yahoochart/' +
+          stockTicker.toUpperCase() +
+          '?range=' +
+          range +
+          '&interval=' +
+          interval
+      )
       .pipe(map((res: Response) => res.body));
   }
 

@@ -15,7 +15,7 @@ import { Transaction } from '../interfaces/transaction';
 })
 export class StoreFacadeService {
   currentStockLoaded$: Observable<Stock>;
-  stockHistoricalLoaded$: Observable<any>; //change type
+  stockHistoricalDataLoaded$: Observable<any>;
   currentUser$: Observable<User>;
   currentProfileUser$: Observable<UserProfile>;
   appError$: Observable<AppError>;
@@ -35,8 +35,8 @@ export class StoreFacadeService {
     this.currentStockLoaded$ = this.store.select(
       appSelectors.selectCurrentStock
     );
-    this.stockHistoricalLoaded$ = this.store.select(
-      appSelectors.selectStockHistory
+    this.stockHistoricalDataLoaded$ = this.store.select(
+      appSelectors.selectStockHistoricalData
     );
     this.currentUser$ = this.store.select(appSelectors.selectCurrentUser);
     this.appError$ = this.store.select(appSelectors.selectAppError);
@@ -75,8 +75,18 @@ export class StoreFacadeService {
     this.store.dispatch(appActions.loadMarketClock({ userId }));
   }
   
-  loadCurrentStockHistoricalData(ticker: string): void {
-    this.store.dispatch(appActions.loadStockHistoricalData({ stockTicker: ticker }));
+  loadCurrentStockHistoricalData(
+    ticker: string,
+    range: string,
+    interval: string
+  ): void {
+    this.store.dispatch(
+      appActions.loadStockHistoricalData({
+        stockTicker: ticker,
+        chartRange: range,
+        chartInterval: interval,
+      })
+    );
   }
 
   createNewUser(user: User): void {

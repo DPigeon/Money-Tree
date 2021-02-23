@@ -15,9 +15,9 @@ export class ApiService {
   get(url: string): Observable<any> {
     return this.http.get(this.baseUrl + url, this.httpOptions);
   }
-  
+
   getStockHistoricalData(url: string): Observable<any> {
-    return this.http.get(url, this.httpOptions);
+    return this.http.get(this.baseUrl + url, this.httpOptions);
   }
 
   post(url: string, params?: any): Observable<any> {

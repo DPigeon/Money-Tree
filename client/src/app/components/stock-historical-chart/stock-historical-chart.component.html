@@ -1,3 +1,11 @@
-<mat-card style="height: 400px">
+<mat-card style="height: 420px">
+  <div class="chartOptionsContainer" *ngIf="historicalData !== null">
+    <span
+      [class]="getOptionClass(option.range)"
+      (click)="changeRangeInterval(option)"
+      *ngFor="let option of chartOptions"
+      >{{ option.view }}</span
+    >
+  </div>
   <div echarts [options]="chartOption"></div>
 </mat-card>

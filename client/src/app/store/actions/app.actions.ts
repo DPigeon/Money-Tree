@@ -17,7 +17,7 @@ export const stockInfoLoadSuccess = createAction(
 
 export const loadStockHistoricalData = createAction(
   '[Stock History] Load Stock Historical Data',
-  props<{ stockTicker: string}>()
+  props<{ stockTicker: string; chartRange: string; chartInterval: string }>()
 );
 
 export const stockHistoricalDataLoadSuccess = createAction(
