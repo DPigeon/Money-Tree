@@ -26,9 +26,9 @@ export class AppComponent implements OnInit {
       );
     });
 
-    this.storeFacade.currentUser$.subscribe((user) => {
-      if (user && user.id) {
-        this.websocketAPI.setWebsocketUserId(user.id);
+    this.storeFacade.isUserLoggedIn$.subscribe((isLoggedIn) => {
+      if (isLoggedIn) {
+        this.websocketAPI.setWebsocketUserId(Number(localStorage.getItem('userId')));
         this.websocketAPI.connect();
       } else if (this.websocketAPI) {
         this.websocketAPI.disconnect();
