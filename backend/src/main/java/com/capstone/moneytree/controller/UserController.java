@@ -2,6 +2,7 @@ package com.capstone.moneytree.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.validation.Valid;
@@ -165,4 +166,8 @@ public class UserController {
       }
    }
 
+   @GetMapping("/search")
+   public ResponseEntity<List<Map<String, String>>> getSearchUsers() {
+      return ResponseEntity.ok(userService.getSearchUsers());
+   }
 }

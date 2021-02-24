@@ -13,6 +13,6 @@ class UserTest extends Specification {
     private static User user
 
     def setup() {
-        user = createUser(1, "test@test.com", "username", "password", "Jake", "Moreau", "123B")
+        user = createUser("test@test.com", "username", "password", "Jake", "Moreau", "123B")
     }
 }

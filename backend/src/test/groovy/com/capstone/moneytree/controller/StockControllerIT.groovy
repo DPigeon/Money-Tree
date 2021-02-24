@@ -1,5 +1,8 @@
 package com.capstone.moneytree.controller
 
+import com.capstone.moneytree.facade.YahooFinanceFacade
+import com.capstone.moneytree.service.api.YahooFinanceService
+import com.capstone.moneytree.service.impl.DefaultYahooFinanceService
 import org.junit.platform.commons.util.StringUtils
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
@@ -8,13 +11,13 @@ import org.springframework.test.context.ActiveProfiles
 import com.capstone.moneytree.facade.StockMarketDataFacade
 import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.impl.DefaultStockMarketDataService
-
+import org.springframework.web.reactive.function.client.WebClient
 import pl.zankowski.iextrading4j.api.exception.IEXTradingException
 import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
- * Tests for the Stock Controller. Tests the StockMarketDataFacade as well.
+ * Tests for the Stock Controller. Tests the StockMarketDataFacade as well. Tests the YahooFinance facade and service.
  * */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("dev")
@@ -25,7 +28,9 @@ class StockControllerIT extends Specification {
 
    StockMarketDataFacade stockMarketDataFacade = new StockMarketDataFacade(PUBLISH_TOKEN, SECRET_TOKEN, "dev")
    StockMarketDataService stockMarketDataService = new DefaultStockMarketDataService(stockMarketDataFacade: stockMarketDataFacade)
-   StockController stockController = new StockController(stockMarketDataService)
+   YahooFinanceFacade yahooFinanceFacade = new YahooFinanceFacade(WebClient.builder());
+   YahooFinanceService yahooFinanceService = new DefaultYahooFinanceService(yahooFinanceFacade: yahooFinanceFacade);
+   StockController stockController = new StockController(stockMarketDataService, yahooFinanceService)
 
    @Ignore("Fails, needs to be fixed")
    def "Validates GET batch returns stock information"() {
@@ -241,5 +246,18 @@ class StockControllerIT extends Specification {
 
       then: "We get an exception"
       thrown(IEXTradingException)
+   }
+
+   def "Validates GET yahooChart returns chart information"() {
+      given: "A stock symbol"
+      def symbol = "AAPL"
+      def range = "1d"
+      def interval = "1m"
+
+      when: "A call to the yahooChart endpoint is made"
+      def res = stockController.getYahooChart(symbol, range, interval)
+
+      then: "We get a valid chart object"
+      res != null
    }
 }

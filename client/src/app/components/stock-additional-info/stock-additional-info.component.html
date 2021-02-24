@@ -1,0 +1,36 @@
+<mat-card class="additionals-container">
+  <div class="card-title">
+    <h3 class="title">{{ getTitleByType() }}</h3>
+    <mat-icon>{{ getIconByType() }}</mat-icon>
+  </div>
+  <div class="users-additional-container">
+    <ng-container *ngFor="let entity of list">
+      <div *ngIf="type !== 'stocks'" class="additional-container">
+        <div class="additional-info">
+          <!-- image src to be changed -->
+          <img
+            class="additional-picture"
+            alt="Profile Picture"
+            width="40"
+            height="40"
+            [src]="
+              'https://static.wikia.nocookie.net/bleachuntoldstories/images/2/24/Hitsugaya_toshiro_profile.png'
+            "
+          />
+          <span
+            class="additional-name"
+            (click)="navigateToadditionalProfile(entity.firstName, 'followers')"
+            >{{ entity.firstName + " " + entity.lastName }}</span
+          >
+        </div>
+      </div>
+      <div *ngIf="type == 'stocks'" class="additional-container">
+        <span
+          class="additional-symbol"
+          (click)="navigateToadditionalProfile(entity.firstName, 'stocks')"
+          >{{ entity.firstName }}</span
+        ><span>%81</span>
+      </div>
+      <mat-divider [inset]="true"></mat-divider>
+    </ng-container></div
+></mat-card>

@@ -1,5 +1,6 @@
 package com.capstone.moneytree.facade;
 
+import com.capstone.moneytree.dao.TransactionDao;
 import com.capstone.moneytree.exception.AlpacaClockException;
 import com.capstone.moneytree.handler.ExceptionMessage;
 
@@ -12,6 +13,11 @@ import java.util.Map;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.capstone.moneytree.dao.UserDao;
+import com.capstone.moneytree.exception.EntityNotFoundException;
+import com.capstone.moneytree.model.TransactionStatus;
+import com.capstone.moneytree.model.node.Transaction;
+import com.capstone.moneytree.model.node.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +53,16 @@ public class MarketInteractionsFacade {
    private final Map<String, AlpacaStreamListener> userIdToStream;
 
    @Autowired
+   UserDao userDao;
+
+   @Autowired
+   TransactionDao transactionDao;
+
+   @Autowired
    public MarketInteractionsFacade(@Value("${alpaca.key.id}") String keyId, @Value("${alpaca.secret}") String secretKey,
          @Value("${alpaca.api.version}") String apiVersion, @Value("${alpaca.base.api.url}") String baseApiUrl,
          @Value("${alpaca.base.data.url}") String baseDataUrl) {
       alpacaAPI = new AlpacaAPI(keyId, secretKey, null, baseApiUrl, baseDataUrl);
-
       userIdToStream = new HashMap<>();
    }
 
@@ -78,7 +89,7 @@ public class MarketInteractionsFacade {
     * @return market status.
     */
    public Clock getMarketClock() {
-      Clock marketClock = null;
+      Clock marketClock;
       try {
          marketClock = alpacaAPI.getClock();
          LOGGER.info("Get market clock: {}", marketClock);
@@ -183,10 +194,46 @@ public class MarketInteractionsFacade {
                TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
                TradeUpdate tradeUpdate = tradeMessage.getData();
                if (tradeUpdate.getEvent().equals("fill")) {
-                  messageSender.convertAndSend("/queue/user-" + userId, tradeUpdate.getOrder().getClientOrderId());
+                  messageSender.convertAndSend(
+                          "/queue/user-" + userId,
+                          tradeUpdate.getOrder().getClientOrderId());
+                  sendOrderCompletedEmail(userId, tradeUpdate);
+                  updateTransactionStatus(tradeUpdate.getOrder().getClientOrderId());
+
                }
             }
          }
       };
+   }
+
+   // Refactor to different service. Add the relationship where user now owns the stock of a
+   // transaction that has been fulfilled
+   private void updateTransactionStatus(String clientOrderId) {
+      List<Transaction> transactions = transactionDao.findAll();
+      transactions.stream()
+              .filter(transaction -> transaction.getClientOrderId().equals(clientOrderId))
+              .findFirst()
+              .ifPresent(this::changeStatusAndSave);
+      LOGGER.info("Updated transaction status for transaction {}", clientOrderId);
+   }
+
+   private void changeStatusAndSave(Transaction transaction) {
+      transaction.setStatus(TransactionStatus.COMPLETED);
+      transactionDao.save(transaction);
+   }
+
+   private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {
+      EmailSender emailSender = new EmailSender();
+      User user = getUserById(Long.parseLong(userId));
+      emailSender.sendOrderCompletedEmail(user, trade);
+   }
+
+   private User getUserById(Long userId) {
+      User user = userDao.findUserById(userId);
+      if (user == null) {
+         throw new EntityNotFoundException("User does not exist!");
+      }
+
+      return user;
    }
 }

@@ -43,7 +43,6 @@ class UserControllerTest extends Specification {
     private static String BUCKET_NAME = System.getenv("AWS_PROFILE_PICTURES_BUCKET")
 
     private static UserDao userDao
-    private static FollowsDao followsDao
     private static UserValidator userValidator
     private static ValidatorFactory validatorFactory
     private static UserService defaultUserService
@@ -64,8 +63,6 @@ class UserControllerTest extends Specification {
         amazonS3Service = new DefaultAmazonS3Service(amazonS3Facade)
         defaultUserService = new DefaultUserService(userDao, followsDao, validatorFactory, amazonS3Service, BUCKET_NAME)
         userController = new UserController(defaultUserService)
-
-
     }
 
     @Test
@@ -445,7 +442,7 @@ class UserControllerTest extends Specification {
     }
 
     @Test
-    def "Should be able to follow a user"() {
+    def "Should be able to follow another user"() {
         given: "two existing users"
         Long userId1 = 1
         String email1 = "moneytree@test.com"
@@ -593,7 +590,7 @@ class UserControllerTest extends Specification {
         def response = userController.unfollowUser(user1.getId(), user2.getId())
 
         then: "user1 should have unfollowed user2"
-//        assert user1.getFollowers().isEmpty()
+        //        assert user1.getFollowers().isEmpty()
         assert response.statusCode == HttpStatus.OK
         assert response.body == userId2
     }
@@ -804,7 +801,7 @@ class UserControllerTest extends Specification {
 
         when: "getFollowers/getFollowings of the users"
         def response = userController.getFollowers(user1.getId())
-
+   
         then: "should return empty list for followers and followings list of user 1"
         assert response.size() == 0
     }
