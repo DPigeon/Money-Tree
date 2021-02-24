@@ -3,10 +3,10 @@ package com.capstone.moneytree.service.impl;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
-import com.capstone.moneytree.facade.MarketInteractionsFacade;
+import com.capstone.moneytree.ActiveProfile;
 import com.capstone.moneytree.model.AlpacaOAuthResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,8 +52,9 @@ public class DefaultUserService implements UserService {
    private String clientId;
    @Value("${alpaca.client.secret}")
    private String clientSecret;
-   @Value("${spring.profiles.active}")
-   private String activeProfile;
+
+   @Autowired
+   private ActiveProfile activeProfile;
 
    private final UserDao userDao;
    private final ValidatorFactory validatorFactory;
@@ -202,24 +203,10 @@ public class DefaultUserService implements UserService {
          throw new EntityNotFoundException(String.format("User with id %s not found", id));
       }
       try {
-         String redirectUri = activeProfile.equals("local") ? "http://localhost:4200/": activeProfile.equals("dev") ? "https://dev.money-tree.tech/":"https://money-tree.tech";
-
-         HashMap<String, String> parameters = new HashMap<>();
-         parameters.put("grant_type", AUTHORIZATION_CODE);
-         parameters.put("code", code);
-         parameters.put("client_id", clientId);
-         parameters.put("client_secret", clientSecret);
-         parameters.put("redirect_uri", redirectUri);
-
-         String form = parameters.keySet().stream()
-                 .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
-                 .collect(Collectors.joining("&"));
+         String redirectUri = activeProfile.getApplicationUrl();
 
          HttpClient client = HttpClient.newHttpClient();
-
-         HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://api.alpaca.markets/oauth/token"))
-                 .headers("Content-Type", "application/x-www-form-urlencoded")
-                 .POST(HttpRequest.BodyPublishers.ofString(form)).build();
+         HttpRequest request = buildRequest(code, redirectUri);
          HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
          //parse json response using gson
@@ -232,9 +219,8 @@ public class DefaultUserService implements UserService {
          userDao.save(userToUpdate);
          LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
 
-      }
-      catch(Exception exception) {
-         System.out.println(exception.getStackTrace());
+      } catch (Exception exception) {
+         LOG.error("Error occurred while trying to process alpaca api key for user {}", exception.getMessage());
       }
 
       return userToUpdate;
@@ -312,9 +298,26 @@ public class DefaultUserService implements UserService {
       return bucketName;
    }
 
+   private HttpRequest buildRequest(String code, String redirectUri) {
+      HashMap<String, String> parameters = new HashMap<>();
+      parameters.put("grant_type", AUTHORIZATION_CODE);
+      parameters.put("code", code);
+      parameters.put("client_id", clientId);
+      parameters.put("client_secret", clientSecret);
+      parameters.put("redirect_uri", redirectUri);
+
+      String form = parameters.keySet().stream()
+              .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
+              .collect(Collectors.joining("&"));
+
+
+      return HttpRequest.newBuilder().uri(URI.create("https://api.alpaca.markets/oauth/token"))
+              .headers("Content-Type", "application/x-www-form-urlencoded")
+              .POST(HttpRequest.BodyPublishers.ofString(form)).build();
+   }
+
    @Override
    public List<Map<String, String>> getSearchUsers() {
       return userDao.getSearchUsers();
    }
-
 }

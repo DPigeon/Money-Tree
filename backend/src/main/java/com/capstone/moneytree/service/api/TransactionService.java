@@ -12,7 +12,7 @@ public interface TransactionService {
 
    List<Transaction> getAllTransactions();
 
-   Transaction getTransactionByOrderType(MoneyTreeOrderType moneyTreeOrderType);
+   List<Transaction> getTransactionsByOrderType(MoneyTreeOrderType moneyTreeOrderType);
 
    /**
     * This method executes a transaction through Alpaca API given an order.

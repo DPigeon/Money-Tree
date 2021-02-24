@@ -1,5 +1,6 @@
 package com.capstone.moneytree.facade;
 
+import com.capstone.moneytree.dao.TransactionDao;
 import com.capstone.moneytree.exception.AlpacaClockException;
 import com.capstone.moneytree.handler.ExceptionMessage;
 
@@ -14,6 +15,8 @@ import javax.validation.constraints.NotNull;
 
 import com.capstone.moneytree.dao.UserDao;
 import com.capstone.moneytree.exception.EntityNotFoundException;
+import com.capstone.moneytree.model.TransactionStatus;
+import com.capstone.moneytree.model.node.Transaction;
 import com.capstone.moneytree.model.node.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +54,9 @@ public class MarketInteractionsFacade {
 
    @Autowired
    UserDao userDao;
+
+   @Autowired
+   TransactionDao transactionDao;
 
    @Autowired
    public MarketInteractionsFacade(@Value("${alpaca.key.id}") String keyId, @Value("${alpaca.secret}") String secretKey,
@@ -192,10 +198,28 @@ public class MarketInteractionsFacade {
                           "/queue/user-" + userId,
                           tradeUpdate.getOrder().getClientOrderId());
                   sendOrderCompletedEmail(userId, tradeUpdate);
+                  updateTransactionStatus(tradeUpdate.getOrder().getClientOrderId());
+
                }
             }
          }
       };
+   }
+
+   // Refactor to different service. Add the relationship where user now owns the stock of a
+   // transaction that has been fulfilled
+   private void updateTransactionStatus(String clientOrderId) {
+      List<Transaction> transactions = transactionDao.findAll();
+      transactions.stream()
+              .filter(transaction -> transaction.getClientOrderId().equals(clientOrderId))
+              .findFirst()
+              .ifPresent(this::changeStatusAndSave);
+      LOGGER.info("Updated transaction status for transaction {}", clientOrderId);
+   }
+
+   private void changeStatusAndSave(Transaction transaction) {
+      transaction.setStatus(TransactionStatus.COMPLETED);
+      transactionDao.save(transaction);
    }
 
    private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {

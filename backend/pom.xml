@@ -195,6 +195,12 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-ogm-bolt-native-types</artifactId>
+            <version>3.2.20</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>

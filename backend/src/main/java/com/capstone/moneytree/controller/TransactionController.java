@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.capstone.moneytree.dao.UserDao;
-import com.capstone.moneytree.model.node.Transaction;
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.service.api.TransactionService;
 

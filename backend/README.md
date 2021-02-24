@@ -65,8 +65,22 @@ You can access the DB GUI with the following link [http://localhost:7474/](http:
 
 IMPORTANT NOTE: The first time the neo4j database runs, the user/pwd is neo4j and needs to be changed according to our the env variables
 
+## Testing
 
-### API Reference and Docs
+
+* Unit test files follow this pattern `*Test.groovy`
+* Integration test file follow this pattern `*IT.groovy`
+
+* To run unit test:
+`mvn clean test`
+
+* To run integration test
+`mvn failsafe:integration-test`
+
+When executing `mvn verify` both unit and integration tests will be executed after the packaging phase of the jar
+When executing `mvn clean install` both unit and integration tests will be executed after the packaging phase of the jar
+
+## API Reference and Docs
 The Swagger UI page is available at http://server:port/context-path/swagger-ui.html
 
 [DEV QUICKLINK](http://money-tree.tech:8080/api/v1/swagger-ui.html)
