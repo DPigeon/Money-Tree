@@ -3,6 +3,7 @@ package com.capstone.moneytree.service.impl;
 
 import javax.security.auth.login.CredentialNotFoundException;
 
+import com.capstone.moneytree.ActiveProfile;
 import com.capstone.moneytree.model.AlpacaOAuthResponse;
 import com.google.gson.Gson;
 
@@ -45,16 +46,13 @@ public class DefaultUserService implements UserService {
    private static final String DEFAULT_PROFILE_NAME = "DEFAULT-profile.jpg";
    private static final String AUTHORIZATION_CODE = "authorization_code";
 
-   private static final String LOCAL_APP_URL = "http://localhost:4200/";
-   private static final String DEV_APP_URL = "https://dev.money-tree.tech/";
-   private static final String PROD_APP_URL = "https://money-tree.tech";
-
    @Value("${alpaca.client.id}")
    private String clientId;
    @Value("${alpaca.client.secret}")
    private String clientSecret;
-   @Value("${spring.profiles.active}")
-   private String activeProfile;
+
+   @Autowired
+   private ActiveProfile activeProfile;
 
    private final UserDao userDao;
    private final ValidatorFactory validatorFactory;
@@ -203,7 +201,7 @@ public class DefaultUserService implements UserService {
          throw new EntityNotFoundException(String.format("User with id %s not found", id));
       }
       try {
-         String redirectUri = getSpringProfile(activeProfile);
+         String redirectUri = activeProfile.getApplicationUrl();
 
          HttpClient client = HttpClient.newHttpClient();
          HttpRequest request = buildRequest(code, redirectUri);
@@ -296,17 +294,6 @@ public class DefaultUserService implements UserService {
 
    public String getBucketName() {
       return bucketName;
-   }
-
-   private String getSpringProfile(String profile) {
-      switch (profile) {
-         case "local":
-            return LOCAL_APP_URL;
-         case "dev":
-            return DEV_APP_URL;
-         default:
-            return PROD_APP_URL;
-      }
    }
 
    private HttpRequest buildRequest(String code, String redirectUri) {

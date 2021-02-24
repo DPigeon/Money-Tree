@@ -14,7 +14,7 @@ import com.capstone.moneytree.model.node.User
 
 import spock.lang.Specification
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("dev")
 class UserControllerIT extends Specification {
 

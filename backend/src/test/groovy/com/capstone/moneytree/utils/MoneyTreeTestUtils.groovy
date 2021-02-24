@@ -65,27 +65,27 @@ class MoneyTreeTestUtils {
    /**
     * Utility method to build an order
     */
-   static buildMarketOrder() {
+   static buildMarketOrder(String symbol = "AAPL", String qty = "3", String side = "BUY", String clientOrderId = "clientId", String type = "market") {
       def order = new Order()
-      order.setSymbol("AAPL")
-      order.setQty("3")
-      order.setSide("BUY")
-      order.setClientOrderId("clientId")
+      order.setSymbol(symbol)
+      order.setQty(qty)
+      order.setSide(side)
+      order.setClientOrderId(clientOrderId)
       order.setTimeInForce(OrderTimeInForce.DAY as String)
       order.setCreatedAt(ZonedDateTime.now())
       order.setSubmittedAt(ZonedDateTime.now())
-      order.setType("Market")
+      order.setType(type)
       return order
    }
 
    /**
     * Utility method to build an asset
     */
-   static buildAsset() {
+   static buildAsset(String symbol = "AAPL", String exchange = "NASDAQ", String status = "active") {
       def asset = new Asset()
-      asset.setSymbol("AAPL")
-      asset.setExchange("NASDAQ")
-      asset.setStatus("active")
+      asset.setSymbol(symbol)
+      asset.setExchange(exchange)
+      asset.setStatus(status)
       return asset
    }
 
