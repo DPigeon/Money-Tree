@@ -9,7 +9,7 @@ class ActiveProfileTest extends Specification {
 
    def "Given  #activeProfile profile, we should receive local url"() {
       given:
-      activeProfile.activeProfile = profile
+      activeProfile.currentProfile = profile
 
       when:
       def url = activeProfile.getApplicationUrl()
