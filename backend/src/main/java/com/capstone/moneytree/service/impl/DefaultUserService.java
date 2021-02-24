@@ -33,6 +33,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -312,5 +314,10 @@ public class DefaultUserService implements UserService {
       return HttpRequest.newBuilder().uri(URI.create("https://api.alpaca.markets/oauth/token"))
               .headers("Content-Type", "application/x-www-form-urlencoded")
               .POST(HttpRequest.BodyPublishers.ofString(form)).build();
+   }
+
+   @Override
+   public List<Map<String, String>> getSearchUsers() {
+      return userDao.getSearchUsers();
    }
 }

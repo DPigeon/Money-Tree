@@ -1,5 +1,6 @@
-package com.capstone.moneytree.testconfig;
+package com.capstone.moneytree.config;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
@@ -22,12 +23,12 @@ public class DefaultStompFrameHandlerConfig implements StompFrameHandler {
     }
 
     @Override
-    public Type getPayloadType(StompHeaders stompHeaders) {
+    public @NotNull Type getPayloadType(@NotNull StompHeaders stompHeaders) {
         return byte[].class;
     }
 
     @Override
-    public void handleFrame(StompHeaders stompHeaders, Object object) {
+    public void handleFrame(@NotNull StompHeaders stompHeaders, Object object) {
         boolean offer = blockingQueue.offer(new String((byte[]) object));
         LOGGER.info("Queue offer: {}", offer);
     }

@@ -24,6 +24,7 @@ class MoneyTreeTestUtils {
               .firstName(firstName)
               .lastName(lastName)
               .alpacaApiKey(alpacaApiKey)
+              .avatarURL("https://moneytree-profile-pictures.s3.amazonaws.com/DEFAULT-profile.jpg")
               .build()
       return user
    }

@@ -7,6 +7,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.validator.UserValidator;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * User service for all user based interactions and business logic
  */
@@ -47,5 +50,7 @@ public interface UserService {
    Long unfollowUser(Long userId, Long userToUnfollowId);
 
    void deleteUserByEmail(String email);
+
+   List<Map<String, String>> getSearchUsers();
 
 }
