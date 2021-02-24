@@ -11,14 +11,14 @@ public class ActiveProfile {
    private static final String PROD_APP_URL = "https://money-tree.tech/";
 
    @Value("${spring.profiles.active}")
-   private String activeProfile;
+   private String currentProfile;
 
    public String getSpringProfile() {
-      return activeProfile.toLowerCase();
+      return currentProfile.toLowerCase();
    }
 
    public String getApplicationUrl() {
-      switch (activeProfile) {
+      switch (currentProfile) {
          case "local":
             return LOCAL_APP_URL;
          case "dev":
