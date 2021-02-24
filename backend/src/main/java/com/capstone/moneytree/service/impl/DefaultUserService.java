@@ -253,7 +253,7 @@ public class DefaultUserService implements UserService {
     
     @Override
     public Long followUser(Long userId, Long userToFollowId) {
-        if (userId == userToFollowId) {
+        if (userId.longValue() == userToFollowId.longValue()) { // change the way comparison is done to fix the codesmell in sonarcloud
             throw new FollowsRelationshipException(USER_CANT_BE_FOLLOWED_BY_ITSELF);
         }
         User user = userDao.findUserById(userId);
@@ -263,7 +263,7 @@ public class DefaultUserService implements UserService {
         }
         List<Follows> alreadyFollowed = followsDao.findFollowsByFollowerIdAndUserToFollowId(userId, userToFollowId);
         // check to see if user already following the other user
-        if (alreadyFollowed.size() != 0) {
+        if (!alreadyFollowed.isEmpty()) {
             throw new FollowsRelationshipException(USER_ALREADY_FOLLOWED);
         }
         Date currentDate = new Date();
@@ -281,7 +281,7 @@ public class DefaultUserService implements UserService {
             throw new EntityNotFoundException(USER_NOT_FOUND);
         }
         List<Follows> allFollowRels = followsDao.findFollowsByFollowerIdAndUserToFollowId(userId, userToUnfollowId);
-        if (allFollowRels.size() == 0) {
+        if (allFollowRels.isEmpty()) {
             throw new FollowsRelationshipException(NOT_FOLLOWED_BY_THIS_USER);
         }
         for (Follows rel : allFollowRels) {
@@ -298,9 +298,9 @@ public class DefaultUserService implements UserService {
         }
     
         List<Follows> allFollowRels = followsDao.findFollowsByFollowerId(userId);
-        List<SanitizedUser> thisUserFollowings = new ArrayList<SanitizedUser>();
+        List<SanitizedUser> thisUserFollowings = new ArrayList<>();
     
-        if (allFollowRels.size() == 0) {
+        if (allFollowRels.isEmpty()) {
             return thisUserFollowings;
         }
     
@@ -321,9 +321,9 @@ public class DefaultUserService implements UserService {
         }
     
         List<Follows> allFollowRels = followsDao.findFollowsByUserToFollowId(userId);
-        List<SanitizedUser> thisUserFollowers = new ArrayList<SanitizedUser>();
+        List<SanitizedUser> thisUserFollowers = new ArrayList<>();
     
-        if (allFollowRels.size() == 0) {
+        if (allFollowRels.isEmpty()){
             return thisUserFollowers;
         }
     

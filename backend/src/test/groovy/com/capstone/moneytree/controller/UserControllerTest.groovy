@@ -43,6 +43,7 @@ class UserControllerTest extends Specification {
     private static String BUCKET_NAME = System.getenv("AWS_PROFILE_PICTURES_BUCKET")
 
     private static UserDao userDao
+    private static FollowsDao followsDao
     private static UserValidator userValidator
     private static ValidatorFactory validatorFactory
     private static UserService defaultUserService
@@ -451,7 +452,8 @@ class UserControllerTest extends Specification {
         String firstName1 = "Billy"
         String lastName1 = "Bob"
         String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
-        User user1 = createUser(userId1, email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        user1.setId(userId1)
 
         Long userId2 = 2
         String email2 = "money@test.com"
@@ -460,7 +462,8 @@ class UserControllerTest extends Specification {
         String firstName2 = "Jake"
         String lastName2 = "Moreau"
         String alpacaApiKey2 = "PYFDRH6ET5etEEGTE7"
-        User user2 = createUser(userId2, email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+        User user2 = createUser(email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+        user2.setId(userId2)
 
         and: "mock the way we retrieve the Follows relationships"
         userDao.findUserById(userId1) >> user1
@@ -488,7 +491,8 @@ class UserControllerTest extends Specification {
         String firstName1 = "Billy"
         String lastName1 = "Bob"
         String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
-        User user1 = createUser(userId1, email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        user1.setId(userId1)
         User user2 = user1
 
 
@@ -517,7 +521,8 @@ class UserControllerTest extends Specification {
         String firstName1 = "Billy"
         String lastName1 = "Bob"
         String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
-        User user1 = createUser(userId1, email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        user1.setId(userId1)
 
         Long userId2 = 2
         String email2 = "money@test.com"
@@ -526,7 +531,8 @@ class UserControllerTest extends Specification {
         String firstName2 = "Jake"
         String lastName2 = "Moreau"
         String alpacaApiKey2 = "PYFDRH6ET5etEEGTE7"
-        User user2 = createUser(userId2, email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+        User user2 = createUser(email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+        user2.setId(userId2)
 
         and: "mock the way we retrieve both users from the database"
         userDao.findUserById(userId1) >> user1
@@ -567,7 +573,8 @@ class UserControllerTest extends Specification {
         String firstName1 = "Billy"
         String lastName1 = "Bob"
         String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
-        User user1 = createUser(userId1, email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        user1.setId(userId1)
 
         Long userId2 = 2
         String email2 = "money@test.com"
@@ -576,7 +583,8 @@ class UserControllerTest extends Specification {
         String firstName2 = "Jake"
         String lastName2 = "Moreau"
         String alpacaApiKey2 = "PYFDRH6ET5etEEGTE7"
-        User user2 = createUser(userId2, email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+        User user2 = createUser(email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+        user2.setId(userId2)
 
         and: "mock the way we retrieve both users from the database assuming id 1 follows id 2"
         userDao.findUserById(userId1) >> user1
@@ -605,7 +613,8 @@ class UserControllerTest extends Specification {
         String firstName1 = "Billy"
         String lastName1 = "Bob"
         String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
-        User user1 = createUser(userId1, email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        user1.setId(userId1)
 
         Long userId2 = 2
         String email2 = "money@test.com"
@@ -614,7 +623,8 @@ class UserControllerTest extends Specification {
         String firstName2 = "Jake"
         String lastName2 = "Moreau"
         String alpacaApiKey2 = "PYFDRH6ET5etEEGTE7"
-        User user2 = createUser(userId2, email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+        User user2 = createUser(email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+        user2.setId(userId2)
 
         and: "mock the way we retrieve both users from the database assuming id 1 follows id 2"
         userDao.findUserById(userId1) >> user1
@@ -656,7 +666,8 @@ class UserControllerTest extends Specification {
         String firstName1 = "Billy"
         String lastName1 = "Bob"
         String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
-        User user1 = createUser(userId1, email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        user1.setId(userId1)
 
         Long userId2 = 2
         String email2 = "money@test.com"
@@ -665,7 +676,8 @@ class UserControllerTest extends Specification {
         String firstName2 = "Jake"
         String lastName2 = "Moreau"
         String alpacaApiKey2 = "PYFDRH6ET5etEEGTE7"
-        User user2 = createUser(userId2, email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+        User user2 = createUser(email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+        user2.setId(userId2)
 
         Long userId3 = 3
         String email3 = "money3@test.com"
@@ -674,7 +686,8 @@ class UserControllerTest extends Specification {
         String firstName3 = "Benny"
         String lastName3 = "Hill"
         String alpacaApiKey3 = "QGAAH6ET5etEEGTE7"
-        User user3 = createUser(userId3, email3, username3, password3, firstName3, lastName3, alpacaApiKey3)
+        User user3 = createUser(email3, username3, password3, firstName3, lastName3, alpacaApiKey3)
+        user3.setId(userId3)
 
         and: "mock the way we retrieve the Follows relationships"
         userDao.findUserById(userId1) >> user1
@@ -704,7 +717,8 @@ class UserControllerTest extends Specification {
         String firstName1 = "Billy"
         String lastName1 = "Bob"
         String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
-        User user1 = createUser(userId1, email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        user1.setId(userId1)
 
         and: "mock the way we retrieve the Follows relationships"
         userDao.findUserById(userId1) >> user1
@@ -742,7 +756,8 @@ class UserControllerTest extends Specification {
         String firstName1 = "Billy"
         String lastName1 = "Bob"
         String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
-        User user1 = createUser(userId1, email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        user1.setId(userId1)
 
         Long userId2 = 2
         String email2 = "money@test.com"
@@ -751,7 +766,8 @@ class UserControllerTest extends Specification {
         String firstName2 = "Jake"
         String lastName2 = "Moreau"
         String alpacaApiKey2 = "PYFDRH6ET5etEEGTE7"
-        User user2 = createUser(userId2, email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+        User user2 = createUser(email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+        user2.setId(userId2)
 
         Long userId3 = 3
         String email3 = "money3@test.com"
@@ -760,7 +776,8 @@ class UserControllerTest extends Specification {
         String firstName3 = "Benny"
         String lastName3 = "Hill"
         String alpacaApiKey3 = "QGAAH6ET5etEEGTE7"
-        User user3 = createUser(userId3, email3, username3, password3, firstName3, lastName3, alpacaApiKey3)
+        User user3 = createUser(email3, username3, password3, firstName3, lastName3, alpacaApiKey3)
+        user3.setId(userId3)
 
         and: "mock the way we retrieve the Follows relationships"
         userDao.findUserById(userId1) >> user1
@@ -790,7 +807,8 @@ class UserControllerTest extends Specification {
         String firstName1 = "Billy"
         String lastName1 = "Bob"
         String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
-        User user1 = createUser(userId1, email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        user1.setId(userId1)
 
         and: "mock the way we retrieve the Follows relationships"
         userDao.findUserById(userId1) >> user1
@@ -801,7 +819,7 @@ class UserControllerTest extends Specification {
 
         when: "getFollowers/getFollowings of the users"
         def response = userController.getFollowers(user1.getId())
-   
+
         then: "should return empty list for followers and followings list of user 1"
         assert response.size() == 0
     }

@@ -137,23 +137,62 @@ class UserControllerIT extends Specification {
             userDao.deleteAll()
     }
 
+    def "a user can follow another user in the database"() {
+        setup: 'Persist an initial user'
+
+        String newEmail1 = 'test@test.com'
+        String username1 = 'daveUsername'
+        String password1 = 'encrypted'
+        String firstName1 = 'DaveFirstname'
+        String lastName1 = 'DaveLastName'
+        User user1 = createUser(newEmail1, username1, password1, firstName1, lastName1, '459fr2w-')
+        userDao.save(user1)
+
+        and: 'persist the other user we want to follow'
+
+        String newEmail2 = 'test@test2123.com'
+        String username2 = 'razine123'
+        String password2 = 'encrypted'
+        String firstName2 = 'razineFristName'
+        String lastName2 = 'BENSARI-razine'
+        User user2 = createUser(newEmail2, username2, password2, firstName2, lastName2, '258459fr2w-')
+        userDao.save(user2)
+
+        when: 'following the user'
+        def response = userController.followUser(user1.getId(), user2.getId())
+
+        then: 'user 1 should follow user 2'
+        assert response.statusCode == HttpStatus.OK
+        assert response.body == user2.getId()
+
+        cleanup: 'delete the created users'
+        userDao.delete(user1)
+        userDao.delete(user2)
+    }
+
     def "a user can unfollow another user in the database"() {
         setup: 'Persist an initial user'
-        userDao.save(createUser(12345678, 'test@test.com', 'dave', 'pass', 'Dave', 'Bas', '74hgf8734gr-'))
-        def user1 = userDao.findUserById(12345678)
+
+        String newEmail1 = 'test@test.com'
+        String username1 = 'daveUsername'
+        String password1 = 'encrypted'
+        String firstName1 = 'DaveFirstname'
+        String lastName1 = 'DaveLastName'
+        User user1 = createUser(newEmail1, username1, password1, firstName1, lastName1, '459fr2w-')
+        userDao.save(user1)
 
         and: 'persist the other user we want to follow & follow it'
-        Long id = 12345679
-        String newEmail = 'test@test2123.com'
-        String username = 'razine123'
-        String password = 'encrypted'
-        String firstName = 'razineFristName'
-        String lastName = 'BENSARI-razine'
-        User user2 = createUser(id, newEmail, username, password, firstName, lastName, '258459fr2w-')
+
+        String newEmail2 = 'test@test2123.com'
+        String username2 = 'razine123'
+        String password2 = 'encrypted'
+        String firstName2 = 'razineFristName'
+        String lastName2 = 'BENSARI-razine'
+        User user2 = createUser(newEmail2, username2, password2, firstName2, lastName2, '258459fr2w-')
         userDao.save(user2)
         userController.followUser(user1.getId(), user2.getId())
 
-        when: 'unfollowing the user'
+        when: 'user1 unfollowing user2'
         def response = userController.unfollowUser(user1.getId(), user2.getId())
 
         then: 'user 1 should unfollow user 2'
@@ -167,21 +206,27 @@ class UserControllerIT extends Specification {
 
     def "a list of followings for user should be correctly returned"() {
         setup: 'Persist an initial user'
-        userDao.save(createUser(12345678, 'test@test.com', 'dave', 'pass', 'Dave', 'Bas', '74hgf8734gr-'))
-        def user1 = userDao.findUserById(12345678)
+
+        String newEmail1 = 'test@test.com'
+        String username1 = 'daveUsername'
+        String password1 = 'encrypted'
+        String firstName1 = 'DaveFirstname'
+        String lastName1 = 'DaveLastName'
+        User user1 = createUser(newEmail1, username1, password1, firstName1, lastName1, '459fr2w-')
+        userDao.save(user1)
 
         and: 'persist the other user we want to follow & follow it'
-        Long id = 12345679
-        String newEmail = 'test@test2123.com'
-        String username = 'razine123'
-        String password = 'encrypted'
-        String firstName = 'razineFristName'
-        String lastName = 'BENSARI-razine'
-        User user2 = createUser(id, newEmail, username, password, firstName, lastName, '258459fr2w-')
+
+        String newEmail2 = 'test@test2123.com'
+        String username2 = 'razine123'
+        String password2 = 'encrypted'
+        String firstName2 = 'razineFristName'
+        String lastName2 = 'BENSARI-razine'
+        User user2 = createUser(newEmail2, username2, password2, firstName2, lastName2, '258459fr2w-')
         userDao.save(user2)
         userController.followUser(user1.getId(), user2.getId())
 
-        when: 'getting the followings of user1'
+        when: 'getFollowings of user1'
         def response = userController.getFollowings(user1.getId())
 
         then: 'should have user2 in the response body'
@@ -194,24 +239,30 @@ class UserControllerIT extends Specification {
 
     def "a list of followers for user should be correctly returned"() {
         setup: 'Persist an initial user'
-        userDao.save(createUser(12345678, 'test@test.com', 'dave', 'pass', 'Dave', 'Bas', '74hgf8734gr-'))
-        def user1 = userDao.findUserById(12345678)
+
+        String newEmail1 = 'test@test.com'
+        String username1 = 'daveUsername'
+        String password1 = 'encrypted'
+        String firstName1 = 'DaveFirstname'
+        String lastName1 = 'DaveLastName'
+        User user1 = createUser(newEmail1, username1, password1, firstName1, lastName1, '459fr2w-')
+        userDao.save(user1)
 
         and: 'persist the other user we want to follow & follow it'
-        Long id = 12345679
-        String newEmail = 'test@test2123.com'
-        String username = 'razine123'
-        String password = 'encrypted'
-        String firstName = 'razineFristName'
-        String lastName = 'BENSARI-razine'
-        User user2 = createUser(id, newEmail, username, password, firstName, lastName, '258459fr2w-')
+
+        String newEmail2 = 'test@test2123.com'
+        String username2 = 'razine123'
+        String password2 = 'encrypted'
+        String firstName2 = 'razineFristName'
+        String lastName2 = 'BENSARI-razine'
+        User user2 = createUser(newEmail2, username2, password2, firstName2, lastName2, '258459fr2w-')
         userDao.save(user2)
         userController.followUser(user1.getId(), user2.getId())
 
-        when: 'getting the followings of user1'
+        when: 'getFollowers of user2'
         def response = userController.getFollowers(user2.getId())
 
-        then: 'should have user2 in the response body'
+        then: 'should have user1 in the response body'
         assert response[0].getFirstName() == user1.getFirstName()
 
         cleanup: 'delete the created users'
