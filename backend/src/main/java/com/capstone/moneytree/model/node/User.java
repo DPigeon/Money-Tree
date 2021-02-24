@@ -2,10 +2,8 @@ package com.capstone.moneytree.model.node;
 
 import java.util.List;
 
-
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
 
 import com.capstone.moneytree.model.Entity;
 
@@ -32,7 +30,7 @@ public class User extends Entity {
     String avatarURL;
 
     String coverPhotoURL;
-       
+
     String email;
 
     Double score;
@@ -74,5 +72,14 @@ public class User extends Entity {
 
     public void owns(Stock stock) {
         this.getStocks().add(stock);
+    }
+
+    public static User sanitizeUser(User user) {
+        User sanitizedUser = User.builder().firstName(user.getFirstName()).lastName(user.getLastName())
+                .username(user.getUsername()).avatarURL(user.getAvatarURL()).score(user.getScore()).rank(user.getRank())
+                .coverPhotoURL(user.getCoverPhotoURL()).biography(user.getBiography()).balance(user.getBalance())
+                .build();
+        sanitizedUser.setId(user.getId());
+        return sanitizedUser;
     }
 }

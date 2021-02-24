@@ -44,9 +44,9 @@ public interface UserService {
 
    User editUserProfilePicture(User user, MultipartFile imageFile, String selection);
 
-   String followUser(Long userId, Long userToFollowId);
+   Long followUser(Long userId, Long userToFollowId);
    
-   String unfollowUser(Long userId, Long userToUnfollowId);
+   Long unfollowUser(Long userId, Long userToUnfollowId);
 
    List<SanitizedUser> getFollowings(Long userId);
    

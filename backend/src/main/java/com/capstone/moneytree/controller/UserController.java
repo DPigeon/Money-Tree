@@ -72,7 +72,7 @@ public class UserController {
     * A method that updates a user with a new Alpaca key. This should be done only
     * once at beginning
     *
-    * @param id  The user ID sent from the frontend
+    * @param id   The user ID sent from the frontend
     * @param code The Alpaca API code sent from the frontend
     * @return The new updated user from the database
     */
@@ -118,30 +118,41 @@ public class UserController {
 
    /**
     * Following a user endpoint
-    * @param userId The ID of the user that is following a user
+    * 
+    * @param userId         The ID of the user that is following a user
     * @param userToFollowId The ID of the user to follow
     * @return A response object
     */
 
    @PostMapping("/{userId}/follow/{userToFollowId}")
-   ResponseEntity<String> followUser(@PathVariable Long userId, @PathVariable Long userToFollowId) {
-      String res = this.userService.followUser(userId, userToFollowId);
-
+   ResponseEntity<Long> followUser(@PathVariable Long userId, @PathVariable Long userToFollowId) {
+      Long res = this.userService.followUser(userId, userToFollowId);
       return ResponseEntity.ok(res);
    }
 
    /**
     * Unfollowing a user endpoint
-    * @param userId The ID of the user that is following a user
+    * 
+    * @param userId           The ID of the user that is following a user
     * @param userToUnfollowId The ID of the user to unfollow
     * @return A response object
     */
 
    @DeleteMapping("/{userId}/unfollow/{userToUnfollowId}")
-   ResponseEntity<String> unfollowUser(@PathVariable Long userId, @PathVariable Long userToUnfollowId) {
-      String res = this.userService.unfollowUser(userId, userToUnfollowId);
+   ResponseEntity<Long> unfollowUser(@PathVariable Long userId, @PathVariable Long userToUnfollowId) {
+      Long res = this.userService.unfollowUser(userId, userToUnfollowId);
 
       return ResponseEntity.ok(res);
+   }
+
+   @GetMapping("/followings/{id}")
+   List<SanitizedUser> getFollowings(@PathVariable Long id) {
+      return userService.getFollowings(id);
+   }
+
+   @GetMapping("/followers/{id}")
+   List<SanitizedUser> getFollowers(@PathVariable Long id) {
+      return userService.getFollowers(id);
    }
 
    @DeleteMapping("/delete-by-email/{email}")
@@ -152,16 +163,6 @@ public class UserController {
       } catch (Exception e) {
          throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage());
       }
-   }
-   
-   @GetMapping("/followings/{id}")
-   List<SanitizedUser> getFollowings(@PathVariable Long id) {
-      return userService.getFollowings(id);
-   }
-
-   @GetMapping("/followers/{id}")
-   List<SanitizedUser> getFollowers(@PathVariable Long id) {
-      return userService.getFollowers(id);
    }
 
 }

@@ -1,5 +1,8 @@
 package com.capstone.moneytree.controller
 
+import com.capstone.moneytree.model.SanitizedUser
+import com.capstone.moneytree.model.relationship.Follows
+import com.capstone.moneytree.service.api.UserService
 import org.springframework.http.HttpStatus
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
@@ -14,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
 import com.capstone.moneytree.dao.UserDao
+import com.capstone.moneytree.dao.FollowsDao
 import com.capstone.moneytree.exception.BadRequestException
 import com.capstone.moneytree.model.node.User
 
@@ -22,135 +26,194 @@ import spock.lang.Specification
 
 @Ignore
 @SpringBootTest
-@ActiveProfiles("dev")
+@ActiveProfiles('dev')
 class UserControllerIT extends Specification {
 
-   @Autowired
-   private UserController userController
+    @Autowired
+    private UserController userController
 
-   @Autowired
-   UserDao userDao
+    @Autowired
+    private UserService userService
 
-   @Rule
-   public Neo4jRule neoServer = new Neo4jRule()
+    @Autowired
+    UserDao userDao
 
-   private Session session
+    @Autowired
+    FollowsDao fallowsDao
 
-   def setup() {
-      Configuration configuration = new Configuration.Builder()
-              .uri(neoServer.boltURI().toString())
-              .build()
 
-      SessionFactory sessionFactory = new SessionFactory(configuration, User.class.getPackage().getName());
-      session = sessionFactory.openSession();
-      session.purgeDatabase()
-   }
+    @Rule
+    public Neo4jRule neoServer = new Neo4jRule()
 
-   def "a user is correctly updated; request body is valid"() {
-      setup: "Persist an initial user"
-      userDao.save(createUser("test@test9009.com", "raz123412", "pass", "razine1234", "bensari2341", null))
-      def persistedUser = userDao.findUserByEmail("test@test9009.com")
+    private Session session
 
-      and: " a new user from request body"
-      String newEmail = "test@test2123.com"
-      String username = "razine123"
-      String password = "encrypted"
-      String firstName = "razineFristName"
-      String lastName = "BENSARI-razine"
-      User newUser = createUser(persistedUser.getId(), newEmail, username, password, firstName, lastName, null)
+    def setup() {
+        Configuration configuration = new Configuration.Builder()
+                .uri(neoServer.boltURI().toString())
+                .build()
 
-      when: " we update the user"
-      def updatedUser = userController.editUserProfile(persistedUser.getId(), newUser)
+        SessionFactory sessionFactory = new SessionFactory(configuration, User.class.getPackage().getName())
+        session = sessionFactory.openSession()
+        session.purgeDatabase()
+    }
 
-      then: " the user should have the updated fields"
-      updatedUser.getBody().getEmail() == newEmail
-      updatedUser.getBody().getFirstName() == firstName
-      updatedUser.getBody().getLastName() == lastName
-      updatedUser.getBody().getUsername() == username
+    def "a user is correctly updated; request body is valid"() {
+        setup: 'Persist an initial user'
+        userDao.save(createUser('test@test9009.com', 'raz123412', 'pass', 'razine1234', 'bensari2341', null))
+        def persistedUser = userDao.findUserByEmail('test@test9009.com')
 
-      cleanup: "delete the created user"
-      userDao.delete(persistedUser)
-   }
+        and: ' a new user from request body'
+        String newEmail = 'test@test2123.com'
+        String username = 'razine123'
+        String password = 'encrypted'
+        String firstName = 'razineFristName'
+        String lastName = 'BENSARI-razine'
+        User newUser = createUser(persistedUser.getId(), newEmail, username, password, firstName, lastName, null)
 
-   def "the passed user has a different id than the path"() {
-      setup: "Persist an initial user"
-      userDao.save(createUser("test@test9092345209.com", "raz23452", "pass2345", "razine2345234", "bensari2345", null))
-      def persistedUser = userDao.findUserByEmail("test@test9092345209.com")
+        when: ' we update the user'
+        def updatedUser = userController.editUserProfile(persistedUser.getId(), newUser)
 
-      and: " a new user from request body"
-      String newEmail = "test@test2.com"
-      String username = "Test"
-      String password = "encrypted"
-      String firstName = "John"
-      String lastName = "Doe"
-      Long differentId = 123
-      User newUser = createUser(differentId, newEmail, username, password, firstName, lastName, null)
+        then: ' the user should have the updated fields'
+        updatedUser.getBody().getEmail() == newEmail
+        updatedUser.getBody().getFirstName() == firstName
+        updatedUser.getBody().getLastName() == lastName
+        updatedUser.getBody().getUsername() == username
 
-      when: " we update the user"
-      userController.editUserProfile(persistedUser.getId(), newUser)
+        cleanup: 'delete the created user'
+        userDao.delete(persistedUser)
+    }
 
-      then: " the user should have the updated fields"
-      thrown(BadRequestException)
+    def "the passed user has a different id than the path"() {
+        setup: 'Persist an initial user'
+        userDao.save(createUser('test@test9092345209.com', 'raz23452', 'pass2345', 'razine2345234', 'bensari2345', null))
+        def persistedUser = userDao.findUserByEmail('test@test9092345209.com')
 
-      cleanup: "delete the created user"
-      userDao.delete(persistedUser)
-   }
+        and: ' a new user from request body'
+        String newEmail = 'test@test2.com'
+        String username = 'Test'
+        String password = 'encrypted'
+        String firstName = 'John'
+        String lastName = 'Doe'
+        Long differentId = 123
+        User newUser = createUser(differentId, newEmail, username, password, firstName, lastName, null)
 
-   def "a user can follow another user in the database"() {
-      setup: "Persist an initial user"
-      userDao.save(createUser(12345678,"test@test.com", "dave", "pass", "Dave", "Bas", "74hgf8734gr-"))
-      def user1 = userDao.findUserById(12345678)
+        when: ' we update the user'
+        userController.editUserProfile(persistedUser.getId(), newUser)
 
-      and: "the other user we want to follow"
-      Long id = 12345679
-      String newEmail = "test@test2123.com"
-      String username = "razine123"
-      String password = "encrypted"
-      String firstName = "razineFristName"
-      String lastName = "BENSARI-razine"
-      User user2 = createUser(id, newEmail, username, password, firstName, lastName, "258459fr2w-")
-      userDao.save(user2)
+        then: ' the user should have the updated fields'
+        thrown(BadRequestException)
 
-      when: "following another user"
-      def response = userController.followUser(user1.getId(), user2.getId())
+        cleanup: 'delete the created user'
+        userDao.delete(persistedUser)
+    }
 
-      then: "user 1 should be following user 2"
-      assert user1.getFollowers().contains(user2)
-      assert user1.getFollowers().size() == 1
-      assert response.statusCode == HttpStatus.OK
-      assert response.body == user2.getId()
+    def "a user can follow another user in the database"() {
+        setup: 'Persist an initial user'
+        userDao.save(createUser(12345678, 'test@test.com', 'dave', 'pass', 'Dave', 'Bas', '74hgf8734gr-'))
+        def user1 = userDao.findUserById(12345678)
 
-      cleanup: "delete the created users"
-      userDao.delete(user1)
-      userDao.delete(user2)
-   }
+        and: 'the other user we want to follow'
+        Long id = 12345679
+        String newEmail = 'test@test2123.com'
+        String username = 'razine123'
+        String password = 'encrypted'
+        String firstName = 'razineFristName'
+        String lastName = 'BENSARI-razine'
+        User user2 = createUser(id, newEmail, username, password, firstName, lastName, '258459fr2w-')
+        userDao.save(user2)
 
-   def "a user can unfollow another user in the database"() {
-      setup: "Persist an initial user"
-      userDao.save(createUser(12345678,"test@test.com", "dave", "pass", "Dave", "Bas", "74hgf8734gr-"))
-      def user1 = userDao.findUserById(12345678)
+        when: 'following another user'
+        def response = userController.followUser(user1.getId(), user2.getId())
 
-      and: "persist the other user we want to follow & follow it"
-      Long id = 12345679
-      String newEmail = "test@test2123.com"
-      String username = "razine123"
-      String password = "encrypted"
-      String firstName = "razineFristName"
-      String lastName = "BENSARI-razine"
-      User user2 = createUser(id, newEmail, username, password, firstName, lastName, "258459fr2w-")
-      userDao.save(user2)
-      userController.followUser(user1.getId(), user2.getId())
+        then: 'user 1 should be following user 2'
 
-      when: "unfollowing the user"
-      def response = userController.unfollowUser(user1.getId(), user2.getId())
+        assert response.statusCode == HttpStatus.OK
+        assert response.body == user2.getId()
 
-      then: "user 1 should unfollow user 2"
-      assert user1.getFollowers().isEmpty()
-      assert response.statusCode == HttpStatus.OK
-      assert response.body == user2.getId()
+        cleanup: 'delete the created users'
+        userDao.delete(user1)
+        userDao.delete(user2)
+    }
 
-      cleanup: "delete the created users"
-      userDao.delete(user1)
-      userDao.delete(user2)
-   }
+    def "a user can unfollow another user in the database"() {
+        setup: 'Persist an initial user'
+        userDao.save(createUser(12345678, 'test@test.com', 'dave', 'pass', 'Dave', 'Bas', '74hgf8734gr-'))
+        def user1 = userDao.findUserById(12345678)
+
+        and: 'persist the other user we want to follow & follow it'
+        Long id = 12345679
+        String newEmail = 'test@test2123.com'
+        String username = 'razine123'
+        String password = 'encrypted'
+        String firstName = 'razineFristName'
+        String lastName = 'BENSARI-razine'
+        User user2 = createUser(id, newEmail, username, password, firstName, lastName, '258459fr2w-')
+        userDao.save(user2)
+        userController.followUser(user1.getId(), user2.getId())
+
+        when: 'unfollowing the user'
+        def response = userController.unfollowUser(user1.getId(), user2.getId())
+
+        then: 'user 1 should unfollow user 2'
+        assert response.statusCode == HttpStatus.OK
+        assert response.body == user2.getId()
+
+        cleanup: 'delete the created users'
+        userDao.delete(user1)
+        userDao.delete(user2)
+    }
+
+    def "a list of followings for user should be correctly returned"() {
+        setup: 'Persist an initial user'
+        userDao.save(createUser(12345678, 'test@test.com', 'dave', 'pass', 'Dave', 'Bas', '74hgf8734gr-'))
+        def user1 = userDao.findUserById(12345678)
+
+        and: 'persist the other user we want to follow & follow it'
+        Long id = 12345679
+        String newEmail = 'test@test2123.com'
+        String username = 'razine123'
+        String password = 'encrypted'
+        String firstName = 'razineFristName'
+        String lastName = 'BENSARI-razine'
+        User user2 = createUser(id, newEmail, username, password, firstName, lastName, '258459fr2w-')
+        userDao.save(user2)
+        userController.followUser(user1.getId(), user2.getId())
+
+        when: 'getting the followings of user1'
+        def response = userController.getFollowings(user1.getId())
+
+        then: 'should have user2 in the response body'
+        assert response[0].getFirstName() == user2.getFirstName()
+
+        cleanup: 'delete the created users'
+        userDao.delete(user1)
+        userDao.delete(user2)
+    }
+
+    def "a list of followers for user should be correctly returned"() {
+        setup: 'Persist an initial user'
+        userDao.save(createUser(12345678, 'test@test.com', 'dave', 'pass', 'Dave', 'Bas', '74hgf8734gr-'))
+        def user1 = userDao.findUserById(12345678)
+
+        and: 'persist the other user we want to follow & follow it'
+        Long id = 12345679
+        String newEmail = 'test@test2123.com'
+        String username = 'razine123'
+        String password = 'encrypted'
+        String firstName = 'razineFristName'
+        String lastName = 'BENSARI-razine'
+        User user2 = createUser(id, newEmail, username, password, firstName, lastName, '258459fr2w-')
+        userDao.save(user2)
+        userController.followUser(user1.getId(), user2.getId())
+
+        when: 'getting the followings of user1'
+        def response = userController.getFollowers(user2.getId())
+
+        then: 'should have user2 in the response body'
+        assert response[0].getFirstName() == user1.getFirstName()
+
+        cleanup: 'delete the created users'
+        userDao.delete(user1)
+        userDao.delete(user2)
+    }
 }
