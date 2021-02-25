@@ -37,49 +37,45 @@ const mockRouter = {
   navigate: jest.fn(),
 } as any;
 
-const followings = [
-  { firstName: 'Marwan', lastName: 'Ayadi' },
-  { firstName: 'Razine', lastName: 'Bensari' },
-  { firstName: 'Arthur', lastName: 'Tourneyrie' },
-  { firstName: 'Alessandro', lastName: 'Kreslin' },
-  { firstName: 'David ', lastName: 'Pigeon' },
-  { firstName: 'Abdulrahim', lastName: 'Mansour' },
-  { firstName: 'Walter', lastName: 'Fleury' },
-  { firstName: 'Hossein', lastName: 'Noor' },
-  { firstName: 'Lindsay', lastName: 'Bangs' },
-];
-
 // unit tests
 describe('FollowingsSearchComponent Unit Test', () => {
   let component: FollowingsSearchComponent;
-
   beforeEach(() => {
     component = new FollowingsSearchComponent(mockRouter);
   });
 
-  it('should display followings list', () => {
-    component.followings = followings;
-    expect(component.followings).toBeTruthy();
-    component.followings = [];
-    expect(component.followings.length).toBe(0);
-  });
-
   it('should display correct searched followings', () => {
+    const fakeUser1 = {
+      id: 1,
+      firstName: 'Razine',
+      lastName: 'Bensari',
+      score: 180,
+    };
+    const fakeUser2 = {
+      id: 0,
+      firstName: 'Marwan',
+      lastName: 'Ayadi',
+      score: 120,
+    };
     component.followingSearch = 'Ra';
-    let following = { firstName: 'Razine', lastName: 'Bensari' };
-    expect(component.isSearchedFollowings(following)).toBe(true);
-    following = { firstName: 'Abdulrahim', lastName: 'Mansour' };
-    expect(component.isSearchedFollowings(following)).toBe(true);
+    console.log(fakeUser1);
+    expect(component.isSearchedFollowings(fakeUser1)).toBe(true);
+    expect(component.isSearchedFollowings(fakeUser2)).toBe(false);
     component.followingSearch = '';
-    expect(component.isSearchedFollowings(following)).toBe(true);
-    component.followingSearch = 'me';
-    expect(component.isSearchedFollowings(following)).toBe(false);
+    expect(component.isSearchedFollowings(fakeUser2)).toBe(true);
+    component.followingSearch = 'marwan ay';
+    expect(component.isSearchedFollowings(fakeUser2)).toBe(true);
   });
 
   it('should navigate to the correct user profile', () => {
+    const fakeUser1 = {
+      id: 1,
+      firstName: 'Razine',
+      lastName: 'Bensari',
+      score: 180,
+    };
     const routingSpy = jest.spyOn(mockRouter, 'navigate');
-    const following = { firstName: 'Razine', lastName: 'Bensari' };
-    component.navigateToFollowingProfile(following.firstName);
+    component.navigateToFollowingProfile(fakeUser1.id);
     expect(routingSpy).toHaveBeenCalledTimes(1); // to be changed to user id
   });
 });

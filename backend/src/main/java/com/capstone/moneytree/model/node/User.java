@@ -1,9 +1,7 @@
 package com.capstone.moneytree.model.node;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -32,7 +30,7 @@ public class User extends Entity {
     String avatarURL;
 
     String coverPhotoURL;
-    
+
     String email;
 
     Double score;
@@ -46,9 +44,6 @@ public class User extends Entity {
     String alpacaApiKey;
 
     String biography;
-
-    @Relationship(type = "FOLLOWS")
-    Set<User> followers;
 
     @Relationship(type = "OWNS")
     List<Stock> stocks;
@@ -71,7 +66,6 @@ public class User extends Entity {
                 .append(password)
                 .append(alpacaApiKey)
                 .append(biography)
-                .append(followers)
                 .append(stocks)
                 .append(transactions)
                 .toHashCode();
@@ -79,25 +73,12 @@ public class User extends Entity {
 
     @Override
     public boolean equals(Object object) {
-        if (object instanceof User){
+        if (object instanceof User) {
             User other = (User) object;
             return this.getId().equals(other.getId());
         }
 
         return false;
-    }
-
-    public void follow(User user) {
-        if (followers == null) {
-            followers = new HashSet<>();
-        }
-        followers.add(user);
-    }
-
-    public void unfollow(User user) {
-        if (followers != null && !followers.isEmpty()) {
-            followers.remove(user);
-        }
     }
 
     public void made(Transaction transaction) {
@@ -113,4 +94,5 @@ public class User extends Entity {
         }
         this.getStocks().add(stock);
     }
-}    
+    
+}

@@ -17,6 +17,16 @@ export const selectCurrentUser = createSelector(
   (appState: State) => appState.user
 );
 
+export const selectCurrentFollowers = createSelector(
+  selectAppState,
+  (appState: State) => appState.followers
+);
+
+export const selectCurrentFollowings = createSelector(
+  selectAppState,
+  (appState: State) => appState.followings
+);
+
 export const selectAppError = createSelector(
   selectAppState,
   (appState: State) => appState.errorMessage

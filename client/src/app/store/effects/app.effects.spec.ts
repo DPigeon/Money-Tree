@@ -40,8 +40,6 @@ const userInfo = {
   rank: 10000,
   balance: 223,
   alpacaApiKey: null,
-  follows: [],
-  followers: [],
   portfolio: [],
   transactions: [],
 };

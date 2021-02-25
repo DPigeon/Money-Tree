@@ -1,13 +1,14 @@
 package com.capstone.moneytree.service.api;
 
+import java.util.List;
 import javax.security.auth.login.CredentialNotFoundException;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.capstone.moneytree.model.SanitizedUser;
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.validator.UserValidator;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,8 +47,12 @@ public interface UserService {
    User editUserProfilePicture(User user, MultipartFile imageFile, String selection);
 
    Long followUser(Long userId, Long userToFollowId);
-
+   
    Long unfollowUser(Long userId, Long userToUnfollowId);
+
+   List<SanitizedUser> getFollowings(Long userId);
+   
+   List<SanitizedUser> getFollowers(Long userId);
 
    void deleteUserByEmail(String email);
 

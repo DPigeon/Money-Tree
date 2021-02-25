@@ -15,6 +15,8 @@ export class HomeComponent implements OnInit {
 
   currentUser$: Observable<User>;
   currentUser: User;
+  followings$: Observable<User[]>;
+  followers$: Observable<User[]>;
 
   constructor(
     private storeFacade: StoreFacadeService,
@@ -30,6 +32,13 @@ export class HomeComponent implements OnInit {
         this.currentUser = user;
         this.userPhotoURL = this.currentUser.avatarURL;
         this.coverPhotoURL = this.currentUser.coverPhotoURL;
+
+        // Loading followings and followers list and adding them to state
+        this.storeFacade.loadCurrentUserFollowings(this.currentUser.id);
+        this.storeFacade.loadCurrentUserFollowers(this.currentUser.id);
+
+        this.followings$ = this.storeFacade.currentFollowings$;
+        this.followers$ = this.storeFacade.currentFollowers$; // can be sent to any other component (as component's input) in future commits
       }
     });
   }

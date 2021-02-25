@@ -57,6 +57,18 @@ export class UserService {
       .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
 
+  getFollowers(userId: number): Observable<User[]> {
+    return this.api
+      .get('users/followers/' + userId)
+      .pipe(map((res: Response) => this.followUserListFormatter(res)));
+  }
+
+  getFollowings(userId: number): Observable<User[]> {
+    return this.api
+      .get('users/followings/' + userId)
+      .pipe(map((res: Response) => this.followUserListFormatter(res)));
+  }
+
   userFormatter(response: any): User {
     const formattedUser: User = {
       id: response.id,
@@ -70,12 +82,27 @@ export class UserService {
       rank: response.rank,
       balance: response.balance,
       alpacaApiKey: response.alpacaApiKey,
-      follows: response.follows,
-      followers: response.followers,
       portfolio: response.portfolio,
       transactions: response.transactions,
       biography: response.biography,
     };
     return formattedUser;
+  }
+
+  followUserListFormatter(response: any): User[] {
+    const result: User[] = [];
+    for (const fetchedUser of response.body) {
+      result.push({
+        id: fetchedUser.id,
+        firstName: fetchedUser.firstName,
+        lastName: fetchedUser.lastName,
+        username: fetchedUser.username,
+        avatarURL: fetchedUser.avatarURL,
+        score: fetchedUser.score,
+        rank: fetchedUser.rank,
+        balance: fetchedUser.balance,
+      });
+    }
+    return result;
   }
 }

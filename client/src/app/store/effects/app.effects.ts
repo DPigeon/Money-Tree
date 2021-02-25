@@ -132,6 +132,45 @@ export class Effects {
       })
     )
   );
+  loadCurrentUserFollowers$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadCurrentUserFollowers),
+      switchMap((action) => {
+        return this.userService.getFollowers(action.id).pipe(
+          map((data: any) =>
+            appActions.setCurrentFollowers({ userFollowers: data })
+          ),
+          catchError((err) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(err),
+              })
+            )
+          )
+        );
+      })
+    )
+  );
+
+  loadCurrentUserFollowings$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadCurrentUserFollowings),
+      switchMap((action) => {
+        return this.userService.getFollowings(action.id).pipe(
+          map((data: any) =>
+            appActions.setCurrentFollowings({ userFollowings: data })
+          ),
+          catchError((error) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(error),
+              })
+            )
+          )
+        );
+      })
+    )
+  );
 
   userLogin$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
@@ -179,11 +218,15 @@ export class Effects {
           .processStockTransaction(action.transaction, action.userId)
           .pipe(
             map((data) => {
-              this.snackBar.open('Transaction Successfully Placed', 'Close', {duration: 5000});
+              this.snackBar.open('Transaction Successfully Placed', 'Close', {
+                duration: 5000,
+              });
               return appActions.setCurrentUser({ user: data });
             }),
             catchError((data) => {
-              this.snackBar.open('Error with Transaction', 'Close', {duration: 5000});
+              this.snackBar.open('Error with Transaction', 'Close', {
+                duration: 5000,
+              });
               return of(
                 appActions.setAppError({
                   errorMessage: this.mirrorError(data),
