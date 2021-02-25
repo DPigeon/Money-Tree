@@ -1,4 +1,4 @@
-package com.capstone.moneytree.dao;
+package com.capstone.moneytree.dao.RelationshipDao;
 
 import com.capstone.moneytree.model.relationship.Follows;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Follows relationship entity Data Access extending from our Neo4jRepository Database
+ * Follows relationship entity Data Access Object class extending
+ * Neo4jRepository Database
  */
 @Repository
 public interface FollowsDao extends Neo4jRepository<Follows, Long> {
@@ -20,5 +21,4 @@ public interface FollowsDao extends Neo4jRepository<Follows, Long> {
 
     List<Follows> findFollowsByFollowerIdAndUserToFollowId(Long followerId, Long userToFollowId);
 
-    
 }
