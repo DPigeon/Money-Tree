@@ -94,13 +94,5 @@ public class User extends Entity {
         }
         this.getStocks().add(stock);
     }
-
-    public static User sanitizeUser(User user) {
-        User sanitizedUser = User.builder().firstName(user.getFirstName()).lastName(user.getLastName())
-                .username(user.getUsername()).avatarURL(user.getAvatarURL()).score(user.getScore()).rank(user.getRank())
-                .coverPhotoURL(user.getCoverPhotoURL()).biography(user.getBiography()).balance(user.getBalance())
-                .build();
-        sanitizedUser.setId(user.getId());
-        return sanitizedUser;
-    }
+    
 }
