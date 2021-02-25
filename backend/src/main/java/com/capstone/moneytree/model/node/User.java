@@ -1,9 +1,11 @@
 package com.capstone.moneytree.model.node;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -12,10 +14,8 @@ import com.capstone.moneytree.model.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode(callSuper = true)
 @NodeEntity
 @Data
 @Builder
@@ -57,6 +57,27 @@ public class User extends Entity {
     List<Transaction> transactions;
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(firstName)
+                .append(lastName)
+                .append(username)
+                .append(avatarURL)
+                .append(coverPhotoURL)
+                .append(email)
+                .append(score)
+                .append(rank)
+                .append(balance)
+                .append(password)
+                .append(alpacaApiKey)
+                .append(biography)
+                .append(followers)
+                .append(stocks)
+                .append(transactions)
+                .toHashCode();
+    }
+
+    @Override
     public boolean equals(Object object) {
         if (object instanceof User){
             User other = (User) object;
@@ -64,11 +85,6 @@ public class User extends Entity {
         }
 
         return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return Math.toIntExact(this.getId());
     }
 
     public void follow(User user) {
@@ -85,10 +101,16 @@ public class User extends Entity {
     }
 
     public void made(Transaction transaction) {
+        if (this.transactions == null) {
+            this.transactions = new ArrayList<>();
+        }
         this.getTransactions().add(transaction);
     }
 
     public void owns(Stock stock) {
+        if (this.stocks == null) {
+            this.stocks = new ArrayList<>();
+        }
         this.getStocks().add(stock);
     }
 }    

@@ -439,23 +439,25 @@ class UserControllerTest extends Specification {
    @Test
    def "Should be able to follow another user"() {
       given: "two existing users"
-      Long userId1 = 1;
+      Long userId1 = 1
       String email1 = "moneytree@test.com"
       String username1 = "Billy"
       String password1 = "encrypted"
       String firstName1 = "Billy"
       String lastName1 = "Bob"
       String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
-      User user1 = createUser(userId1, email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+      User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+      user1.setId(userId1)
 
-      Long userId2 = 2;
+      Long userId2 = 2
       String email2 = "money@test.com"
       String username2 = "Jake"
       String password2 = "encrypted"
       String firstName2 = "Jake"
       String lastName2 = "Moreau"
       String alpacaApiKey2 = "PYFDRH6ET5etEEGTE7"
-      User user2 = createUser(userId2, email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+      User user2 = createUser(email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+      user2.setId(userId2)
 
       and: "mock the way we retrieve both users from the database"
       userDao.findUserById(userId1) >> user1
@@ -474,45 +476,47 @@ class UserControllerTest extends Specification {
    @Test
    def "Should be able to unfollow another user"() {
       given: "two existing users"
-      Long userId1 = 1;
       String email1 = "moneytree@test.com"
       String username1 = "Billy"
       String password1 = "encrypted"
       String firstName1 = "Billy"
       String lastName1 = "Bob"
       String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
-      User user1 = createUser(userId1, email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+      User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+      Long user1Id = 987654321
+      user1.setId(user1Id)
 
-      Long userId2 = 2;
       String email2 = "money@test.com"
       String username2 = "Jake"
       String password2 = "encrypted"
       String firstName2 = "Jake"
       String lastName2 = "Moreau"
       String alpacaApiKey2 = "PYFDRH6ET5etEEGTE7"
-      User user2 = createUser(userId2, email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+      User user2 = createUser(email2, username2, password2, firstName2, lastName2, alpacaApiKey2)
+      Long user2Id = 123456789
+      user2.setId(user2Id)
 
       and: "mock the way we retrieve both users from the database assuming id 1 follows id 2"
-      Set<User> user1Follows = new HashSet<>();
-      user1Follows.add(user2);
+      Set<User> user1Follows = new HashSet<>()
+      user1Follows.add(user2)
       user1.setFollowers(user1Follows)
-      userDao.findUserById(userId1) >> user1
-      userDao.findUserById(userId2) >> user2
+      userDao.findUserById(user1Id) >> user1
+      userDao.findUserById(user2Id) >> user2
 
       when: "unfollowing a user"
-      def response = userController.unfollowUser(userId1, userId2)
+      def response = userController.unfollowUser(user1Id, user2Id)
 
       then: "user1 should have unfollowed user2"
       assert user1.getFollowers().isEmpty()
       assert response.statusCode == HttpStatus.OK
-      assert response.body == userId2
+      assert response.body == user2Id
    }
 
    @Test
    def "Should throw UserNotFoundException if following a non-existent user"() {
       given: "two non-existent users"
-      Long userId = 1;
-      Long friendId = 2;
+      Long userId = 1
+      Long friendId = 2
 
       when: "following a user"
       userController.followUser(userId, friendId)
@@ -524,8 +528,8 @@ class UserControllerTest extends Specification {
    @Test
    def "Should throw UserNotFoundException if unfollowing a non-existent user"() {
       given: "two non-existent users"
-      Long userId = 1;
-      Long friendId = 2;
+      Long userId = 1
+      Long friendId = 2
 
       when: "unfollowing a user"
       userController.unfollowUser(userId, friendId)

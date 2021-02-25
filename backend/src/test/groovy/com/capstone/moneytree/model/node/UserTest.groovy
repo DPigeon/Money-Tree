@@ -13,13 +13,13 @@ class UserTest extends Specification {
     private static User user
 
     def setup() {
-        user = createUser(1, "test@test.com", "username", "password", "Jake", "Moreau", "123B")
+        user = createUser("test@test.com", "username", "password", "Jake", "Moreau", "123B")
     }
 
     @Test
     def "Should follow a user"() {
         given: "another user"
-        User user2 = createUser(2, "test2@test.com", "username2", "password2", "Will", "Moreau", "123C")
+        User user2 = createUser("test2@test.com", "username2", "password2", "Will", "Moreau", "123C")
 
         when: "follow another user"
         user.follow(user2)
@@ -32,10 +32,10 @@ class UserTest extends Specification {
     @Test
     def "Should unfollow a user"() {
         given: "another user"
-        User user2 = createUser(2, "test2@test.com", "username2", "password2", "Will", "Moreau", "123C")
+        User user2 = createUser("test2@test.com", "username2", "password2", "Will", "Moreau", "123C")
 
         when: "unfollow another user already followed by user1"
-        Set<User> followers = new HashSet<>();
+        Set<User> followers = new HashSet<>()
         followers.add(user2)
         user.setFollowers(followers)
         user.unfollow(user2)
@@ -47,7 +47,7 @@ class UserTest extends Specification {
     @Test
     def "Should create a new set of followers if following first person ever"() {
         given: "another user"
-        User user2 = createUser(2, "test2@test.com", "username2", "password2", "Will", "Moreau", "123C")
+        User user2 = createUser("test2@test.com", "username2", "password2", "Will", "Moreau", "123C")
 
         assert user2.getFollowers() == null
         when: "follow another user by creating a fresh set for followers"

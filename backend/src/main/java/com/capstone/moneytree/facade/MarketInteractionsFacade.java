@@ -1,6 +1,8 @@
 package com.capstone.moneytree.facade;
 
+
 import com.capstone.moneytree.dao.UserDao;
+import com.capstone.moneytree.dao.TransactionDao;
 import com.capstone.moneytree.exception.AlpacaClockException;
 import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.handler.ExceptionMessage;
@@ -14,6 +16,8 @@ import java.util.Map;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.capstone.moneytree.model.TransactionStatus;
+import com.capstone.moneytree.model.node.Transaction;
 import com.capstone.moneytree.model.node.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +55,9 @@ public class MarketInteractionsFacade {
    private final Map<String, AlpacaStreamListener> userIdToStream;
 
    @Autowired
+   TransactionDao transactionDao;
+
+   @Autowired
    public MarketInteractionsFacade(UserDao userDao) {
       this.userDao = userDao;
       userIdToStream = new HashMap<>();
@@ -59,7 +66,8 @@ public class MarketInteractionsFacade {
    private void initializeAlpacaSession(String userId) {
       User user = getUser(Long.parseLong(userId));
       String alpacaKey = user.getAlpacaApiKey();
-      alpacaAPI = AlpacaSession.alpaca(alpacaKey);
+      AlpacaSession alpacaSession = new AlpacaSession();
+      alpacaAPI = alpacaSession.alpaca(alpacaKey);
    }
 
    /**
@@ -198,11 +206,28 @@ public class MarketInteractionsFacade {
                if (tradeUpdate.getEvent().equals("fill")) {
                   messageSender.convertAndSend("/queue/user-" + userId, tradeUpdate.getOrder());
                   sendOrderCompletedEmail(userId, tradeUpdate);
+                  updateTransactionStatus(tradeUpdate.getOrder().getClientOrderId());
                   LOGGER.info("Order filled by user id {}", userId);
                }
             }
          }
       };
+   }
+
+   // Refactor to different service. Add the relationship where user now owns the stock of a
+   // transaction that has been fulfilled
+   private void updateTransactionStatus(String clientOrderId) {
+      List<Transaction> transactions = transactionDao.findAll();
+      transactions.stream()
+              .filter(transaction -> transaction.getClientOrderId().equals(clientOrderId))
+              .findFirst()
+              .ifPresent(this::changeStatusAndSave);
+      LOGGER.info("Updated transaction status for transaction {}", clientOrderId);
+   }
+
+   private void changeStatusAndSave(Transaction transaction) {
+      transaction.setStatus(TransactionStatus.COMPLETED);
+      transactionDao.save(transaction);
    }
 
    private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {

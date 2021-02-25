@@ -16,17 +16,17 @@ import com.capstone.moneytree.model.node.User
 import org.junit.Test
 import spock.lang.Specification
 
-import com.icegreen.greenmail.util.GreenMail;
-import com.icegreen.greenmail.util.ServerSetup;
-import org.junit.rules.ExternalResource;
-import javax.mail.internet.MimeMessage;
+import com.icegreen.greenmail.util.GreenMail
+import com.icegreen.greenmail.util.ServerSetup
+import org.junit.rules.ExternalResource
+import javax.mail.internet.MimeMessage
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 class EmailSenderIT extends Specification {
 
     @Rule
-    public SmtpServerRule smtpServerRule = new SmtpServerRule(2525);
+    public SmtpServerRule smtpServerRule = new SmtpServerRule(2525)
 
     @Autowired
     private EmailSender emailSender
@@ -42,8 +42,8 @@ class EmailSenderIT extends Specification {
         given: "A user that has an order completed"
         String email = "test@money-tree.tech"
         String username = "Dud"
-        User user = createUser(1, email, username, "password", "Dude", "Joe", "F^ef3tS")
-        String orderId = "1203432";
+        User user = createUser(email, username, "password", "Dude", "Joe", "F^ef3tS")
+        String orderId = "1203432"
         ZonedDateTime timestamp = ZonedDateTime.now()
         String symbol = "AAPL"
         TradeUpdate trade = createTradeUpdate(orderId, "1", symbol, "5", "3", "Buy", "50", "30", "fill", "30", timestamp, "2")
@@ -52,20 +52,20 @@ class EmailSenderIT extends Specification {
         emailSender.sendOrderCompletedEmail(user, trade)
 
         then: "Email is sent properly"
-        MimeMessage[] receivedMessages = smtpServerRule.getMessages();
-        assert receivedMessages.length == 1
+        MimeMessage[] receivedMessages = smtpServerRule.getMessages()
+        receivedMessages.length == 1
 
-        MimeMessage receivedMessage = receivedMessages[0];
-        assert GreenMailUtil.getBody(receivedMessage).contains("Hello " + username)
-        assert receivedMessage.getAllRecipients()[0].toString() == email
+        MimeMessage receivedMessage = receivedMessages[0]
+        GreenMailUtil.getBody(receivedMessage).contains("Hello " + username)
+        receivedMessage.getAllRecipients()[0].toString() == email
     }
 
     @Test
     def "It should throw an illegal address if no destination"() {
         given: "A user that has an order completed"
         String email = ""
-        User user = createUser(1, email, "Fab", "password", "Dave", "Joe", "F^ef3tS")
-        String orderId = "1203432";
+        User user = createUser(email, "Fab", "password", "Dave", "Joe", "F^ef3tS")
+        String orderId = "1203432"
         ZonedDateTime timestamp = ZonedDateTime.now()
         String symbol = "AAPL"
         TradeUpdate trade = createTradeUpdate(orderId, "1", symbol, "5", "3", "Buy", "50", "30", "fill", "30", timestamp, "2")
@@ -74,8 +74,8 @@ class EmailSenderIT extends Specification {
         emailSender.sendOrderCompletedEmail(user, trade)
 
         then: "Should give an illegal address error"
-        MimeMessage[] receivedMessages = smtpServerRule.getMessages();
-        assert receivedMessages.length == 0
+        MimeMessage[] receivedMessages = smtpServerRule.getMessages()
+        receivedMessages.length == 0
     }
 }
 
@@ -84,29 +84,29 @@ class EmailSenderIT extends Specification {
  */
 class SmtpServerRule extends ExternalResource {
 
-    private GreenMail smtpServer;
-    private final int port;
+    private GreenMail smtpServer
+    private final int port
 
     SmtpServerRule(int port) {
-        this.port = port;
+        this.port = port
     }
 
     @Override
     protected void before() throws Throwable {
-        super.before();
-        smtpServer = new GreenMail(new ServerSetup(port, null, "smtp"));
-        smtpServer.setUser("username", "secret"); // Same as application-test.properties
-        smtpServer.start();
+        super.before()
+        smtpServer = new GreenMail(new ServerSetup(port, null, "smtp"))
+        smtpServer.setUser("username", "secret") // Same as application-test.properties
+        smtpServer.start()
     }
 
     MimeMessage[] getMessages() {
-        return smtpServer.getReceivedMessages();
+        return smtpServer.getReceivedMessages()
     }
 
     @Override
     protected void after() {
-        super.after();
-        smtpServer.stop();
+        super.after()
+        smtpServer.stop()
     }
 }
 
