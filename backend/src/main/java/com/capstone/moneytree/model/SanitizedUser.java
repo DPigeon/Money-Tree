@@ -2,12 +2,15 @@ package com.capstone.moneytree.model;
 
 import com.capstone.moneytree.model.node.User;
 
-public class SanitizedUser { // this class will be used to return only the necessary info about a user for follower/followings api and other apis
+public class SanitizedUser { // this class will be used to return only the necessary info about a user for
+                             // follower/followings api and other apis
     Long id;
     String firstName;
     String lastName;
     String username;
     String avatarURL;
+    String coverPhotoURL;
+    String biography;
     Double score;
     Double rank;
     Float balance;
@@ -18,11 +21,15 @@ public class SanitizedUser { // this class will be used to return only the neces
         this.lastName = user.getLastName();
         this.username = user.getUsername();
         this.avatarURL = user.getAvatarURL();
+        this.coverPhotoURL = user.getCoverPhotoURL();
         this.score = user.getScore();
         this.rank = user.getRank();
         this.balance = user.getBalance();
+        this.biography = user.getBiography();
     }
-    // setters and getters needed so that json response can be created (avoiding faster.xml exception)
+
+    // setters and getters needed so that json response can be created (avoiding
+    // faster.xml exception)
     public Long getId() {
         return id;
     }
@@ -81,6 +88,26 @@ public class SanitizedUser { // this class will be used to return only the neces
 
     public void setBalance(Float balance) {
         this.balance = balance;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public String getCoverPhotoURL() {
+        return coverPhotoURL;
+    }
+
+    public void setCoverPhotoURL(String coverPhotoURL) {
+        this.coverPhotoURL = coverPhotoURL;
     }
 
 }
