@@ -13,8 +13,5 @@
     <div>{{ user.username }}</div>
     <div>{{ user.email }}</div>
   </div>
-  <app-followings-search
-    fxFlex="20%"
-    fxFlex.lt-sm="90%"
-  ></app-followings-search>
+  <app-followings-search [followings$]="followings$" fxFlex="20%" fxFlex.lt-sm="90%"></app-followings-search>
 </div>

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { User } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-followings-search',
@@ -7,51 +9,29 @@ import { Router } from '@angular/router';
   styleUrls: ['./followings-search.component.scss'],
 })
 export class FollowingsSearchComponent implements OnInit {
-  followings = [
-    { firstName: 'Marwan', lastName: 'Ayadi' },
-    { firstName: 'Razine', lastName: 'Bensari' },
-    { firstName: 'Arthur', lastName: 'Tourneyrie' },
-    { firstName: 'Alessandro', lastName: 'Kreslin' },
-    { firstName: 'David ', lastName: 'Pigeon' },
-    { firstName: 'Abdulrahim', lastName: 'Mansour' },
-    { firstName: 'Walter', lastName: 'Fleury' },
-    { firstName: 'Hossein', lastName: 'Noor' },
-    { firstName: 'Lindsay', lastName: 'Bangs' },
-    { firstName: 'Marwan', lastName: 'Ayadi' },
-    { firstName: 'Razine', lastName: 'Bensari' },
-    { firstName: 'Arthur', lastName: 'Tourneyrie' },
-    { firstName: 'Alessandro', lastName: 'Kreslin' },
-    { firstName: 'David ', lastName: 'Pigeon' },
-    { firstName: 'Abdulrahim', lastName: 'Mansour' },
-    { firstName: 'Walter', lastName: 'Fleury' },
-    { firstName: 'Hossein', lastName: 'Noor' },
-    { firstName: 'Lindsay', lastName: 'Bangs' },
-    { firstName: 'Marwan', lastName: 'Ayadi' },
-    { firstName: 'Razine', lastName: 'Bensari' },
-    { firstName: 'Arthur', lastName: 'Tourneyrie' },
-    { firstName: 'Alessandro', lastName: 'Kreslin' },
-    { firstName: 'David ', lastName: 'Pigeon' },
-    { firstName: 'Abdulrahim', lastName: 'Mansour' },
-    { firstName: 'Walter', lastName: 'Fleury' },
-    { firstName: 'Hossein', lastName: 'Noor' },
-    { firstName: 'Lindsay', lastName: 'Bangs' },
-  ]; // to be changed
+  @Input() followings$: Observable<User[]>;
   followingSearch = '';
 
   constructor(private router: Router) {}
   ngOnInit(): void {}
 
-  navigateToFollowingProfile(following: string): void {
-    this.router.navigate(['/user-profile/' + following]);
+  // Profile pages will be added in future commits
+  navigateToFollowingProfile(followingId: number): void {
+    this.router.navigate(['/user-profile/' + followingId]);
   }
-  // to be changed
-  isSearchedFollowings(following): boolean {
+
+  isSearchedFollowings(following: User): boolean {
     return (
       following.firstName
         .toLowerCase()
         .indexOf(this.followingSearch.toLowerCase()) > -1 ||
       following.lastName
         .toLowerCase()
+        .indexOf(this.followingSearch.toLowerCase()) > -1 ||
+      following.firstName
+        .toLowerCase()
+        .concat(' ')
+        .concat(following.lastName.toLowerCase())
         .indexOf(this.followingSearch.toLowerCase()) > -1 ||
       this.followingSearch === ''
     );

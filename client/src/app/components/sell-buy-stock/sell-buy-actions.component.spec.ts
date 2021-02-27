@@ -20,8 +20,6 @@ const mockUser: User = {
   rank: 10000,
   balance: 223,
   alpacaApiKey: null,
-  follows: [],
-  followers: [],
   portfolio: [],
   transactions: [],
 };
@@ -47,11 +45,11 @@ const mockStock = {
 } as any;
 
 const matDialogMock = {
-  close: jest.fn()
+  close: jest.fn(),
 } as any;
 
 const mockStoreFacade = {
-  processStockTransaction: jest.fn()
+  processStockTransaction: jest.fn(),
 } as any;
 
 const mockDialogData = {
@@ -71,7 +69,7 @@ describe('SellOrBuyActionsComponent', () => {
         {
           provide: MatDialogRef,
           useValue: {
-            close: (dialogResult: any) => { },
+            close: (dialogResult: any) => {},
           },
         },
         NGRX_STORE_MODULE,
@@ -96,7 +94,11 @@ describe('SellOrBuyActionsComponent unit test', () => {
   let component: SellOrBuyActionsComponent;
 
   beforeEach(() => {
-    component = new SellOrBuyActionsComponent(matDialogMock, mockStoreFacade, mockDialogData);
+    component = new SellOrBuyActionsComponent(
+      matDialogMock,
+      mockStoreFacade,
+      mockDialogData
+    );
   });
 
   it('should return the right stockprice', () => {
@@ -122,9 +124,11 @@ describe('SellOrBuyActionsComponent unit test', () => {
     component.quantity = 2;
     component.price = 10;
     component.isMarketOrder = true;
-    expect(component.getTotal()).toBe(mockDialogData.stockInfo.stockValue * component.quantity);
+    expect(component.getTotal()).toBe(
+      mockDialogData.stockInfo.stockValue * component.quantity
+    );
     component.isMarketOrder = false;
-    expect(component.getTotal()).toBe(component.price  * component.quantity);
+    expect(component.getTotal()).toBe(component.price * component.quantity);
   });
 
   it('should return the remaining balance', () => {
@@ -133,9 +137,10 @@ describe('SellOrBuyActionsComponent unit test', () => {
     component.data = mockDialogData;
     component.quantity = 2;
     component.isMarketOrder = true;
-    expect(component.getRemainingBalance()).toBe(component.balance + component.getTotal());
+    expect(component.getRemainingBalance()).toBe(
+      component.balance + component.getTotal()
+    );
   });
-
 
   it('should return Buy or Sell', () => {
     component.ngOnInit();

@@ -24,6 +24,8 @@ export class StoreFacadeService {
     hasAlpacaCode: boolean;
   }>;
   currentMarketClock$: Observable<MarketClock>;
+  currentFollowings$: Observable<User[]>;
+  currentFollowers$: Observable<User[]>;
 
   constructor(private store: Store<{ appState: State }>) {
     this.currentStockLoaded$ = this.store.select(
@@ -40,6 +42,12 @@ export class StoreFacadeService {
     );
     this.currentMarketClock$ = this.store.select(
       appSelectors.selectCurrentMarketClock
+    );
+    this.currentFollowers$ = this.store.select(
+      appSelectors.selectCurrentFollowers
+    );
+    this.currentFollowings$ = this.store.select(
+      appSelectors.selectCurrentFollowings
     );
   }
 
@@ -73,6 +81,13 @@ export class StoreFacadeService {
     this.store.dispatch(appActions.getCurrentUser({ id: userId }));
   }
 
+  loadCurrentUserFollowers(userId: number): void {
+    this.store.dispatch(appActions.loadCurrentUserFollowers({ id: userId }));
+  }
+  loadCurrentUserFollowings(userId: number): void {
+    this.store.dispatch(appActions.loadCurrentUserFollowings({ id: userId }));
+  }
+
   logCurrentUserOut(): void {
     this.store.dispatch(appActions.logCurrentUserOut());
   }
@@ -87,6 +102,8 @@ export class StoreFacadeService {
     );
   }
   processStockTransaction(transaction: Transaction, userId: number): void {
-    this.store.dispatch(appActions.processStockTransaction({ transaction, userId }));
+    this.store.dispatch(
+      appActions.processStockTransaction({ transaction, userId })
+    );
   }
 }

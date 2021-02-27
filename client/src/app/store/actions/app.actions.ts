@@ -33,6 +33,15 @@ export const getCurrentUser = createAction(
   props<{ id: number }>()
 );
 
+export const loadCurrentUserFollowers = createAction(
+  '[User[]] Load user followers',
+  props<{ id: number }>()
+);
+export const loadCurrentUserFollowings = createAction(
+  '[User[]] Load user followings',
+  props<{ id: number }>()
+);
+
 export const userLogin = createAction(
   '[User] User login',
   props<{ user: User }>()
@@ -53,6 +62,16 @@ export const setCurrentUser = createAction(
   props<{ user: User }>()
 );
 
+export const setCurrentFollowers = createAction(
+  '[User[]] New value for current user followers',
+  props<{ userFollowers: User[] }>()
+);
+
+export const setCurrentFollowings = createAction(
+  '[User[]] New value for current user followings',
+  props<{ userFollowings: User[] }>()
+);
+
 export const logCurrentUserOut = createAction('[User] Log user out');
 
 export const setAppError = createAction(
@@ -67,7 +86,5 @@ export const updatePictureURL = createAction(
 
 export const processStockTransaction = createAction(
   '[Transactions] New stock transaction for user',
-  props<{ transaction: Transaction, userId: number}>()
+  props<{ transaction: Transaction; userId: number }>()
 );
-
-

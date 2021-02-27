@@ -12,6 +12,8 @@ export interface State {
   currentStockLoaded: Stock;
   currentMarketClock: MarketClock;
   errorMessage: AppError;
+  followers: User[];
+  followings: User[];
 }
 
 export const initialState: State = {
@@ -19,6 +21,8 @@ export const initialState: State = {
   currentStockLoaded: null,
   errorMessage: null,
   currentMarketClock: null,
+  followers: null,
+  followings: null,
 };
 
 export const reducer = createReducer(
@@ -27,16 +31,29 @@ export const reducer = createReducer(
     ...state,
     currentStockLoaded: stock,
   })),
+
   on(appActions.loadMarketClockSuccess, (state, { marketClock }) => ({
     ...state,
     currentMarketClock: marketClock,
   })),
+
   on(appActions.setCurrentUser, (state, { user }) => {
     if (user.id) {
       localStorage.setItem('userId', String(user.id));
     }
     return { ...state, user };
   }),
+
+  on(appActions.setCurrentFollowers, (state, { userFollowers }) => ({
+    ...state,
+    followers: userFollowers,
+  })),
+
+  on(appActions.setCurrentFollowings, (state, { userFollowings }) => ({
+    ...state,
+    followings: userFollowings,
+  })),
+
   on(appActions.setAppError, (state, { errorMessage }) => ({
     ...state,
     errorMessage,
