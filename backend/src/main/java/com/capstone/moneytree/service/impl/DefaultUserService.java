@@ -56,9 +56,9 @@ public class DefaultUserService implements UserService {
     private static final String USER_CANT_BE_FOLLOWED_BY_ITSELF = "User cannot followed by itself";
     private static final String USER_ALREADY_FOLLOWED = "User already followed";
     
-    @Value("${alpaca.client.id}")
+    @Value("${alpaca.key.id}")
     String clientId;
-    @Value("${alpaca.client.secret}")
+    @Value("${alpaca.secret}")
     String clientSecret;
     
     @Autowired
