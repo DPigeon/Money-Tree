@@ -15,10 +15,10 @@ public interface FollowsDao extends Neo4jRepository<Follows, Long> {
 
     List<Follows> findAll();
 
-    List<Follows> findFollowsByFollowerId(Long followerId);
+    List<Follows> findByFollowerId(Long followerId);
 
-    List<Follows> findFollowsByUserToFollowId(Long userToFollowId);
+    List<Follows> findByUserToFollowId(Long userToFollowId);
 
-    List<Follows> findFollowsByFollowerIdAndUserToFollowId(Long followerId, Long userToFollowId);
+    List<Follows> findByFollowerIdAndUserToFollowId(Long followerId, Long userToFollowId);
 
 }

@@ -13,7 +13,7 @@ export class StockService {
 
   loadStockInfo(stockTicker: string): Observable<Stock> {
     return this.api
-      .get('stockmarket/batch/' + stockTicker.toUpperCase())
+      .get('stock/batch/' + stockTicker.toUpperCase())
       .pipe(map((res: Response) => this.IEXtoModel(res.body)));
   }
 

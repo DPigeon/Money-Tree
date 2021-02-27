@@ -17,7 +17,7 @@ public interface MadeDao extends Neo4jRepository<Made, Long> {
 
     List<Made> findAll();
 
-    List<Made> findByTransactionId(Long transactionID);
+    Made findByTransactionId(Long transactionID);
 
     List<Made> findByTransactionDate(Date transactionDate);
 

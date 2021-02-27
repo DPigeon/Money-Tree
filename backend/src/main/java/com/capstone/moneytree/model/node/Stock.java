@@ -18,53 +18,27 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Stock extends Entity {
 
-   String exchange;
+    String symbol; // or ticker!
 
-   String symbol;
+    String companyName;
 
-   String status;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
 
-   String ticker;
+        if (!(o instanceof Stock)) {
+            return false;
+        }
 
-   String label;
+        Stock stock = (Stock) o;
 
-   String industry;
+        return new EqualsBuilder().append(symbol, stock.symbol).append(companyName, stock.companyName).isEquals();
+    }
 
-   String volatility;
-
-   @Override
-   public boolean equals(Object o) {
-      if (this == o) {
-         return true;
-      }
-
-      if (!(o instanceof Stock)) {
-         return false;
-      }
-
-      Stock stock = (Stock) o;
-
-      return new EqualsBuilder()
-              .append(exchange, stock.exchange)
-              .append(symbol, stock.symbol)
-              .append(status, stock.status)
-              .append(ticker, stock.ticker)
-              .append(label, stock.label)
-              .append(industry, stock.industry)
-              .append(volatility, stock.volatility)
-              .isEquals();
-   }
-
-   @Override
-   public int hashCode() {
-      return new HashCodeBuilder(17, 37)
-              .append(exchange)
-              .append(symbol)
-              .append(status)
-              .append(ticker)
-              .append(label)
-              .append(industry)
-              .append(volatility)
-              .toHashCode();
-   }
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(symbol).append(companyName).toHashCode();
+    }
 }

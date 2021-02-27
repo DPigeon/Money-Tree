@@ -15,10 +15,10 @@ public interface ToFulfillDao extends Neo4jRepository<ToFulfill, Long> {
 
     List<ToFulfill> findAll();
 
-    List<ToFulfill> findToFulfillByTransactionId(Long transactionId);
+    ToFulfill findByTransactionId(Long transactionId);
 
-    List<ToFulfill> findToFulfillByStockId(Long stockId);
+    List<ToFulfill> findByStockId(Long stockId);
 
-    List<ToFulfill> findOwnsByTransactionIdAndStockId(Long transactionId, Long stockId);
+    List<ToFulfill> findByTransactionIdAndStockId(Long transactionId, Long stockId);
 
 }

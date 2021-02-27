@@ -8,17 +8,8 @@ import com.capstone.moneytree.model.node.User;
 
 public interface StockService {
 
-   List<Stock> getAllStocks();
+    List<Stock> getAllStocks();
 
-   Stock getStockByLabel(String label);
+    List<Stock> getUserStocks(Long userId);
 
-   Stock getStockByIndustry(String industry);
-
-   Stock getStockByVolatility(String volatility);
-
-   Stock persistStock(Stock stock);
-
-   List<Stock> getStockByUser(User user);
-
-   List<Stock> getStockByTransaction(Transaction transaction);
 }

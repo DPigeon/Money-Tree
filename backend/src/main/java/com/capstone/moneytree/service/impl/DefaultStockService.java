@@ -1,5 +1,6 @@
 package com.capstone.moneytree.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.capstone.moneytree.dao.StockDao;
+import com.capstone.moneytree.dao.RelationshipDao.OwnsDao;
 import com.capstone.moneytree.model.node.Stock;
+import com.capstone.moneytree.model.relationship.Owns;
 import com.capstone.moneytree.model.node.Transaction;
 import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.service.api.StockService;
@@ -19,47 +22,30 @@ import com.capstone.moneytree.service.api.StockService;
 @Transactional
 public class DefaultStockService implements StockService {
 
-   private final StockDao stockDao;
-   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultStockService.class);
+    private final StockDao stockDao;
+    private final OwnsDao ownsDao;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultStockService.class);
 
-   @Autowired
-   public DefaultStockService(StockDao stockDao) {
-      this.stockDao = stockDao;
-   }
+    @Autowired
+    public DefaultStockService(StockDao stockDao, OwnsDao ownsDao) {
+        this.stockDao = stockDao;
+        this.ownsDao = ownsDao;
+    }
 
-   @Override
-   public List<Stock> getAllStocks() {
-      LOGGER.info("Getting all stocks...");
-      return stockDao.findAll();
-   }
+    @Override
+    public List<Stock> getAllStocks() {
+        LOGGER.info("Getting all stocks...");
+        return stockDao.findAll();
+    }
 
-   @Override
-   public Stock getStockByLabel(String label) {
-      return null;
-   }
+    @Override
+    public List<Stock> getUserStocks(Long userId) {
+        List<Stock> userStocks = new ArrayList<>();
+        List<Owns> allOwnsRels = ownsDao.findByUserId(userId);
+        for (Owns rel : allOwnsRels) {
+            userStocks.add(rel.getStock());
+        }
+        return userStocks;
+    }
 
-   @Override
-   public Stock getStockByIndustry(String industry) {
-      return null;
-   }
-
-   @Override
-   public Stock getStockByVolatility(String volatility) {
-      return null;
-   }
-
-   @Override
-   public Stock persistStock(Stock stock) {
-      return null;
-   }
-
-   @Override
-   public List<Stock> getStockByUser(User user) {
-      return Collections.emptyList();
-   }
-
-   @Override
-   public List<Stock> getStockByTransaction(Transaction transaction) {
-      return Collections.emptyList();
-   }
 }

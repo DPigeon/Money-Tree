@@ -22,21 +22,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Transaction extends Entity {
 
-   float quantity;
+    float quantity;
 
-   ZonedDateTime purchasedAt;
+    ZonedDateTime purchasedAt;
 
-   MoneyTreeOrderType moneyTreeOrderType;
+    MoneyTreeOrderType moneyTreeOrderType;
 
-   String clientOrderId;
+    String clientOrderId;
 
-   TransactionStatus status;
+    TransactionStatus status;
 
-   // @Relationship(type = "FULFILLS", direction = Relationship.INCOMING)
-   // Stock fulfilledStock;
+    float avgPrice;
 
-   // public Transaction fulfills(Stock stock) {
-   // this.setFulfilledStock(stock);
-   // return this;
-   // }
+    String symbol;
 }
