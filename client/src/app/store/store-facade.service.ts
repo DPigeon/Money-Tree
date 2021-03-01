@@ -26,6 +26,8 @@ export class StoreFacadeService {
   currentMarketClock$: Observable<MarketClock>;
   currentFollowings$: Observable<User[]>;
   currentFollowers$: Observable<User[]>;
+  userTransactions$: Observable<Transaction[]>;
+  userOwnedStocks$: Observable<Stock[]>;
 
   constructor(private store: Store<{ appState: State }>) {
     this.currentStockLoaded$ = this.store.select(
@@ -48,6 +50,12 @@ export class StoreFacadeService {
     );
     this.currentFollowings$ = this.store.select(
       appSelectors.selectCurrentFollowings
+    );
+    this.userTransactions$ = this.store.select(
+      appSelectors.selectUserTransactions
+    );
+    this.userOwnedStocks$ = this.store.select(
+      appSelectors.selectUserOwnedStocks
     );
   }
 
@@ -105,5 +113,11 @@ export class StoreFacadeService {
     this.store.dispatch(
       appActions.processStockTransaction({ transaction, userId })
     );
+  }
+  loadUserTransactions(userId: number): void {
+    this.store.dispatch(appActions.loadUserTransactions({ userId }));
+  }
+  loadUserOwnedStocks(userId: number): void {
+    this.store.dispatch(appActions.loadUserOwnedStocks({ userId }));
   }
 }

@@ -1,9 +1,12 @@
+import { loadUserTransactions } from './../../store/actions/app.actions';
 import { Component, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
 import { StoreFacadeService } from '../../store/store-facade.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditProfileComponent } from '../../components/edit-profile/edit-profile.component';
+import { Transaction } from 'src/app/interfaces/transaction';
+import { Stock } from 'src/app/interfaces/stock';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -17,6 +20,8 @@ export class HomeComponent implements OnInit {
   currentUser: User;
   followings$: Observable<User[]>;
   followers$: Observable<User[]>;
+  userTransactions$: Observable<Transaction[]>;
+  userOwnedStocks$: Observable<Stock[]>;
 
   constructor(
     private storeFacade: StoreFacadeService,
@@ -36,9 +41,13 @@ export class HomeComponent implements OnInit {
         // Loading followings and followers list and adding them to state
         this.storeFacade.loadCurrentUserFollowings(this.currentUser.id);
         this.storeFacade.loadCurrentUserFollowers(this.currentUser.id);
+        this.storeFacade.loadUserTransactions(this.currentUser.id);
+        this.storeFacade.loadUserOwnedStocks(this.currentUser.id);
 
         this.followings$ = this.storeFacade.currentFollowings$;
         this.followers$ = this.storeFacade.currentFollowers$; // can be sent to any other component (as component's input) in future commits
+        this.userTransactions$ = this.storeFacade.userTransactions$;
+        this.userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
       }
     });
   }

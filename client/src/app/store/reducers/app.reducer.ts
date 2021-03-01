@@ -1,3 +1,4 @@
+import { Transaction } from './../../interfaces/transaction';
 import { MarketClock } from './../../interfaces/market-clock';
 import { createReducer, on } from '@ngrx/store';
 import { AppError } from 'src/app/interfaces/app-error';
@@ -14,6 +15,8 @@ export interface State {
   errorMessage: AppError;
   followers: User[];
   followings: User[];
+  userTransactions: Transaction[];
+  userOwnedStocks: Stock[];
 }
 
 export const initialState: State = {
@@ -23,6 +26,8 @@ export const initialState: State = {
   currentMarketClock: null,
   followers: null,
   followings: null,
+  userTransactions: null,
+  userOwnedStocks: null,
 };
 
 export const reducer = createReducer(
@@ -52,6 +57,16 @@ export const reducer = createReducer(
   on(appActions.setCurrentFollowings, (state, { userFollowings }) => ({
     ...state,
     followings: userFollowings,
+  })),
+
+  on(appActions.updateUserTransactions, (state, { transactions }) => ({
+    ...state,
+    userTransactions: transactions,
+  })),
+
+  on(appActions.updateUserOwnedStocks, (state, { stocks }) => ({
+    ...state,
+    userOwnedStocks: stocks,
   })),
 
   on(appActions.setAppError, (state, { errorMessage }) => ({

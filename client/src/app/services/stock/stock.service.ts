@@ -23,6 +23,12 @@ export class StockService {
       .pipe(map((res: Response) => this.marketClockFormatter(res)));
   }
 
+  getUserOwnedStocks(userId: number): Observable<Stock[]> {
+    return this.api
+      .get('stock/owned-stocks/' + userId)
+      .pipe(map((res: Response) => this.stockListFormatter(res)));
+  }
+
   // This will need to be discussed: formatting responses frontend vs backend, same models?
   IEXtoModel(iex: any): Stock {
     const stock: Stock = {
@@ -55,5 +61,16 @@ export class StockService {
       timestamp: response.body.timestamp,
     };
     return fromattedMarketClock;
+  }
+
+  stockListFormatter(response: any): Stock[] {
+    const result: Stock[] = [];
+    for (const fetchedStock of response.body) {
+      result.push({
+        companyName: fetchedStock.companyName,
+        tickerSymbol: fetchedStock.symbol,
+      });
+      return result;
+    }
   }
 }

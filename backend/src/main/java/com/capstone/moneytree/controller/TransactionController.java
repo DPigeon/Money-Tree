@@ -48,7 +48,7 @@ public class TransactionController {
     /**
      * An order needs these fields:
      * <p>
-     * { "symbol": "aapl" //symbol or asset ID to identify the asset to trade "qty"
+     * { "symbol": "AAPL" //symbol or asset ID to identify the asset to trade "qty"
      * : "3" // number of shares to trade "side" : "buy" // could be buy or sell
      * "type": "market" // market, limit, stop, stop_limit, or trailing_stop
      * "time_in_force": "" }

@@ -54,3 +54,13 @@ export const selectCurrentMarketClock = createSelector(
   selectAppState,
   (appState: State) => appState.currentMarketClock
 );
+
+export const selectUserTransactions = createSelector(
+  selectAppState,
+  (appState: State) => appState.userTransactions
+);
+
+export const selectUserOwnedStocks = createSelector(
+  selectAppState,
+  (appState: State) => appState.userOwnedStocks
+);

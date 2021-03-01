@@ -84,7 +84,27 @@ export const updatePictureURL = createAction(
   props<{ id: number; image: File; typeSelection: string }>()
 );
 
+export const loadUserTransactions = createAction(
+  '[Transactions] Load transactions list for current user',
+  props<{ userId: number }>()
+);
+
+export const updateUserTransactions = createAction(
+  '[Transactions] New transaction list for current user',
+  props<{ transactions: [Transaction] }>()
+);
+
 export const processStockTransaction = createAction(
   '[Transactions] New stock transaction for user',
   props<{ transaction: Transaction; userId: number }>()
+);
+
+export const loadUserOwnedStocks = createAction(
+  '[Stocks] Load owned-stock list for current user',
+  props<{ userId: number }>()
+);
+
+export const updateUserOwnedStocks = createAction(
+  '[Stocks] New owned-stock list for current user',
+  props<{ stocks: [Stock] }>()
 );
