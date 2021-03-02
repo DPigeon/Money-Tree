@@ -2,7 +2,6 @@ package com.capstone.moneytree.controller;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -42,11 +41,10 @@ public class AlpacaController {
     * @return ResponseEntity of Account.
     */
    @GetMapping("/account")
-   public ResponseEntity<Account> getAccount() {
-      Account account = marketInteractionsFacade.getAccount();
-      Optional<Account> optional = Optional.of(account);
+   public ResponseEntity<Account> getAccount(String userId) {
+      Account account = marketInteractionsFacade.getAccount(userId);
 
-      return ResponseEntity.of(optional);
+      return ResponseEntity.ok(account);
    }
 
    /**
@@ -55,11 +53,10 @@ public class AlpacaController {
     * @return ResponseEntity of Position List.
     */
    @GetMapping("/positions")
-   public ResponseEntity<List<Position>> getPositions() {
-      List<Position> positions = marketInteractionsFacade.getOpenPositions();
-      Optional<List<Position>> optional = Optional.of(positions);
+   public ResponseEntity<List<Position>> getPositions(String userId) {
+      List<Position> positions = marketInteractionsFacade.getOpenPositions(userId);
 
-      return ResponseEntity.of(optional);
+      return ResponseEntity.ok(positions);
    }
 
    /**
@@ -75,12 +72,14 @@ public class AlpacaController {
     */
    @GetMapping("/portfolio/period={periodLength}&unit={periodUnit}&timeframe={timeFrame}&dateend={dateEnd}&extended={extendedHours}")
    public ResponseEntity<PortfolioHistory> getPortfolio(
+           @PathVariable(name = "userId") @Valid @NotBlank String userId,
            @PathVariable(name = "periodLength") @Valid @NotBlank int periodLength,
            @PathVariable(name = "periodUnit") @Valid @NotBlank String periodUnit,
            @PathVariable(name = "timeFrame") @Valid @NotBlank String timeFrame,
            @PathVariable(name = "dateEnd") @Valid @NotBlank LocalDate dateEnd,
            @PathVariable(name = "extendedHours") @Valid @NotBlank String extendedHours) {
       PortfolioHistory portfolioHistory = marketInteractionsFacade.getPortfolioHistory(
+              userId,
               periodLength,
               periodUnit,
               timeFrame,
@@ -114,10 +113,9 @@ public class AlpacaController {
     * @return market status.
     */
     @GetMapping("/market-status")
-    public ResponseEntity<Clock> getMarketClock() {
-      Clock marketClock = marketInteractionsFacade.getMarketClock();
+    public ResponseEntity<Clock> getMarketClock(String userId) {
+      Clock marketClock = marketInteractionsFacade.getMarketClock(userId);
       return ResponseEntity.ok(marketClock);
     }
-
 }
 

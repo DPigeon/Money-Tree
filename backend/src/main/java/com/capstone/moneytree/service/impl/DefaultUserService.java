@@ -56,13 +56,13 @@ public class DefaultUserService implements UserService {
     private static final String USER_CANT_BE_FOLLOWED_BY_ITSELF = "User cannot followed by itself";
     private static final String USER_ALREADY_FOLLOWED = "User already followed";
     
-    @Value("${alpaca.client.id}")
-    private String clientId;
-    @Value("${alpaca.client.secret}")
-    private String clientSecret;
+    @Value("${alpaca.key.id}")
+    String clientId;
+    @Value("${alpaca.secret}")
+    String clientSecret;
     
     @Autowired
-    private ActiveProfile activeProfile;
+    ActiveProfile activeProfile;
     
     private final UserDao userDao;
     private final FollowsDao followsDao;
