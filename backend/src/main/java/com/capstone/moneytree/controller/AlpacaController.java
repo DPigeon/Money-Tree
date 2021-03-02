@@ -40,8 +40,8 @@ public class AlpacaController {
     *
     * @return ResponseEntity of Account.
     */
-   @GetMapping("/account")
-   public ResponseEntity<Account> getAccount(String userId) {
+   @GetMapping("/account/{userId}")
+   public ResponseEntity<Account> getAccount(@PathVariable(name = "userId") @Valid @NotBlank String userId) {
       Account account = marketInteractionsFacade.getAccount(userId);
 
       return ResponseEntity.ok(account);
@@ -52,8 +52,8 @@ public class AlpacaController {
     *
     * @return ResponseEntity of Position List.
     */
-   @GetMapping("/positions")
-   public ResponseEntity<List<Position>> getPositions(String userId) {
+   @GetMapping("/positions/{userId}")
+   public ResponseEntity<List<Position>> getPositions(@PathVariable(name = "userId") @Valid @NotBlank String userId) {
       List<Position> positions = marketInteractionsFacade.getOpenPositions(userId);
 
       return ResponseEntity.ok(positions);
@@ -70,7 +70,7 @@ public class AlpacaController {
     * @param extendedHours Includes extended hours in result. Works only for timeframe less than 1D.
     * @return A PortfolioHistory of timeseries
     */
-   @GetMapping("/portfolio/period={periodLength}&unit={periodUnit}&timeframe={timeFrame}&dateend={dateEnd}&extended={extendedHours}")
+   @GetMapping("/portfolio/userId={userId}&period={periodLength}&unit={periodUnit}&timeframe={timeFrame}&dateend={dateEnd}&extended={extendedHours}")
    public ResponseEntity<PortfolioHistory> getPortfolio(
            @PathVariable(name = "userId") @Valid @NotBlank String userId,
            @PathVariable(name = "periodLength") @Valid @NotBlank int periodLength,
@@ -90,6 +90,17 @@ public class AlpacaController {
    }
 
    /**
+    *  Gets the market status (open/closed).
+    *
+    * @return market status.
+    */
+   @GetMapping("/market-status/{userId}")
+   public ResponseEntity<Clock> getMarketClock(@PathVariable(name = "userId") @Valid @NotBlank String userId) {
+      Clock marketClock = marketInteractionsFacade.getMarketClock(userId);
+      return ResponseEntity.ok(marketClock);
+   }
+
+   /**
     * 1. To make a WS request, you must use a STOMP client with SockJS
     * 2. Endpoint to connect is "http://localhost:8080/api/v1/ws"
     * 3. Subscribe to the "/queue/user-{userId}" channel
@@ -106,16 +117,5 @@ public class AlpacaController {
    public void disconnectFromTradeUpdates(String userId) {
       marketInteractionsFacade.disconnectFromStream(userId);
    }
-
-   /**
-    *  Gets the market status (open/closed).
-    *
-    * @return market status.
-    */
-    @GetMapping("/market-status")
-    public ResponseEntity<Clock> getMarketClock(String userId) {
-      Clock marketClock = marketInteractionsFacade.getMarketClock(userId);
-      return ResponseEntity.ok(marketClock);
-    }
 }
 
