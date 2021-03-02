@@ -31,6 +31,7 @@ import com.capstone.moneytree.model.relationship.Made;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -76,6 +77,9 @@ public class MarketInteractionsFacade {
 
     @Autowired
     OwnsDao ownsDao;
+
+    @Autowired
+    EmailSender emailSender;
 
     @Autowired
     public MarketInteractionsFacade(UserDao userDao) {
@@ -257,7 +261,6 @@ public class MarketInteractionsFacade {
     }
 
     private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {
-        EmailSender emailSender = new EmailSender();
         User user = getUserById(Long.parseLong(userId));
         emailSender.sendOrderCompletedEmail(user, trade);
     }

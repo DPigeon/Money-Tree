@@ -14,9 +14,13 @@
       <mat-chip class='stock-industry'>{{ stockIndustry }}</mat-chip>
     </mat-chip-list>
   </div>
+
 </div>
-<p class="next-opening-message" id="market-next-open-msg" *ngIf="marketClock && !marketClock.isOpen">Next market
-  opening: {{nextOpen()}}</p>
+<div class="next-opening-message">
+  <p id="market-next-open-msg" *ngIf="marketClock && !marketClock.isOpen">Next market
+    opening: {{nextOpen()}}
+  </p>
+</div>
 <mat-card>
   <div class="stock-pricing">
     <span class="stock-value">${{ stockValue }}</span>

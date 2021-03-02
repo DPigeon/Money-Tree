@@ -63,8 +63,8 @@ export class StoreFacadeService {
     this.store.dispatch(appActions.loadStockInfo({ stockTicker: ticker }));
   }
 
-  loadMarketClock(): void {
-    this.store.dispatch(appActions.loadMarketClock());
+  loadMarketClock(userId: number): void {
+    this.store.dispatch(appActions.loadMarketClock({ userId }));
   }
 
   createNewUser(user: User): void {

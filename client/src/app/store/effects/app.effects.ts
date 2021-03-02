@@ -41,7 +41,7 @@ export class Effects {
     this.actions$.pipe(
       ofType(appActions.loadMarketClock),
       switchMap((action) => {
-        return this.stockService.loadMarketClock().pipe(
+        return this.stockService.loadMarketClock(action.userId).pipe(
           map((data: any) =>
             appActions.loadMarketClockSuccess({
               marketClock: data,
@@ -260,24 +260,24 @@ export class Effects {
   );
 
   loadUserOwnedStocks$: Observable<Action> = createEffect(() =>
-  this.actions$.pipe(
-    ofType(appActions.loadUserOwnedStocks),
-    switchMap((action) => {
-      return this.stockService.getUserOwnedStocks(action.userId).pipe(
-        map((data) => {
-          return appActions.updateUserOwnedStocks({ stocks: data });
-        }),
-        catchError((data) =>
-          of(
-            appActions.setAppError({
-              errorMessage: this.mirrorError(data),
-            })
+    this.actions$.pipe(
+      ofType(appActions.loadUserOwnedStocks),
+      switchMap((action) => {
+        return this.stockService.getUserOwnedStocks(action.userId).pipe(
+          map((data) => {
+            return appActions.updateUserOwnedStocks({ stocks: data });
+          }),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
+            )
           )
-        )
-      );
-    })
-  )
-);
+        );
+      })
+    )
+  );
 
   mirrorError(backendError: any): AppError {
     if (backendError && backendError.error) {

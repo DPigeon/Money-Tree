@@ -73,6 +73,7 @@ export const reducer = createReducer(
     ...state,
     errorMessage,
   })),
+
   on(appActions.logCurrentUserOut, (state) => {
     localStorage.removeItem('userId');
     return { ...state, user: null };

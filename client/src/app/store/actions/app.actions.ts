@@ -16,7 +16,8 @@ export const stockInfoLoadSuccess = createAction(
 );
 
 export const loadMarketClock = createAction(
-  '[Market Clock] Load Market Clock Info'
+  '[Market Clock] Load Market Clock Info',
+  props<{ userId: number }>()
 );
 export const loadMarketClockSuccess = createAction(
   '[Market Clock] Load Market Clock Success',
@@ -90,21 +91,21 @@ export const loadUserTransactions = createAction(
 );
 
 export const updateUserTransactions = createAction(
-  '[Transactions] New transaction list for current user',
-  props<{ transactions: [Transaction] }>()
+  '[Transaction[]] New transaction list for current user',
+  props<{ transactions: Transaction[] }>()
 );
 
 export const processStockTransaction = createAction(
-  '[Transactions] New stock transaction for user',
+  '[Transaction[]] New stock transaction for user',
   props<{ transaction: Transaction; userId: number }>()
 );
 
 export const loadUserOwnedStocks = createAction(
-  '[Stocks] Load owned-stock list for current user',
+  '[Stock[]] Load owned-stock list for current user',
   props<{ userId: number }>()
 );
 
 export const updateUserOwnedStocks = createAction(
-  '[Stocks] New owned-stock list for current user',
-  props<{ stocks: [Stock] }>()
+  '[Stock[]] New owned-stock list for current user',
+  props<{ stocks: Stock[] }>()
 );

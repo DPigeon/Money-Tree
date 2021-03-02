@@ -7,6 +7,10 @@ export interface Stock {
   stockChangePercent?: number;
   stockValue?: number;
   logo?: string;
+  since?: string;
+  avgPrice?: string;
+  quantity?: string;
+
   stats?: {
     open?: number;
     high?: number;

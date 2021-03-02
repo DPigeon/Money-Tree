@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.capstone.moneytree.model.SanitizedStock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.capstone.moneytree.dao.StockDao;
 import com.capstone.moneytree.dao.RelationshipDao.OwnsDao;
 import com.capstone.moneytree.model.node.Stock;
+import com.capstone.moneytree.model.SanitizedStock;
 import com.capstone.moneytree.model.relationship.Owns;
 import com.capstone.moneytree.model.node.Transaction;
 import com.capstone.moneytree.model.node.User;
@@ -39,11 +41,11 @@ public class DefaultStockService implements StockService {
     }
 
     @Override
-    public List<Stock> getUserStocks(Long userId) {
-        List<Stock> userStocks = new ArrayList<>();
+    public List<SanitizedStock> getUserStocks(Long userId) {
+        List<SanitizedStock> userStocks = new ArrayList<>();
         List<Owns> allOwnsRels = ownsDao.findByUserId(userId);
         for (Owns rel : allOwnsRels) {
-            userStocks.add(rel.getStock());
+            userStocks.add(new SanitizedStock(rel));
         }
         return userStocks;
     }

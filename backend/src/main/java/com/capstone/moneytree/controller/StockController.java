@@ -1,7 +1,9 @@
 package com.capstone.moneytree.controller;
 
+import com.capstone.moneytree.model.SanitizedStock;
 import com.capstone.moneytree.model.node.Stock;
 import com.capstone.moneytree.model.node.Transaction;
+import com.capstone.moneytree.model.relationship.Owns;
 import com.capstone.moneytree.service.api.StockMarketDataService;
 import com.capstone.moneytree.service.api.StockService;
 import com.capstone.moneytree.service.api.YahooFinanceService;
@@ -114,8 +116,8 @@ public class StockController {
      * @return A proper response with a list of all stocks for that user
      */
     @GetMapping("/owned-stocks/{userId}")
-    List<Stock> getUserStocks(@PathVariable String userId) {
-        List<Stock> userStocks =
+    List<SanitizedStock> getUserStocks(@PathVariable String userId) {
+        List<SanitizedStock> userStocks =
                 stockService.getUserStocks(Long.parseLong(userId));
 
         LOG.info("Returning {} transactions", userStocks.size());

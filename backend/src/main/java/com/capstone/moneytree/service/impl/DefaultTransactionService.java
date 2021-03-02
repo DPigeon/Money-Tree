@@ -75,8 +75,6 @@ public class DefaultTransactionService implements TransactionService {
 
         /* Get user for that transaction */
         User user = userDao.findUserById(Long.parseLong(userId));
-        // TODO if user is null =>
-
         String alpacaKey = user.getAlpacaApiKey();
 
         /* Build the transaction and persist and update user balance */
@@ -119,9 +117,7 @@ public class DefaultTransactionService implements TransactionService {
             toFulfillDao.save(toFulfillRelationship);
 
             user.setBalance(Float.parseFloat(api.getAccount().getCash()));
-        } catch (
-
-                Exception e) {
+        } catch (Exception e) {
             throw new AlpacaException(e.getMessage());
         }
 

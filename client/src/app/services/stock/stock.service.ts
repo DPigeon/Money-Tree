@@ -17,9 +17,9 @@ export class StockService {
       .pipe(map((res: Response) => this.IEXtoModel(res.body)));
   }
 
-  loadMarketClock(): Observable<MarketClock> {
+  loadMarketClock(userId: number): Observable<MarketClock> {
     return this.api
-      .get('alpaca/market-status')
+      .get('alpaca/market-status/' + userId)
       .pipe(map((res: Response) => this.marketClockFormatter(res)));
   }
 
@@ -69,8 +69,11 @@ export class StockService {
       result.push({
         companyName: fetchedStock.companyName,
         tickerSymbol: fetchedStock.symbol,
+        since: fetchedStock.since,
+        avgPrice: fetchedStock.avgPrice,
+        quantity: fetchedStock.quantity,
       });
-      return result;
     }
+    return result;
   }
 }
