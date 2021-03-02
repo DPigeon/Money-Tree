@@ -2,11 +2,8 @@ package com.capstone.moneytree.controller
 
 import com.capstone.moneytree.dao.UserDao
 import com.capstone.moneytree.model.node.User
-import org.junit.Rule
-import org.neo4j.harness.junit.rule.Neo4jRule
-import org.neo4j.ogm.config.Configuration
-import org.neo4j.ogm.session.Session
-import org.neo4j.ogm.session.SessionFactory
+import net.jacobpeterson.alpaca.enums.PortfolioTimeFrame
+import net.jacobpeterson.domain.alpaca.clock.Clock
 import org.springframework.beans.factory.annotation.Autowired
 import com.capstone.moneytree.config.DefaultStompFrameHandlerConfig
 import com.capstone.moneytree.config.WebSocketClientConfig
@@ -32,17 +29,14 @@ import java.util.concurrent.LinkedBlockingDeque
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
 
 /**
- * Integration Tests for the Alpaca Controller. Tests the MarketInteractionFacade as well.
+ * Integration Tests for the Alpaca Controller.
  */
 
-@Ignore
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("dev")
 class AlpacaControllerIT extends Specification {
 
-    // TODO: move those into a test properties file later
-    private static final O_AUTH_TOKEN_TEST = "b9474f2b-b256-4166-b851-306600a17671"
-
+    private static final String O_AUTH_TOKEN_TEST = "545e5eee-7ee0-4b17-83db-a8cd95e0570e"
     private static final String WS_CHANNEL_TRADE_UPDATES = "/queue/user-";
     private static final String MESSAGE_MAPPING_TRADE_UPDATES = "/app/trade/updates"
     private static final String MESSAGE_MAPPING_DISCONNECT = "/app/trade/disconnect"
@@ -53,48 +47,64 @@ class AlpacaControllerIT extends Specification {
     @Autowired
     UserDao userDao
 
-    @Rule
-    public Neo4jRule neoServer = new Neo4jRule()
-
-    private Session session
-
-    def setup() {
-        Configuration configuration = new Configuration.Builder()
-                .uri(neoServer.boltURI().toString())
-                .build()
-
-        SessionFactory sessionFactory = new SessionFactory(configuration, User.class.getPackage().getName());
-        session = sessionFactory.openSession();
-        session.purgeDatabase()
-    }
+    String email = "test322315@money.com"
+    User createdUser = createUser(email, "Raz", "pass", "Raz", "Ben", O_AUTH_TOKEN_TEST)
 
     def "Should retrieve an Alpaca account successfully"() {
         setup: "Create the user"
-        userDao.save(createUser(14303,"test@money.com", "Raz", "pass", "Raz", "Ben", O_AUTH_TOKEN_TEST))
-        def user = userDao.findUserByEmail("test@money.com")
+        userDao.save(createdUser)
+        def user = userDao.findUserByEmail(email)
 
         when: "Getting an Alpaca account"
         ResponseEntity<Account> response = alpacaController.getAccount(user.getId().toString())
 
         then: "The account should be retrieved"
         assert response.statusCode == HttpStatus.OK
+        assert response.body.id != null
+
+        cleanup: "Delete the created user"
+        userDao.delete(user)
+    }
+
+    def "Should retrieve the Market Clock"() {
+        setup: "Create the user"
+        userDao.save(createdUser)
+        def user = userDao.findUserByEmail(email)
+
+        when: "Getting the Market Clock"
+        ResponseEntity<Clock> response = alpacaController.getMarketClock(user.getId().toString())
+
+        then: "The account should be retrieved"
+        assert response.statusCode == HttpStatus.OK
+        assert response.body.timestamp != null
+        assert response.body.nextOpen != null
+        assert response.body.nextClose != null
 
         cleanup: "Delete the created user"
         userDao.delete(user)
     }
 
     def "Should retrieve a list of positions successfully"() {
-        when: "Getting a list of positions"
+        setup: "Create the user"
+        userDao.save(createdUser)
+        def user = userDao.findUserByEmail(email)
 
-        ResponseEntity<List<Position>> response = alpacaController.getPositions(userId)
+        when: "Getting a list of positions"
+        ResponseEntity<List<Position>> response = alpacaController.getPositions(user.getId().toString())
 
         then: "The positions should be retrieved"
         assert response.statusCode == HttpStatus.OK
+        assert !response.body.isEmpty()
+
+        cleanup: "Delete the created user"
+        userDao.delete(user)
     }
 
     @Test
     def "Should retrieve a Portfolio successfully"() {
-        given:
+        setup: "Create the user with portfolio info"
+        userDao.save(createdUser)
+        def user = userDao.findUserByEmail(email)
         int period = 1
         String unit = "WEEK"
         String timeFrame = "FIFTEEN_MINUTE"
@@ -103,7 +113,7 @@ class AlpacaControllerIT extends Specification {
 
         when: "Getting the portfolio"
         ResponseEntity<PortfolioHistory> response = alpacaController.getPortfolio(
-                "1",
+                user.getId().toString(),
                 period,
                 unit,
                 timeFrame,
@@ -113,11 +123,18 @@ class AlpacaControllerIT extends Specification {
 
         then: "The portfolio should be retrieved"
         assert response.statusCode == HttpStatus.OK
+        assert response.body.timeframe == PortfolioTimeFrame.FIFTEEN_MINUTE
+        assert !response.body.timestamp.isEmpty()
+
+        cleanup: "Delete the created user"
+        userDao.delete(user)
     }
 
     @Test
     def "Invalid unit for retrieving a Portfolio"() {
-        given:
+        setup: "Create the user with portfolio info"
+        userDao.save(createdUser)
+        def user = userDao.findUserByEmail(email)
         int period = 1
         String unit = null
         String timeFrame = "FIFTEEN_MINUTE"
@@ -125,15 +142,27 @@ class AlpacaControllerIT extends Specification {
         String extended = "false"
 
         when: "Getting the portfolio with invalid unit"
-        createPortfolioRequest(period, unit, timeFrame, localDate, extended)
+        alpacaController.getPortfolio(
+                user.getId().toString(),
+                period,
+                unit,
+                timeFrame,
+                localDate,
+                extended
+        )
 
         then: "Should not retrieve a portfolio with null unit"
         thrown(NullPointerException)
+
+        cleanup: "Delete the created user"
+        userDao.delete(user)
     }
 
     @Test
     def "Invalid timeFrame for retrieving a Portfolio"() {
-        given:
+        setup: "Create the user with portfolio info"
+        userDao.save(createdUser)
+        def user = userDao.findUserByEmail(email)
         int period = 1
         String unit = "WEEK"
         String timeFrame = null
@@ -141,10 +170,20 @@ class AlpacaControllerIT extends Specification {
         String extended = "false"
 
         when: "Getting the portfolio with invalid time frame"
-        createPortfolioRequest(period, unit, timeFrame, localDate, extended)
+        alpacaController.getPortfolio(
+                user.getId().toString(),
+                period,
+                unit,
+                timeFrame,
+                localDate,
+                extended
+        )
 
         then: "Should not retrieve a portfolio with null time frame"
         thrown(NullPointerException)
+
+        cleanup: "Delete the created user"
+        userDao.delete(user)
     }
 
     @Test
@@ -182,19 +221,5 @@ class AlpacaControllerIT extends Specification {
 
         then: "Should be disconnected from the WebSocket server"
         assert blockingQueue.size() == 0
-    }
-
-    // TODO: Make a class later that creates and encapsulates our requests with methods like this one below to be reusable
-    def createPortfolioRequest(int period, String unit, String timeFrame, LocalDate localDate, String extended) {
-        ResponseEntity<PortfolioHistory> response = alpacaController.getPortfolio(
-                "1",
-                period,
-                unit,
-                timeFrame,
-                localDate,
-                extended
-        )
-
-        return response
     }
 }
