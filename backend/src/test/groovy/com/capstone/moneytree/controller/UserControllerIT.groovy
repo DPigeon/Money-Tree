@@ -27,7 +27,6 @@ class UserControllerIT extends Specification {
     @Autowired
     private UserService userService
 
-
     @Autowired
     UserDao userDao
 
