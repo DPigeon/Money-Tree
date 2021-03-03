@@ -36,17 +36,23 @@ export class StockHistoricalChartComponent implements OnInit, OnChanges {
     { view: '5 days', range: '5d', interval: '15m' },
     { view: '1 month', range: '1mo', interval: '1h' },
     { view: '6 months', range: '6mo', interval: '1d' },
-    { view: '1 year', range: '1y', interval: '1wk' },
+    { view: '1 year', range: '1y', interval: '5d' },
     { view: '5 years', range: '5y', interval: '1mo' },
     { view: 'max', range: 'max', interval: '3mo' },
   ];
   selectedRange = '1d';
+  currentStock='';
 
   async ngOnInit(): Promise<void> {
     await this.formatChartData();
     this.displayChart();
   }
   async ngOnChanges(): Promise<void> {
+   
+    if(this.currentStock!==this.historicalData.chart.result[0].meta.symbol){
+      this.selectedRange='1d';
+      this.currentStock=this.historicalData.chart.result[0].meta.symbol;
+    }
     await this.formatChartData();
     this.displayChart();
   }
@@ -113,7 +119,7 @@ export class StockHistoricalChartComponent implements OnInit, OnChanges {
     };
   }
 
-  formatChartData(): void {
+  async formatChartData(): Promise<void> {
     this.xAxisData = this.convertTimeStampToDate(
       this.historicalData.chart.result[0].timestamp
     );
