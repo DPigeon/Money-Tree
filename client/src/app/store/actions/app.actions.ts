@@ -4,6 +4,7 @@ import { User, UserProfile } from 'src/app/interfaces/user';
 import { AppError } from 'src/app/interfaces/app-error';
 import { MarketClock } from 'src/app/interfaces/market-clock';
 import { Transaction } from 'src/app/interfaces/transaction';
+import { StockHistory } from 'src/app/interfaces/stockHistory';
 
 export const loadStockInfo = createAction(
   '[Stock Info] Load Stock Info',
@@ -22,7 +23,7 @@ export const loadStockHistoricalData = createAction(
 
 export const stockHistoricalDataLoadSuccess = createAction(
   '[Stock History] Load Stock Historical Data Success',
-  props<{ stockHistoricalData: any }>()
+  props<{ stockHistoricalData: StockHistory }>()
 );
 
 export const loadMarketClock = createAction(

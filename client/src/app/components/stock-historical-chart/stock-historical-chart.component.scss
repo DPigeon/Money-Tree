@@ -1,10 +1,17 @@
 @import "../../../styles.scss";
 
-.chartOptionsContainer {
+.card-container {
+  height: 420px;
+}
+.chart-options-container {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+}
+.chart-unavailable {
+  padding-top: 100px;
+  text-align: center;
 }
 .range-option-selected {
   text-align: center;

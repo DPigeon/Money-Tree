@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Stock } from 'src/app/interfaces/stock';
+import { StockHistory } from 'src/app/interfaces/stockHistory';
 import { ApiService } from '../api/api.service';
 import { MarketClock } from './../../interfaces/market-clock';
 
@@ -27,7 +28,7 @@ export class StockService {
     stockTicker: string,
     range: string,
     interval: string
-  ): Observable<any> {
+  ): Observable<StockHistory> {
     return this.api
       .getStockHistoricalData(
         'stockmarket/yahoochart/' +
@@ -37,7 +38,7 @@ export class StockService {
           '&interval=' +
           interval
       )
-      .pipe(map((res: Response) => res.body));
+      .pipe(map((res: Response) => this.YahooDataToModel(res.body)));
   }
 
   getUserOwnedStocks(userId: number): Observable<Stock[]> {
@@ -69,6 +70,15 @@ export class StockService {
       },
     };
     return stock;
+  }
+  YahooDataToModel(response: any): StockHistory {
+    const stockHistoricalData: StockHistory = {
+      symbol: response.chart.result[0].meta.symbol,
+      closePrice: response.chart.result[0].indicators.quote[0].close,
+      timestamp: response.chart.result[0].timestamp,
+      currency: response.chart.result[0].meta.currency,
+    };
+    return stockHistoricalData;
   }
   marketClockFormatter(response: any): MarketClock {
     const fromattedMarketClock: MarketClock = {

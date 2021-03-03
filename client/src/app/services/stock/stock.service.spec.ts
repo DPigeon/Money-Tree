@@ -2,6 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { StockService } from './stock.service';
 import { Stock } from 'src/app/interfaces/stock';
+import { StockHistory } from 'src/app/interfaces/stockHistory';
+import yahooSampleChart from 'src/assets/stock-history/stock-history-sample';
 
 describe('StockService', () => {
   let service: StockService;
@@ -65,8 +67,22 @@ describe('StockService', () => {
     },
   };
 
+  const yahooSampleResponse = yahooSampleChart;
+
+  const expectedStockHistory: StockHistory = {
+    symbol: yahooSampleResponse.chart.result[0].meta.symbol,
+    closePrice: yahooSampleResponse.chart.result[0].indicators.quote[0].close,
+    timestamp: yahooSampleResponse.chart.result[0].timestamp,
+    currency: yahooSampleResponse.chart.result[0].meta.currency,
+  };
+
   it('should convert iex data to frontend model', () => {
     const transformedData = service.IEXtoModel(iexSampleResponse);
     expect(transformedData).toEqual(expectedStock);
+  });
+
+  it('should convert yahoo data to frontend model', () => {
+    const transformedData = service.YahooDataToModel(yahooSampleResponse);
+    expect(transformedData).toEqual(expectedStockHistory);
   });
 });

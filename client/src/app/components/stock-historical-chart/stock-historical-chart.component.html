@@ -1,5 +1,5 @@
-<mat-card style="height: 420px">
-  <div class="chartOptionsContainer" *ngIf="historicalData !== null">
+<mat-card class="card-container">
+  <div id="chart-options" class="chart-options-container">
     <span
       [class]="getOptionClass(option.range)"
       (click)="changeRangeInterval(option)"
@@ -7,5 +7,17 @@
       >{{ option.view }}</span
     >
   </div>
-  <div echarts [options]="chartOption"></div>
+  <div
+    id="stock-chart"
+    *ngIf="!isUnavailableChart"
+    echarts
+    [options]="chartOption"
+  ></div>
+  <h4
+    id="unavailable-chart"
+    *ngIf="isUnavailableChart"
+    class="chart-unavailable"
+  >
+    No chart available
+  </h4>
 </mat-card>

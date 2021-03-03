@@ -51,4 +51,16 @@ describe('stock detail page system test', () => {
     });
     browser.sleep(5000);
   });
+  it('should show stock historical chart', () => {
+    page.navigateToStockDetailPage('aapl').then(() => {
+      if (page.getStockChart().isPresent()) {
+        expect(page.getStockUnavailableChart().isPresent()).toBeFalsy();
+        expect(page.getChartOptions().isPresent()).toBeTruthy();
+      } else if (page.getStockUnavailableChart().isPresent()) {
+        expect(page.getStockChart().isPresent()).toBeFalsy();
+        expect(page.getChartOptions().isPresent()).toBeTruthy();
+      }
+    });
+    browser.sleep(5000);
+  });
 });

@@ -7,6 +7,7 @@ import {
   OnChanges,
 } from '@angular/core';
 import { EChartsOption, graphic } from 'echarts';
+import { StockHistory } from 'src/app/interfaces/stockHistory';
 
 export interface ChartViewOptions {
   view: string;
@@ -19,7 +20,7 @@ export interface ChartViewOptions {
   styleUrls: ['./stock-historical-chart.component.scss'],
 })
 export class StockHistoricalChartComponent implements OnInit, OnChanges {
-  @Input() historicalData: any;
+  @Input() historicalData: StockHistory;
   @Output() changeHistoricalChartRangeInterval = new EventEmitter<{
     range: string;
     interval: string;
@@ -41,20 +42,30 @@ export class StockHistoricalChartComponent implements OnInit, OnChanges {
     { view: 'max', range: 'max', interval: '3mo' },
   ];
   selectedRange = '1d';
-  currentStock='';
+  currentStock = '';
+  isUnavailableChart = false;
 
   async ngOnInit(): Promise<void> {
-    await this.formatChartData();
-    this.displayChart();
+    if (this.historicalData.closePrice.filter((h) => h !== null).length > 1) {
+      await this.formatChartData();
+      this.displayChart();
+      this.isUnavailableChart = false;
+    } else {
+      this.isUnavailableChart = true;
+    }
   }
   async ngOnChanges(): Promise<void> {
-   
-    if(this.currentStock!==this.historicalData.chart.result[0].meta.symbol){
-      this.selectedRange='1d';
-      this.currentStock=this.historicalData.chart.result[0].meta.symbol;
+    if (this.currentStock !== this.historicalData.symbol) {
+      this.selectedRange = '1d';
+      this.currentStock = this.historicalData.symbol;
     }
-    await this.formatChartData();
-    this.displayChart();
+    if (this.historicalData.closePrice.filter((h) => h !== null).length > 1) {
+      await this.formatChartData();
+      this.displayChart();
+      this.isUnavailableChart = false;
+    } else {
+      this.isUnavailableChart = true;
+    }
   }
 
   displayChart(): void {
@@ -93,7 +104,7 @@ export class StockHistoricalChartComponent implements OnInit, OnChanges {
       ],
       series: [
         {
-          name: 'Price (USD)',
+          name: 'Price (' + this.historicalData.currency + ')',
           type: 'line',
           stack: 'u',
           showSymbol: false,
@@ -114,18 +125,15 @@ export class StockHistoricalChartComponent implements OnInit, OnChanges {
             focus: 'series',
           },
           data: this.yAxisData,
+          connectNulls: true,
         },
       ],
     };
   }
 
   async formatChartData(): Promise<void> {
-    this.xAxisData = this.convertTimeStampToDate(
-      this.historicalData.chart.result[0].timestamp
-    );
-    this.yAxisData = this.formatValues(
-      this.historicalData.chart.result[0].indicators.quote[0].close
-    );
+    this.xAxisData = this.convertTimeStampToDate(this.historicalData.timestamp);
+    this.yAxisData = this.formatValues(this.historicalData.closePrice);
   }
 
   convertTimeStampToDate(time: any[]): string[] {
@@ -151,15 +159,24 @@ export class StockHistoricalChartComponent implements OnInit, OnChanges {
       const year = conversionTime.getFullYear();
       const month = months[conversionTime.getMonth()];
       const date = conversionTime.getDate();
-      const hour = conversionTime.getHours();
-      const min = conversionTime.getMinutes();
-      const sec = conversionTime.getSeconds();
+      const hour = String(conversionTime.getHours());
+      const min = String(conversionTime.getMinutes());
 
       switch (this.selectedRange) {
         case '1d':
         case '5d':
         case '1mo':
-          xAxis.push(String(month + ' ' + date + '\n ' + hour + ':' + min));
+          xAxis.push(
+            String(
+              month +
+                ' ' +
+                date +
+                '\n ' +
+                hour.padStart(2, '0') +
+                ':' +
+                min.padStart(2, '0')
+            )
+          );
           break;
         case '6mo':
         case '1y':
@@ -175,7 +192,6 @@ export class StockHistoricalChartComponent implements OnInit, OnChanges {
 
   changeRangeInterval(option: ChartViewOptions): void {
     this.selectedRange = option.range;
-
     this.changeHistoricalChartRangeInterval.emit({
       range: option.range,
       interval: option.interval,
@@ -192,24 +208,17 @@ export class StockHistoricalChartComponent implements OnInit, OnChanges {
   formatValues(values: number[]): number[] {
     this.minValue = values[0];
     this.maxValue = values[0];
-    const formattedValues: number[] = [];
-    values.forEach((v) => {
-      formattedValues.push(Number(v.toFixed(2)));
-      if (this.minValue > v) {
-        this.minValue = Math.floor(v);
-      }
-      if (this.maxValue < v) {
-        this.maxValue = Math.ceil(v);
-      }
-    });
-    this.intervalValue = Math.ceil((this.maxValue - this.minValue) / 12);
-    if ((this.maxValue - this.minValue) / 12 < 0.5) {
-      this.maxValue += 1;
-    } else {
-      this.maxValue = this.minValue + this.intervalValue * 12;
-    }
-    this.minValue = this.minValue - this.intervalValue;
 
+    const formattedValues = values.map((v) =>
+      v == null ? null : Number(v.toFixed(2))
+    );
+    this.minValue = Math.floor(
+      Math.min(...formattedValues.filter((f) => f !== null))
+    );
+    this.maxValue = Math.ceil(
+      Math.max(...formattedValues.filter((f) => f !== null))
+    );
+    this.intervalValue = Math.ceil((this.maxValue - this.minValue) / 12);
     return formattedValues;
   }
 }
