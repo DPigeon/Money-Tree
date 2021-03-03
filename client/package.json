@@ -30,7 +30,7 @@
     "fuzzy-search": "^3.2.1",
     "net": "^1.0.2",
     "ngx-echarts": "^6.0.0",
-    "ngx-hotjar": "^9.0.2",
+    "ngx-hotjar": "^11.0.0",
     "rxjs": "~6.6.0",
     "sockjs-client": "^1.5.0",
     "stompjs": "^2.3.3",
