@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
 import com.capstone.moneytree.dao.UserDao
-import com.capstone.moneytree.dao.relationshipDao.FollowsDao
+import com.capstone.moneytree.dao.FollowsDao
 import com.capstone.moneytree.exception.BadRequestException
 import com.capstone.moneytree.model.node.User
 

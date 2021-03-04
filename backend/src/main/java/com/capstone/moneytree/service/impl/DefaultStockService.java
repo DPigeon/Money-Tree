@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.capstone.moneytree.dao.StockDao;
-import com.capstone.moneytree.dao.relationshipDao.OwnsDao;
+import com.capstone.moneytree.dao.OwnsDao;
 import com.capstone.moneytree.model.node.Stock;
 import com.capstone.moneytree.model.relationship.Owns;
 import com.capstone.moneytree.service.api.StockService;

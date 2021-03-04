@@ -1,7 +1,7 @@
 package com.capstone.moneytree.service
 
-import com.capstone.moneytree.dao.relationshipDao.MadeDao
-import com.capstone.moneytree.dao.relationshipDao.ToFulfillDao
+import com.capstone.moneytree.dao.MadeDao
+import com.capstone.moneytree.dao.ToFulfillDao
 import com.capstone.moneytree.dao.StockDao
 import com.capstone.moneytree.dao.TransactionDao
 import com.capstone.moneytree.dao.UserDao
@@ -17,9 +17,6 @@ import com.capstone.moneytree.model.relationship.Made
 import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.api.TransactionService
 import com.capstone.moneytree.service.impl.DefaultTransactionService
-import net.jacobpeterson.domain.alpaca.order.Order
-
-import java.time.ZonedDateTime
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildMarketOrder
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildTransactions

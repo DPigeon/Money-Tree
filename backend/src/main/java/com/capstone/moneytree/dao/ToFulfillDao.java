@@ -1,4 +1,4 @@
-package com.capstone.moneytree.dao.relationshipDao;
+package com.capstone.moneytree.dao;
 
 import com.capstone.moneytree.model.relationship.ToFulfill;
 import org.springframework.data.neo4j.repository.Neo4jRepository;

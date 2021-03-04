@@ -1,4 +1,4 @@
-package com.capstone.moneytree.dao.relationshipDao;
+package com.capstone.moneytree.dao;
 
 import com.capstone.moneytree.model.TransactionStatus;
 import com.capstone.moneytree.model.relationship.Made;

@@ -19,7 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes
 import org.springframework.web.multipart.MultipartFile
 
 import com.capstone.moneytree.dao.UserDao
-import com.capstone.moneytree.dao.relationshipDao.FollowsDao
+import com.capstone.moneytree.dao.FollowsDao
 import com.capstone.moneytree.exception.*
 import com.capstone.moneytree.facade.AmazonS3Facade
 import com.capstone.moneytree.model.node.User
