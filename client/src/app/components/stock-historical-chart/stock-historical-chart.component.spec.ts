@@ -109,7 +109,6 @@ describe('Stock Historical chart', () => {
           new Date(t * 1000).getFullYear()
       )
     );
-    
   });
 
   it('should change time interval', () => {
