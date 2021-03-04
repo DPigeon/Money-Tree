@@ -8,7 +8,6 @@ import {
 } from '../../shared.module';
 import { StockHistoricalChartComponent } from './stock-historical-chart.component';
 
-
 describe('StockHistoricalChartComponent', () => {
   let component: StockHistoricalChartComponent;
   let fixture: ComponentFixture<StockHistoricalChartComponent>;
@@ -54,14 +53,6 @@ const stockHistoricalData: StockHistory = {
   ],
   currency: 'USD',
 };
-const convertedTimestamps = [
-  'Mar 3\n 09:30',
-  'Mar 3\n 09:35',
-  'Mar 3\n 09:40',
-  'Mar 3\n 09:45',
-  'Mar 3\n 09:50',
-  'Mar 3\n 09:55',
-];
 const formatedValues: number[] = [689.88, 687.11, 688.99, null, 696.22, 691.09];
 
 // unit tests
@@ -74,11 +65,51 @@ describe('Stock Historical chart', () => {
   });
 
   it('should convert timestamp to Date', () => {
+    const d = new Date();
     component.historicalData = stockHistoricalData;
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    component.selectedRange = '1d' || '5d' || '1mo';
     expect(
-      component.convertTimeStampToDate(stockHistoricalData.timestamp).sort()
-    ).toEqual(convertedTimestamps.sort());
-    component.convertTimeStampToDate(stockHistoricalData.timestamp);
+      component.convertTimeStampToDate(stockHistoricalData.timestamp)
+    ).toEqual(
+      stockHistoricalData.timestamp.map(
+        (t) =>
+          String(months[new Date(t * 1000).getMonth()]) +
+          ' ' +
+          new Date(t * 1000).getDate() +
+          '\n ' +
+          String(new Date(t * 1000).getHours()).padStart(2, '0') +
+          ':' +
+          String(new Date(t * 1000).getMinutes()).padStart(2, '0')
+      )
+    );
+    component.selectedRange = '6mo' || '1y' || '5y' || 'max';
+    expect(
+      component.convertTimeStampToDate(stockHistoricalData.timestamp)
+    ).toEqual(
+      stockHistoricalData.timestamp.map(
+        (t) =>
+          String(months[new Date(t * 1000).getMonth()]) +
+          ' ' +
+          new Date(t * 1000).getDate() +
+          '\n ' +
+          new Date(t * 1000).getFullYear()
+      )
+    );
+    
   });
 
   it('should change time interval', () => {
