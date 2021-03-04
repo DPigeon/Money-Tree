@@ -22,17 +22,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Transaction extends Entity {
 
-    float quantity;
+   float quantity;
 
-    ZonedDateTime purchasedAt;
+   float avgPrice;
 
-    MoneyTreeOrderType moneyTreeOrderType;
+   float total;
 
-    String clientOrderId;
+   ZonedDateTime purchasedAt;
 
-    TransactionStatus status;
+   MoneyTreeOrderType moneyTreeOrderType;
 
-    float avgPrice;
+   String clientOrderId;
 
-    String symbol;
+   TransactionStatus status;
+
+   String symbol;
 }

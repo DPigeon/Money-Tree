@@ -25,30 +25,33 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @RelationshipEntity(type = "Owns")
 public class Owns {
-    @Id
-    @GeneratedValue
-    private Long id;
+   @Id
+   @GeneratedValue
+   private Long id;
 
-    @StartNode
-    User user;
+   @StartNode
+   User user;
 
-    @EndNode
-    Stock stock;
+   @EndNode
+   Stock stock;
 
-    @DateLong
-    Date since;
+   @DateLong
+   Date since;
 
-    float quantity;
+   float quantity;
 
-    float avgPrice;
+   float avgPrice;
 
-    public Owns(User user, Stock stock, Date since,
-                float quantity, float avgPrice) {
-        this.user = user;
-        this.stock = stock;
-        this.since = since;
-        this.quantity = quantity;
-        this.avgPrice = avgPrice;
-    }
+   float total;
+
+   public Owns(User user, Stock stock, Date since,
+               float quantity, float avgPrice, float total) {
+      this.user = user;
+      this.stock = stock;
+      this.since = since;
+      this.quantity = quantity;
+      this.avgPrice = avgPrice;
+      this.total = total;
+   }
 
 }

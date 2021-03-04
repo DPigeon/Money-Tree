@@ -8,8 +8,9 @@ export interface Stock {
   stockValue?: number;
   logo?: string;
   since?: string;
-  avgPrice?: string;
   quantity?: string;
+  avgPrice?: string;
+  total?: string;
 
   stats?: {
     open?: number;

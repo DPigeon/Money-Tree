@@ -1,4 +1,3 @@
-import { loadUserTransactions } from './../../store/actions/app.actions';
 import { Component, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/interfaces/user';

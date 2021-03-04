@@ -120,7 +120,7 @@ public class StockController {
         List<SanitizedStock> userStocks =
                 stockService.getUserStocks(Long.parseLong(userId));
 
-        LOG.info("Returning {} transactions", userStocks.size());
+        LOG.info("Returning {} owned stocks", userStocks.size());
 
         return userStocks;
     }

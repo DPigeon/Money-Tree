@@ -17,6 +17,7 @@ import com.capstone.moneytree.model.relationship.Made
 import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.api.TransactionService
 import com.capstone.moneytree.service.impl.DefaultTransactionService
+import net.jacobpeterson.domain.alpaca.order.Order
 
 import java.time.ZonedDateTime
 
@@ -69,68 +70,79 @@ class DefaultTransactionServiceTest extends Specification {
         })
     }
 
-//    def "Validate the happy path when executing a transaction"() {
-//        given: "The session returns the mock api"
-//        session.alpaca(_) >> api
-//
-//        and: "a valid order"
-//        def order = buildMarketOrder()
-//
-//        and: "a valid stock"
-//        Stock newStock = new Stock()
-//        newStock.setSymbol(order.getSymbol())
-//
-//        and: "a valid transaction"
-//        Transaction newTransaction = new Transaction(1, order.getCreatedAt(), MoneyTreeOrderType.MARKET_BUY, order.getClientOrderId(), TransactionStatus.PENDING, 2.00, "AAPL")
-//
-//        and: "api returns a successful order"
-//        api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY) >> order
-//        and: "api return asset for this symbol"
-//        Asset asset = buildAsset()
-//        api.getAssetBySymbol(order.getSymbol()) >> asset
-//
-//        and: "StockDao returns an existing stock object for that symbol"
-//        stockDao.findBySymbol(order.getSymbol()) >> newStock
-//
-//        and: "user dao returns a user"
-//        def user = new User()
-//        user.setId(1)
-//        user.setAlpacaApiKey("88999oikkjsga,mbsd")
-//        userDao.findUserById(1 as Long) >> user
-//
-//        and: "returns a balance"
-//        def balance = "1234.56"
-//        api.getAccount() >> Stub(Account) {
-//            getCash() >> balance
-//        }
-//
-//        and: "returns the user transactions "
-//        madeDao.findByUserId(1 as Long) >>  [new Made(user, newTransaction, null)]
-//
-//        and: "returns the user transactions "
-//        transactionService.getUserTransactions(user.getId()) >>  [newTransaction]
-//
-//
-//        when: "execute is triggered"
-//        transactionService.execute(user.getAlpacaApiKey(), order, user)
-//
-//
-//        then:
-//        1 * madeDao.save(_)
-//        1 * toFulfillDao.save(_)
-//        1 * userDao.save(_)
-//    }
+    def "Validate the happy path when executing a transaction"() {
+        given: "The session returns the mock api"
+        session.alpaca(_) >> api
 
-//    def "Should throw an exception when the userId does not exist"() {
-//        given: "Database returns null (no user for that id)"
-//        userDao.findUserById(123456789) >> null
-//
-//        when: "executing a transaction for a non existing user"
-//        transactionService.execute("1234", null)
-//
-//        then:
-//        thrown(EntityNotFoundException)
-//    }
+        and: "a valid order"
+        def order = buildMarketOrder()
+
+        and: "a valid stock"
+        Stock newStock = new Stock()
+        newStock.setSymbol(order.getSymbol())
+
+        and: "a valid transaction"
+        Transaction newTransaction = Transaction.builder().purchasedAt(order.getCreatedAt()).moneyTreeOrderType(MoneyTreeOrderType.MARKET_BUY)
+                .clientOrderId(order.getClientOrderId()).status(TransactionStatus.PENDING).quantity(2.00f).symbol("AAPL").build()
+
+        and: "api returns a successful order"
+        api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY) >> order
+        and: "api return asset for this symbol"
+        Asset asset = buildAsset()
+        api.getAssetBySymbol(order.getSymbol()) >> asset
+
+        and: "StockDao returns an existing stock object for that symbol"
+        stockDao.findBySymbol(order.getSymbol()) >> newStock
+
+        and: "user dao returns a user"
+        def user = new User()
+        user.setAlpacaApiKey("88999oikkjsga,mbsd")
+        Long userId = 1
+        user.setId(userId)
+        userDao.findUserById(userId) >> user
+
+        and: "returns a balance"
+        def balance = "1234.56"
+        api.getAccount() >> Stub(Account) {
+            getCash() >> balance
+        }
+
+        and: "returns the constructed transaction"
+        transactionService.constructTransactionFromOrder(order) >> newTransaction
+
+        and: "returns the user transactions "
+        List<Made> allMadeRels = new ArrayList<>()
+        allMadeRels.add(new Made(user, newTransaction, null))
+        madeDao.findByUserId(user.getId()) >> allMadeRels
+
+        and: "returns the user transactions "
+        List<Transaction> userTransactionsList = new ArrayList<>()
+        userTransactionsList.add(newTransaction)
+        transactionService.getUserTransactions(user.getId()) >> userTransactionsList
+
+
+        when: "execute is triggered"
+        transactionService.execute(Long.toString(user.getId()), order)
+
+
+        then:
+        1 * madeDao.save(_)
+        1 * toFulfillDao.save(_)
+        1 * transactionDao.save(_)
+        1 * userDao.save(_)
+        assert transactionService.execute(Long.toString(user.getId()), order) == userTransactionsList
+    }
+
+    def "Should throw an exception when the userId does not exist"() {
+        given: "Database returns null (no user for that id)"
+        userDao.findUserById(123456789) >> null
+
+        when: "executing a transaction for a non existing user"
+        transactionService.execute("1234", null)
+
+        then:
+        thrown(EntityNotFoundException)
+    }
 
     def "exception thrown by api when making call should be caught"() {
         given: "The session returns the mock api"

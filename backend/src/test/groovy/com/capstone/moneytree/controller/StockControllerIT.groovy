@@ -1,6 +1,7 @@
 package com.capstone.moneytree.controller
 
 import com.capstone.moneytree.facade.YahooFinanceFacade
+import com.capstone.moneytree.service.api.StockService
 import com.capstone.moneytree.service.api.YahooFinanceService
 import com.capstone.moneytree.service.impl.DefaultYahooFinanceService
 import org.junit.platform.commons.util.StringUtils
@@ -26,11 +27,15 @@ class StockControllerIT extends Specification {
    private static final String PUBLISH_TOKEN = System.getenv().get("IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX")
    private static final String SECRET_TOKEN = System.getenv().get("IEXCLOUD_SECRET_TOKEN_SANDBOX")
 
+
+
    StockMarketDataFacade stockMarketDataFacade = new StockMarketDataFacade(PUBLISH_TOKEN, SECRET_TOKEN, "dev")
    StockMarketDataService stockMarketDataService = new DefaultStockMarketDataService(stockMarketDataFacade: stockMarketDataFacade)
    YahooFinanceFacade yahooFinanceFacade = new YahooFinanceFacade(WebClient.builder());
    YahooFinanceService yahooFinanceService = new DefaultYahooFinanceService(yahooFinanceFacade: yahooFinanceFacade);
-   StockController stockController = new StockController(stockMarketDataService, yahooFinanceService)
+   StockService stockService
+
+   StockController stockController = new StockController(stockMarketDataService, yahooFinanceService, stockService)
 
    @Ignore("Fails, needs to be fixed")
    def "Validates GET batch returns stock information"() {

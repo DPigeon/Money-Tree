@@ -58,219 +58,224 @@ import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdateMessage;
 @Component
 public class MarketInteractionsFacade {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MarketInteractionsFacade.class);
-    private final UserDao userDao;
-    private AlpacaAPI alpacaAPI;
-    private final Map<String, AlpacaStreamListener> userIdToStream;
+   private static final Logger LOGGER = LoggerFactory.getLogger(MarketInteractionsFacade.class);
+   private final UserDao userDao;
+   private AlpacaAPI alpacaAPI;
+   private final Map<String, AlpacaStreamListener> userIdToStream;
 
-    @Autowired
-    StockDao stockDao;
+   @Autowired
+   StockDao stockDao;
 
-    @Autowired
-    TransactionDao transactionDao;
+   @Autowired
+   TransactionDao transactionDao;
 
-    @Autowired
-    MadeDao madeDao;
+   @Autowired
+   MadeDao madeDao;
 
-    @Autowired
-    ToFulfillDao toFulfillDao;
+   @Autowired
+   ToFulfillDao toFulfillDao;
 
-    @Autowired
-    OwnsDao ownsDao;
+   @Autowired
+   OwnsDao ownsDao;
 
-    @Autowired
-    EmailSender emailSender;
+   @Autowired
+   EmailSender emailSender;
 
-    @Autowired
-    public MarketInteractionsFacade(UserDao userDao) {
-        this.userDao = userDao;
-        userIdToStream = new HashMap<>();
-    }
+   @Autowired
+   public MarketInteractionsFacade(UserDao userDao) {
+      this.userDao = userDao;
+      userIdToStream = new HashMap<>();
+   }
 
-    private void initializeAlpacaSession(String userId) {
-        User user = getUserById(Long.parseLong(userId));
-        String alpacaKey = user.getAlpacaApiKey();
-        AlpacaSession alpacaSession = new AlpacaSession();
-        alpacaAPI = alpacaSession.alpaca(alpacaKey);
-    }
+   private void initializeAlpacaSession(String userId) {
+      User user = getUserById(Long.parseLong(userId));
+      String alpacaKey = user.getAlpacaApiKey();
+      AlpacaSession alpacaSession = new AlpacaSession();
+      alpacaAPI = alpacaSession.alpaca(alpacaKey);
+   }
 
-    /**
-     * Gets the Alpaca user account.
-     *
-     * @return An Account.
-     */
-    public Account getAccount(String userId) {
-        initializeAlpacaSession(userId);
-        Account account = null;
-        try {
-            account = alpacaAPI.getAccount();
-            LOGGER.info("Get account: {}", account);
-        } catch (AlpacaAPIRequestException e) {
-            LOGGER.error("Error getting the Alpaca account: {}", e.getMessage());
-        }
+   /**
+    * Gets the Alpaca user account.
+    *
+    * @return An Account.
+    */
+   public Account getAccount(String userId) {
+      initializeAlpacaSession(userId);
+      Account account = null;
+      try {
+         account = alpacaAPI.getAccount();
+         LOGGER.info("Get account: {}", account);
+      } catch (AlpacaAPIRequestException e) {
+         LOGGER.error("Error getting the Alpaca account: {}", e.getMessage());
+      }
 
-        return account;
-    }
+      return account;
+   }
 
-    /**
-     * Gets the market status (open/closed).
-     *
-     * @return market status.
-     */
-    public Clock getMarketClock(String userId) {
-        initializeAlpacaSession(userId);
-        Clock marketClock;
-        try {
-            marketClock = alpacaAPI.getClock();
-            LOGGER.info("Get market clock: {}", marketClock);
-        } catch (Exception e) {
-            LOGGER.error("Error getting the Alpaca market clock: {}", e.getMessage());
-            throw new AlpacaClockException(ExceptionMessage.ALPACA_CLOCK_ERROR.getMessage());
-        }
-        return marketClock;
-    }
+   /**
+    * Gets the market status (open/closed).
+    *
+    * @return market status.
+    */
+   public Clock getMarketClock(String userId) {
+      initializeAlpacaSession(userId);
+      Clock marketClock;
+      try {
+         marketClock = alpacaAPI.getClock();
+         LOGGER.info("Get market clock: {}", marketClock);
+      } catch (Exception e) {
+         LOGGER.error("Error getting the Alpaca market clock: {}", e.getMessage());
+         throw new AlpacaClockException(ExceptionMessage.ALPACA_CLOCK_ERROR.getMessage());
+      }
+      return marketClock;
+   }
 
-    /**
-     * Gets all stocks position for a user.
-     *
-     * @return List of available positions.
-     */
-    public List<Position> getOpenPositions(String userId) {
-        initializeAlpacaSession(userId);
-        ArrayList<Position> positions = null;
-        try {
-            positions = alpacaAPI.getOpenPositions();
-            LOGGER.info("Get positions: {}", positions);
-        } catch (AlpacaAPIRequestException e) {
-            LOGGER.error("Error getting positions: {}", e.getMessage());
-        }
+   /**
+    * Gets all stocks position for a user.
+    *
+    * @return List of available positions.
+    */
+   public List<Position> getOpenPositions(String userId) {
+      initializeAlpacaSession(userId);
+      ArrayList<Position> positions = null;
+      try {
+         positions = alpacaAPI.getOpenPositions();
+         LOGGER.info("Get positions: {}", positions);
+      } catch (AlpacaAPIRequestException e) {
+         LOGGER.error("Error getting positions: {}", e.getMessage());
+      }
 
-        return positions;
-    }
+      return positions;
+   }
 
-    /**
-     * Gets the timeseries data for the profile value of equity and profit loss.
-     *
-     * @param periodLength  Duration of the data.
-     * @param periodUnit    Either day (D), week (W), month (M) or year (A).
-     * @param timeFrame     Resolution of the time window (1Min, 5Min, 15Min, 1H,
-     *                      1D)
-     * @param dateEnd       Date data is returned up to.
-     * @param extendedHours Includes extended hours in result. Works only for
-     *                      timeframe less than 1D.
-     * @return A PortfolioHistory of timeseries
-     */
-    public PortfolioHistory getPortfolioHistory(String userId, @NotNull @NotBlank int periodLength,
-                                                @NotNull @NotBlank String periodUnit, @NotNull @NotBlank String timeFrame,
-                                                @NotNull @NotBlank LocalDate dateEnd, @NotNull @NotBlank boolean extendedHours) {
-        initializeAlpacaSession(userId);
-        PortfolioHistory portfolioHistory = null;
-        PortfolioPeriodUnit portfolioPeriodUnit = PortfolioPeriodUnit.valueOf(periodUnit);
-        PortfolioTimeFrame portfolioTimeFrame = PortfolioTimeFrame.valueOf(timeFrame);
-        try {
-            portfolioHistory = alpacaAPI.getPortfolioHistory(periodLength, portfolioPeriodUnit, portfolioTimeFrame,
-                    dateEnd, extendedHours);
-            LOGGER.info("Get portfolio: {}", portfolioHistory);
-        } catch (AlpacaAPIRequestException e) {
-            LOGGER.error("Error getting the portfolio: {}", e.getMessage());
-        }
+   /**
+    * Gets the timeseries data for the profile value of equity and profit loss.
+    *
+    * @param periodLength  Duration of the data.
+    * @param periodUnit    Either day (D), week (W), month (M) or year (A).
+    * @param timeFrame     Resolution of the time window (1Min, 5Min, 15Min, 1H,
+    *                      1D)
+    * @param dateEnd       Date data is returned up to.
+    * @param extendedHours Includes extended hours in result. Works only for
+    *                      timeframe less than 1D.
+    * @return A PortfolioHistory of timeseries
+    */
+   public PortfolioHistory getPortfolioHistory(String userId, @NotNull @NotBlank int periodLength,
+                                               @NotNull @NotBlank String periodUnit, @NotNull @NotBlank String timeFrame,
+                                               @NotNull @NotBlank LocalDate dateEnd, @NotNull @NotBlank boolean extendedHours) {
+      initializeAlpacaSession(userId);
+      PortfolioHistory portfolioHistory = null;
+      PortfolioPeriodUnit portfolioPeriodUnit = PortfolioPeriodUnit.valueOf(periodUnit);
+      PortfolioTimeFrame portfolioTimeFrame = PortfolioTimeFrame.valueOf(timeFrame);
+      try {
+         portfolioHistory = alpacaAPI.getPortfolioHistory(periodLength, portfolioPeriodUnit, portfolioTimeFrame,
+                 dateEnd, extendedHours);
+         LOGGER.info("Get portfolio: {}", portfolioHistory);
+      } catch (AlpacaAPIRequestException e) {
+         LOGGER.error("Error getting the portfolio: {}", e.getMessage());
+      }
 
-        return portfolioHistory;
-    }
+      return portfolioHistory;
+   }
 
-    /**
-     * A stream listener to receive trade updates
-     * https://alpaca.markets/docs/api-documentation/api-v2/streaming/
-     */
-    public void listenToStreamUpdates(String userId, SimpMessagingTemplate messageSender) {
-        try {
-            initializeAlpacaSession(userId);
-            AlpacaStreamListener streamListener = createStreamListener(userId, messageSender,
-                    AlpacaStreamMessageType.TRADE_UPDATES);
-            alpacaAPI.addAlpacaStreamListener(streamListener);
-            if (userIdToStream.containsKey(userId)) {
-                userIdToStream.replace(userId, streamListener);
-            } else {
-                userIdToStream.put(userId, streamListener);
+   /**
+    * A stream listener to receive trade updates
+    * https://alpaca.markets/docs/api-documentation/api-v2/streaming/
+    */
+   public void listenToStreamUpdates(String userId, SimpMessagingTemplate messageSender) {
+      try {
+         initializeAlpacaSession(userId);
+         AlpacaStreamListener streamListener = createStreamListener(userId, messageSender,
+                 AlpacaStreamMessageType.TRADE_UPDATES);
+         alpacaAPI.addAlpacaStreamListener(streamListener);
+         if (userIdToStream.containsKey(userId)) {
+            userIdToStream.replace(userId, streamListener);
+         } else {
+            userIdToStream.put(userId, streamListener);
+         }
+         LOGGER.info("[Trade Updates]: Listening to trade streams of user ID {}", userId);
+      } catch (WebsocketException e) {
+         LOGGER.error("WebSocketException for user ID {}. Error: {}", userId, e.getMessage());
+      }
+   }
+
+   public void disconnectFromStream(String userId) {
+      initializeAlpacaSession(userId);
+      if (userIdToStream.containsKey(userId)) {
+         AlpacaStreamListener streamListener = userIdToStream.get(userId);
+         try {
+            alpacaAPI.removeAlpacaStreamListener(streamListener);
+            userIdToStream.remove(userId);
+            LOGGER.info("[Trade Updates]: Removing stream listener for user ID {}", userId);
+         } catch (WebsocketException e) {
+            LOGGER.error("WebSocketException for user ID {}", userId);
+         }
+      }
+   }
+
+   /**
+    * Creates a streamListenerAdapter for stream listeners
+    *
+    * @param messageType A list of AlpacaStreamMessageType
+    * @return An AlpacaStreamListenerAdapter
+    */
+   private AlpacaStreamListener createStreamListener(String userId, SimpMessagingTemplate messageSender,
+                                                     AlpacaStreamMessageType... messageType) {
+      return new AlpacaStreamListenerAdapter(messageType) {
+         @Override
+         public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
+            if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES) {
+               TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
+               TradeUpdate tradeUpdate = tradeMessage.getData();
+               if (tradeUpdate.getEvent().equals("fill")) {
+                  messageSender.convertAndSend("/queue/user-" + userId,
+                          tradeUpdate.getOrder().getClientOrderId());
+                  sendOrderCompletedEmail(userId, tradeUpdate);
+                  updateTransactionStatus(tradeUpdate.getOrder().getClientOrderId(), tradeUpdate.getOrder().getFilledAvgPrice(), tradeUpdate.getPrice());
+                  LOGGER.info("Order filled by user id {}", userId);
+               }
             }
-            LOGGER.info("[Trade Updates]: Listening to trade streams of user ID {}", userId);
-        } catch (WebsocketException e) {
-            LOGGER.error("WebSocketException for user ID {}. Error: {}", userId, e.getMessage());
-        }
-    }
+         }
+      };
+   }
 
-    public void disconnectFromStream(String userId) {
-        initializeAlpacaSession(userId);
-        if (userIdToStream.containsKey(userId)) {
-            AlpacaStreamListener streamListener = userIdToStream.get(userId);
-            try {
-                alpacaAPI.removeAlpacaStreamListener(streamListener);
-                userIdToStream.remove(userId);
-                LOGGER.info("[Trade Updates]: Removing stream listener for user ID {}", userId);
-            } catch (WebsocketException e) {
-                LOGGER.error("WebSocketException for user ID {}", userId);
-            }
-        }
-    }
+   private void updateTransactionStatus(String clientOrderId, String avgPrice, String totalPrice) {
+      Transaction transaction = transactionDao.findByClientOrderId(clientOrderId);
+      if (avgPrice != null) {
+         // to go around null exception because the listener listens to the trade updates and while the status is pending this value is null
+         transaction.setAvgPrice(Float.parseFloat(avgPrice));
+      }
+      transaction.setTotal(Float.parseFloat(totalPrice));
+      changeStatusAndSave(transaction);
+      LOGGER.info("Updated transaction status for transaction {}", clientOrderId);
+   }
 
-    /**
-     * Creates a streamListenerAdapter for stream listeners
-     *
-     * @param messageType A list of AlpacaStreamMessageType
-     * @return An AlpacaStreamListenerAdapter
-     */
-    private AlpacaStreamListener createStreamListener(String userId, SimpMessagingTemplate messageSender,
-                                                      AlpacaStreamMessageType... messageType) {
-        return new AlpacaStreamListenerAdapter(messageType) {
-            @Override
-            public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
-                if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES) {
-                    TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
-                    TradeUpdate tradeUpdate = tradeMessage.getData();
-                    if (tradeUpdate.getEvent().equals("fill")) {
-                        messageSender.convertAndSend("/queue/user-" + userId,
-                                tradeUpdate.getOrder().getClientOrderId());
-                        sendOrderCompletedEmail(userId, tradeUpdate);
-                        updateTransactionStatus(tradeUpdate.getOrder().getClientOrderId());
-                        LOGGER.info("Order filled by user id {}", userId);
-                    }
-                }
-            }
-        };
-    }
+   private void changeStatusAndSave(Transaction transaction) {
+      transaction.setStatus(TransactionStatus.COMPLETED);
+      transactionDao.save(transaction);
 
-    private void updateTransactionStatus(String clientOrderId) {
-        Transaction transaction = transactionDao.findByClientOrderId(clientOrderId);
-        changeStatusAndSave(transaction);
-        LOGGER.info("Updated transaction status for transaction {}", clientOrderId);
-    }
+      // finding made relationship for that transaction and the user related to it
+      Made madeRel = madeDao.findByTransactionId(transaction.getId());
+      User user = madeRel.getUser();
 
-    private void changeStatusAndSave(Transaction transaction) {
-        transaction.setStatus(TransactionStatus.COMPLETED);
-        transactionDao.save(transaction);
+      Stock stock = stockDao.findBySymbol(transaction.getSymbol());
 
-        // finding made relationship for that transaction and the user related to it
-        Made madeRel = madeDao.findByTransactionId(transaction.getId());
-        User user = madeRel.getUser();
+      Owns ownsRelationship = new Owns(user, stock, new Date(), transaction.getQuantity(), transaction.getAvgPrice(), transaction.getTotal());
+      ownsDao.save(ownsRelationship);
 
-        Stock stock = stockDao.findBySymbol(transaction.getSymbol());
+   }
 
-        Owns ownsRelationship = new Owns(user, stock, new Date(), transaction.getQuantity(), transaction.getAvgPrice());
-        ownsDao.save(ownsRelationship);
+   private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {
+      User user = getUserById(Long.parseLong(userId));
+      emailSender.sendOrderCompletedEmail(user, trade);
+   }
 
-    }
+   private User getUserById(Long userId) {
+      User user = userDao.findUserById(userId);
+      if (user == null) {
+         throw new EntityNotFoundException("User does not exist!");
+      }
 
-    private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {
-        User user = getUserById(Long.parseLong(userId));
-        emailSender.sendOrderCompletedEmail(user, trade);
-    }
-
-    private User getUserById(Long userId) {
-        User user = userDao.findUserById(userId);
-        if (user == null) {
-            throw new EntityNotFoundException("User does not exist!");
-        }
-
-        return user;
-    }
+      return user;
+   }
 }

@@ -23,7 +23,7 @@ export class TransactionService {
   ): Observable<any> {
     return this.api
       .post('transactions/execute/' + userId, transaction)
-      .pipe(map((res: Response) => res.body));
+      .pipe(map((res: Response) => this.transactionListFormatter(res)));
   }
 
   transactionListFormatter(response: any): Transaction[] {
@@ -37,8 +37,9 @@ export class TransactionService {
         status: fetchedTransaction.status,
         averagePricePerShare: fetchedTransaction.avgPrice,
         symbol: fetchedTransaction.symbol,
+        total: fetchedTransaction.total,
       });
-      return result;
     }
+    return result;
   }
 }
