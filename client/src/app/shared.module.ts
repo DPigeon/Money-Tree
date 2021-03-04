@@ -16,6 +16,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+//echarts
+import { NgxEchartsModule } from 'ngx-echarts';
+import * as echarts from 'echarts';
+
 export const MATERIAL_MODULE_DEPENDENCIES = [
   MatIconModule,
   MatCardModule,
@@ -33,5 +37,7 @@ export const MATERIAL_MODULE_DEPENDENCIES = [
 ];
 
 export const NGRX_STORE_MODULE = provideMockStore({ initialState });
+
+export const NGX_ECHART = NgxEchartsModule.forRoot({ echarts });
 
 export const FORM_MODULE_DPENDENCEIES = [FormsModule, ReactiveFormsModule];

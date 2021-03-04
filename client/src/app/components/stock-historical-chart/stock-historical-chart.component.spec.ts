@@ -1,11 +1,38 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { NgxEchartsDirective } from 'ngx-echarts';
 import { StockHistory } from 'src/app/interfaces/stockHistory';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
   FORM_MODULE_DPENDENCEIES,
+  NGX_ECHART,
 } from '../../shared.module';
 import { StockHistoricalChartComponent } from './stock-historical-chart.component';
+
+
+describe('StockHistoricalChartComponent', () => {
+  let component: StockHistoricalChartComponent;
+  let fixture: ComponentFixture<StockHistoricalChartComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        MATERIAL_MODULE_DEPENDENCIES,
+        FORM_MODULE_DPENDENCEIES,
+        NGX_ECHART,
+      ],
+      declarations: [StockHistoricalChartComponent],
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(StockHistoricalChartComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
 
 const stockHistoricalData: StockHistory = {
   symbol: 'TSLA',
@@ -36,32 +63,9 @@ const convertedTimestamps = [
   'Mar 3\n 09:55',
 ];
 const formatedValues: number[] = [689.88, 687.11, 688.99, null, 696.22, 691.09];
-describe('StockHistoricalChartComponent', () => {
-  let component: StockHistoricalChartComponent;
-  let fixture: ComponentFixture<StockHistoricalChartComponent>;
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        MATERIAL_MODULE_DEPENDENCIES,
-        RouterTestingModule,
-        FORM_MODULE_DPENDENCEIES,
-      ],
-      declarations: [StockHistoricalChartComponent],
-    }).compileComponents();
-  });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(StockHistoricalChartComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
 // unit tests
-describe('StockStats', () => {
+describe('Stock Historical chart', () => {
   let component: StockHistoricalChartComponent;
 
   beforeEach(() => {
