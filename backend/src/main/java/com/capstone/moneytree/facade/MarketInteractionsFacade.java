@@ -17,10 +17,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.capstone.moneytree.dao.UserDao;
-import com.capstone.moneytree.dao.RelationshipDao.MadeDao;
-import com.capstone.moneytree.dao.RelationshipDao.OwnsDao;
-import com.capstone.moneytree.dao.RelationshipDao.ToFulfillDao;
-import com.capstone.moneytree.exception.EntityNotFoundException;
+import com.capstone.moneytree.dao.relationshipDao.MadeDao;
+import com.capstone.moneytree.dao.relationshipDao.OwnsDao;
+import com.capstone.moneytree.dao.relationshipDao.ToFulfillDao;
 import com.capstone.moneytree.model.TransactionStatus;
 import com.capstone.moneytree.model.node.Stock;
 import com.capstone.moneytree.model.node.Transaction;
@@ -31,7 +30,6 @@ import com.capstone.moneytree.model.relationship.Made;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 

@@ -3,7 +3,6 @@ package com.capstone.moneytree.service.api;
 import java.util.List;
 import javax.security.auth.login.CredentialNotFoundException;
 
-import com.capstone.moneytree.model.node.Transaction;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.capstone.moneytree.model.SanitizedUser;

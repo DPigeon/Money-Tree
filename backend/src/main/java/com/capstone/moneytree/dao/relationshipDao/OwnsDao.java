@@ -1,4 +1,4 @@
-package com.capstone.moneytree.dao.RelationshipDao;
+package com.capstone.moneytree.dao.relationshipDao;
 
 import com.capstone.moneytree.model.relationship.Owns;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -17,8 +17,8 @@ public interface OwnsDao extends Neo4jRepository<Owns, Long> {
 
     List<Owns> findByStockId(Long stockId);
 
-    List<Owns> findByUserId(Long UserId);
+    List<Owns> findByUserId(Long userId);
 
-    List<Owns> findByUserIdAndStockId(Long UserId, Long stockId);
+    List<Owns> findByUserIdAndStockId(Long userId, Long stockId);
 
 }

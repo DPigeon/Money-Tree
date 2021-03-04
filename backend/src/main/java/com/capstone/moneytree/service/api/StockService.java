@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.capstone.moneytree.model.SanitizedStock;
 import com.capstone.moneytree.model.node.Stock;
-import com.capstone.moneytree.model.relationship.Owns;
+
 
 public interface StockService {
 

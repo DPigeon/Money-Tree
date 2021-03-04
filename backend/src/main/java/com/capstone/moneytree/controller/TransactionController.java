@@ -21,56 +21,56 @@ import net.jacobpeterson.domain.alpaca.order.Order;
 @RequestMapping("/transactions")
 public class TransactionController {
 
-    private final TransactionService transactionService;
-    private static final Logger LOG = LoggerFactory.getLogger(StockController.class);
+   private final TransactionService transactionService;
+   private static final Logger LOG = LoggerFactory.getLogger(TransactionController.class);
 
-    @Autowired
-    public TransactionController(TransactionService transactionService) {
-        this.transactionService = transactionService;
-    }
+   @Autowired
+   public TransactionController(TransactionService transactionService) {
+      this.transactionService = transactionService;
+   }
 
-    /**
-     * A GET method that fetches all transactions present within the database
-     *
-     * @return A proper response with a list of all transactions
-     */
-    @GetMapping
-    List<Transaction> all() {
-        List<Transaction> transactions = new ArrayList<>();
+   /**
+    * A GET method that fetches all transactions present within the database
+    *
+    * @return A proper response with a list of all transactions
+    */
+   @GetMapping
+   List<Transaction> all() {
+      List<Transaction> transactions = new ArrayList<>();
 
-        transactionService.getAllTransactions().forEach(transactions::add);
+      transactionService.getAllTransactions().forEach(transactions::add);
 
-        LOG.info("Returning {} transactions", transactions.size());
+      LOG.info("Returning {} transactions", transactions.size());
 
-        return transactions;
-    }
+      return transactions;
+   }
 
-    /**
-     * An order needs these fields:
-     * <p>
-     * { "symbol": "AAPL" //symbol or asset ID to identify the asset to trade "qty"
-     * : "3" // number of shares to trade "side" : "buy" // could be buy or sell
-     * "type": "market" // market, limit, stop, stop_limit, or trailing_stop
-     * "time_in_force": "" }
-     */
-    @PostMapping("/execute/{userId}")
-    public List<Transaction> executeTransaction(@PathVariable String userId, @RequestBody Order order) {
-        return this.transactionService.execute(userId, order);
-    }
+   /**
+    * An order needs these fields:
+    * <p>
+    * { "symbol": "AAPL" //symbol or asset ID to identify the asset to trade "qty"
+    * : "3" // number of shares to trade "side" : "buy" // could be buy or sell
+    * "type": "market" // market, limit, stop, stop_limit, or trailing_stop
+    * "time_in_force": "" }
+    */
+   @PostMapping("/execute/{userId}")
+   public List<Transaction> executeTransaction(@PathVariable String userId, @RequestBody Order order) {
+      return this.transactionService.execute(userId, order);
+   }
 
-    /**
-     * A GET method that fetches all transactions for a particular user
-     *
-     * @return A proper response with a list of all transactions for that user
-     */
-    @GetMapping("/{userId}")
-    List<Transaction> getUserTransactions(@PathVariable String userId) {
-        List<Transaction> userTransactions =
-                transactionService.getUserTransactions(Long.parseLong(userId));
+   /**
+    * A GET method that fetches all transactions for a particular user
+    *
+    * @return A proper response with a list of all transactions for that user
+    */
+   @GetMapping("/{userId}")
+   List<Transaction> getUserTransactions(@PathVariable String userId) {
+      List<Transaction> userTransactions =
+              transactionService.getUserTransactions(Long.parseLong(userId));
 
-        LOG.info("Returning {} transactions", userTransactions.size());
+      LOG.info("Returning {} transactions", userTransactions.size());
 
-        return userTransactions;
-    }
+      return userTransactions;
+   }
 
 }

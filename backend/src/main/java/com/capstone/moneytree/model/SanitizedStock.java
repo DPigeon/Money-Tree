@@ -3,7 +3,6 @@ package com.capstone.moneytree.model;
 import java.util.Date;
 
 import com.capstone.moneytree.model.relationship.Owns;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data

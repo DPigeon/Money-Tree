@@ -18,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.capstone.moneytree.dao.StockDao;
 import com.capstone.moneytree.dao.TransactionDao;
 import com.capstone.moneytree.dao.UserDao;
-import com.capstone.moneytree.dao.RelationshipDao.MadeDao;
-import com.capstone.moneytree.dao.RelationshipDao.ToFulfillDao;
+import com.capstone.moneytree.dao.relationshipDao.MadeDao;
+import com.capstone.moneytree.dao.relationshipDao.ToFulfillDao;
 import com.capstone.moneytree.facade.AlpacaSession;
 import com.capstone.moneytree.model.MoneyTreeOrderType;
 import com.capstone.moneytree.model.TransactionStatus;
@@ -76,8 +76,8 @@ public class DefaultTransactionService implements TransactionService {
 
       /* Get user for that transaction */
       User user = userDao.findUserById(Long.parseLong(userId));
-      if(user==null){
-      throw new EntityNotFoundException("User does not exist!");
+      if (user == null) {
+         throw new EntityNotFoundException("User does not exist!");
       }
       String alpacaKey = user.getAlpacaApiKey();
 
@@ -128,13 +128,12 @@ public class DefaultTransactionService implements TransactionService {
    }
 
    private Transaction constructTransactionFromOrder(Order alpacaOrder) {
-      Transaction transaction = Transaction.builder().status(TransactionStatus.PENDING).purchasedAt(alpacaOrder.getCreatedAt())
+      return Transaction.builder().status(TransactionStatus.PENDING).purchasedAt(alpacaOrder.getCreatedAt())
               .clientOrderId(alpacaOrder.getClientOrderId())
               .moneyTreeOrderType(MoneyTreeOrderType
                       .valueOf(alpacaOrder.getType().toUpperCase() + "_" + alpacaOrder.getSide().toUpperCase()))
               .quantity(Float.parseFloat(alpacaOrder.getQty())).purchasedAt(alpacaOrder.getSubmittedAt())
               .symbol(alpacaOrder.getSymbol()).build(); // avg price and total will be set only if stock got fulfilled
-      return transaction;
    }
 
    @Override

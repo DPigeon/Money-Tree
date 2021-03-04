@@ -1,7 +1,6 @@
 package com.capstone.moneytree.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.capstone.moneytree.model.SanitizedStock;
@@ -12,12 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.capstone.moneytree.dao.StockDao;
-import com.capstone.moneytree.dao.RelationshipDao.OwnsDao;
+import com.capstone.moneytree.dao.relationshipDao.OwnsDao;
 import com.capstone.moneytree.model.node.Stock;
-import com.capstone.moneytree.model.SanitizedStock;
 import com.capstone.moneytree.model.relationship.Owns;
-import com.capstone.moneytree.model.node.Transaction;
-import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.service.api.StockService;
 
 @Service

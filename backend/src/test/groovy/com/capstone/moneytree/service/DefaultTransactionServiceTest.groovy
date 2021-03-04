@@ -1,7 +1,7 @@
 package com.capstone.moneytree.service
 
-import com.capstone.moneytree.dao.RelationshipDao.MadeDao
-import com.capstone.moneytree.dao.RelationshipDao.ToFulfillDao
+import com.capstone.moneytree.dao.relationshipDao.MadeDao
+import com.capstone.moneytree.dao.relationshipDao.ToFulfillDao
 import com.capstone.moneytree.dao.StockDao
 import com.capstone.moneytree.dao.TransactionDao
 import com.capstone.moneytree.dao.UserDao

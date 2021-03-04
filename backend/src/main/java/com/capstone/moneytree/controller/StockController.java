@@ -1,13 +1,9 @@
 package com.capstone.moneytree.controller;
 
 import com.capstone.moneytree.model.SanitizedStock;
-import com.capstone.moneytree.model.node.Stock;
-import com.capstone.moneytree.model.node.Transaction;
-import com.capstone.moneytree.model.relationship.Owns;
 import com.capstone.moneytree.service.api.StockMarketDataService;
 import com.capstone.moneytree.service.api.StockService;
 import com.capstone.moneytree.service.api.YahooFinanceService;
-import com.capstone.moneytree.service.impl.DefaultStockService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.capstone.moneytree.dao.*;
-import com.capstone.moneytree.dao.RelationshipDao.*;
+import com.capstone.moneytree.dao.relationshipDao.*;
 import com.capstone.moneytree.model.SanitizedUser;
 import com.capstone.moneytree.exception.BadRequestException;
 import com.capstone.moneytree.exception.EntityNotFoundException;
