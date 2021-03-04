@@ -17,12 +17,24 @@
   text-align: center;
   width: 60px;
   border-bottom: 2px solid $action-color;
-  padding-bottom: 5px;
+  padding: 0 3px 5px 3px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(247, 150, 48, 0.2) 200%
+  );
   cursor: pointer;
 }
 .range-option {
   text-align: center;
   width: 60px;
   border-bottom: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   cursor: pointer;
 }
