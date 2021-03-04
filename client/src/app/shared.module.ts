@@ -16,7 +16,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-//echarts
+// echarts
 import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
 
