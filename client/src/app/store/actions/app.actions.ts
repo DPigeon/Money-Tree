@@ -5,6 +5,7 @@ import { AppError } from 'src/app/interfaces/app-error';
 import { MarketClock } from 'src/app/interfaces/market-clock';
 import { Transaction } from 'src/app/interfaces/transaction';
 import { StockHistory } from 'src/app/interfaces/stockHistory';
+import { UserSearch } from 'src/app/interfaces/userSearch';
 
 export const loadStockInfo = createAction(
   '[Stock Info] Load Stock Info',
@@ -82,6 +83,14 @@ export const setCurrentFollowers = createAction(
 export const setCurrentFollowings = createAction(
   '[User[]] New value for current user followings',
   props<{ userFollowings: User[] }>()
+);
+
+export const loadUserSearchList = createAction(
+  '[User Search List] Load all users'
+);
+export const loadUserSearchListSuccess = createAction(
+  '[User Search List] Load Users list Success',
+  props<{ userSearchList: UserSearch[] }>()
 );
 
 export const logCurrentUserOut = createAction('[User] Log user out');

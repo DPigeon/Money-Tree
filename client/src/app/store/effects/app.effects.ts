@@ -86,6 +86,28 @@ export class Effects {
     )
   );
 
+  loadUserSearchList$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadUserSearchList),
+      switchMap((action) => {
+        return this.userService.getAllUsers().pipe(
+          map((data: any) =>
+            appActions.loadUserSearchListSuccess({
+              userSearchList: data,
+            })
+          ),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
+            )
+          )
+        );
+      })
+    )
+  );
+
   createNewUser$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
       ofType(appActions.createNewUser),

@@ -1,3 +1,4 @@
+@import "../../../styles.scss";
 #searchbox {
   width: 90%;
   height: 28px;
@@ -9,12 +10,80 @@
     border: none;
   }
 }
+.searchOptions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 5px 0;
+}
+.searchOption {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  cursor: pointer;
+  mat-icon {
+    padding-right: 5px;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+.selectedOption {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-bottom: 2px solid $action-color;
 
+  mat-icon {
+    padding-right: 5px;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
 .option-container {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-}
 
+  .picture-name {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    .profile-picture {
+      border-radius: 50%;
+      margin-right: 5px;
+      margin-right: 10px;
+    }
+  }
+}
+mat-autocomplete-panel {
+  overflow-y: hidden;
+}
+.custom-scroll {
+  max-height: 192px;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background: rgb(190, 189, 189);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: #555;
+  }
+}

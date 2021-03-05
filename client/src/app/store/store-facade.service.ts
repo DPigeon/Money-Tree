@@ -9,6 +9,7 @@ import { User, UserProfile } from '../interfaces/user';
 import { AppError } from '../interfaces/app-error';
 import { MarketClock } from './../interfaces/market-clock';
 import { Transaction } from '../interfaces/transaction';
+import { UserSearch } from '../interfaces/userSearch';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +31,7 @@ export class StoreFacadeService {
   currentFollowers$: Observable<User[]>;
   userTransactions$: Observable<Transaction[]>;
   userOwnedStocks$: Observable<Stock[]>;
+  userSearch$: Observable<UserSearch[]>;
 
   constructor(private store: Store<{ appState: State }>) {
     this.currentStockLoaded$ = this.store.select(
@@ -65,6 +67,7 @@ export class StoreFacadeService {
     this.currentProfileUser$ = this.store.select(
       appSelectors.selectCurrentLoadedProfile
     );
+    this.userSearch$ = this.store.select(appSelectors.selectUserSearchList);
   }
 
   loadCurrentStock(ticker: string): void {
@@ -116,6 +119,10 @@ export class StoreFacadeService {
   }
   loadCurrentUserFollowings(userId: number): void {
     this.store.dispatch(appActions.loadCurrentUserFollowings({ id: userId }));
+  }
+
+  loadUserSearchList(): void {
+    this.store.dispatch(appActions.loadUserSearchList());
   }
 
   logCurrentUserOut(): void {

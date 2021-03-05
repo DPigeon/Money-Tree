@@ -1,5 +1,7 @@
+import { componentFactoryName } from '@angular/compiler';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import FuzzySearch from 'fuzzy-search';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
   FORM_MODULE_DPENDENCEIES,
@@ -43,42 +45,81 @@ describe('StockSearchComponent Unit Test', () => {
   beforeEach(() => {
     component = new StockSearchComponent(mockRouter);
   });
+  const itemSearch = [
+    {
+      type: 'user',
+      name: 'user user',
+      id: '',
+      profileImage:
+        'https://moneytree-profile-pictures.s3.amazonaws.com/DEFAULT-profile.jpg',
+    },
+    {
+      type: 'user',
+      name: 'money tree',
+      id: '',
+      profileImage:
+        'https://moneytree-profile-pictures.s3.amazonaws.com/AGWLLGVS3AJ327O2T-im.jpg',
+    },
+    {
+      type: 'user',
+      name: 'tree money',
+      id: '',
+      profileImage:
+        'https://moneytree-profile-pictures.s3.amazonaws.com/DEFAULT-profile.jpg',
+    },
+  ];
 
   it('should handle proper keyboard input on autocomplete', () => {
     const routingSpy = jest.spyOn(mockRouter, 'navigate');
-
     // case: no active option, no search result
     component.query = '';
-    component.activeOption = { Symbol: '', Name: '' };
+    component.activeOption = { type: '', id: '', name: '' };
     component.searchResults = [];
     component.handleKeyboardSelectionEvent();
     expect(routingSpy).toHaveBeenCalledTimes(0);
 
     // case: active option, no search result
     routingSpy.mockClear();
-    component.activeOption = { Symbol: 'AAPL', Name: 'Apple Inc.' };
+    component.activeOption = { type: 'stock', id: 'AAPL', name: 'Apple Inc.' };
     component.searchResults = [];
     component.handleKeyboardSelectionEvent();
     expect(routingSpy).toHaveBeenCalledTimes(1);
 
     // case: no active option, search result
     routingSpy.mockClear();
-    component.activeOption = { Symbol: '', Name: '' };
-    component.searchResults = [{ Symbol: 'AAPL', Name: 'Apple Inc.' }];
+    component.activeOption = { type: '', id: '', name: '' };
+    component.searchResults = [
+      { type: 'stock', id: 'AAPL', name: 'Apple Inc.' },
+    ];
     component.handleKeyboardSelectionEvent();
     expect(routingSpy).toHaveBeenCalledTimes(1);
 
     // case: active option, search result
     routingSpy.mockClear();
-    component.activeOption = { Symbol: '', Name: '' };
-    component.searchResults = [{ Symbol: 'AAPL', Name: 'Apple Inc.' }];
+    component.activeOption = { type: '', id: '', name: '' };
+    component.searchResults = [
+      { type: 'stock', id: 'AAPL', name: 'Apple Inc.' },
+    ];
     component.handleKeyboardSelectionEvent();
     expect(routingSpy).toHaveBeenCalledTimes(1);
   });
 
   it('should return the correct search results when querying', () => {
+    component.allSearcher = new FuzzySearch(itemSearch, ['name'], {
+      caseSensitive: false,
+      sort: true,
+    });
+    component.userSearcher = new FuzzySearch(itemSearch, ['name'], {
+      caseSensitive: false,
+      sort: true,
+    });
+    component.stockSearcher = new FuzzySearch(itemSearch, ['name'], {
+      caseSensitive: false,
+      sort: true,
+    });
+    component.selectedSearchOption = 'stocks' || 'users' || 'all';
     component.autoComplete = {
-      closePanel: jest.fn()
+      closePanel: jest.fn(),
     } as any;
     const keyboardHandlerSpy = jest.spyOn(
       component,
@@ -91,21 +132,30 @@ describe('StockSearchComponent Unit Test', () => {
     expect(component.searchResults.length).toBe(0);
 
     // case: no key, query
-    component.query = 'aapl';
+    component.query = 'user';
     component.queryFilter(null);
     expect(component.searchResults.length > 0).toBe(true);
-    expect(component.query).toBe('aapl');
+    expect(component.query).toBe('user');
 
     // case: key, query
-    component.query = 'aapl';
+    component.query = 'user';
     component.queryFilter({ key: 'Enter' } as any);
     expect(keyboardHandlerSpy).toHaveBeenCalled();
-    expect(component.query).toBe('Apple Inc.');
+    expect(component.query).toBe('user user');
 
     // case: key, no query
     keyboardHandlerSpy.mockClear();
     component.query = '';
     component.queryFilter({ key: 'Enter' } as any);
     expect(keyboardHandlerSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it('should return the correct classes', () => {
+    expect(component.redirectSearch('user')).toBe('/profile/');
+    expect(component.redirectSearch('stock')).toBe('/stock-detail/');
+    component.selectedSearchOption = 'stocks';
+    expect(component.isSelectedClass('stocks')).toBe('selectedOption');
+    component.selectedSearchOption = 'users';
+    expect(component.isSelectedClass('stocks')).toBe('searchOption');
   });
 });

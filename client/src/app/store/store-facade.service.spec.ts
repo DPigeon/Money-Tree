@@ -98,4 +98,10 @@ describe('StoreFacadeService', () => {
     service.logCurrentUserOut();
     expect(spy).toHaveBeenCalledWith(appActions.logCurrentUserOut());
   });
+
+  it('should dispatach user list', () => {
+    const spy = jest.spyOn(store, 'dispatch');
+    service.loadUserSearchList();
+    expect(spy).toHaveBeenCalledWith(appActions.loadUserSearchList());
+  });
 });

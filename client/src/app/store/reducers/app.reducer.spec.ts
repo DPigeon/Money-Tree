@@ -2,6 +2,7 @@ import { reducer, initialState } from './app.reducer';
 import * as appActions from '../actions/app.actions';
 import { Stock } from '../../interfaces/stock';
 import { User } from 'src/app/interfaces/user';
+import { UserSearch } from 'src/app/interfaces/userSearch';
 
 const stockInfo: Stock = {
   tickerSymbol: 'AC',
@@ -64,6 +65,9 @@ const stockHistoricalData = {
   ],
   currency: 'USD',
 };
+const users: UserSearch[] = [
+  { id: 20, firstName: 'Money', lastName: 'Tree', email: 'money@tree.ca' },
+];
 
 const userInfo: User = {
   id: 1,
@@ -118,6 +122,14 @@ describe('Reducer Reducer', () => {
       });
       const state = reducer(initialState, action);
       expect(state.errorMessage.message).toEqual('error');
+    });
+
+    it('should return the state with user list', () => {
+      const action = appActions.loadUserSearchListSuccess({
+        userSearchList: users,
+      });
+      const state = reducer(initialState, action);
+      expect(state.searchUserList).toEqual(users);
     });
 
     it('should return a null user state when logged out', () => {

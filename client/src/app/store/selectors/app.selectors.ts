@@ -74,3 +74,8 @@ export const selectCurrentLoadedProfile = createSelector(
   selectAppState,
   (appState: State) => appState.currentProfileUser
 );
+
+export const selectUserSearchList = createSelector(
+  selectAppState,
+  (appState: State) => appState.searchUserList
+);

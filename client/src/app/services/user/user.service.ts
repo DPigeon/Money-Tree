@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User, UserProfile } from 'src/app/interfaces/user';
+import { UserSearch } from 'src/app/interfaces/userSearch';
 import { ApiService } from '../api/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -48,6 +49,12 @@ export class UserService {
       );
   }
 
+  getAllUsers(): Observable<UserSearch[]> {
+    return this.api
+      .get('users/search')
+      .pipe(map((res: Response) => this.userSearchFormatter(res.body)));
+  }
+
   userLogin(user: User): Observable<User> {
     return this.api
       .post('users/login', user)
@@ -91,5 +98,57 @@ export class UserService {
       .pipe(
         map((res: Response) => this.dataFormatter.followUserListFormatter(res))
       );
+  }
+
+  userFormatter(response: any): User {
+    const formattedUser: User = {
+      id: response.id,
+      firstName: response.firstName,
+      lastName: response.lastName,
+      username: response.username,
+      avatarURL: response.avatarURL,
+      coverPhotoURL: response.coverPhotoURL,
+      email: response.email,
+      score: response.score,
+      rank: response.rank,
+      balance: response.balance,
+      alpacaApiKey: response.alpacaApiKey,
+      // portfolio: response.portfolio,
+      // transactions: response.transactions,
+      biography: response.biography,
+    };
+    return formattedUser;
+  }
+
+  userSearchFormatter(response: any): UserSearch[] {
+    let result: UserSearch[] = [];
+    response.forEach((e) => {
+      result.push({
+        id: e.id,
+        firstName: e.firstName,
+        lastName: e.lastName,
+        username: e.username,
+        avatarURL: e.avatarURL,
+        email: e.email,
+      });
+    });
+    return result;
+  }
+
+  followUserListFormatter(response: any): User[] {
+    const result: User[] = [];
+    for (const fetchedUser of response.body) {
+      result.push({
+        id: fetchedUser.id,
+        firstName: fetchedUser.firstName,
+        lastName: fetchedUser.lastName,
+        username: fetchedUser.username,
+        avatarURL: fetchedUser.avatarURL,
+        score: fetchedUser.score,
+        rank: fetchedUser.rank,
+        balance: fetchedUser.balance,
+      });
+    }
+    return result;
   }
 }
