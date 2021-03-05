@@ -121,7 +121,7 @@ export class UserService {
   }
 
   userSearchFormatter(response: any): UserSearch[] {
-    let result: UserSearch[] = [];
+    const result: UserSearch[] = [];
     response.forEach((e) => {
       result.push({
         id: e.id,

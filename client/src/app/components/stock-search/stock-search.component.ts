@@ -29,7 +29,7 @@ export class StockSearchComponent implements OnInit {
   query = '';
   searchResults: SearchItem[] = [];
   activeOption: SearchItem = { type: '', id: '', name: '' };
-  selectedSearchOption: string = 'all';
+  selectedSearchOption = 'all';
   allSearcher: FuzzySearch = null;
   userSearcher: FuzzySearch = null;
   stockSearcher: FuzzySearch = null;
@@ -65,7 +65,7 @@ export class StockSearchComponent implements OnInit {
   }
 
   async getStocksAndUsers(stocks: any, users: any): Promise<SearchItem[]> {
-    let allSearch: SearchItem[] = [];
+    const allSearch: SearchItem[] = [];
     stocks.forEach((s) => {
       allSearch.push({ type: s.type, name: s.Name, id: s.Symbol });
     });
