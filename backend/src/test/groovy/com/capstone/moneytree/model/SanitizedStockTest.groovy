@@ -17,9 +17,7 @@ import java.time.Instant;
  */
 class SanitizedStockTest extends Specification {
     @Test
-    def "it should create a SanitizedStock from an Owns releationship"()
-
-    {
+    def "it should create a SanitizedStock from an Owns releationship"() {
 
         given:
         "an Owns relationship object created from Owns class"

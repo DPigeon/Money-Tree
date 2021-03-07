@@ -18,6 +18,7 @@ export class StockDetailComponent implements OnInit {
   stockInfo$ = this.storeFacade.currentStockLoaded$;
   marketClock$ = this.storeFacade.currentMarketClock$;
   userInfo$ = this.storeFacade.currentUser$;
+  userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
   constructor(
     private storeFacade: StoreFacadeService,
     private route: ActivatedRoute,
@@ -30,6 +31,7 @@ export class StockDetailComponent implements OnInit {
     this.userInfo$.subscribe((user: User) => {
       if (user) {
         this.storeFacade.loadMarketClock(user.id);
+        this.storeFacade.loadUserOwnedStocks(user.id);
       }
     });
     this.router.events

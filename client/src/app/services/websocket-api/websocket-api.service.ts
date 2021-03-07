@@ -80,8 +80,6 @@ export class WebsocketAPIService {
 
   onMessageReceived(message): void {
     this.count += 1;
-    console.log('message: ');
-    console.log(message);
 
     console.log('Message Recieved from Server :: ', message.body);
     if (this.userId && message && message.body && message.body) {

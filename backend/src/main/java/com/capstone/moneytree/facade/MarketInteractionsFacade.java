@@ -186,11 +186,13 @@ public class MarketInteractionsFacade {
          AlpacaStreamListener streamListener = createStreamListener(userId, messageSender,
                  AlpacaStreamMessageType.TRADE_UPDATES);
          alpacaAPI.addAlpacaStreamListener(streamListener);
-         if (userIdToStream.containsKey(userId)) {
-            userIdToStream.replace(userId, streamListener);
-         } else {
-            userIdToStream.put(userId, streamListener);
-         }
+         // if (userIdToStream.containsKey(userId)) {
+         //    userIdToStream.replace(userId, streamListener);
+         // } else {
+         //    userIdToStream.put(userId, streamListener);
+         // }
+         userIdToStream.putIfAbsent(userId, streamListener);
+
          LOGGER.info("[Trade Updates]: Listening to trade streams of user ID {}", userId);
       } catch (WebsocketException e) {
          LOGGER.error("WebSocketException for user ID {}. Error: {}", userId, e.getMessage());
@@ -222,9 +224,19 @@ public class MarketInteractionsFacade {
       return new AlpacaStreamListenerAdapter(messageType) {
          @Override
          public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
-            if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES) {
-               TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
-               TradeUpdate tradeUpdate = tradeMessage.getData();
+            // if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES) {
+            //    TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
+            //    TradeUpdate tradeUpdate = tradeMessage.getData();
+
+            TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
+            TradeUpdate tradeUpdate = tradeMessage.getData();
+
+            if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES && !tradeUpdate.getOrder().getStatus().equals("filled") &&
+                    madeDao.findByTransactionId( // finding the made relationship to get the userID!
+                            transactionDao.findByClientOrderId(tradeUpdate.getOrder().getClientOrderId()).getId()
+                    ).getUser().getId().toString().equals(userId)) {
+
+
                if (tradeUpdate.getEvent().equals("fill")) {
                   messageSender.convertAndSend("/queue/user-" + userId,
                           tradeUpdate.getOrder().getClientOrderId());
