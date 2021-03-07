@@ -80,7 +80,8 @@ export class WebsocketAPIService {
 
   onMessageReceived(message): void {
     this.count += 1;
-    console.log('Message Recieved from Server :: ', JSON.parse(message.body));
+
+    console.log('Message Recieved from Server :: ', message.body);
     if (this.userId && message && message.body && message.body) {
       const snackBarRef = this.snackBar.open(
         'The status of one of your orders has been updated',

@@ -9,8 +9,12 @@ import com.capstone.moneytree.model.node.Stock;
 
 @Repository
 public interface StockDao extends Neo4jRepository<Stock, Long> {
-   List<Stock> findAll();
+    List<Stock> findAll();
 
-   Stock findStockById(Long id);
+    Stock findStockById(Long id);
+
+    Stock findBySymbol(String symbol);
+
+    Stock findByCompanyName(String companyName);
 
 }

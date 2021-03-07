@@ -471,7 +471,7 @@ class UserControllerTest extends Specification {
 
         and: "mock the way we retrieve the Follows relationships"
         List<Follows> mockedRelationships = List.of() // an empty list
-        followsDao.findFollowsByFollowerIdAndUserToFollowId(userId1, userId2) >> mockedRelationships
+        followsDao.findByFollowerIdAndUserToFollowId(userId1, userId2) >> mockedRelationships
 
         when: "following a user"
         def response = userController.followUser(user1.getId(), user2.getId())
@@ -502,7 +502,7 @@ class UserControllerTest extends Specification {
 
         and: "mock the way we retrieve the Follows relationships"
         List<Follows> mockedRelationships = List.of() // an empty list
-        followsDao.findFollowsByFollowerIdAndUserToFollowId(userId1, user2.getId()) >> mockedRelationships
+        followsDao.findByFollowerIdAndUserToFollowId(userId1, user2.getId()) >> mockedRelationships
 
         when: "following itself"
         def response = userController.followUser(user1.getId(), user2.getId())
@@ -540,7 +540,7 @@ class UserControllerTest extends Specification {
 
         and: "mock the way we retrieve the Follows relationships (so that user1 follows user2)"
         List<Follows> mockedRelationships = List.of(new Follows(user1, user2, new Date()))
-        followsDao.findFollowsByFollowerIdAndUserToFollowId(userId1, userId2) >> mockedRelationships
+        followsDao.findByFollowerIdAndUserToFollowId(userId1, userId2) >> mockedRelationships
 
         when: "following a user"
         def response = userController.followUser(user1.getId(), user2.getId())
@@ -592,7 +592,7 @@ class UserControllerTest extends Specification {
 
         and: "mock the way we retrieve the Follows relationships (so that user1 follows user2)"
         List<Follows> mockedRelationships = List.of(new Follows(user1, user2, new Date()))
-        followsDao.findFollowsByFollowerIdAndUserToFollowId(userId1, userId2) >> mockedRelationships
+        followsDao.findByFollowerIdAndUserToFollowId(userId1, userId2) >> mockedRelationships
 
         when: "unfollowing a user"
         def response = userController.unfollowUser(user1.getId(), user2.getId())
@@ -632,7 +632,7 @@ class UserControllerTest extends Specification {
 
         and: "mock the way we retrieve the Follows relationships (so that user1 follows user2)"
         List<Follows> mockedRelationships = List.of() //empty list
-        followsDao.findFollowsByFollowerIdAndUserToFollowId(userId1, userId2) >> mockedRelationships
+        followsDao.findByFollowerIdAndUserToFollowId(userId1, userId2) >> mockedRelationships
 
         when: "unfollowing a user that was not followed by the current user"
         userController.unfollowUser(user1.getId(), user2.getId())
@@ -696,7 +696,7 @@ class UserControllerTest extends Specification {
 
         and: "mock the way we retrieve the Follows relationships"
         List<Follows> mockedRelationships = List.of(new Follows(user1, user2, new Date()), new Follows(user1, user3, new Date()))
-        followsDao.findFollowsByFollowerId(userId1) >> mockedRelationships
+        followsDao.findByFollowerId(userId1) >> mockedRelationships
 
         when: "getFollowers/getFollowings of the users"
         def response = userController.getFollowings(user1.getId())
@@ -725,7 +725,7 @@ class UserControllerTest extends Specification {
 
         and: "mock the way we retrieve the Follows relationships"
         List<Follows> mockedRelationships = List.of() // empty list
-        followsDao.findFollowsByFollowerId(userId1) >> mockedRelationships
+        followsDao.findByFollowerId(userId1) >> mockedRelationships
 
         when: "getFollowers/getFollowings of the users"
         def response = userController.getFollowings(user1.getId())
@@ -786,7 +786,7 @@ class UserControllerTest extends Specification {
 
         and: "mock the way we retrieve the Follows relationships"
         List<Follows> mockedRelationships = List.of(new Follows(user2, user1, new Date()), new Follows(user3, user1, new Date()))
-        followsDao.findFollowsByUserToFollowId(userId1) >> mockedRelationships
+        followsDao.findByUserToFollowId(userId1) >> mockedRelationships
 
         when: "getFollowers/getFollowings of the users"
         def response = userController.getFollowers(user1.getId())
@@ -815,7 +815,7 @@ class UserControllerTest extends Specification {
 
         and: "mock the way we retrieve the Follows relationships"
         List<Follows> mockedRelationships = List.of() // empty list
-        followsDao.findFollowsByUserToFollowId(userId1) >> mockedRelationships
+        followsDao.findByUserToFollowId(userId1) >> mockedRelationships
 
         when: "getFollowers/getFollowings of the users"
         def response = userController.getFollowers(user1.getId())

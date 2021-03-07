@@ -41,7 +41,7 @@ export class Effects {
     this.actions$.pipe(
       ofType(appActions.loadMarketClock),
       switchMap((action) => {
-        return this.stockService.loadMarketClock().pipe(
+        return this.stockService.loadMarketClock(action.userId).pipe(
           map((data: any) =>
             appActions.loadMarketClockSuccess({
               marketClock: data,
@@ -210,6 +210,26 @@ export class Effects {
     )
   );
 
+  loadUserTransactions$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadUserTransactions),
+      switchMap((action) => {
+        return this.transactionService.getUserTransactions(action.userId).pipe(
+          map((data) => {
+            return appActions.updateUserTransactions({ transactions: data });
+          }),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
+            )
+          )
+        );
+      })
+    )
+  );
+
   createStockTransaction$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
       ofType(appActions.processStockTransaction),
@@ -221,7 +241,8 @@ export class Effects {
               this.snackBar.open('Transaction Successfully Placed', 'Close', {
                 duration: 5000,
               });
-              return appActions.setCurrentUser({ user: data });
+              // a successful call will return list of transactions for that user
+              return appActions.updateUserTransactions({ transactions: data });
             }),
             catchError((data) => {
               this.snackBar.open('Error with Transaction', 'Close', {
@@ -238,7 +259,27 @@ export class Effects {
     )
   );
 
-  mirrorError(backendError): AppError {
+  loadUserOwnedStocks$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadUserOwnedStocks),
+      switchMap((action) => {
+        return this.stockService.getUserOwnedStocks(action.userId).pipe(
+          map((data) => {
+            return appActions.updateUserOwnedStocks({ stocks: data });
+          }),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
+            )
+          )
+        );
+      })
+    )
+  );
+
+  mirrorError(backendError: any): AppError {
     if (backendError && backendError.error) {
       const errorMessage: AppError = {
         status: backendError.error.status,

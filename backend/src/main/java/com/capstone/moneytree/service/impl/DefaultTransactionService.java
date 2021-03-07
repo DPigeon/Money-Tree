@@ -1,12 +1,11 @@
 package com.capstone.moneytree.service.impl;
 
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 import com.capstone.moneytree.exception.AlpacaException;
 
+import com.capstone.moneytree.exception.EntityNotFoundException;
 import net.jacobpeterson.alpaca.enums.OrderSide;
 import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
 
@@ -16,21 +15,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.capstone.moneytree.dao.StockDao;
 import com.capstone.moneytree.dao.TransactionDao;
 import com.capstone.moneytree.dao.UserDao;
-import com.capstone.moneytree.exception.EntityNotFoundException;
+import com.capstone.moneytree.dao.MadeDao;
+import com.capstone.moneytree.dao.ToFulfillDao;
 import com.capstone.moneytree.facade.AlpacaSession;
 import com.capstone.moneytree.model.MoneyTreeOrderType;
 import com.capstone.moneytree.model.TransactionStatus;
 import com.capstone.moneytree.model.node.Stock;
 import com.capstone.moneytree.model.node.Transaction;
 import com.capstone.moneytree.model.node.User;
+import com.capstone.moneytree.model.relationship.ToFulfill;
+import com.capstone.moneytree.model.relationship.Made;
+import com.capstone.moneytree.service.api.StockMarketDataService;
 import com.capstone.moneytree.service.api.TransactionService;
 
 import net.jacobpeterson.alpaca.AlpacaAPI;
-import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
-import net.jacobpeterson.domain.alpaca.asset.Asset;
 import net.jacobpeterson.domain.alpaca.order.Order;
+import pl.zankowski.iextrading4j.api.stocks.v1.KeyStats;
 
 @Service
 @Transactional
@@ -39,13 +42,22 @@ public class DefaultTransactionService implements TransactionService {
 
    private final TransactionDao transactionDao;
    private final UserDao userDao;
+   private final StockDao stockDao;
+   private final MadeDao madeDao;
+   private final ToFulfillDao toFulfillDao;
    private final AlpacaSession session;
+   private final StockMarketDataService stockMarketDataService;
 
    @Autowired
-   public DefaultTransactionService(TransactionDao transactionDao, UserDao userDao, AlpacaSession session) {
+   public DefaultTransactionService(TransactionDao transactionDao, UserDao userDao, StockDao stockDao, MadeDao madeDao,
+                                    ToFulfillDao toFulfillDao, AlpacaSession session, StockMarketDataService stockMarketDataService) {
       this.transactionDao = transactionDao;
       this.userDao = userDao;
+      this.stockDao = stockDao;
+      this.madeDao = madeDao;
+      this.toFulfillDao = toFulfillDao;
       this.session = session;
+      this.stockMarketDataService = stockMarketDataService;
    }
 
    @Override
@@ -56,78 +68,82 @@ public class DefaultTransactionService implements TransactionService {
 
    @Override
    public List<Transaction> getTransactionsByOrderType(MoneyTreeOrderType moneyTreeOrderType) {
-      List<Transaction> allTransactions = transactionDao.findAll();
-
-      return allTransactions.stream()
-              .filter(transaction -> transaction.getMoneyTreeOrderType().equals(moneyTreeOrderType))
-              .collect(Collectors.toList());
+      return transactionDao.findByMoneyTreeOrderType(moneyTreeOrderType);
    }
-
 
    @Override
-   public User execute(String userId, Order order) {
+   public List<Transaction> execute(String userId, Order order) {
 
-      /* Get user for that transaction*/
-      User user = getUser(Long.parseLong(userId));
-
+      /* Get user for that transaction */
+      User user = userDao.findUserById(Long.parseLong(userId));
+      if (user == null) {
+         throw new EntityNotFoundException("User does not exist!");
+      }
       String alpacaKey = user.getAlpacaApiKey();
 
-      /* Build the transaction, persist and update user balance */
-      Transaction transaction = executeTransaction(alpacaKey, order, user);
+      /* Build the transaction and persist and update user balance */
+      executeTransaction(alpacaKey, order, user);
+      userDao.save(user);
 
-      /* Save the user by appending new transaction and stock*/
-      user.made(transaction);
-      user = userDao.save(user);
-      return user;
+      return getUserTransactions(user.getId());
    }
 
-   private Transaction executeTransaction(String alpacaKey, Order order, User user) {
+   private void executeTransaction(String alpacaKey, Order order, User user) {
       Transaction transaction;
       try {
          AlpacaAPI api = session.alpaca(alpacaKey);
-         Order alpacaOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
-         Stock stock = persistFulfilledStock(order, alpacaKey);
+         Order alpacaOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()),
+                 OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
+
+         Stock stock = stockDao.findBySymbol(order.getSymbol());
+         if (stock == null) { // if database does not have this stock object create and save it
+            KeyStats stockInfo = stockMarketDataService.getKeyStats(order.getSymbol());
+            stock = Stock.builder().symbol(order.getSymbol()).companyName(stockInfo.getCompanyName()).build();
+            stockDao.save(stock);
+         }
 
          LOGGER.info("Executed order {}", alpacaOrder.getClientOrderId());
 
          transaction = constructTransactionFromOrder(alpacaOrder);
-         transaction.fulfills(stock);
+         transactionDao.save(transaction);
+
+         /*
+          * create and save two relationships: Made and ToFulfill. User Made Transaction
+          * and Transaction ToFulfill Stock. The fulfillmentDate will be set when the
+          * order is completed (fulfilled), and similarly the OWNS relationships will be
+          * created when the order is completed
+          */
+
+         Made madeRelationship = new Made(user, transaction, transaction.getPurchasedAt());
+         madeDao.save(madeRelationship);
+
+         ToFulfill toFulfillRelationship = new ToFulfill(transaction, stock, null);
+         toFulfillDao.save(toFulfillRelationship);
 
          user.setBalance(Float.parseFloat(api.getAccount().getCash()));
       } catch (Exception e) {
          throw new AlpacaException(e.getMessage());
       }
-      return transaction;
+
    }
 
    private Transaction constructTransactionFromOrder(Order alpacaOrder) {
-      return Transaction.builder()
-              .status(TransactionStatus.PENDING)
-              .purchasedAt(alpacaOrder.getCreatedAt())
+      return Transaction.builder().status(TransactionStatus.PENDING).purchasedAt(alpacaOrder.getCreatedAt())
               .clientOrderId(alpacaOrder.getClientOrderId())
-              .moneyTreeOrderType(MoneyTreeOrderType.valueOf(alpacaOrder.getType().toUpperCase() + "_" + alpacaOrder.getSide().toUpperCase()))
-              .quantity(Float.parseFloat(alpacaOrder.getQty()))
-              .purchasedAt(alpacaOrder.getSubmittedAt())
-              .build();
+              .moneyTreeOrderType(MoneyTreeOrderType
+                      .valueOf(alpacaOrder.getType().toUpperCase() + "_" + alpacaOrder.getSide().toUpperCase()))
+              .quantity(Float.parseFloat(alpacaOrder.getQty())).purchasedAt(alpacaOrder.getSubmittedAt())
+              .symbol(alpacaOrder.getSymbol()).build(); // avg price and total will be set only if stock got fulfilled
    }
 
-   private Stock persistFulfilledStock(Order alpacaOrder, String alpacaKey)
-           throws
-           AlpacaAPIRequestException {
-      AlpacaAPI api = session.alpaca(alpacaKey);
-      Asset assetOfStock = api.getAssetBySymbol(alpacaOrder.getSymbol());
-      return Stock.builder()
-              .exchange(assetOfStock.getExchange())
-              .symbol(assetOfStock.getSymbol())
-              .status(assetOfStock.getStatus())
-              .build();
-   }
-
-   private User getUser(Long userId) {
-      User user = userDao.findUserById(userId);
-      if (user == null) {
-         throw new EntityNotFoundException("Did not find user for transaction");
+   @Override
+   public List<Transaction> getUserTransactions(Long userId) {
+      List<Made> allMadeRels = madeDao.findByUserId(userId);
+      List<Transaction> userTransactions = new ArrayList<>();
+      for (Made rel : allMadeRels) {
+         userTransactions.add(rel.getTransaction());
       }
-      return user;
+      return userTransactions;
    }
+
 }

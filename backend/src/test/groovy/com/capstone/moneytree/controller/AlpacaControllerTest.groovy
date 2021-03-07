@@ -9,6 +9,7 @@ import net.jacobpeterson.domain.alpaca.position.Position
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
+import spock.lang.Ignore
 
 import java.time.LocalDate
 

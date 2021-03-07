@@ -3,7 +3,6 @@ package com.capstone.moneytree.model.node;
 import java.time.ZonedDateTime;
 
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
 
 import com.capstone.moneytree.model.Entity;
 import com.capstone.moneytree.model.MoneyTreeOrderType;
@@ -25,6 +24,10 @@ public class Transaction extends Entity {
 
    float quantity;
 
+   float avgPrice;
+
+   float total;
+
    ZonedDateTime purchasedAt;
 
    MoneyTreeOrderType moneyTreeOrderType;
@@ -33,11 +36,5 @@ public class Transaction extends Entity {
 
    TransactionStatus status;
 
-   @Relationship(type = "FULFILLS", direction = Relationship.INCOMING)
-   Stock fulfilledStock;
-
-   public Transaction fulfills(Stock stock) {
-      this.setFulfilledStock(stock);
-      return this;
-   }
+   String symbol;
 }

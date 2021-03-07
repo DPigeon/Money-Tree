@@ -13,14 +13,20 @@ export class StockService {
 
   loadStockInfo(stockTicker: string): Observable<Stock> {
     return this.api
-      .get('stockmarket/batch/' + stockTicker.toUpperCase())
+      .get('stock/batch/' + stockTicker.toUpperCase())
       .pipe(map((res: Response) => this.IEXtoModel(res.body)));
   }
 
-  loadMarketClock(): Observable<MarketClock> {
+  loadMarketClock(userId: number): Observable<MarketClock> {
     return this.api
-      .get('alpaca/market-status')
+      .get('alpaca/market-status/' + userId)
       .pipe(map((res: Response) => this.marketClockFormatter(res)));
+  }
+
+  getUserOwnedStocks(userId: number): Observable<Stock[]> {
+    return this.api
+      .get('stock/owned-stocks/' + userId)
+      .pipe(map((res: Response) => this.stockListFormatter(res)));
   }
 
   // This will need to be discussed: formatting responses frontend vs backend, same models?
@@ -55,5 +61,19 @@ export class StockService {
       timestamp: response.body.timestamp,
     };
     return fromattedMarketClock;
+  }
+
+  stockListFormatter(response: any): Stock[] {
+    const result: Stock[] = [];
+    for (const fetchedStock of response.body) {
+      result.push({
+        companyName: fetchedStock.companyName,
+        tickerSymbol: fetchedStock.symbol,
+        since: fetchedStock.since,
+        avgPrice: fetchedStock.avgPrice,
+        quantity: fetchedStock.quantity,
+      });
+    }
+    return result;
   }
 }

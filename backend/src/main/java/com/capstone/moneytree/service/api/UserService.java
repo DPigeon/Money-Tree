@@ -16,46 +16,46 @@ import java.util.Map;
  */
 public interface UserService {
 
-   /**
-    * Gets all users from the database.
-    *
-    * @return the list of users. Empty list if none.
-    */
-   Iterable<User> getAllUsers();
+    /**
+     * Gets all users from the database.
+     *
+     * @return the list of users. Empty list if none.
+     */
+    Iterable<User> getAllUsers();
 
-   User getUserById(Long id);
+    User getUserById(Long id);
 
-   /**
-    * Find a unique User with email and username
-    *
-    * @param email    The email of the user
-    * @param username The username of the user
-    * @return The User in the database
-    */
-   User getUserByEmailAndUsername(String email, String username);
+    /**
+     * Find a unique User with email and username
+     *
+     * @param email    The email of the user
+     * @param username The username of the user
+     * @return The User in the database
+     */
+    User getUserByEmailAndUsername(String email, String username);
 
-   User createUser(User user);
+    User createUser(User user);
 
-   User updateUser(User userToUpdate, User user);
+    User updateUser(User userToUpdate, User user);
 
-   User registerAlpacaApiKey(Long id, String key);
+    User registerAlpacaApiKey(Long id, String key);
 
-   UserValidator getUserValidator();
+    UserValidator getUserValidator();
 
-   User login(User credentials) throws CredentialNotFoundException;
+    User login(User credentials) throws CredentialNotFoundException;
 
-   User editUserProfilePicture(User user, MultipartFile imageFile, String selection);
+    User editUserProfilePicture(User user, MultipartFile imageFile, String selection);
 
-   Long followUser(Long userId, Long userToFollowId);
-   
-   Long unfollowUser(Long userId, Long userToUnfollowId);
+    Long followUser(Long userId, Long userToFollowId);
 
-   List<SanitizedUser> getFollowings(Long userId);
-   
-   List<SanitizedUser> getFollowers(Long userId);
+    Long unfollowUser(Long userId, Long userToUnfollowId);
 
-   void deleteUserByEmail(String email);
+    List<SanitizedUser> getFollowings(Long userId);
 
-   List<Map<String, String>> getSearchUsers();
+    List<SanitizedUser> getFollowers(Long userId);
+
+    void deleteUserByEmail(String email);
+
+    List<Map<String, String>> getSearchUsers();
 
 }
