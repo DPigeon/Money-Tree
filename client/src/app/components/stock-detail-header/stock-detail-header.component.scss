@@ -1,7 +1,7 @@
 @import "../../../styles.scss";
 
 .company-title {
-  display: flex;
+  
   align-items: center;
   margin-bottom: 20px;
   justify-content: space-between;
@@ -31,7 +31,10 @@
       margin-right: 10px;
     }
   }
-  .chips-container .mat-chip {
+  .chips-container{
+    float: right;
+  }
+  .mat-chip {
     color: $primary-color;
     background-color: white;
     border: lightgoldenrodyellow solid 0.01px;
@@ -55,6 +58,7 @@
   font-weight: 500;
   text-align: right;
   font-size: small;
+  margin: 40px 0 -5px 0;
 }
 .stock-pricing {
   margin-left: 1rem;

@@ -7,6 +7,7 @@ import {
   RouterEvent,
 } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { User } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-stock-detail',
@@ -17,16 +18,22 @@ export class StockDetailComponent implements OnInit {
   stockInfo$ = this.storeFacade.currentStockLoaded$;
   marketClock$ = this.storeFacade.currentMarketClock$;
   userInfo$ = this.storeFacade.currentUser$;
+  userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
   constructor(
     private storeFacade: StoreFacadeService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     let ticker = this.route.snapshot.paramMap.get('ticker');
     this.storeFacade.loadCurrentStock(ticker);
-    this.storeFacade.loadMarketClock();
+    this.userInfo$.subscribe((user: User) => {
+      if (user) {
+        this.storeFacade.loadMarketClock(user.id);
+        this.storeFacade.loadUserOwnedStocks(user.id);
+      }
+    });
     this.router.events
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
       .subscribe(() => {

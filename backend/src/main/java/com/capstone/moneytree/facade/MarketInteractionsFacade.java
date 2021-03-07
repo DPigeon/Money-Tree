@@ -1,7 +1,6 @@
 package com.capstone.moneytree.facade;
 
-
-import com.capstone.moneytree.dao.UserDao;
+import com.capstone.moneytree.dao.StockDao;
 import com.capstone.moneytree.dao.TransactionDao;
 import com.capstone.moneytree.exception.AlpacaClockException;
 import com.capstone.moneytree.exception.EntityNotFoundException;
@@ -9,6 +8,7 @@ import com.capstone.moneytree.handler.ExceptionMessage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +16,17 @@ import java.util.Map;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.capstone.moneytree.dao.UserDao;
+import com.capstone.moneytree.dao.MadeDao;
+import com.capstone.moneytree.dao.OwnsDao;
+import com.capstone.moneytree.dao.ToFulfillDao;
 import com.capstone.moneytree.model.TransactionStatus;
+import com.capstone.moneytree.model.node.Stock;
 import com.capstone.moneytree.model.node.Transaction;
 import com.capstone.moneytree.model.node.User;
+import com.capstone.moneytree.model.relationship.Owns;
+import com.capstone.moneytree.model.relationship.Made;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +57,27 @@ import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdateMessage;
 public class MarketInteractionsFacade {
 
    private static final Logger LOGGER = LoggerFactory.getLogger(MarketInteractionsFacade.class);
-
    private final UserDao userDao;
    private AlpacaAPI alpacaAPI;
    private final Map<String, AlpacaStreamListener> userIdToStream;
 
    @Autowired
+   StockDao stockDao;
+
+   @Autowired
    TransactionDao transactionDao;
+
+   @Autowired
+   MadeDao madeDao;
+
+   @Autowired
+   ToFulfillDao toFulfillDao;
+
+   @Autowired
+   OwnsDao ownsDao;
+
+   @Autowired
+   EmailSender emailSender;
 
    @Autowired
    public MarketInteractionsFacade(UserDao userDao) {
@@ -64,7 +86,7 @@ public class MarketInteractionsFacade {
    }
 
    private void initializeAlpacaSession(String userId) {
-      User user = getUser(Long.parseLong(userId));
+      User user = getUserById(Long.parseLong(userId));
       String alpacaKey = user.getAlpacaApiKey();
       AlpacaSession alpacaSession = new AlpacaSession();
       alpacaAPI = alpacaSession.alpaca(alpacaKey);
@@ -72,7 +94,7 @@ public class MarketInteractionsFacade {
 
    /**
     * Gets the Alpaca user account.
-    * 
+    *
     * @return An Account.
     */
    public Account getAccount(String userId) {
@@ -90,7 +112,7 @@ public class MarketInteractionsFacade {
 
    /**
     * Gets the market status (open/closed).
-    * 
+    *
     * @return market status.
     */
    public Clock getMarketClock(String userId) {
@@ -108,7 +130,7 @@ public class MarketInteractionsFacade {
 
    /**
     * Gets all stocks position for a user.
-    * 
+    *
     * @return List of available positions.
     */
    public List<Position> getOpenPositions(String userId) {
@@ -126,7 +148,7 @@ public class MarketInteractionsFacade {
 
    /**
     * Gets the timeseries data for the profile value of equity and profit loss.
-    * 
+    *
     * @param periodLength  Duration of the data.
     * @param periodUnit    Either day (D), week (W), month (M) or year (A).
     * @param timeFrame     Resolution of the time window (1Min, 5Min, 15Min, 1H,
@@ -137,15 +159,15 @@ public class MarketInteractionsFacade {
     * @return A PortfolioHistory of timeseries
     */
    public PortfolioHistory getPortfolioHistory(String userId, @NotNull @NotBlank int periodLength,
-         @NotNull @NotBlank String periodUnit, @NotNull @NotBlank String timeFrame,
-         @NotNull @NotBlank LocalDate dateEnd, @NotNull @NotBlank boolean extendedHours) {
+                                               @NotNull @NotBlank String periodUnit, @NotNull @NotBlank String timeFrame,
+                                               @NotNull @NotBlank LocalDate dateEnd, @NotNull @NotBlank boolean extendedHours) {
       initializeAlpacaSession(userId);
       PortfolioHistory portfolioHistory = null;
       PortfolioPeriodUnit portfolioPeriodUnit = PortfolioPeriodUnit.valueOf(periodUnit);
       PortfolioTimeFrame portfolioTimeFrame = PortfolioTimeFrame.valueOf(timeFrame);
       try {
          portfolioHistory = alpacaAPI.getPortfolioHistory(periodLength, portfolioPeriodUnit, portfolioTimeFrame,
-               dateEnd, extendedHours);
+                 dateEnd, extendedHours);
          LOGGER.info("Get portfolio: {}", portfolioHistory);
       } catch (AlpacaAPIRequestException e) {
          LOGGER.error("Error getting the portfolio: {}", e.getMessage());
@@ -162,13 +184,15 @@ public class MarketInteractionsFacade {
       try {
          initializeAlpacaSession(userId);
          AlpacaStreamListener streamListener = createStreamListener(userId, messageSender,
-               AlpacaStreamMessageType.TRADE_UPDATES);
+                 AlpacaStreamMessageType.TRADE_UPDATES);
          alpacaAPI.addAlpacaStreamListener(streamListener);
-         if (userIdToStream.containsKey(userId)) {
-            userIdToStream.replace(userId, streamListener);
-         } else {
-            userIdToStream.put(userId, streamListener);
-         }
+         // if (userIdToStream.containsKey(userId)) {
+         //    userIdToStream.replace(userId, streamListener);
+         // } else {
+         //    userIdToStream.put(userId, streamListener);
+         // }
+         userIdToStream.putIfAbsent(userId, streamListener);
+
          LOGGER.info("[Trade Updates]: Listening to trade streams of user ID {}", userId);
       } catch (WebsocketException e) {
          LOGGER.error("WebSocketException for user ID {}. Error: {}", userId, e.getMessage());
@@ -191,22 +215,33 @@ public class MarketInteractionsFacade {
 
    /**
     * Creates a streamListenerAdapter for stream listeners
-    * 
+    *
     * @param messageType A list of AlpacaStreamMessageType
     * @return An AlpacaStreamListenerAdapter
     */
    private AlpacaStreamListener createStreamListener(String userId, SimpMessagingTemplate messageSender,
-         AlpacaStreamMessageType... messageType) {
+                                                     AlpacaStreamMessageType... messageType) {
       return new AlpacaStreamListenerAdapter(messageType) {
          @Override
          public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
-            if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES) {
-               TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
-               TradeUpdate tradeUpdate = tradeMessage.getData();
+            // if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES) {
+            //    TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
+            //    TradeUpdate tradeUpdate = tradeMessage.getData();
+
+            TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
+            TradeUpdate tradeUpdate = tradeMessage.getData();
+
+            if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES && !tradeUpdate.getOrder().getStatus().equals("filled") &&
+                    madeDao.findByTransactionId( // finding the made relationship to get the userID!
+                            transactionDao.findByClientOrderId(tradeUpdate.getOrder().getClientOrderId()).getId()
+                    ).getUser().getId().toString().equals(userId)) {
+
+
                if (tradeUpdate.getEvent().equals("fill")) {
-                  messageSender.convertAndSend("/queue/user-" + userId, tradeUpdate.getOrder());
+                  messageSender.convertAndSend("/queue/user-" + userId,
+                          tradeUpdate.getOrder().getClientOrderId());
                   sendOrderCompletedEmail(userId, tradeUpdate);
-                  updateTransactionStatus(tradeUpdate.getOrder().getClientOrderId());
+                  updateTransactionStatus(tradeUpdate.getOrder().getClientOrderId(), tradeUpdate.getOrder().getFilledAvgPrice(), tradeUpdate.getPrice());
                   LOGGER.info("Order filled by user id {}", userId);
                }
             }
@@ -214,29 +249,38 @@ public class MarketInteractionsFacade {
       };
    }
 
-   // Refactor to different service. Add the relationship where user now owns the stock of a
-   // transaction that has been fulfilled
-   private void updateTransactionStatus(String clientOrderId) {
-      List<Transaction> transactions = transactionDao.findAll();
-      transactions.stream()
-              .filter(transaction -> transaction.getClientOrderId().equals(clientOrderId))
-              .findFirst()
-              .ifPresent(this::changeStatusAndSave);
+   private void updateTransactionStatus(String clientOrderId, String avgPrice, String totalPrice) {
+      Transaction transaction = transactionDao.findByClientOrderId(clientOrderId);
+      if (avgPrice != null) {
+         // to go around null exception because the listener listens to the trade updates and while the status is pending this value is null
+         transaction.setAvgPrice(Float.parseFloat(avgPrice));
+      }
+      transaction.setTotal(Float.parseFloat(totalPrice));
+      changeStatusAndSave(transaction);
       LOGGER.info("Updated transaction status for transaction {}", clientOrderId);
    }
 
    private void changeStatusAndSave(Transaction transaction) {
       transaction.setStatus(TransactionStatus.COMPLETED);
       transactionDao.save(transaction);
+
+      // finding made relationship for that transaction and the user related to it
+      Made madeRel = madeDao.findByTransactionId(transaction.getId());
+      User user = madeRel.getUser();
+
+      Stock stock = stockDao.findBySymbol(transaction.getSymbol());
+
+      Owns ownsRelationship = new Owns(user, stock, new Date(), transaction.getQuantity(), transaction.getAvgPrice(), transaction.getTotal());
+      ownsDao.save(ownsRelationship);
+
    }
 
    private void sendOrderCompletedEmail(String userId, TradeUpdate trade) {
-      EmailSender emailSender = new EmailSender();
-      User user = getUser(Long.parseLong(userId));
+      User user = getUserById(Long.parseLong(userId));
       emailSender.sendOrderCompletedEmail(user, trade);
    }
 
-   private User getUser(Long userId) {
+   private User getUserById(Long userId) {
       User user = userDao.findUserById(userId);
       if (user == null) {
          throw new EntityNotFoundException("User does not exist!");

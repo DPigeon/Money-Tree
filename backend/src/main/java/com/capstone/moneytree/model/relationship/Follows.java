@@ -38,7 +38,7 @@ public class Follows {
    @DateLong
    Date followDate;
 
-   public Follows(User follower, User userToFollow, Date followDate){
+   public Follows(User follower, User userToFollow, Date followDate) {
       this.follower = follower;
       this.userToFollow = userToFollow;
       this.followDate = followDate;

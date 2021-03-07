@@ -7,18 +7,18 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Follows relationship entity Data Access extending from our Neo4jRepository Database
+ * Follows relationship entity Data Access Object class extending
+ * Neo4jRepository Database
  */
 @Repository
 public interface FollowsDao extends Neo4jRepository<Follows, Long> {
 
     List<Follows> findAll();
 
-    List<Follows> findFollowsByFollowerId(Long followerId);
+    List<Follows> findByFollowerId(Long followerId);
 
-    List<Follows> findFollowsByUserToFollowId(Long userToFollowId);
+    List<Follows> findByUserToFollowId(Long userToFollowId);
 
-    List<Follows> findFollowsByFollowerIdAndUserToFollowId(Long followerId, Long userToFollowId);
+    List<Follows> findByFollowerIdAndUserToFollowId(Long followerId, Long userToFollowId);
 
-    
 }

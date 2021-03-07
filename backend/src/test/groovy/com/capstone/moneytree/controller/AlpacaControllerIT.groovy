@@ -1,3 +1,4 @@
+
 package com.capstone.moneytree.controller
 
 import com.capstone.moneytree.dao.UserDao
@@ -57,6 +58,7 @@ class AlpacaControllerIT extends Specification {
 
         when: "Getting an Alpaca account"
         ResponseEntity<Account> response = alpacaController.getAccount(user.getId().toString())
+
 
         then: "The account should be retrieved"
         assert response.statusCode == HttpStatus.OK
@@ -223,3 +225,4 @@ class AlpacaControllerIT extends Specification {
         assert blockingQueue.size() == 0
     }
 }
+

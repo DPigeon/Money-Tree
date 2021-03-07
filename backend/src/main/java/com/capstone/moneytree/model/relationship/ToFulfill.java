@@ -3,14 +3,14 @@ package com.capstone.moneytree.model.relationship;
 import java.time.ZonedDateTime;
 
 import org.neo4j.ogm.annotation.EndNode;
+import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
-import org.neo4j.ogm.annotation.GeneratedValue;
 
+import com.capstone.moneytree.model.node.Stock;
 import com.capstone.moneytree.model.node.Transaction;
-import com.capstone.moneytree.model.node.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,24 +22,24 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RelationshipEntity(type = "Made")
-public class Made {
-
+@RelationshipEntity(type = "ToFulfill")
+public class ToFulfill {
     @Id
     @GeneratedValue
     private Long id;
 
     @StartNode
-    User user;
-
-    @EndNode
     Transaction transaction;
 
-    ZonedDateTime transactionDate;
+    @EndNode
+    Stock stock;
 
-    public Made(User user, Transaction transaction, ZonedDateTime transactionDate) {
-        this.user = user;
+    ZonedDateTime fulfillmentDate;
+
+    public ToFulfill(Transaction transaction, Stock stock, ZonedDateTime fulfillmentDate) {
         this.transaction = transaction;
-        this.transactionDate = transactionDate;
+        this.stock = stock;
+        this.fulfillmentDate = fulfillmentDate;
     }
+
 }
