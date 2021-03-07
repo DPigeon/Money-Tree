@@ -1,6 +1,5 @@
 package com.capstone.moneytree.service
 
-import com.capstone.moneytree.dao.StockDao
 import com.capstone.moneytree.dao.TransactionDao
 import com.capstone.moneytree.dao.UserDao
 import com.capstone.moneytree.exception.AlpacaException

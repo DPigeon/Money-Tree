@@ -8,6 +8,8 @@ import net.jacobpeterson.alpaca.enums.OrderTimeInForce
 import net.jacobpeterson.domain.alpaca.asset.Asset
 import net.jacobpeterson.domain.alpaca.order.Order
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate
+import org.springframework.mock.web.MockMultipartFile
+import org.springframework.web.multipart.MultipartFile
 
 import java.time.ZonedDateTime
 
@@ -93,5 +95,10 @@ class MoneyTreeTestUtils {
    static TradeUpdate createTradeUpdate(String id, String clientId, String symbol, String qty, String filledQty, String type, String limitPrice, String avgPrice, String event, String price, ZonedDateTime timestamp, String position) {
       Order order = new Order(id, clientId, null, null, null, null, null, null, null, null, null, null, null, symbol, null, qty, filledQty, type, null, null, limitPrice, null, avgPrice, null, null, null, null, null, null)
       return new TradeUpdate(event, price, timestamp, position, order)
+   }
+
+   static MultipartFile getMultipartFile() {
+      File file = new File("./src/test/resources/image/profile.jpg")
+      return new MockMultipartFile(file.getName(), file.getAbsolutePath(), null, file.getBytes())
    }
 }
