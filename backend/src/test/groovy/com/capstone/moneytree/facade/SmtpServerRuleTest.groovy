@@ -1,6 +1,5 @@
 package com.capstone.moneytree.facade
 
-import org.junit.Test
 import spock.lang.Specification
 
 import javax.mail.internet.MimeMessage
@@ -9,7 +8,6 @@ class SmtpServerRuleTest extends Specification {
 
     private SmtpServerRule smtpServerRuleUtils
 
-    @Test
     def "It should initialize the smtpServer"() {
         given: "A mocked port for emails"
         int port = 2525
@@ -21,7 +19,6 @@ class SmtpServerRuleTest extends Specification {
         assert smtpServerRuleUtils != null
     }
 
-    @Test
     def "It should get messages from smtpServer"() {
         given: "A mocked port for emails and a server"
         int port = 2525

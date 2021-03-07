@@ -38,7 +38,6 @@ class AlpacaControllerTest extends Specification {
         alpacaController = new AlpacaController(marketInteractionsFacade, messageSender)
     }
 
-    @Test
     def "It should get an Alpaca account"() {
         given: "A user ID"
         String userId = "59"
@@ -55,7 +54,6 @@ class AlpacaControllerTest extends Specification {
         assert response.statusCode == HttpStatus.OK
     }
 
-    @Test
     def "Should retrieve the open positions"() {
         given: "A user ID"
         String userId = "10332"
@@ -72,7 +70,6 @@ class AlpacaControllerTest extends Specification {
         assert response.statusCode == HttpStatus.OK
     }
 
-    @Test
     def "Should retrieve a portfolio"() {
         given: "A user ID"
         String userId = "10332"
@@ -94,7 +91,6 @@ class AlpacaControllerTest extends Specification {
         assert response.statusCode == HttpStatus.OK
     }
 
-    @Test
     def "It should listen to trade updates before sending an email when order completed"() {
         given: "A user (ID) subscribing to the trades"
         String userId = "1"
@@ -108,7 +104,6 @@ class AlpacaControllerTest extends Specification {
         then: "No exception thrown"
     }
 
-    @Test
     def "It should disconnect from trade updates when asked"() {
         given: "A user (ID) subscribing to the trades"
         String userId = "1"

@@ -1,6 +1,5 @@
 package com.capstone.moneytree.controller
 
-import com.capstone.moneytree.model.SanitizedUser
 import com.capstone.moneytree.model.relationship.Follows
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.*
@@ -10,7 +9,6 @@ import java.nio.file.Paths
 
 import javax.security.auth.login.CredentialNotFoundException
 
-import org.junit.Test
 import org.springframework.http.HttpStatus
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockMultipartFile
@@ -66,7 +64,6 @@ class UserControllerTest extends Specification {
         userController = new UserController(defaultUserService)
     }
 
-    @Test
     def "Should register a user successfully"() {
         given: "a user from user fields and another mocked user"
         String email = "test@test.com"
@@ -91,7 +88,6 @@ class UserControllerTest extends Specification {
         response.getBody() == user
     }
 
-    @Test
     def "Should not register a user with any empty fields"() {
         given: "a user with empty fields"
         String email = ""
@@ -108,7 +104,6 @@ class UserControllerTest extends Specification {
         thrown(MissingMandatoryFieldException)
     }
 
-    @Test
     def "Should not register a user if email already exists"() {
         given: "a user with email already registered"
         String email = "cath@test.com"
@@ -128,7 +123,6 @@ class UserControllerTest extends Specification {
         thrown(UserAlreadyExistsException)
     }
 
-    @Test
     def "Should not register a user if username already exists"() {
         given: "a user with username already registered"
         String email = "moneytree@test.com"
@@ -148,7 +142,6 @@ class UserControllerTest extends Specification {
         thrown(UserAlreadyExistsException)
     }
 
-    @Test
     def "Should register an Alpaca key to a user successfully"() {
         given: "A registered user with an Alpaca key"
         String email = "moneytree@test.com"
@@ -178,7 +171,6 @@ class UserControllerTest extends Specification {
         assert response.body.alpacaApiKey == alpacaApiKey
     }
 
-    @Test
     def "Should not register an Alpaca key to the user if key is empty"() {
         given: "A registered user with an empty key"
         String email = "moneytree@test.com"
@@ -196,7 +188,6 @@ class UserControllerTest extends Specification {
         thrown(EntityNotFoundException)
     }
 
-    @Test
     def "Should not register an Alpaca key to the user if user does not exists"() {
         given: "A registered user with an Alpaca key"
         String email = "moneytree@test.com"
@@ -217,7 +208,6 @@ class UserControllerTest extends Specification {
         thrown(EntityNotFoundException)
     }
 
-    @Test
     def "Login Test"() {
         given: "A registeredUser"
         String password = "password123"
@@ -252,7 +242,6 @@ class UserControllerTest extends Specification {
         thrown(CredentialNotFoundException)
     }
 
-    @Test
     def "Edit User Profile Picture returns an exception if the provided image is empty"() {
         given: "A registered user with an Alpaca key"
         String email = "moneytree@test.com"
@@ -277,7 +266,6 @@ class UserControllerTest extends Specification {
         thrown(InvalidMediaFileException)
     }
 
-    @Test
     def "Edit User Profile Picture is returns an exception if the provided image is null"() {
         given: "A registered user with an Alpaca key"
         String email = "moneytree@test.com"
@@ -301,7 +289,6 @@ class UserControllerTest extends Specification {
         thrown(InvalidMediaFileException)
     }
 
-    @Test
     def "Edit User Profile Picture is successful if the user uploads its first picture ever"() {
         given: "A registered user"
         def user = new User(
@@ -330,7 +317,6 @@ class UserControllerTest extends Specification {
         Files.copy(Paths.get("./src/test/resources/${PIC_FILE_NAME}"), Paths.get("./src/test/resources/image/${PIC_FILE_NAME}"))
     }
 
-    @Test
     def "Edit User Profile Picture successfully deletes the previous avatar when present"() {
         given: "A registered user"
         def user = new User(
@@ -365,7 +351,6 @@ class UserControllerTest extends Specification {
         Files.copy(Paths.get("./src/test/resources/${PIC_FILE_NAME}"), Paths.get("./src/test/resources/image/${PIC_FILE_NAME}"))
     }
 
-    @Test
     def "Edit User Profile Picture throws exception when image is null"() {
         given: "A registered user"
         def user = new User(
@@ -387,7 +372,6 @@ class UserControllerTest extends Specification {
         thrown(InvalidMediaFileException)
     }
 
-    @Test
     def "Edit User Profile Picture throws exception when image is empty"() {
         given: "A registered user"
         def user = new User(
@@ -414,7 +398,6 @@ class UserControllerTest extends Specification {
         thrown(InvalidMediaFileException)
     }
 
-    @Test
     def "converting to multipart to file throws exception when the file does not exist"() {
         given: "An empty file"
         def image = Mock(File) {
@@ -433,7 +416,6 @@ class UserControllerTest extends Specification {
         thrown(ExceptionAmazonS3)
     }
 
-    @Test
     def "deleting a file returns nothing when the url provided is empty"() {
         when: "the upload operation to return with no exception thrown"
         amazonS3Facade.deleteImageFromS3Bucket(_ as String, null)
@@ -442,7 +424,6 @@ class UserControllerTest extends Specification {
         notThrown(Exception)
     }
 
-    @Test
     def "Should be able to follow another user"() {
         given: "two existing users"
         Long userId1 = 1
@@ -481,7 +462,6 @@ class UserControllerTest extends Specification {
         assert response.body == userId2
     }
 
-    @Test
     def "Should not be able to follow itself"() {
         given: "a two same users with same Ids"
         Long userId1 = 1
@@ -511,7 +491,6 @@ class UserControllerTest extends Specification {
         thrown(FollowsRelationshipException)
     }
 
-    @Test
     def "Should not be able to follow a user that is already followed "() {
         given: "two existing users"
         Long userId1 = 1
@@ -549,7 +528,6 @@ class UserControllerTest extends Specification {
         thrown(FollowsRelationshipException)
     }
 
-    @Test
     def "Should throw UserNotFoundException if following a non-existent user"() {
         given: "two non-existent users"
         Long userId = 1
@@ -562,8 +540,6 @@ class UserControllerTest extends Specification {
         thrown(EntityNotFoundException)
     }
 
-
-    @Test
     def "Should be able to unfollow another user"() {
         given: "two existing users"
         Long userId1 = 1
@@ -603,7 +579,6 @@ class UserControllerTest extends Specification {
         assert response.body == userId2
     }
 
-    @Test
     def "Should not be able to unfollow another user if not already following that user"() {
         given: "two existing users"
         Long userId1 = 1
@@ -642,8 +617,6 @@ class UserControllerTest extends Specification {
 
     }
 
-
-    @Test
     def "Should throw UserNotFoundException if unfollowing a non-existent user"() {
         given: "two non-existent users"
         Long userId = 1
@@ -656,7 +629,6 @@ class UserControllerTest extends Specification {
         thrown(EntityNotFoundException)
     }
 
-    @Test
     def "Should return the right followings list when a user follows 2 other users"() {
         given: "3 existing users, user 1 is following user2 and user3"
         Long userId1 = 1
@@ -707,7 +679,6 @@ class UserControllerTest extends Specification {
         assert response[1].getFirstName() == "Benny"
     }
 
-    @Test
     def "Should return empty followings list when a user was not following any other users"() {
         given: "one existing user"
         Long userId1 = 1
@@ -734,7 +705,6 @@ class UserControllerTest extends Specification {
         assert response.size() == 0
     }
 
-    @Test
     def "Should throw UserNotFoundException if getting followings for a non-existent user"() {
         given: "a non-existent users"
         Long userId = 1
@@ -746,7 +716,6 @@ class UserControllerTest extends Specification {
         thrown(EntityNotFoundException)
     }
 
-    @Test
     def "Should return the right followers list when a user was followed by 2 other users"() {
         given: "3 existing users, user 1 is followed by user2 and user3"
         Long userId1 = 1
@@ -797,7 +766,6 @@ class UserControllerTest extends Specification {
         assert response[1].getFirstName() == "Benny"
     }
 
-    @Test
     def "Should return empty followers list when a user was not followed by any other users"() {
         given: "one existing user"
         Long userId1 = 1
@@ -824,7 +792,6 @@ class UserControllerTest extends Specification {
         assert response.size() == 0
     }
 
-    @Test
     def "Should throw UserNotFoundException if getting followers for a non-existent user"() {
         given: "a non-existent users"
         Long userId = 1
@@ -836,15 +803,9 @@ class UserControllerTest extends Specification {
         thrown(EntityNotFoundException)
     }
 
-
     def uploadNewAvatar() {
         File file = new File("./src/test/resources/image/${PIC_FILE_NAME}")
         MockMultipartFile imageFile = new MockMultipartFile(file.getName(), file.getAbsolutePath(), null, file.getBytes())
         return amazonS3Facade.uploadImageToS3Bucket(imageFile, BUCKET_NAME)
-    }
-
-    def getMultipartFile() {
-        File file = new File("./src/test/resources/image/${PIC_FILE_NAME}")
-        return new MockMultipartFile(file.getName(), file.getAbsolutePath(), null, file.getBytes())
     }
 }

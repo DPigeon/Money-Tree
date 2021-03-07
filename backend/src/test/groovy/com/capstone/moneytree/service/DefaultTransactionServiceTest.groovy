@@ -33,7 +33,6 @@ import spock.lang.Specification
 
 class DefaultTransactionServiceTest extends Specification {
 
-
     TransactionDao transactionDao = Mock()
     UserDao userDao = Mock()
     StockDao stockDao = Mock();

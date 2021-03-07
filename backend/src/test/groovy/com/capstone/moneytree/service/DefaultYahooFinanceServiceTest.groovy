@@ -9,8 +9,8 @@ import spock.lang.Specification
 
 class DefaultYahooFinanceServiceTest extends Specification {
 
-    YahooFinanceFacade yahooFinanceFacade = new YahooFinanceFacade(WebClient.builder());
-    YahooFinanceService yahooFinanceService = new DefaultYahooFinanceService(yahooFinanceFacade: yahooFinanceFacade);
+    YahooFinanceFacade yahooFinanceFacade = new YahooFinanceFacade(WebClient.builder())
+    YahooFinanceService yahooFinanceService = new DefaultYahooFinanceService(yahooFinanceFacade: yahooFinanceFacade)
 
     def "Should get historical graph data"() {
         given: "The information"

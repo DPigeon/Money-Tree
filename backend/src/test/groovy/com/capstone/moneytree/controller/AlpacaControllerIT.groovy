@@ -13,7 +13,6 @@ import org.springframework.messaging.simp.stomp.StompSession
 
 import java.time.LocalDate
 
-import org.junit.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -102,7 +101,6 @@ class AlpacaControllerIT extends Specification {
         userDao.delete(user)
     }
 
-    @Test
     def "Should retrieve a Portfolio successfully"() {
         setup: "Create the user with portfolio info"
         userDao.save(createdUser)
@@ -132,7 +130,6 @@ class AlpacaControllerIT extends Specification {
         userDao.delete(user)
     }
 
-    @Test
     def "Invalid unit for retrieving a Portfolio"() {
         setup: "Create the user with portfolio info"
         userDao.save(createdUser)
@@ -160,7 +157,6 @@ class AlpacaControllerIT extends Specification {
         userDao.delete(user)
     }
 
-    @Test
     def "Invalid timeFrame for retrieving a Portfolio"() {
         setup: "Create the user with portfolio info"
         userDao.save(createdUser)
@@ -188,7 +184,6 @@ class AlpacaControllerIT extends Specification {
         userDao.delete(user)
     }
 
-    @Test
     @Ignore("Only run locally for an E2E backend test")
     def "Should connect to the WebSocket server"() {
         given:
@@ -206,7 +201,6 @@ class AlpacaControllerIT extends Specification {
         assert blockingQueue.size() == 0
     }
 
-    @Test
     @Ignore("Only run locally for an E2E backend test")
     def "Should disconnect from the WebSocket server"() {
         given:

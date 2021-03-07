@@ -4,6 +4,7 @@ import com.capstone.moneytree.facade.YahooFinanceFacade
 import com.capstone.moneytree.service.api.StockService
 import com.capstone.moneytree.service.api.YahooFinanceService
 import com.capstone.moneytree.service.impl.DefaultYahooFinanceService
+import org.junit.Test
 import org.junit.platform.commons.util.StringUtils
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
@@ -14,7 +15,6 @@ import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.impl.DefaultStockMarketDataService
 import org.springframework.web.reactive.function.client.WebClient
 import pl.zankowski.iextrading4j.api.exception.IEXTradingException
-import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
@@ -27,28 +27,25 @@ class StockControllerIT extends Specification {
    private static final String PUBLISH_TOKEN = System.getenv().get("IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX")
    private static final String SECRET_TOKEN = System.getenv().get("IEXCLOUD_SECRET_TOKEN_SANDBOX")
 
-
-
    StockMarketDataFacade stockMarketDataFacade = new StockMarketDataFacade(PUBLISH_TOKEN, SECRET_TOKEN, "dev")
    StockMarketDataService stockMarketDataService = new DefaultStockMarketDataService(stockMarketDataFacade: stockMarketDataFacade)
-   YahooFinanceFacade yahooFinanceFacade = new YahooFinanceFacade(WebClient.builder());
-   YahooFinanceService yahooFinanceService = new DefaultYahooFinanceService(yahooFinanceFacade: yahooFinanceFacade);
+   YahooFinanceFacade yahooFinanceFacade = new YahooFinanceFacade(WebClient.builder())
+   YahooFinanceService yahooFinanceService = new DefaultYahooFinanceService(yahooFinanceFacade: yahooFinanceFacade)
    StockService stockService
 
    StockController stockController = new StockController(stockMarketDataService, yahooFinanceService, stockService)
 
-   @Ignore("Fails, needs to be fixed")
    def "Validates GET batch returns stock information"() {
       given: "A stock symbol"
-      def appl = "AAPL"
+      def symbol = "AAPL"
 
       when: "A call to the batch endpoint is made"
-      def res = stockController.getBatchStocksBySymbol(appl)
+      def res = stockController.getBatchStocksBySymbol(symbol)
 
       then: "We get a valid Batch object"
       res.statusCode == HttpStatus.OK
       res.getBody() != null
-      res.getBody().company.symbol == appl
+      res.getBody().company.symbol == symbol
    }
 
    def "GET batch throws IEXTrading Exception when symbol is not valid"() {
@@ -169,18 +166,17 @@ class StockControllerIT extends Specification {
       thrown(IEXTradingException)
    }
 
-   @Ignore("Fails, needs to be fixed")
    def "Validates GET keyStats returns keyStats information"() {
       given: "A stock symbol"
-      def appl = "AAPL"
+      def symbol = "AAPL"
 
       when: "A call to the keyStats endpoint is made"
-      def res = stockController.getKeyStats(appl)
+      def res = stockController.getKeyStats(symbol)
 
       then: "We get a valid keyStats object"
       res.statusCode == HttpStatus.OK
       res.getBody() != null
-      res.getBody().companyName == "Apple, Inc."
+      res.getBody().companyName == "Apple Inc"
    }
 
    def "GET keyStats throws IEXTrading Exception when symbol is not valid"() {

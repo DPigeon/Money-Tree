@@ -11,7 +11,7 @@ public class ActiveProfile {
    private static final String PROD_APP_URL = "https://money-tree.tech/";
 
    @Value("${spring.profiles.active}")
-   private String currentProfile;
+   String currentProfile;
 
    public String getSpringProfile() {
       return currentProfile.toLowerCase();

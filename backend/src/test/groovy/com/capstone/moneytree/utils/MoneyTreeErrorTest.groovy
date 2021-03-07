@@ -1,13 +1,11 @@
 package com.capstone.moneytree.utils
 
 import com.capstone.moneytree.exception.AlpacaException
-import org.junit.Test
 import org.springframework.http.HttpStatus
 import spock.lang.Specification
 
 class MoneyTreeErrorTest extends Specification {
 
-    @Test
     def "It should create a MoneyTreeError"() {
         when: "the error is initialized"
         MoneyTreeError moneyTreeError = new MoneyTreeError()
@@ -17,7 +15,6 @@ class MoneyTreeErrorTest extends Specification {
         assert moneyTreeError.getTimestamp() != null
     }
 
-    @Test
     def "It should create a MoneyTreeError with a status"() {
         when: "the error is initialized with status"
         HttpStatus status = HttpStatus.BAD_REQUEST
@@ -29,7 +26,6 @@ class MoneyTreeErrorTest extends Specification {
         assert moneyTreeError.getStatus() == status
     }
 
-    @Test
     def "It should create a MoneyTreeError with status and exception"() {
         when: "the error is initialized with status and exception"
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR
@@ -43,7 +39,6 @@ class MoneyTreeErrorTest extends Specification {
         assert moneyTreeError.getDebugMessage() == throwable.getLocalizedMessage()
     }
 
-    @Test
     def "It should create a MoneyTreeError with status, message and exception"() {
         when: "the error is initialized with status, message and exception"
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR
@@ -59,7 +54,6 @@ class MoneyTreeErrorTest extends Specification {
         assert moneyTreeError.getDebugMessage() == throwable.getLocalizedMessage()
     }
 
-    @Test
     def "It should create an error"() {
         given: "status and message"
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR

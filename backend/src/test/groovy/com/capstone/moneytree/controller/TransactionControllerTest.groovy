@@ -24,5 +24,4 @@ class TransactionControllerTest extends Specification {
       then: "Expect the method to be called once with proper arguments"
       1 * transactionService.execute(userId, order)
    }
-
 }

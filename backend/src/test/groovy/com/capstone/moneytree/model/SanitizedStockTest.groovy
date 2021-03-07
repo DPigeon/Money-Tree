@@ -3,9 +3,6 @@ package com.capstone.moneytree.model
 import com.capstone.moneytree.model.node.User
 import com.capstone.moneytree.model.node.Stock
 import com.capstone.moneytree.model.relationship.Owns
-import org.junit.Test
-
-import static com.capstone.moneytree.utils.MoneyTreeTestUtils.*
 
 import spock.lang.Specification
 
@@ -16,9 +13,8 @@ import java.time.Instant;
  * Unit Tests for the SanitizedStock model.
  */
 class SanitizedStockTest extends Specification {
-    @Test
-    def "it should create a SanitizedStock from an Owns releationship"() {
 
+    def "it should create a SanitizedStock from an Owns relationship"() {
         given:
         "an Owns relationship object created from Owns class"
         Stock stock = Stock.builder().symbol("AAPL").companyName("Apple INC.").build()
