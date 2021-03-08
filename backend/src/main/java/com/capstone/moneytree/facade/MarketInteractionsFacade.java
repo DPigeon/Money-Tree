@@ -19,7 +19,6 @@ import javax.validation.constraints.NotNull;
 import com.capstone.moneytree.dao.UserDao;
 import com.capstone.moneytree.dao.MadeDao;
 import com.capstone.moneytree.dao.OwnsDao;
-import com.capstone.moneytree.dao.ToFulfillDao;
 import com.capstone.moneytree.model.TransactionStatus;
 import com.capstone.moneytree.model.node.Stock;
 import com.capstone.moneytree.model.node.Transaction;
