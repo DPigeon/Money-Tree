@@ -2,7 +2,9 @@ package com.capstone.moneytree.service
 
 import com.capstone.moneytree.dao.FollowsDao
 import com.capstone.moneytree.dao.UserDao
+import com.capstone.moneytree.model.SanitizedUser
 import com.capstone.moneytree.model.node.User
+import com.capstone.moneytree.model.relationship.Follows
 import com.capstone.moneytree.service.api.AmazonS3Service
 import com.capstone.moneytree.service.api.UserService
 import com.capstone.moneytree.service.impl.DefaultUserService
@@ -154,26 +156,116 @@ class DefaultUserServiceTest extends Specification {
     }
 
     def "Should follow a user"() {
-        
+        given:
+        User user1 = createUser("test@test.com", "test", "pass", "Use", "Yes", "44y-33h4ye")
+        user1.setId(1)
+        User user2 = createUser("test2@test.com", "test", "pass", "Use", "Yes", "44y-33h4ye")
+        user2.setId(2)
+        List<Follows> follows = new ArrayList<>()
+        Follows follow = new Follows(user1, user2, new Date())
+
+        and:
+        userDao.findUserById(user1.getId()) >> user1
+        userDao.findUserById(user2.getId()) >> user2
+        followsDao.findByFollowerIdAndUserToFollowId(user1.getId(), user2.getId()) >> follows
+        followsDao.save(follow)
+
+        when:
+        Long response = userService.followUser(user1.getId(), user2.getId())
+
+        then:
+        response != null
+        response == user2.getId()
     }
 
     def "Should unfollow a user"() {
+        given:
+        User user1 = createUser("test@test.com", "test", "pass", "Use", "Yes", "44y-33h4ye")
+        user1.setId(1)
+        User user2 = createUser("test2@test.com", "test", "pass", "Use", "Yes", "44y-33h4ye")
+        user2.setId(2)
+        List<Follows> follows = List.of(
+                new Follows(user1, user2, new Date())
+        )
 
+        and:
+        userDao.findUserById(user1.getId()) >> user1
+        userDao.findUserById(user2.getId()) >> user2
+        followsDao.findByFollowerIdAndUserToFollowId(user1.getId(), user2.getId()) >> follows
+        followsDao.delete(follows.get(0))
+
+        when:
+        Long response = userService.unfollowUser(user1.getId(), user2.getId())
+
+        then:
+        response != null
+        response == user2.getId()
     }
 
     def "Should get followings"() {
+        given:
+        User user1 = createUser("test@test.com", "test", "pass", "Use", "Yes", "44y-33h4ye")
+        user1.setId(1)
+        User user2 = createUser("test2@test.com", "test", "pass", "Use", "Yes", "44y-33h4ye")
+        user2.setId(2)
+        List<Follows> follows = List.of(
+                new Follows(user1, user2, new Date())
+        )
 
+        and:
+        userDao.findUserById(user1.getId()) >> user1
+        followsDao.findByFollowerId(user1.getId()) >> follows
+
+        when:
+        List<SanitizedUser> response = userService.getFollowings(user1.getId())
+
+        then:
+        response != null
+        response.size() == 1
     }
 
     def "Should get followers"() {
+        given:
+        User user1 = createUser("test@test.com", "test", "pass", "Use", "Yes", "44y-33h4ye")
+        user1.setId(1)
+        User user2 = createUser("test2@test.com", "test", "pass", "Use", "Yes", "44y-33h4ye")
+        user2.setId(2)
+        List<Follows> follows = List.of(
+                new Follows(user1, user2, new Date())
+        )
 
+        and:
+        userDao.findUserById(user1.getId()) >> user1
+        followsDao.findByUserToFollowId(user1.getId()) >> follows
+
+        when:
+        List<SanitizedUser> response = userService.getFollowers(user1.getId())
+
+        then:
+        response != null
+        response.size() == 1
     }
 
     def "Should delete user by email"() {
+        given:
+        String email = "test@test.com"
+        User user = createUser(email, "test", "pass", "Use", "Yes", "44y-33h4ye")
 
+        and:
+        userDao.findUserByEmail(email) >> user
+
+        when:
+        userService.deleteUserByEmail(email)
+
+        then:
+        1 * userDao.delete(user)
     }
 
-    def "Should get searched users"() {
+    def "Should get searched users by calling the database once"() {
+        when:
+        userService.getSearchUsers()
 
+        then:
+        1 * userDao.getSearchUsers()
     }
 }
