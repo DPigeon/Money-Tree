@@ -53,5 +53,4 @@ public class Owns {
       this.avgPrice = avgPrice;
       this.total = total;
    }
-
 }

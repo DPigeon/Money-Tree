@@ -1,9 +1,10 @@
 package com.capstone.moneytree.utils
 
 import com.capstone.moneytree.model.MoneyTreeOrderType
+import com.capstone.moneytree.model.TransactionStatus
 import com.capstone.moneytree.model.node.Transaction
 import com.capstone.moneytree.model.node.User
-
+import com.capstone.moneytree.model.relationship.Made
 import net.jacobpeterson.alpaca.enums.OrderTimeInForce
 import net.jacobpeterson.domain.alpaca.asset.Asset
 import net.jacobpeterson.domain.alpaca.order.Order
@@ -51,6 +52,30 @@ class MoneyTreeTestUtils {
               .build()
    }
 
+   static Order createOrder(String id, String symbol, String qty, String type, String timeInForce) {
+      return new Order(id, null, null, null, null, null, null,
+              null, null, null, null, null, null, symbol, null,
+              qty, null, type, null, timeInForce, null, null, null, null,
+              null, null, null, null, null)
+   }
+
+   static Transaction createTransaction(String symbol, float avgPrice, float total, TransactionStatus status) {
+      return Transaction.builder()
+               .symbol(symbol)
+               .avgPrice(avgPrice)
+               .total(total)
+               .status(status)
+               .build()
+   }
+
+   static Made createMadeRelationship(User user, Transaction transaction, ZonedDateTime date) {
+      return Made.builder()
+               .user(user)
+               .transaction(transaction)
+               .transactionDate(date)
+               .build()
+   }
+
    /**
     * Utility method to create transactions
     */
@@ -62,9 +87,7 @@ class MoneyTreeTestUtils {
          Transaction.builder().moneyTreeOrderType(MoneyTreeOrderType.MARKET_SELL).build(),
          Transaction.builder().moneyTreeOrderType(MoneyTreeOrderType.LIMIT_BUY).build()
       ]
-
    }
-
 
    /**
     * Utility method to build an order

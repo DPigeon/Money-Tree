@@ -10,9 +10,6 @@ import com.capstone.moneytree.service.api.UserService
 import com.capstone.moneytree.service.impl.DefaultUserService
 import com.capstone.moneytree.validator.UserValidator
 import com.capstone.moneytree.validator.ValidatorFactory
-import org.springframework.mock.web.MockHttpServletRequest
-import org.springframework.web.context.request.RequestContextHolder
-import org.springframework.web.context.request.ServletRequestAttributes
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
 
