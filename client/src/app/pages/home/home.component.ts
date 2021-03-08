@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private storeFacade: StoreFacadeService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
   ) {
     this.currentUser = null; // otherwise there would be an undefined error because of waiting for the currentUser values to fetch
   }
