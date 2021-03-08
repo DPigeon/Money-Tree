@@ -60,6 +60,7 @@ class TransactionControllerIT extends Specification {
         transactionDao.delete(transaction2)
     }
 
+    // TODO: In another story since ISSUE-319 was too big
     @Ignore("TODO")
     def "Execute a transaction in the database"() {
 
