@@ -338,6 +338,11 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    public List<Map<String, String>> getSearchUsers() {
+        return userDao.getSearchUsers();
+    }
+
+    @Override
     public UserValidator getUserValidator() {
         return validatorFactory.getUserValidator();
     }
@@ -369,10 +374,5 @@ public class DefaultUserService implements UserService {
         return HttpRequest.newBuilder().uri(URI.create("https://api.alpaca.markets/oauth/token"))
                 .headers("Content-Type", "application/x-www-form-urlencoded")
                 .POST(HttpRequest.BodyPublishers.ofString(form)).build();
-    }
-
-    @Override
-    public List<Map<String, String>> getSearchUsers() {
-        return userDao.getSearchUsers();
     }
 }

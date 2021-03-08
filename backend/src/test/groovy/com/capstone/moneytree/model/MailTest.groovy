@@ -1,7 +1,6 @@
 package com.capstone.moneytree.model
 
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate
-import org.junit.Test
 import spock.lang.Specification
 
 import java.time.ZonedDateTime
@@ -10,7 +9,6 @@ import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createTradeUpdate
 
 class MailTest extends Specification {
 
-    @Test
     def "It should initialize a mail"() {
         given: "a mail"
         Mail mail = Mail.builder().build()
@@ -25,7 +23,6 @@ class MailTest extends Specification {
         assert mail != null
     }
 
-    @Test
     def "It should construct the text mail body"() {
         given: "a mail"
         Mail mail = Mail.builder().build()

@@ -13,7 +13,6 @@ import java.time.ZonedDateTime
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.*
 
 import com.capstone.moneytree.model.node.User
-import org.junit.Test
 import spock.lang.Specification
 
 import com.icegreen.greenmail.util.GreenMail
@@ -37,7 +36,6 @@ class EmailSenderIT extends Specification {
      * to your email. Don't forget to change
      * active profiles to "dev" as well.
      */
-    @Test
     def "It should send an email successfully"() {
         given: "A user that has an order completed"
         String email = "test@money-tree.tech"
@@ -60,7 +58,6 @@ class EmailSenderIT extends Specification {
         receivedMessage.getAllRecipients()[0].toString() == email
     }
 
-    @Test
     def "It should throw an illegal address if no destination"() {
         given: "A user that has an order completed"
         String email = ""

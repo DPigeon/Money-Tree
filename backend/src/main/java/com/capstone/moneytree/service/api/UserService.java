@@ -54,8 +54,7 @@ public interface UserService {
 
     List<SanitizedUser> getFollowers(Long userId);
 
-    void deleteUserByEmail(String email);
-
     List<Map<String, String>> getSearchUsers();
 
+    void deleteUserByEmail(String email);
 }

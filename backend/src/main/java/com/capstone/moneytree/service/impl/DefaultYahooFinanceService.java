@@ -8,6 +8,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class DefaultYahooFinanceService implements YahooFinanceService {
+
     @Autowired
     YahooFinanceFacade yahooFinanceFacade;
 

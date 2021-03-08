@@ -1,18 +1,14 @@
 package com.capstone.moneytree.model
 
 import com.capstone.moneytree.model.node.User
-import org.junit.Test
-
-import static com.capstone.moneytree.utils.MoneyTreeTestUtils.*
 import spock.lang.Specification
 
 /**
  * Unit Tests for the SanitizedUser model.
  */
 class SanitizedUserTest extends Specification {
-    @Test
-    def "it should create a SanitizedUser from a User"() {
 
+    def "it should create a SanitizedUser from a User"() {
         given: "a User object created from User class"
         User newUser = new User()
         newUser.setId(1)

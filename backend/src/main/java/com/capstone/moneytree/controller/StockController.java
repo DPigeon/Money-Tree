@@ -27,7 +27,6 @@ import java.util.List;
 @RequestMapping("/stock")
 public class StockController {
 
-
     private final StockMarketDataService stockMarketDataService;
     private final YahooFinanceService yahooFinanceService;
     private final StockService stockService;
@@ -120,5 +119,4 @@ public class StockController {
 
         return userStocks;
     }
-
 }

@@ -41,5 +41,4 @@ public class ToFulfill {
         this.stock = stock;
         this.fulfillmentDate = fulfillmentDate;
     }
-
 }

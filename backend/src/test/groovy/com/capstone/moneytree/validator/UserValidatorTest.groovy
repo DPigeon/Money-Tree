@@ -9,7 +9,6 @@ import com.capstone.moneytree.model.node.User
 
 import spock.lang.Specification
 
-
 class UserValidatorTest extends Specification {
 
    UserValidator userValidator

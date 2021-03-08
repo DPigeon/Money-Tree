@@ -1,7 +1,5 @@
 package com.capstone.moneytree.controller
 
-import com.capstone.moneytree.service.api.UserService
-import org.junit.Test
 import org.springframework.http.HttpStatus
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
@@ -11,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
 import com.capstone.moneytree.dao.UserDao
-import com.capstone.moneytree.dao.FollowsDao
 import com.capstone.moneytree.exception.BadRequestException
 import com.capstone.moneytree.model.node.User
 
@@ -25,14 +22,7 @@ class UserControllerIT extends Specification {
     UserController userController
 
     @Autowired
-    private UserService userService
-
-    @Autowired
     UserDao userDao
-
-    @Autowired
-    FollowsDao fallowsDao
-
 
     def "a user is correctly persisted then fetched"() {
         setup: "Persist an initial user"
@@ -100,7 +90,6 @@ class UserControllerIT extends Specification {
         userDao.delete(newUser)
     }
 
-    @Test
     def "a search request is made to retrieve only the essential properties of a User"() {
         setup: "Persist an initial set of users"
         userDao.save(createUser("test@test909234sd202.com", "raz23452", "pass2345", "razine2345234", "bensari2345", null))

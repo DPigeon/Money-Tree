@@ -36,9 +36,7 @@ public class TransactionController {
     */
    @GetMapping
    List<Transaction> all() {
-      List<Transaction> transactions = new ArrayList<>();
-
-      transactionService.getAllTransactions().forEach(transactions::add);
+      List<Transaction> transactions = new ArrayList<>(transactionService.getAllTransactions());
 
       LOG.info("Returning {} transactions", transactions.size());
 
@@ -65,12 +63,10 @@ public class TransactionController {
     */
    @GetMapping("/{userId}")
    List<Transaction> getUserTransactions(@PathVariable String userId) {
-      List<Transaction> userTransactions =
-              transactionService.getUserTransactions(Long.parseLong(userId));
+      List<Transaction> userTransactions = transactionService.getUserTransactions(Long.parseLong(userId));
 
       LOG.info("Returning {} transactions", userTransactions.size());
 
       return userTransactions;
    }
-
 }

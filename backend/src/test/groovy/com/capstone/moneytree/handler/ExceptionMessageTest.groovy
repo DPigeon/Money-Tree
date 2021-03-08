@@ -1,11 +1,9 @@
 package com.capstone.moneytree.handler
 
-import org.junit.Test
 import spock.lang.Specification
 
 class ExceptionMessageTest extends Specification {
 
-    @Test
     def "It should get the exception messages"() {
         when: "Getting messages"
         String entityNotFound = ExceptionMessage.ENTITY_NOT_FOUND.getMessage()

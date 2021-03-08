@@ -30,9 +30,10 @@ import net.jacobpeterson.domain.alpaca.account.Account
 import net.jacobpeterson.domain.alpaca.asset.Asset
 import spock.lang.Specification
 
-
+/**
+ * This class is used to test all basic implementation for the Transaction Service.
+ */
 class DefaultTransactionServiceTest extends Specification {
-
 
     TransactionDao transactionDao = Mock()
     UserDao userDao = Mock()

@@ -23,6 +23,5 @@ public class SanitizedStock {
       this.quantity = ownsRel.getQuantity();
       this.avgPrice = ownsRel.getAvgPrice();
       this.total = ownsRel.getTotal();
-
    }
 }

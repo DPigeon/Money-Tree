@@ -124,7 +124,6 @@ public class DefaultTransactionService implements TransactionService {
       } catch (Exception e) {
          throw new AlpacaException(e.getMessage());
       }
-
    }
 
    private Transaction constructTransactionFromOrder(Order alpacaOrder) {
@@ -145,5 +144,4 @@ public class DefaultTransactionService implements TransactionService {
       }
       return userTransactions;
    }
-
 }

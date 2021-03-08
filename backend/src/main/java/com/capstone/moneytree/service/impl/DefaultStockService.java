@@ -45,5 +45,4 @@ public class DefaultStockService implements StockService {
         }
         return userStocks;
     }
-
 }

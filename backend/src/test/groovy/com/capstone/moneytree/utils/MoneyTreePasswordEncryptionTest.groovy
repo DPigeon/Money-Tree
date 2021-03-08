@@ -1,6 +1,5 @@
 package com.capstone.moneytree.utils
 
-import org.junit.Test
 import spock.lang.Specification
 
 class MoneyTreePasswordEncryptionTest extends Specification {
@@ -11,7 +10,6 @@ class MoneyTreePasswordEncryptionTest extends Specification {
         passwordEncryption = new MoneyTreePasswordEncryption()
     }
 
-    @Test
     def "It should encrypt a password"() {
         given: "a password"
         String password = "hello"
@@ -23,7 +21,6 @@ class MoneyTreePasswordEncryptionTest extends Specification {
         assert passwordEncryption.checkPassword(password, encryptedPassword)
     }
 
-    @Test
     def "It should not login if the password is not the same"() {
         given: "a password"
         String password = "not_equal"
