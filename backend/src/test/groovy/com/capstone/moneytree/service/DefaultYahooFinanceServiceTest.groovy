@@ -7,6 +7,9 @@ import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 import spock.lang.Specification
 
+/**
+ * This class is used to test all basic implementation for the Yahoo Finance Service.
+ */
 class DefaultYahooFinanceServiceTest extends Specification {
 
     YahooFinanceFacade yahooFinanceFacade = new YahooFinanceFacade(WebClient.builder())

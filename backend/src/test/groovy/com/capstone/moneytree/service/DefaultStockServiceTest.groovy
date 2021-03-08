@@ -11,6 +11,9 @@ import com.capstone.moneytree.service.impl.DefaultStockService
 import com.capstone.moneytree.utils.MoneyTreeTestUtils
 import spock.lang.Specification
 
+/**
+ * This class is used to test all basic implementation for the Stock Service.
+ */
 class DefaultStockServiceTest extends Specification {
 
     StockDao stockDao = Mock()

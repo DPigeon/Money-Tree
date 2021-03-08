@@ -7,6 +7,9 @@ import com.capstone.moneytree.utils.MoneyTreeTestUtils
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Specification
 
+/**
+ * This class is used to test all basic implementation for the AmazonS3 Service.
+ */
 class DefaultAmazonS3ServiceTest extends Specification {
 
     AmazonS3Facade amazonS3Facade = Mock()

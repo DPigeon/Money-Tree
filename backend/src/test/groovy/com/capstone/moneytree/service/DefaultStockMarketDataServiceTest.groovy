@@ -5,6 +5,9 @@ import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.impl.DefaultStockMarketDataService
 import spock.lang.Specification;
 
+/**
+ * This class is used to test all basic implementation for the StockMarketDataService Service.
+ */
 class DefaultStockMarketDataServiceTest extends Specification {
 
     StockMarketDataFacade stockMarketDataFacade = Mock()

@@ -1,6 +1,7 @@
 package com.capstone.moneytree.controller
 
 import com.capstone.moneytree.model.relationship.Follows
+import org.springframework.http.ResponseEntity
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.*
 
@@ -206,6 +207,23 @@ class UserControllerTest extends Specification {
 
         then: "should throw EntityNotFoundException"
         thrown(EntityNotFoundException)
+    }
+
+    def "Should get user by ID"() {
+        given: "A user ID"
+        Long userId = 1
+        User user = createUser("test@test.com", "user", "pass", "User", "Yes", "44y-h4ye")
+
+        and: "mocked database"
+        defaultUserService.getUserById(userId) >> user
+        userDao.findUserById(userId) >> user
+
+        when: "Getting the user"
+        User userResponse = userController.getUser(userId)
+
+        then:
+        userResponse != null
+        userResponse.getEmail() == user.getEmail()
     }
 
     def "Login Test"() {
@@ -522,7 +540,7 @@ class UserControllerTest extends Specification {
         followsDao.findByFollowerIdAndUserToFollowId(userId1, userId2) >> mockedRelationships
 
         when: "following a user"
-        def response = userController.followUser(user1.getId(), user2.getId())
+        userController.followUser(user1.getId(), user2.getId())
 
         then: "already followed should be thrown"
         thrown(FollowsRelationshipException)
@@ -574,7 +592,7 @@ class UserControllerTest extends Specification {
         def response = userController.unfollowUser(user1.getId(), user2.getId())
 
         then: "user1 should have unfollowed user2"
-        //        assert user1.getFollowers().isEmpty()
+        // assert user1.getFollowers().isEmpty()
         assert response.statusCode == HttpStatus.OK
         assert response.body == userId2
     }
@@ -801,6 +819,32 @@ class UserControllerTest extends Specification {
 
         then: "should throw EntityNotFoundException"
         thrown(EntityNotFoundException)
+    }
+
+    def "Should throw entity not found when deleting an unknown user"() {
+        given: "an email"
+        String email = "test@test.com"
+
+        when: "deleting user by email"
+        userController.deleteUserByEmail(email)
+
+        then: "User Service called"
+        thrown(EntityNotFoundException)
+    }
+
+    def "Should get search users"() {
+        given:
+        List<Map<String, String>> list = new ArrayList<>()
+
+        and: "mocked database"
+        defaultUserService.getSearchUsers() >> list
+
+        when:
+        ResponseEntity<List<Map<String, String>>> response = userController.getSearchUsers()
+
+        then:
+        response != null
+        response.statusCode == HttpStatus.OK
     }
 
     def uploadNewAvatar() {
