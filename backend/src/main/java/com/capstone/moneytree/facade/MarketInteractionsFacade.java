@@ -217,18 +217,16 @@ public class MarketInteractionsFacade {
             TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
             TradeUpdate tradeUpdate = tradeMessage.getData();
 
-            if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES && !tradeUpdate.getOrder().getStatus().equals("filled") &&
-                    madeDao.findByTransactionId( // finding the made relationship to get the userID!
-                            transactionDao.findByClientOrderId(tradeUpdate.getOrder().getClientOrderId()).getId()
-                    ).getUser().getId().toString().equals(userId)) {
+            if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES &&
+                    !tradeUpdate.getOrder().getStatus().equals("filled") &&
+                    madeDao.findByTransactionId(transactionDao.findByClientOrderId(tradeUpdate.getOrder().getClientOrderId()).getId())
+                            .getUser().getId().toString().equals(userId) && tradeUpdate.getEvent().equals("fill")) {
 
-               if (tradeUpdate.getEvent().equals("fill")) {
-                  messageSender.convertAndSend("/queue/user-" + userId,
-                          tradeUpdate.getOrder().getClientOrderId());
-                  sendOrderCompletedEmail(userId, tradeUpdate);
-                  updateTransactionStatus(tradeUpdate.getOrder().getClientOrderId(), tradeUpdate.getOrder().getFilledAvgPrice(), tradeUpdate.getPrice());
-                  LOGGER.info("Order filled by user id {}", userId);
-               }
+               messageSender.convertAndSend("/queue/user-" + userId,
+                       tradeUpdate.getOrder().getClientOrderId());
+               sendOrderCompletedEmail(userId, tradeUpdate);
+               updateTransactionStatus(tradeUpdate.getOrder().getClientOrderId(), tradeUpdate.getOrder().getFilledAvgPrice(), tradeUpdate.getPrice());
+               LOGGER.info("Order filled by user id {}", userId);
             }
          }
       };

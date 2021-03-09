@@ -1,5 +1,7 @@
 package com.capstone.moneytree.controller
 
+import com.capstone.moneytree.dao.StockDao
+import com.capstone.moneytree.model.node.Stock
 import com.capstone.moneytree.model.node.Transaction
 import com.capstone.moneytree.service.impl.DefaultTransactionService
 
@@ -10,6 +12,7 @@ import spock.lang.Specification
 class TransactionControllerTest extends Specification {
 
    DefaultTransactionService transactionService = Mock()
+   StockDao stockDao = Mock()
    def transactionController = new TransactionController(transactionService)
 
    def "Should get all transactions"() {
@@ -33,6 +36,21 @@ class TransactionControllerTest extends Specification {
 
       and: "A mock order"
       Order order = Mock()
+
+      when: "We delegate the arguments to the service methods"
+      transactionController.executeTransaction(userId, order)
+
+      then: "Expect the method to be called once with proper arguments"
+      1 * transactionService.execute(userId, order)
+   }
+
+   def "Should create a stock if null"() {
+      given: "A string long id"
+      def userId = "1232342452345"
+
+      and: "A mock order"
+      Order order = Mock()
+      stockDao.findBySymbol(order.getSymbol()) >> null
 
       when: "We delegate the arguments to the service methods"
       transactionController.executeTransaction(userId, order)
