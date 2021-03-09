@@ -1,29 +1,34 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Transaction } from 'src/app/interfaces/transaction';
-import { User } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-transaction-history',
   templateUrl: './transaction-history.component.html',
   styleUrls: ['./transaction-history.component.scss']
 })
-export class TransactionHistoryComponent implements OnInit {
-  @Input() userInfo: User;
+export class TransactionHistoryComponent implements OnInit, OnChanges {
+  @Input() userTransactions: Transaction[];
   transactionHistory: Transaction[];
   constructor() { }
 
   ngOnInit(): void {
-    console.log('Yo my dick', this.userInfo)
-    //this.transactionHistory = this.userInfo.transactions;
+
+  }
+  ngOnChanges(): void {
+    if (this.userTransactions) { this.transactionHistory = this.userTransactions; }
+    console.log('Transaction history: ', this.transactionHistory);
+  }
+  transactionFormatStart(transaction: Transaction): string {
+    if (this.userTransactions) {
+      let printedTransaction = '';
+      transaction.type === 'MARKET_BUY' ? printedTransaction += 'Bought ' : printedTransaction += 'Sold ';
+      printedTransaction += transaction.qty + ' shares of ';
+      return transaction ? printedTransaction : 'err';
+    }
   }
 
-  printTransaction(transaction: Transaction): string{
-    console.log('This is print Transaction ',transaction)
-   // let printedTransaction = '';
-   // transaction.side === 'buy' ? printedTransaction +='Bought ' : printedTransaction +='Sold '; 
-   // printedTransaction += 'shares of ' + transaction.stockFulfilled.tickerSymbol + 'at an average of ' + transaction.averagePricePerShare + ' per share.'; 
-
-   // return transaction ? printedTransaction : '';
-   return '';
+  transactionFormatEnd(transaction: Transaction): string {
+    return transaction ? (' at an average of ' + transaction.averagePricePerShare + '$ per share.') : 'err';
   }
+
 }

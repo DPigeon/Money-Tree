@@ -1,25 +1,25 @@
-<div class="transaction-history-container">
-    <mat-card>
-      <mat-card-title>Transaction History</mat-card-title>
-      <div *ngFor="let transaction of transactionHistory">
-        <p> {{printTransaction(transaction)}}></p>
-        <hr>
+<mat-card class="transaction-history-container">
+  <mat-card-title>Transaction History</mat-card-title>
+  <div class="wrapper">
+    <ng-container *ngFor="let transaction of transactionHistory">
+
+      <div class="single-transaction-container">
+        <span>{{transactionFormatStart(transaction)}}
+          <a [routerLink]="['../../stock-detail', transaction.symbol]">{{transaction.symbol}}</a>
+          {{transactionFormatEnd(transaction)}}</span>
+
       </div>
-      <p>
-        Sold 245 shares of BHF at an average of 13.26$ per share.
-      </p>
-      <hr>
-      <p>
-        Sold 245 shares of BHF at an average of 13.26$ per share.
-      </p>
-      <hr>
-      <p>
-        Sold 245 shares of BHF at an average of 13.26$ per share.
-      </p>
-      <hr>
-      <p>
-        Sold 245 shares of BHF at an average of 13.26$ per share.
-      </p>
-      <hr>
-    </mat-card>
+
+      <div *ngIf="transaction.status=='COMPLETED'  ; else elseBlock"
+        [ngClass]="transaction.status=='COMPLETED' ? 'transaction-status-date': 'transaction-status-pending'">
+        {{transaction.time_in_force | date}}
+      </div>
+      <ng-template #elseBlock>
+        <div class="transaction-status-pending">Pending</div>
+      </ng-template>
+
+      <mat-divider [inset]="true"></mat-divider>
+
+    </ng-container>
   </div>
+</mat-card>
