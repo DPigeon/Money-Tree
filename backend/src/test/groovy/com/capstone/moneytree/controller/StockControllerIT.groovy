@@ -197,26 +197,16 @@ class StockControllerIT extends Specification {
 
    def "Validates GET chart for the DAY, WEEK, MONTH, YEAR, default returns chart information"() {
       given: "A stock symbol"
-      def appl = "AAPL"
+      def symbol = "AAPL"
+      def ranges = ["DAY", "WEEK", "MONTH", "YEAR", "other"]
 
-      when: "A call to the chart endpoint is made"
-      def res1 = stockController.getChart(appl, "DAY")
-      def res2 = stockController.getChart(appl, "WEEK")
-      def res3 = stockController.getChart(appl, "MONTH")
-      def res4 = stockController.getChart(appl, "YEAR")
-      def res5 = stockController.getChart(appl, "other")
-
-      then: "We get a valid chart object"
-      res1.getBody() != null
-      res1.statusCode == HttpStatus.OK
-      res2.getBody() != null
-      res2.statusCode == HttpStatus.OK
-      res3.getBody() != null
-      res3.statusCode == HttpStatus.OK
-      res4.getBody() != null
-      res4.statusCode == HttpStatus.OK
-      res5.getBody() != null
-      res5.statusCode == HttpStatus.OK
+      for(range in ranges){
+         when: "A call to the chart endpoint is made"
+         def res = stockController.getChart(symbol, range)
+         then: "We get a valid chart object"
+         res.getBody() != null
+         res.statusCode == HttpStatus.OK
+      }
    }
 
    def "GET chart throws IEXTrading Exception when symbol is not valid"() {
