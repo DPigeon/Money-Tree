@@ -9,7 +9,6 @@ import net.jacobpeterson.domain.alpaca.position.Position
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
-import spock.lang.Ignore
 
 import java.time.LocalDate
 
@@ -17,7 +16,6 @@ import static com.capstone.moneytree.utils.MoneyTreeTestUtils.*
 
 import com.capstone.moneytree.dao.UserDao
 import com.capstone.moneytree.facade.MarketInteractionsFacade
-import org.junit.Test
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import spock.lang.Specification
 

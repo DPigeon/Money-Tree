@@ -1,10 +1,12 @@
 package com.capstone.moneytree.controller
 
+import com.capstone.moneytree.dao.OwnsDao
+import com.capstone.moneytree.dao.StockDao
 import com.capstone.moneytree.facade.YahooFinanceFacade
 import com.capstone.moneytree.service.api.StockService
 import com.capstone.moneytree.service.api.YahooFinanceService
+import com.capstone.moneytree.service.impl.DefaultStockService
 import com.capstone.moneytree.service.impl.DefaultYahooFinanceService
-import org.junit.Test
 import org.junit.platform.commons.util.StringUtils
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
@@ -27,11 +29,14 @@ class StockControllerIT extends Specification {
    private static final String PUBLISH_TOKEN = System.getenv().get("IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX")
    private static final String SECRET_TOKEN = System.getenv().get("IEXCLOUD_SECRET_TOKEN_SANDBOX")
 
+   StockDao stockDao
+   OwnsDao ownsDao
+
    StockMarketDataFacade stockMarketDataFacade = new StockMarketDataFacade(PUBLISH_TOKEN, SECRET_TOKEN, "dev")
    StockMarketDataService stockMarketDataService = new DefaultStockMarketDataService(stockMarketDataFacade: stockMarketDataFacade)
    YahooFinanceFacade yahooFinanceFacade = new YahooFinanceFacade(WebClient.builder())
    YahooFinanceService yahooFinanceService = new DefaultYahooFinanceService(yahooFinanceFacade: yahooFinanceFacade)
-   StockService stockService
+   StockService stockService = new DefaultStockService(stockDao, ownsDao)
 
    StockController stockController = new StockController(stockMarketDataService, yahooFinanceService, stockService)
 
@@ -190,16 +195,28 @@ class StockControllerIT extends Specification {
       thrown(IEXTradingException)
    }
 
-   def "Validates GET chart for the DAY returns chart information"() {
+   def "Validates GET chart for the DAY, WEEK, MONTH, YEAR, default returns chart information"() {
       given: "A stock symbol"
       def appl = "AAPL"
 
       when: "A call to the chart endpoint is made"
-      def res = stockController.getChart(appl, "DAY")
+      def res1 = stockController.getChart(appl, "DAY")
+      def res2 = stockController.getChart(appl, "WEEK")
+      def res3 = stockController.getChart(appl, "MONTH")
+      def res4 = stockController.getChart(appl, "YEAR")
+      def res5 = stockController.getChart(appl, "other")
 
       then: "We get a valid chart object"
-      res.statusCode == HttpStatus.OK
-      res.getBody() != null
+      res1.getBody() != null
+      res1.statusCode == HttpStatus.OK
+      res2.getBody() != null
+      res2.statusCode == HttpStatus.OK
+      res3.getBody() != null
+      res3.statusCode == HttpStatus.OK
+      res4.getBody() != null
+      res4.statusCode == HttpStatus.OK
+      res5.getBody() != null
+      res5.statusCode == HttpStatus.OK
    }
 
    def "GET chart throws IEXTrading Exception when symbol is not valid"() {

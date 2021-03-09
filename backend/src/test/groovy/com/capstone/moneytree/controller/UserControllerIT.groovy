@@ -257,4 +257,22 @@ class UserControllerIT extends Specification {
         userDao.delete(user1)
         userDao.delete(user2)
     }
+
+    def "Should delete a user by email when needed"() {
+        setup: "Persist an initial user"
+        String email = "test@test9009.com"
+        userDao.save(createUser(email, "raz123412", "pass", "razine1234", "bensari2341", null))
+
+        when: "We fetch the user and delete it"
+        userController.deleteUserByEmail(email)
+        def deletedUser = userDao.findUserByEmail(email)
+
+        then: "Verify that user is deleted"
+        deletedUser == null
+
+        cleanup: "Sanity check if user was not deleted properly"
+        if (deletedUser != null) {
+            userDao.delete(deletedUser)
+        }
+    }
 }
