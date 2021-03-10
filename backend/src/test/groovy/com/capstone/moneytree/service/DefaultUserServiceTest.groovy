@@ -111,7 +111,7 @@ class DefaultUserServiceTest extends Specification {
         userDao.save() >> user
 
         when:
-        User userResponse = userService.editUserProfilePicture(user, image, "test")
+        User userResponse = userService.editUserProfilePicture(user, image, "avatarURL")
 
         then:
         userResponse != null
