@@ -217,10 +217,13 @@ public class MarketInteractionsFacade {
             TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
             TradeUpdate tradeUpdate = tradeMessage.getData();
 
-            if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES && !tradeUpdate.getOrder().getStatus().equals("filled") &&
-                    madeDao.findByTransactionId( // finding the made relationship to get the userID!
-                            transactionDao.findByClientOrderId(tradeUpdate.getOrder().getClientOrderId()).getId()
-                    ).getUser().getId().toString().equals(userId)) {
+             if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES 
+             //&& !tradeUpdate.getOrder().getStatus().equals("filled") 
+            //&&
+            //         madeDao.findByTransactionId( // finding the made relationship to get the userID!
+            //                 transactionDao.findByClientOrderId(tradeUpdate.getOrder().getClientOrderId()).getId()
+            //         ).getUser().getId().toString().equals(userId))
+             ){
 
                if (tradeUpdate.getEvent().equals("fill")) {
                   messageSender.convertAndSend("/queue/user-" + userId,

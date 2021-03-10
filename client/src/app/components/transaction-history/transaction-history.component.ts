@@ -19,12 +19,12 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
     console.log('Transaction history: ', this.transactionHistory);
   }
   transactionFormatStart(transaction: Transaction): string {
-    if (this.userTransactions) {
-      let printedTransaction = '';
+    let printedTransaction = '';
+    if (transaction) {
       transaction.type === 'MARKET_BUY' ? printedTransaction += 'Bought ' : printedTransaction += 'Sold ';
       printedTransaction += transaction.qty + ' shares of ';
-      return transaction ? printedTransaction : 'err';
     }
+    return transaction ? printedTransaction : 'err';
   }
 
   transactionFormatEnd(transaction: Transaction): string {
