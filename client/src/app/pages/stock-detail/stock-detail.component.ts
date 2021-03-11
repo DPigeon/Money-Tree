@@ -28,12 +28,11 @@ export class StockDetailComponent implements OnInit {
   ngOnInit(): void {
     let ticker = this.route.snapshot.paramMap.get('ticker');
     this.storeFacade.loadCurrentStock(ticker);
-    this.userInfo$.subscribe((user: User) => {
-      if (user) {
-        this.storeFacade.loadMarketClock(user.id);
-        this.storeFacade.loadUserOwnedStocks(user.id);
-      }
-    });
+    this.storeFacade.loadMarketClock(Number(localStorage.getItem('userId')));
+    this.storeFacade.loadUserOwnedStocks(
+      Number(localStorage.getItem('userId'))
+    );
+
     this.router.events
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
       .subscribe(() => {
