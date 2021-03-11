@@ -112,8 +112,7 @@ public class StockController {
      */
     @GetMapping("/owned-stocks/{userId}")
     List<SanitizedStock> getUserStocks(@PathVariable String userId) {
-        List<SanitizedStock> userStocks =
-                stockService.getUserStocks(Long.parseLong(userId));
+        List<SanitizedStock> userStocks = stockService.getUserStocks(Long.parseLong(userId));
 
         LOG.info("Returning {} owned stocks", userStocks.size());
 

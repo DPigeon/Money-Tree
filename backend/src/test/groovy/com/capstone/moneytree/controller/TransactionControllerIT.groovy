@@ -52,8 +52,7 @@ class TransactionControllerIT extends Specification {
         then: "Expect to get the transactions"
         list != null
         list.size() == 2
-        list.get(0).getSymbol() == symbol1
-        list.get(1).getSymbol() == symbol2
+        list.get(0).getSymbol() == symbol1 || symbol2
 
         cleanup: "Delete persisted transactions"
         transactionDao.delete(transaction1)
