@@ -12,11 +12,12 @@ export class TransactionHistoryComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnInit(): void {
-
-  }
-  ngOnChanges(): void {
     if (this.userTransactions) { this.transactionHistory = this.userTransactions; }
     console.log('Transaction history: ', this.transactionHistory);
+  }
+  ngOnChanges(): void {
+    // if (this.userTransactions) { this.transactionHistory = this.userTransactions; }
+    // console.log('Transaction history: ', this.transactionHistory);
   }
   transactionFormatStart(transaction: Transaction): string {
     let printedTransaction = '';

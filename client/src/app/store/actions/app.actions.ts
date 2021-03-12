@@ -109,3 +109,13 @@ export const updateUserOwnedStocks = createAction(
   '[Stock[]] New owned-stock list for current user',
   props<{ stocks: Stock[] }>()
 );
+
+export const loadUserProfile = createAction(
+  '[User] Load profile of particular user',
+  props<{ username: string }>()
+)
+
+export const setCurrentProfileUser = createAction(
+  '[User] Update the new profile user',
+  props<{ currentProfileUser: User }>()
+);

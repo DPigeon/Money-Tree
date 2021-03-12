@@ -28,6 +28,7 @@ export class StoreFacadeService {
   currentFollowers$: Observable<User[]>;
   userTransactions$: Observable<Transaction[]>;
   userOwnedStocks$: Observable<Stock[]>;
+  currentProfileUser$: Observable<User>;
 
   constructor(private store: Store<{ appState: State }>) {
     this.currentStockLoaded$ = this.store.select(
@@ -119,5 +120,8 @@ export class StoreFacadeService {
   }
   loadUserOwnedStocks(userId: number): void {
     this.store.dispatch(appActions.loadUserOwnedStocks({ userId }));
+  }
+  loadCurrentProfileUser(username: string): void {
+    this.store.dispatch(appActions.loadUserProfile({ username }));
   }
 }

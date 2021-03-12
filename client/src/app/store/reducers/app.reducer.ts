@@ -10,6 +10,7 @@ export const reducerFeatureKey = 'reducer';
 
 export interface State {
   user: User;
+  currentProfileUser: User;
   currentStockLoaded: Stock;
   currentMarketClock: MarketClock;
   errorMessage: AppError;
@@ -21,6 +22,7 @@ export interface State {
 
 export const initialState: State = {
   user: null,
+  currentProfileUser: null,
   currentStockLoaded: null,
   errorMessage: null,
   currentMarketClock: null,
@@ -77,5 +79,9 @@ export const reducer = createReducer(
   on(appActions.logCurrentUserOut, (state) => {
     localStorage.removeItem('userId');
     return { ...state, user: null };
-  })
+  }),
+
+  on(appActions.setCurrentProfileUser, (state, { currentProfileUser }) => {
+    return { ...state, currentProfileUser };
+  }),
 );

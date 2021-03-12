@@ -18,7 +18,7 @@ export class Effects {
     private transactionService: TransactionService,
     private userService: UserService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   getStock$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
@@ -291,4 +291,25 @@ export class Effects {
     }
     return null;
   }
+
+
+  loadUserProfile$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadUserProfile),
+      switchMap((action) => {
+        return this.userService.getUserByUsername(action.username).pipe(
+          map((data) => {
+            return appActions.setCurrentProfileUser({ currentProfileUser: data });
+          }),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
+            )
+          )
+        );
+      })
+    )
+  );
 }

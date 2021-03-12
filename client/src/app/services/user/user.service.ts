@@ -27,6 +27,12 @@ export class UserService {
       .get('users/' + id)
       .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
+  
+  getUserByUsername(username: string): Observable<User> {
+    return this.api
+      .get('users/' + username) // check if end point changes
+      .pipe(map((res: Response) => this.userFormatter(res.body)));
+  }
 
   userLogin(user: User): Observable<User> {
     return this.api
