@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Transaction } from 'src/app/interfaces/transaction';
+import { UserProfile } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-transaction-history',
@@ -7,13 +8,13 @@ import { Transaction } from 'src/app/interfaces/transaction';
   styleUrls: ['./transaction-history.component.scss']
 })
 export class TransactionHistoryComponent implements OnInit, OnChanges {
-  @Input() userTransactions: Transaction[];
-  transactionHistory: Transaction[];
+  @Input() currentProfileUser: UserProfile;
+  transactions: Transaction[];
   constructor() { }
 
   ngOnInit(): void {
-    if (this.userTransactions) { this.transactionHistory = this.userTransactions; }
-    console.log('Transaction history: ', this.transactionHistory);
+    this.transactions = this.currentProfileUser && this.currentProfileUser.transactions ? this.currentProfileUser.transactions : [];
+    console.log('Transaction history: ', this.transactions);
   }
   ngOnChanges(): void {
     // if (this.userTransactions) { this.transactionHistory = this.userTransactions; }

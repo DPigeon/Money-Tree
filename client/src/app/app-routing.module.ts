@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: '', component: LoginSignupComponent },
   { path: 'home', component: HomeComponent },
   { path: 'edit-profile', component: EditProfileComponent },
-  { path: 'profile/:name', component: ProfileComponent }
+  { path: 'profile/:username', component: ProfileComponent }
 ];
 
 @NgModule({

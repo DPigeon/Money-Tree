@@ -3,14 +3,14 @@ import { MarketClock } from './../../interfaces/market-clock';
 import { createReducer, on } from '@ngrx/store';
 import { AppError } from 'src/app/interfaces/app-error';
 import { Stock } from 'src/app/interfaces/stock';
-import { User } from 'src/app/interfaces/user';
+import { User, UserProfile } from 'src/app/interfaces/user';
 import * as appActions from '../actions/app.actions';
 
 export const reducerFeatureKey = 'reducer';
 
 export interface State {
   user: User;
-  currentProfileUser: User;
+  currentProfileUser: UserProfile;
   currentStockLoaded: Stock;
   currentMarketClock: MarketClock;
   errorMessage: AppError;

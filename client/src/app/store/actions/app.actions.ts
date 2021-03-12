@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Stock } from 'src/app/interfaces/stock';
-import { User } from 'src/app/interfaces/user';
+import { User, UserProfile } from 'src/app/interfaces/user';
 import { AppError } from 'src/app/interfaces/app-error';
 import { MarketClock } from 'src/app/interfaces/market-clock';
 import { Transaction } from 'src/app/interfaces/transaction';
@@ -117,5 +117,5 @@ export const loadUserProfile = createAction(
 
 export const setCurrentProfileUser = createAction(
   '[User] Update the new profile user',
-  props<{ currentProfileUser: User }>()
+  props<{ currentProfileUser: UserProfile }>()
 );

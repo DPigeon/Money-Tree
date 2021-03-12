@@ -15,6 +15,11 @@ export interface User {
   password?: string;
   alpacaApiKey?: string;
   biography?: string;
+}
+
+export interface UserProfile extends User {
   portfolio?: Stock[];
   transactions?: Transaction[];
+  following?: User[];
+  followers?: User[]; 
 }

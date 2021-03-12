@@ -98,6 +98,15 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    public User getUserByUsername(String username) {
+        User user = userDao.findUserByUsername(username);
+        if (user == null) {
+            throw new EntityNotFoundException(USER_NOT_FOUND);
+        }
+        return user;
+    }
+
+    @Override
     public User getUserByEmailAndUsername(String email, String username) {
         User existingUser = userDao.findUserByEmailAndUsername(email, username);
         if (existingUser == null) {
