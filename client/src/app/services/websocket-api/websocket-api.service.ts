@@ -88,11 +88,18 @@ export class WebsocketAPIService {
         'View',
         { duration: 5000 }
       );
+      setTimeout(() => {
+        this.storeFacade.loadUserOwnedStocks(
+          Number(localStorage.getItem('userId'))
+        );
+        this.storeFacade.loadUserTransactions(
+          Number(localStorage.getItem('userId'))
+        );
+      }, 2000);
       snackBarRef.onAction().subscribe(() => {
         // currently the profile page does not exist but when it does, it will guide the users there
         // this.router.navigate(['profile'])
       });
-      this.storeFacade.getCurrentUser(this.userId);
     }
     console.log('COUNT DEBUG: ', this.count);
   }
