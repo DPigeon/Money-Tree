@@ -113,7 +113,7 @@ export const updateUserOwnedStocks = createAction(
 export const loadUserProfile = createAction(
   '[User] Load profile of particular user',
   props<{ username: string }>()
-)
+);
 
 export const setCurrentProfileUser = createAction(
   '[User] Update the new profile user',

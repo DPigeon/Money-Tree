@@ -68,4 +68,4 @@ export const selectUserOwnedStocks = createSelector(
 export const selectCurrentLoadedProfile = createSelector(
   selectAppState,
   (appState: State) => appState.currentProfileUser
-)
+);

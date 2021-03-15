@@ -27,7 +27,7 @@ export class UserService {
       .get('users/' + id)
       .pipe(map((res: Response) => this.userFormatter(res.body)));
   }
-  
+
   // This method is used to get profile information, and will include all data for the user
   getUserByUsername(username: string): Observable<UserProfile> {
     return this.api
@@ -95,7 +95,7 @@ export class UserService {
   }
 
   userCompleteProfileFormatter(response: any): UserProfile {
-    const user: UserProfile = this.userFormatter(response)
+    const user: UserProfile = this.userFormatter(response);
     user.followers = response.followers;
     user.following = response.following;
     user.transactions = response.transactions;

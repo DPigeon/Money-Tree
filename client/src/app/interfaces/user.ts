@@ -21,5 +21,5 @@ export interface UserProfile extends User {
   portfolio?: Stock[];
   transactions?: Transaction[];
   following?: User[];
-  followers?: User[]; 
+  followers?: User[];
 }

@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
   currentProfileUser$ = this.storeFacade.currentProfileUser$;
-  
+
   constructor(
     private storeFacade: StoreFacadeService,
     private route: ActivatedRoute,

@@ -60,7 +60,7 @@ export class StoreFacadeService {
     );
     this.currentProfileUser$ = this.store.select(
       appSelectors.selectCurrentLoadedProfile
-    )
+    );
   }
 
   loadCurrentStock(ticker: string): void {
