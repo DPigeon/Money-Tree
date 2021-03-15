@@ -54,15 +54,15 @@ public class DefaultUserService implements UserService {
     private static final String NOT_FOLLOWED_BY_THIS_USER = "The user is not followed";
     private static final String USER_CANT_BE_FOLLOWED_BY_ITSELF = "User cannot followed by itself";
     private static final String USER_ALREADY_FOLLOWED = "User already followed";
-    
+
     @Value("${alpaca.key.id}")
     String clientId;
     @Value("${alpaca.secret}")
     String clientSecret;
-    
+
     @Autowired
     ActiveProfile activeProfile;
-    
+
     private final UserDao userDao;
     private final FollowsDao followsDao;
     private final ValidatorFactory validatorFactory;
@@ -91,6 +91,15 @@ public class DefaultUserService implements UserService {
     @Override
     public User getUserById(Long id) {
         User user = userDao.findUserById(id);
+        if (user == null) {
+            throw new EntityNotFoundException(USER_NOT_FOUND);
+        }
+        return user;
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        User user = userDao.findUserByUsername(username);
         if (user == null) {
             throw new EntityNotFoundException(USER_NOT_FOUND);
         }
