@@ -58,6 +58,9 @@ export class StoreFacadeService {
     this.userOwnedStocks$ = this.store.select(
       appSelectors.selectUserOwnedStocks
     );
+    this.currentProfileUser$ = this.store.select(
+      appSelectors.selectCurrentLoadedProfile
+    )
   }
 
   loadCurrentStock(ticker: string): void {

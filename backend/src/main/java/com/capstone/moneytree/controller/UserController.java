@@ -98,11 +98,11 @@ public class UserController {
    @GetMapping("/profile/{username}")
    UserCompleteProfile getUserByUsername(@PathVariable String username) {
       User user = userService.getUserByUsername(username);
-      UserCompleteProfile completeUserProfile = (UserCompleteProfile) user;
-      completeUserProfile.followers = userService.getFollowers(user.getId());
-      completeUserProfile.following = userService.getFollowings(user.getId());
-      completeUserProfile.userTransactions = transactionService.getUserTransactions(user.getId());
-      completeUserProfile.ownedStocks = stockService.getUserStocks(user.getId());
+      UserCompleteProfile completeUserProfile = new UserCompleteProfile(user);
+      completeUserProfile.setFollowers(userService.getFollowers(user.getId()));
+      completeUserProfile.setFollowing(userService.getFollowers(user.getId()));
+      completeUserProfile.setTransactions(transactionService.getUserTransactions(user.getId()));
+      completeUserProfile.setOwnedStocks(stockService.getUserStocks(user.getId()));
       return completeUserProfile;
    }
 

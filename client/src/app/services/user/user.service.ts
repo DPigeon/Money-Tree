@@ -31,8 +31,8 @@ export class UserService {
   // This method is used to get profile information, and will include all data for the user
   getUserByUsername(username: string): Observable<UserProfile> {
     return this.api
-      .get('users/' + username) // check if end point changes
-      .pipe(map((res: Response) => this.userProfileFormatter(res.body)));
+      .get('users/profile/' + username) // check if end point changes
+      .pipe(map((res: Response) => this.userCompleteProfileFormatter(res.body)));
   }
 
   userLogin(user: User): Observable<User> {
@@ -94,14 +94,12 @@ export class UserService {
     return formattedUser;
   }
 
-  userProfileFormatter(response: any): UserProfile {
-    console.log("FORMATTERRRRR");
-    console.log(response);
+  userCompleteProfileFormatter(response: any): UserProfile {
     const user: UserProfile = this.userFormatter(response)
-    user.followers = [];
-    user.following = [];
-    user.transactions = [];
-    user.portfolio = [];
+    user.followers = response.followers;
+    user.following = response.following;
+    user.transactions = response.transactions;
+    user.portfolio = response.ownedStocks;
     return user;
   }
 
