@@ -1,0 +1,12 @@
+@import "../../../styles.scss";
+.container {
+    position: relative;
+}
+.transaction-history-container {
+    position: absolute;
+    right: 3em;
+    bottom: 3em;
+    width: 345px;
+    height: 375px;
+    
+}

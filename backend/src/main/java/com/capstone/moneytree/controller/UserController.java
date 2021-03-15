@@ -26,18 +26,25 @@ import com.capstone.moneytree.exception.InvalidMediaFileException;
 import com.capstone.moneytree.handler.ExceptionMessage;
 import com.capstone.moneytree.model.SanitizedUser;
 import com.capstone.moneytree.model.node.User;
+import com.capstone.moneytree.model.UserCompleteProfile;
+import com.capstone.moneytree.service.api.TransactionService;
 import com.capstone.moneytree.service.api.UserService;
+import com.capstone.moneytree.service.api.StockService;
 
 @MoneyTreeController
 @RequestMapping("/users")
 public class UserController {
 
    private final UserService userService;
+   private final TransactionService transactionService;
+   private final StockService stockService;
    private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
    @Autowired
-   public UserController(UserService userService) {
+   public UserController(UserService userService, TransactionService transactionService, StockService stockService) {
       this.userService = userService;
+      this.transactionService = transactionService;
+      this.stockService = stockService;
    }
 
    /**
@@ -86,6 +93,22 @@ public class UserController {
    @GetMapping("/{id}")
    User getUser(@PathVariable Long id) {
       return userService.getUserById(id);
+   }
+
+   /**
+    * A method that returns a complete profile for user with the list of follows, transactions, ownedStocks, etc
+    * @param username   The username sent from frontend
+    * @return The complete user info for profile page
+    */
+   @GetMapping("/profile/{username}")
+   UserCompleteProfile getUserByUsername(@PathVariable String username) {
+      User user = userService.getUserByUsername(username);
+      UserCompleteProfile completeUserProfile = new UserCompleteProfile(user);
+      completeUserProfile.setFollowers(userService.getFollowers(user.getId()));
+      completeUserProfile.setFollowing(userService.getFollowings(user.getId()));
+      completeUserProfile.setTransactions(transactionService.getUserTransactions(user.getId()));
+      completeUserProfile.setOwnedStocks(stockService.getUserStocks(user.getId()));
+      return completeUserProfile;
    }
 
    /**

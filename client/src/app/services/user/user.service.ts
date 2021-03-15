@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from 'src/app/interfaces/user';
+import { User, UserProfile } from 'src/app/interfaces/user';
 import { ApiService } from '../api/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -26,6 +26,13 @@ export class UserService {
     return this.api
       .get('users/' + id)
       .pipe(map((res: Response) => this.userFormatter(res.body)));
+  }
+
+  // This method is used to get profile information, and will include all data for the user
+  getUserByUsername(username: string): Observable<UserProfile> {
+    return this.api
+      .get('users/profile/' + username) // check if end point changes
+      .pipe(map((res: Response) => this.userCompleteProfileFormatter(res.body)));
   }
 
   userLogin(user: User): Observable<User> {
@@ -82,11 +89,18 @@ export class UserService {
       rank: response.rank,
       balance: response.balance,
       alpacaApiKey: response.alpacaApiKey,
-      portfolio: response.portfolio,
-      transactions: response.transactions,
       biography: response.biography,
     };
     return formattedUser;
+  }
+
+  userCompleteProfileFormatter(response: any): UserProfile {
+    const user: UserProfile = this.userFormatter(response);
+    user.followers = response.followers;
+    user.following = response.following;
+    user.transactions = response.transactions;
+    user.portfolio = response.ownedStocks;
+    return user;
   }
 
   followUserListFormatter(response: any): User[] {

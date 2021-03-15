@@ -279,6 +279,28 @@ export class Effects {
     )
   );
 
+  loadUserProfile$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadUserProfile),
+      switchMap((action) => {
+        return this.userService.getUserByUsername(action.username).pipe(
+          map((data) => {
+            return appActions.setCurrentProfileUser({
+              currentProfileUser: data,
+            });
+          }),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
+            )
+          )
+        );
+      })
+    )
+  );
+
   mirrorError(backendError: any): AppError {
     if (backendError && backendError.error) {
       const errorMessage: AppError = {

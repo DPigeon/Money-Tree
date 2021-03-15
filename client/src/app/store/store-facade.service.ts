@@ -5,7 +5,7 @@ import * as appActions from './actions/app.actions';
 import * as appSelectors from './selectors/app.selectors';
 import { Observable } from 'rxjs';
 import { Stock } from '../interfaces/stock';
-import { User } from '../interfaces/user';
+import { User, UserProfile } from '../interfaces/user';
 import { AppError } from '../interfaces/app-error';
 import { MarketClock } from './../interfaces/market-clock';
 import { Transaction } from '../interfaces/transaction';
@@ -16,6 +16,7 @@ import { Transaction } from '../interfaces/transaction';
 export class StoreFacadeService {
   currentStockLoaded$: Observable<Stock>;
   currentUser$: Observable<User>;
+  currentProfileUser$: Observable<UserProfile>;
   appError$: Observable<AppError>;
   shouldAlpacaRedirect$: Observable<boolean>;
   isUserLoggedIn$: Observable<boolean>;
@@ -56,6 +57,9 @@ export class StoreFacadeService {
     );
     this.userOwnedStocks$ = this.store.select(
       appSelectors.selectUserOwnedStocks
+    );
+    this.currentProfileUser$ = this.store.select(
+      appSelectors.selectCurrentLoadedProfile
     );
   }
 
@@ -119,5 +123,8 @@ export class StoreFacadeService {
   }
   loadUserOwnedStocks(userId: number): void {
     this.store.dispatch(appActions.loadUserOwnedStocks({ userId }));
+  }
+  loadCurrentProfileUser(username: string): void {
+    this.store.dispatch(appActions.loadUserProfile({ username }));
   }
 }
