@@ -10,11 +10,11 @@ import { UserProfile } from 'src/app/interfaces/user';
 export class TransactionHistoryComponent implements OnChanges {
   @Input() currentProfileUser: UserProfile;
   transactions: Transaction[];
-  constructor() { }
 
   ngOnChanges(): void {
     this.transactions = this.currentProfileUser && this.currentProfileUser.transactions ? this.currentProfileUser.transactions : [];
   }
+
   transactionFormatStart(transaction: Transaction): string {
     let printedTransaction = '';
     if (transaction) {
