@@ -188,7 +188,6 @@ public class MarketInteractionsFacade {
    }
 
    public void disconnectFromStream(String userId) {
-      initializeAlpacaSession(userId);
       if (userIdToStream.containsKey(userId)) {
          AlpacaStreamListener streamListener = userIdToStream.get(userId);
          try {
@@ -209,25 +208,20 @@ public class MarketInteractionsFacade {
     */
    private AlpacaStreamListener createStreamListener(String userId, SimpMessagingTemplate messageSender,
                                                      AlpacaStreamMessageType... messageType) {
-
-
       return new AlpacaStreamListenerAdapter(messageType) {
          @Override
          public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
-
             TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
             TradeUpdate tradeUpdate = tradeMessage.getData();
             String clientOrderId = tradeUpdate.getOrder().getClientOrderId();
-
             updateTracker.putIfAbsent(clientOrderId, false);
-
             if(tradeUpdate.getEvent().equals("fill")) {
                Transaction transaction = transactionDao.findByClientOrderId(clientOrderId);
                while (transaction == null ) {
                   transaction = transactionDao.findByClientOrderId(clientOrderId);
                }
                String userIdForOrder = madeDao.findByTransactionId(transaction.getId()).getUser().getId().toString();
-               if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES && !updateTracker.get(clientOrderId) && userIdForOrder.equals(userId)
+               if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES && updateTracker.get(clientOrderId)==false && userIdForOrder.equals(userId)
                   ) {
                      messageSender.convertAndSend("/queue/user-" + userId,
                              tradeUpdate.getOrder().getClientOrderId());
