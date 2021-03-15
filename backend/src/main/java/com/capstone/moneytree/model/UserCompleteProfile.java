@@ -35,21 +35,4 @@ public class UserCompleteProfile {
         this.balance = user.getBalance();
         this.biography = user.getBiography();
     }
-
-    public void setFollowers(List<SanitizedUser> followers) {
-        this.followers = followers;
-    }
-
-    public void setFollowing(List<SanitizedUser> following) {
-        this.following = following;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
-    public void setOwnedStocks(List<SanitizedStock> ownedStocks) {
-        this.ownedStocks = ownedStocks;
-    }
-
 }

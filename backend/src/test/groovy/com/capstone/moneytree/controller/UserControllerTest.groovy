@@ -1,6 +1,18 @@
 package com.capstone.moneytree.controller
 
+import com.capstone.moneytree.dao.MadeDao
+import com.capstone.moneytree.dao.OwnsDao
+import com.capstone.moneytree.dao.StockDao
+import com.capstone.moneytree.dao.ToFulfillDao
+import com.capstone.moneytree.dao.TransactionDao
+import com.capstone.moneytree.facade.AlpacaSession
 import com.capstone.moneytree.model.relationship.Follows
+import com.capstone.moneytree.model.relationship.Owns
+import com.capstone.moneytree.service.api.StockMarketDataService
+import com.capstone.moneytree.service.api.StockService
+import com.capstone.moneytree.service.api.TransactionService
+import com.capstone.moneytree.service.impl.DefaultStockService
+import com.capstone.moneytree.service.impl.DefaultTransactionService
 import org.springframework.http.ResponseEntity
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.*
@@ -43,16 +55,32 @@ class UserControllerTest extends Specification {
 
     private static UserDao userDao
     private static FollowsDao followsDao
+    private static TransactionDao transactionDao
+    private static StockDao stockDao
+    private static MadeDao madeDao
+    private static ToFulfillDao toFulfillDao
+    private static OwnsDao ownsDao
     private static UserValidator userValidator
     private static ValidatorFactory validatorFactory
     private static UserService defaultUserService
     private static UserController userController
     private static AmazonS3Service amazonS3Service
     private static AmazonS3Facade amazonS3Facade
+    private static AlpacaSession session
+    private static StockMarketDataService stockMarketDataService
+    private static TransactionService transactionService
+    private static StockService stockService
 
     def setup() {
         userDao = Mock()
         followsDao = Mock()
+        transactionDao = Mock()
+        stockDao = Mock()
+        madeDao = Mock()
+        ownsDao = Mock()
+        toFulfillDao = Mock()
+        session = Mock()
+        stockMarketDataService = Mock()
         userValidator = new UserValidator(userDao)
         validatorFactory = Mock(ValidatorFactory) {
             it.getUserValidator() >> userValidator
@@ -62,7 +90,9 @@ class UserControllerTest extends Specification {
         amazonS3Facade = new AmazonS3Facade(S3_ACCESS_KEY, S3_SECRET_KEY)
         amazonS3Service = new DefaultAmazonS3Service(amazonS3Facade)
         defaultUserService = new DefaultUserService(userDao, followsDao, validatorFactory, amazonS3Service, BUCKET_NAME)
-        userController = new UserController(defaultUserService)
+        transactionService = new DefaultTransactionService(transactionDao, userDao, stockDao, madeDao, toFulfillDao, session, stockMarketDataService)
+        stockService = new DefaultStockService(stockDao, ownsDao)
+        userController = new UserController(defaultUserService, transactionService, stockService)
     }
 
     def "Should register a user successfully"() {
@@ -846,6 +876,44 @@ class UserControllerTest extends Specification {
         response != null
         response.statusCode == HttpStatus.OK
     }
+
+    def "Should return complete user profile"() {
+        given: "one existing user"
+        Long userId1 = 1
+        String email1 = "moneytree@test.com"
+        String username1 = "Billy"
+        String password1 = "encrypted"
+        String firstName1 = "Billy"
+        String lastName1 = "Bob"
+        String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
+        User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
+        user1.setId(userId1)
+
+        and: "mock the way we retrieve the user from db"
+        userDao.findUserByUsername(username1) >> user1
+        userDao.findUserById(userId1) >> user1
+
+        and: "mock the way we retrieve the user info"
+        followsDao.findByUserToFollowId(userId1) >> List.of()
+        followsDao.findByFollowerId(userId1) >> List.of()
+        madeDao.findByUserId(userId1) >> List.of()
+        ownsDao.findByUserId(userId1) >> List.of()
+
+        defaultUserService.getFollowers(userId1) >> List.of()
+        defaultUserService.getFollowings(userId1) >> List.of()
+        transactionService.getUserTransactions(userId1) >> List.of()
+        stockService.getUserStocks(userId1) >> List.of()
+
+        when: "get completedProfile for user1"
+        def response = userController.getUserByUsername(username1)
+
+        then: "should return empty list for followers and followings list of user 1"
+        assert response.getUsername() == ("Billy")
+        assert response.getFollowers().size() == 0
+        assert response.getFollowing().size() == 0
+        assert response.getTransactions().size() == 0
+    }
+
 
     def uploadNewAvatar() {
         File file = new File("./src/test/resources/image/${PIC_FILE_NAME}")

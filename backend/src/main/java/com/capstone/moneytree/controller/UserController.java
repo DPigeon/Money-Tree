@@ -95,12 +95,17 @@ public class UserController {
       return userService.getUserById(id);
    }
 
+   /**
+    * A method that returns a complete profile for user with the list of follows, transactions, ownedStocks, etc
+    * @param username   The username sent from frontend
+    * @return The complete user info for profile page
+    */
    @GetMapping("/profile/{username}")
    UserCompleteProfile getUserByUsername(@PathVariable String username) {
       User user = userService.getUserByUsername(username);
       UserCompleteProfile completeUserProfile = new UserCompleteProfile(user);
       completeUserProfile.setFollowers(userService.getFollowers(user.getId()));
-      completeUserProfile.setFollowing(userService.getFollowers(user.getId()));
+      completeUserProfile.setFollowing(userService.getFollowings(user.getId()));
       completeUserProfile.setTransactions(transactionService.getUserTransactions(user.getId()));
       completeUserProfile.setOwnedStocks(stockService.getUserStocks(user.getId()));
       return completeUserProfile;
