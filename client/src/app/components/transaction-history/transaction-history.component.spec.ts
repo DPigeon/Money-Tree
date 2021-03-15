@@ -62,30 +62,30 @@ describe('transactionHistoryComponent unit test', () => {
 
   beforeEach(() => {
     component = new TransactionHistoryComponent();
-    component.transactionHistory = mockTransactionHistory;
+    component.transactions = mockTransactionHistory;
   });
 
   it('Should return the first half of the transaction', () => {
-    component.ngOnInit();
-    component.transactionHistory = mockTransactionHistory;
-    expect(component.transactionFormatStart(component.transactionHistory[0])).toBe(
+    component.ngOnChanges();
+    component.transactions = mockTransactionHistory;
+    expect(component.transactionFormatStart(component.transactions[0])).toBe(
       'Bought ' + mockTransactionBuy.qty + ' shares of '
     );
-    expect(component.transactionFormatStart(component.transactionHistory[1])).toBe(
+    expect(component.transactionFormatStart(component.transactions[1])).toBe(
       'Sold ' + mockTransactionSell.qty + ' shares of '
     );
-    expect(component.transactionFormatStart(component.transactionHistory[2])).toBe(
+    expect(component.transactionFormatStart(component.transactions[2])).toBe(
       'err'
     );
   });
 
   it('Should return the end of the transaction', () => {
-    component.ngOnInit();
-    component.transactionHistory = mockTransactionHistory;
-    expect(component.transactionFormatEnd(component.transactionHistory[0])).toBe(
+    component.ngOnChanges();
+    component.transactions = mockTransactionHistory;
+    expect(component.transactionFormatEnd(component.transactions[0])).toBe(
       ' at an average of ' + mockTransactionBuy.averagePricePerShare + '$ per share.'
     );
-    expect(component.transactionFormatEnd(component.transactionHistory[2])).toBe(
+    expect(component.transactionFormatEnd(component.transactions[2])).toBe(
       'err'
     );
   });
