@@ -6,10 +6,10 @@ import { Transaction } from '../interfaces/transaction';
 @Injectable({
     providedIn: 'root',
 })
-export class dataFormatter {
+export class DataFormatter {
     constructor() { }
 
-    userFormatter(response: any): User {
+    userFormatter(response: any): User { 
         const formattedUser: User = {
             id: response.id,
             firstName: response.firstName,
@@ -52,20 +52,21 @@ export class dataFormatter {
         return result;
     }
 
-transactionListFormatter(response: any): Transaction[] {
-    const result: Transaction[] = [];
-    for (const fetchedTransaction of response.body) {
-      result.push({
-        qty: fetchedTransaction.quantity,
-        time_in_force: fetchedTransaction.purchasedAt,
-        type: fetchedTransaction.moneyTreeOrderType,
-        client_order_id: fetchedTransaction.clienOrderId,
-        status: fetchedTransaction.status,
-        averagePricePerShare: fetchedTransaction.avgPrice,
-        symbol: fetchedTransaction.symbol,
-        total: fetchedTransaction.total,
-      });
+    transactionListFormatter(response: any): Transaction[] {
+        const result: Transaction[] = [];
+        for (const fetchedTransaction of response) {
+            result.push({
+                qty: fetchedTransaction.quantity,
+                time_in_force: fetchedTransaction.purchasedAt,
+                type: fetchedTransaction.moneyTreeOrderType,
+                client_order_id: fetchedTransaction.clienOrderId,
+                status: fetchedTransaction.status,
+                averagePricePerShare: fetchedTransaction.avgPrice,
+                symbol: fetchedTransaction.symbol,
+                total: fetchedTransaction.total,
+            });
+        }
+        return result;
     }
-    return result;
-  }
+    
 }

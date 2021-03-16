@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { UserService } from './user.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { User } from 'src/app/interfaces/user';
+import { DataFormatter } from '../../utilities/data-formatters'
 
 const fakeReponse: User = {
   id: 1,
@@ -29,10 +30,5 @@ describe('UserService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
-  });
-
-  it('should format the user to the expected User model', () => {
-    const transformedResponse = service.userFormatter(fakeReponse);
-    expect(transformedResponse).toEqual(fakeReponse);
   });
 });

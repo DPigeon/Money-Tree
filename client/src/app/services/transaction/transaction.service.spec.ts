@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionService } from './transaction.service';
+import { DataFormatter } from '../../utilities/data-formatters'
 
 describe('TransactionService', () => {
   let service: TransactionService;

@@ -3,13 +3,13 @@ import { User, UserProfile } from 'src/app/interfaces/user';
 import { ApiService } from '../api/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { dataFormatter } from '../../utilities/data-formatters'
+import { DataFormatter } from '../../utilities/data-formatters';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private api: ApiService, private dataFormatter: dataFormatter) { }
+  constructor(private api: ApiService, private dataFormatter: DataFormatter) { }
 
   createNewUser(user: User): Observable<User> {
     return this.api

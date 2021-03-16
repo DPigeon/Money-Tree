@@ -4,18 +4,18 @@ import { Transaction } from '../../interfaces/transaction';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserService } from '../user/user.service';
-import { dataFormatter } from '../../utilities/data-formatters'
+import { DataFormatter } from '../../utilities/data-formatters';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransactionService {
-  constructor(private api: ApiService, private userService: UserService, private dataFormatter: dataFormatter) {}
+  constructor(private api: ApiService, private userService: UserService, private dataFormatter: DataFormatter) {}
 
   getUserTransactions(userId: number): Observable<Transaction[]> {
     return this.api
       .get('transactions/' + userId)
-      .pipe(map((res: Response) => this.dataFormatter.transactionListFormatter(res)));
+      .pipe(map((res: Response) => this.dataFormatter.transactionListFormatter(res.body)));
   }
 
   processStockTransaction(
@@ -24,7 +24,7 @@ export class TransactionService {
   ): Observable<any> {
     return this.api
       .post('transactions/execute/' + userId, transaction)
-      .pipe(map((res: Response) => this.dataFormatter.transactionListFormatter(res)));
+      .pipe(map((res: Response) => this.dataFormatter.transactionListFormatter(res.body)));
   }
 
 }
