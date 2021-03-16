@@ -12,7 +12,8 @@ export class DataFormatter {
      }
 
     userFormatter(response: any): User {
-        const formattedUser: User = {
+        let formattedUser: User;
+        return formattedUser = {
             id: response.id,
             firstName: response.firstName,
             lastName: response.lastName,
@@ -26,7 +27,6 @@ export class DataFormatter {
             alpacaApiKey: response.alpacaApiKey,
             biography: response.biography,
         };
-        return formattedUser;
     }
 
     userCompleteProfileFormatter(response: any): UserProfile {
