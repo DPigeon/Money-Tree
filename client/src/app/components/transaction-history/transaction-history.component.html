@@ -1,6 +1,7 @@
 <mat-card class="transaction-history-container">
   <mat-card-title>Transaction History</mat-card-title>
   <div class="wrapper">
+    <div *ngIf="transactions && !transactions.length"> You have no transactions yet</div>
     <ng-container *ngFor="let transaction of transactions">
 
       <div class="single-transaction-container">

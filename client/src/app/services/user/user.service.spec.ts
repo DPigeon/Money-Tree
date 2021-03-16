@@ -30,9 +30,4 @@ describe('UserService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
-  it('should format the user to the expected User model', () => {
-    const transformedResponse = service.userFormatter(fakeReponse);
-    expect(transformedResponse).toEqual(fakeReponse);
-  });
 });
