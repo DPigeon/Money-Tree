@@ -9,7 +9,7 @@ import { Transaction } from '../interfaces/transaction';
 export class DataFormatter {
     constructor() { }
 
-    userFormatter(response: any): User { 
+    userFormatter(response: any): User {
         const formattedUser: User = {
             id: response.id,
             firstName: response.firstName,
@@ -68,5 +68,4 @@ export class DataFormatter {
         }
         return result;
     }
-    
 }
