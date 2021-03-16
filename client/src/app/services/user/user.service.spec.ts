@@ -15,8 +15,6 @@ const fakeReponse: User = {
   rank: 10000,
   balance: 223,
   alpacaApiKey: null,
-  portfolio: [],
-  transactions: [],
 };
 
 describe('UserService', () => {
@@ -31,10 +29,5 @@ describe('UserService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
-  });
-
-  it('should format the user to the expected User model', () => {
-    const transformedResponse = service.userFormatter(fakeReponse);
-    expect(transformedResponse).toEqual(fakeReponse);
   });
 });

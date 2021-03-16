@@ -7,11 +7,7 @@ import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.handler.ExceptionMessage;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -59,6 +55,7 @@ public class MarketInteractionsFacade {
    private final UserDao userDao;
    private AlpacaAPI alpacaAPI;
    private final Map<String, AlpacaStreamListener> userIdToStream;
+   private Map<String, Boolean> updateTracker;
 
    @Autowired
    StockDao stockDao;
@@ -79,6 +76,7 @@ public class MarketInteractionsFacade {
    public MarketInteractionsFacade(UserDao userDao) {
       this.userDao = userDao;
       userIdToStream = new HashMap<>();
+      updateTracker = new HashMap<>();
    }
 
    private void initializeAlpacaSession(String userId) {
@@ -190,7 +188,6 @@ public class MarketInteractionsFacade {
    }
 
    public void disconnectFromStream(String userId) {
-      initializeAlpacaSession(userId);
       if (userIdToStream.containsKey(userId)) {
          AlpacaStreamListener streamListener = userIdToStream.get(userId);
          try {
@@ -216,17 +213,23 @@ public class MarketInteractionsFacade {
          public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
             TradeUpdateMessage tradeMessage = (TradeUpdateMessage) streamMessage;
             TradeUpdate tradeUpdate = tradeMessage.getData();
-
-            if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES &&
-                    !tradeUpdate.getOrder().getStatus().equals("filled") &&
-                    madeDao.findByTransactionId(transactionDao.findByClientOrderId(tradeUpdate.getOrder().getClientOrderId()).getId())
-                            .getUser().getId().toString().equals(userId) && tradeUpdate.getEvent().equals("fill")) {
-
-               messageSender.convertAndSend("/queue/user-" + userId,
-                       tradeUpdate.getOrder().getClientOrderId());
-               sendOrderCompletedEmail(userId, tradeUpdate);
-               updateTransactionStatus(tradeUpdate.getOrder().getClientOrderId(), tradeUpdate.getOrder().getFilledAvgPrice(), tradeUpdate.getPrice());
-               LOGGER.info("Order filled by user id {}", userId);
+            String clientOrderId = tradeUpdate.getOrder().getClientOrderId();
+            updateTracker.putIfAbsent(clientOrderId, false);
+            if(tradeUpdate.getEvent().equals("fill")) {
+               Transaction transaction = transactionDao.findByClientOrderId(clientOrderId);
+               while (transaction == null ) {
+                  transaction = transactionDao.findByClientOrderId(clientOrderId);
+               }
+               String userIdForOrder = madeDao.findByTransactionId(transaction.getId()).getUser().getId().toString();
+               if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES && updateTracker.get(clientOrderId)==false && userIdForOrder.equals(userId)
+                  ) {
+                     messageSender.convertAndSend("/queue/user-" + userId,
+                             tradeUpdate.getOrder().getClientOrderId());
+                     sendOrderCompletedEmail(userId, tradeUpdate);
+                     updateTransactionStatus(tradeUpdate.getOrder().getClientOrderId(), tradeUpdate.getOrder().getFilledAvgPrice(), tradeUpdate.getPrice());
+                     updateTracker.replace(clientOrderId, true);
+                     LOGGER.info("Order with clientOrderId: {} filled by user id {}", clientOrderId, userId);
+               }
             }
          }
       };

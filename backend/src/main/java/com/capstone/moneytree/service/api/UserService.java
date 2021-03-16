@@ -25,6 +25,8 @@ public interface UserService {
 
     User getUserById(Long id);
 
+    User getUserByUsername(String username);
+
     /**
      * Find a unique User with email and username
      *
