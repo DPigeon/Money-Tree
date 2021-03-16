@@ -7,7 +7,9 @@ import { Transaction } from '../interfaces/transaction';
     providedIn: 'root',
 })
 export class DataFormatter {
-    constructor() { }
+    constructor() {
+        // is empty
+     }
 
     userFormatter(response: any): User {
         const formattedUser: User = {
