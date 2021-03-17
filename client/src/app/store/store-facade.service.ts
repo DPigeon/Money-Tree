@@ -74,7 +74,7 @@ export class StoreFacadeService {
   loadMarketClock(userId: number): void {
     this.store.dispatch(appActions.loadMarketClock({ userId }));
   }
-  
+
   loadCurrentStockHistoricalData(
     ticker: string,
     range: string,

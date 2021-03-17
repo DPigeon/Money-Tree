@@ -36,9 +36,8 @@ export class StockDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
-    let ticker = this.route.snapshot.paramMap.get('ticker');
-    this.storeFacade.loadCurrentStock(ticker);
+    this.ticker = this.route.snapshot.paramMap.get('ticker');
+    this.storeFacade.loadCurrentStock(this.ticker);
     this.storeFacade.loadMarketClock(Number(localStorage.getItem('userId')));
     this.storeFacade.loadUserOwnedStocks(
       Number(localStorage.getItem('userId'))
