@@ -30,7 +30,7 @@ export class StockService {
     interval: string
   ): Observable<StockHistory> {
     return this.api
-      .getStockHistoricalData(
+      .get(
         'stockmarket/yahoochart/' +
           stockTicker.toUpperCase() +
           '?range=' +
