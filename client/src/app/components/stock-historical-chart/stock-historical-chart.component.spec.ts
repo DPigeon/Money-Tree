@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgxEchartsDirective } from 'ngx-echarts';
 import { StockHistory } from 'src/app/interfaces/stockHistory';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
@@ -65,7 +64,6 @@ describe('Stock Historical chart', () => {
   });
 
   it('should convert timestamp to Date', () => {
-    const d = new Date();
     component.historicalData = stockHistoricalData;
     const months = [
       'Jan',
@@ -129,8 +127,8 @@ describe('Stock Historical chart', () => {
     component.maxValue = stockHistoricalData.closePrice[0];
     component.minValue = stockHistoricalData.closePrice[0];
     expect(
-      component.formatValues(stockHistoricalData.closePrice).sort()
-    ).toEqual(formatedValues.sort());
+      component.formatValues(stockHistoricalData.closePrice)
+    ).toEqual(formatedValues);
     expect(component.maxValue).toBe(697);
     expect(component.minValue).toBe(687);
     expect(component.intervalValue).toBe(1);
