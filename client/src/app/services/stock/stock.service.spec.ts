@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { StockService } from './stock.service';
 import { Stock } from 'src/app/interfaces/stock';
 import { StockHistory } from 'src/app/interfaces/stockHistory';
-import yahooSampleChart from 'src/assets/stock-history/stock-history-sample';
+import yahooSampleChart from 'src/assets/stock-history/yahooSampleChart';
 
 describe('StockService', () => {
   let service: StockService;
