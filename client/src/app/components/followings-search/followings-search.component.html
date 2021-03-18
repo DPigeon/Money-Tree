@@ -16,9 +16,9 @@
         <div class="following-container" *ngIf="isSearchedFollowings(following)">
           <img class="following-picture" alt="Profile Picture" width="40" height="40" [src]="
             following.avatarURL
-          " (click)="navigateToFollowingProfile(following.id)" />
+          " (click)="navigateToFollowingProfile(following.username)" />
           <div class="following-info">
-            <span class="following-name" (click)="navigateToFollowingProfile(following.id)">{{
+            <span class="following-name" (click)="navigateToFollowingProfile(following.username)">{{
               following.firstName
               + " " + following.lastName }}</span>
             <div>

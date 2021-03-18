@@ -13,11 +13,11 @@ const routes: Routes = [
   { path: '', component: LoginSignupComponent },
   { path: 'home', component: HomeComponent },
   { path: 'edit-profile', component: EditProfileComponent },
-  { path: 'profile/:username', component: ProfileComponent }
+  { path: 'profile/:username', component: ProfileComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -1,0 +1,23 @@
+<div class="follow-list-container" *ngIf="follows">
+    <button class="close-dialog-x" mat-dialog-close>X
+    </button>
+    <h3 class='list-title'>{{listTitle}}</h3>
+    <ng-container *ngFor="let user of follows">
+        <div class="user-container">
+            <div class="user-left-part">
+                <img class="user-picture" alt="Profile Picture" width="40" height="40" src="{{user.avatarURL}}"
+                    (click)="navigateToFollowProfile(user.username, user.id)" />
+                <div class=" user-first-and-last-name" (click)="navigateToFollowProfile(user.username, user.id)">
+                    <span class="user-name">{{
+                        user.firstName
+                        + " " + user.lastName }}</span>
+                </div>
+            </div>
+            <div class="user-right-part">
+                <span class="user-score-label">SCORE:</span>
+                <span class="user-score">{{user.score || 0}}</span>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+    </ng-container>
+</div>

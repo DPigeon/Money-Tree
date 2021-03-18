@@ -1,3 +1,10 @@
 <app-header></app-header>
 <app-transaction-history class="transaction-history-container" [currentProfileUser]="currentProfileUser$ | async">
+
 </app-transaction-history>
+<div class="followers-follwing-hyperlinks" *ngIf="completeUserProfile">
+
+    <button mat-button (click)="openDialog('Followers')">{{getFollowers().length}} Followers</button>
+    <button mat-button (click)="openDialog('Followings')">{{getFollowings().length}} Followings</button>
+    <!-- <button mat-button *ngIf="!isCurrentUserProfile()" (click)="followOrUnfollow()"> {{followButtonLabel()}}</button> -->
+</div>
