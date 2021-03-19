@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user/user.service';
+import { isUserLoggedIn } from './../../store/selectors/app.selectors';
+import { Component, Input, OnInit } from '@angular/core';
 import { StoreFacadeService } from '../../store/store-facade.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User, UserProfile } from 'src/app/interfaces/user';
@@ -11,6 +13,7 @@ import { ListOfFollowsComponent } from 'src/app/components/list-of-follows/list-
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
+  loggedInUserId: number;
   currentProfileUser$ = this.storeFacade.currentProfileUser$;
   completeUserProfile: UserProfile;
   followers: User[];
@@ -19,7 +22,8 @@ export class ProfileComponent implements OnInit {
     private storeFacade: StoreFacadeService,
     public dialog: MatDialog,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {}
   ngOnInit(): void {
     const username = this.route.snapshot.paramMap.get('username');
@@ -29,17 +33,22 @@ export class ProfileComponent implements OnInit {
         this.completeUserProfile = data;
       }
     });
+    this.storeFacade.currentUser$.subscribe((loggedInUser: User) => {
+      if (loggedInUser) {
+        this.loggedInUserId = loggedInUser.id;
+      }
+    });
   }
   openDialog(choice: string): void {
     let dialogRef;
     switch (choice) {
-      case 'Followers':
+      case 'followers':
         dialogRef = this.dialog.open(ListOfFollowsComponent, {
           data: { followslist: this.getFollowers(), followsTitle: choice },
         });
         break;
 
-      case 'Followings':
+      case 'followings':
         dialogRef = this.dialog.open(ListOfFollowsComponent, {
           data: { followslist: this.getFollowings(), followsTitle: choice },
         });
@@ -64,5 +73,49 @@ export class ProfileComponent implements OnInit {
   }
   getFollowings(): User[] {
     return this.completeUserProfile ? this.completeUserProfile.following : null;
+  }
+  isLoggedInUserProfile(): boolean {
+    if (this.completeUserProfile && this.loggedInUserId) {
+      return this.completeUserProfile.id === Number(this.loggedInUserId);
+    }
+  }
+  followButtonLabel(): string {
+    let label = 'Follow';
+    const profileUserFollowers = this.completeUserProfile.followers;
+    for (const follower of profileUserFollowers) {
+      if (follower.id === this.loggedInUserId) {
+        label = 'Unfollow';
+        break;
+      }
+    }
+    return label;
+  }
+  followOrUnfollow(): void {
+    const label = this.followButtonLabel();
+    if (label === 'Follow') {
+      this.userService
+        .followUser(this.loggedInUserId, this.completeUserProfile.id)
+        .toPromise()
+        .then(() =>
+          this.storeFacade.loadCurrentUserFollowings(this.loggedInUserId)
+        )
+        .then(() =>
+          this.storeFacade.loadCurrentProfileUser(
+            this.completeUserProfile.username
+          )
+        );
+    } else if (label === 'Unfollow') {
+      this.userService
+        .unfollowUser(this.loggedInUserId, this.completeUserProfile.id)
+        .toPromise()
+        .then(() =>
+          this.storeFacade.loadCurrentUserFollowings(this.loggedInUserId)
+        )
+        .then(() =>
+          this.storeFacade.loadCurrentProfileUser(
+            this.completeUserProfile.username
+          )
+        );
+    }
   }
 }

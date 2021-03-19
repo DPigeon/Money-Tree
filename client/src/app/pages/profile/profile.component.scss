@@ -1,12 +1,24 @@
 @import "../../../styles.scss";
 .container {
-    position: relative;
+  position: relative;
 }
 .transaction-history-container {
-    position: absolute;
-    right: 3em;
-    bottom: 3em;
-    width: 345px;
-    height: 375px;
-    
+  position: absolute;
+  right: 3em;
+  bottom: 3em;
+  width: 345px;
+  height: 375px;
+}
+.followers-follwings-container {
+  .follow-unfollow-label {
+    color: $primary-color;
+    text-decoration: underline;
+  }
+  .follow-unfollow-button {
+    color: white;
+    background-color: $primary-color;
+    margin: 2px;
+    width: 150px;
+    text-align: center;
+  }
 }

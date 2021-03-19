@@ -2,9 +2,15 @@
 <app-transaction-history class="transaction-history-container" [currentProfileUser]="currentProfileUser$ | async">
 
 </app-transaction-history>
-<div class="followers-follwing-hyperlinks" *ngIf="completeUserProfile">
+<div class="followers-follwings-container" *ngIf="completeUserProfile">
 
-    <button mat-button (click)="openDialog('Followers')">{{getFollowers().length}} Followers</button>
-    <button mat-button (click)="openDialog('Followings')">{{getFollowings().length}} Followings</button>
-    <!-- <button mat-button *ngIf="!isCurrentUserProfile()" (click)="followOrUnfollow()"> {{followButtonLabel()}}</button> -->
+    <button mat-button class="follow-unfollow-label" (click)="openDialog('followers')"
+        [disabled]="getFollowers().length===0">{{getFollowers().length}}
+        followers</button>
+    <button mat-button class="follow-unfollow-label" (click)="openDialog('followings')"
+        [disabled]="getFollowings().length===0">{{getFollowings().length}}
+        followings</button>
+    <button mat-button class="follow-unfollow-button" *ngIf="!isLoggedInUserProfile()"
+        (click)="followOrUnfollow()">{{followButtonLabel()}}</button>
+
 </div>
