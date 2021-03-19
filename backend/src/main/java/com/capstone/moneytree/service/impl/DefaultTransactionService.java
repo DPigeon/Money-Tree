@@ -3,9 +3,11 @@ package com.capstone.moneytree.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.capstone.moneytree.dao.*;
 import com.capstone.moneytree.exception.AlpacaException;
 
 import com.capstone.moneytree.exception.EntityNotFoundException;
+import com.capstone.moneytree.model.relationship.Owns;
 import net.jacobpeterson.alpaca.enums.OrderSide;
 import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
 
@@ -15,11 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.capstone.moneytree.dao.StockDao;
-import com.capstone.moneytree.dao.TransactionDao;
-import com.capstone.moneytree.dao.UserDao;
-import com.capstone.moneytree.dao.MadeDao;
-import com.capstone.moneytree.dao.ToFulfillDao;
 import com.capstone.moneytree.facade.AlpacaSession;
 import com.capstone.moneytree.model.MoneyTreeOrderType;
 import com.capstone.moneytree.model.TransactionStatus;
@@ -98,7 +95,10 @@ public class DefaultTransactionService implements TransactionService {
          Stock stock = stockDao.findBySymbol(order.getSymbol());
          if (stock == null) { // if database does not have this stock object create and save it
             KeyStats stockInfo = stockMarketDataService.getKeyStats(order.getSymbol());
-            stock = Stock.builder().symbol(order.getSymbol()).companyName(stockInfo.getCompanyName()).build();
+            stock = Stock.builder()
+                    .symbol(order.getSymbol())
+                    .companyName(stockInfo.getCompanyName())
+                    .build();
             stockDao.save(stock);
          }
 
@@ -106,6 +106,8 @@ public class DefaultTransactionService implements TransactionService {
 
          transaction = constructTransactionFromOrder(alpacaOrder);
          transactionDao.save(transaction);
+
+         updateUserScore(order, user, transaction);
 
          /*
           * create and save two relationships: Made and ToFulfill. User Made Transaction
@@ -127,12 +129,39 @@ public class DefaultTransactionService implements TransactionService {
    }
 
    private Transaction constructTransactionFromOrder(Order alpacaOrder) {
-      return Transaction.builder().status(TransactionStatus.PENDING).purchasedAt(alpacaOrder.getCreatedAt())
+      return Transaction.builder()
+              .status(TransactionStatus.PENDING)
+              .purchasedAt(alpacaOrder.getCreatedAt())
               .clientOrderId(alpacaOrder.getClientOrderId())
               .moneyTreeOrderType(MoneyTreeOrderType
                       .valueOf(alpacaOrder.getType().toUpperCase() + "_" + alpacaOrder.getSide().toUpperCase()))
               .quantity(Float.parseFloat(alpacaOrder.getQty())).purchasedAt(alpacaOrder.getSubmittedAt())
-              .symbol(alpacaOrder.getSymbol()).build(); // avg price and total will be set only if stock got fulfilled
+              .symbol(alpacaOrder.getSymbol())
+              .build(); // avg price and total will be set only if stock got fulfilled
+   }
+
+   // ISSUE-346
+   public void updateUserScore(Order order, User user, Transaction transaction) {
+      if (order.getSide().equals("sell")) {
+         // TODO: Find the right stock bought with ids?
+         float boughtPrice = 0;
+         List<Made> userMade = madeDao.findByUserId(user.getId());
+         for (Made made : userMade) {
+            Transaction oldTransaction = made.getTransaction();
+            if (oldTransaction.getSymbol().equals(transaction.getSymbol())) {
+               boughtPrice = oldTransaction.getTotal();
+               break;
+            }
+         }
+
+         float soldPrice = transaction.getTotal();
+         if (boughtPrice < 1) {
+            double score = soldPrice - boughtPrice;
+            double updatedScore = user.getScore() + score;
+            user.setScore(updatedScore);
+            userDao.save(user);
+         }
+      }
    }
 
    @Override
