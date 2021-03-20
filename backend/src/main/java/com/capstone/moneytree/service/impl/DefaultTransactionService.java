@@ -143,7 +143,6 @@ public class DefaultTransactionService implements TransactionService {
    // ISSUE-346
    public void updateUserScore(Order order, User user, Transaction transaction) {
       if (order.getSide().equals("sell")) {
-         // TODO: Find the right stock bought with ids?
          float boughtPrice = 0;
          List<Made> userMade = madeDao.findByUserId(user.getId());
          for (Made made : userMade) {
@@ -153,14 +152,18 @@ public class DefaultTransactionService implements TransactionService {
                break;
             }
          }
+         calculateScoreAndUpdate(boughtPrice, transaction.getTotal(), user);
+      }
+   }
 
-         float soldPrice = transaction.getTotal();
-         if (boughtPrice < 1) {
-            double score = soldPrice - boughtPrice;
-            double updatedScore = user.getScore() + score;
-            user.setScore(updatedScore);
-            userDao.save(user);
-         }
+   private void calculateScoreAndUpdate(float boughtPrice, float soldPrice, User user) {
+      if (boughtPrice > 0) {
+         double score = soldPrice - boughtPrice;
+         double updatedScore = user.getScore() + score;
+         user.setScore(updatedScore);
+         userDao.save(user);
+      } else {
+         throw new EntityNotFoundException("Transaction not found while selling stock!");
       }
    }
 

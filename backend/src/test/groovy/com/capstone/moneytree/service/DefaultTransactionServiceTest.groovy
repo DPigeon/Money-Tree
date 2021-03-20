@@ -17,6 +17,9 @@ import com.capstone.moneytree.model.relationship.Made
 import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.api.TransactionService
 import com.capstone.moneytree.service.impl.DefaultTransactionService
+import net.jacobpeterson.domain.alpaca.order.Order
+
+import java.time.ZonedDateTime
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildMarketOrder
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildTransactions
@@ -29,6 +32,11 @@ import net.jacobpeterson.alpaca.enums.OrderTimeInForce
 import net.jacobpeterson.domain.alpaca.account.Account
 import net.jacobpeterson.domain.alpaca.asset.Asset
 import spock.lang.Specification
+
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createMadeRelationship
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createOrder
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createTransaction
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
 
 /**
  * This class is used to test all basic implementation for the Transaction Service.
@@ -163,6 +171,37 @@ class DefaultTransactionServiceTest extends Specification {
 
         then:
         thrown(AlpacaException)
+    }
+
+    def "Should update user score properly"() {
+        given: "A user with an order and an old transaction executed"
+        String symbol = "TSLA"
+        float boughtPrice = 10
+        float soldPrice = 40
+        double initialScore = 20
+        double finalScore = 50
+        User user = createUser("test@test.com", "user", "pass", "User", "Name", "key")
+        user.setId(10)
+        user.setScore(initialScore)
+        Order order = createOrder("1", symbol, "10", "market", "DAY");
+        order.setSide("sell")
+        Transaction oldTransaction = createTransaction(symbol, 15, boughtPrice, TransactionStatus.COMPLETED)
+        List<Made> madeList = List.of(createMadeRelationship(user, oldTransaction, ZonedDateTime.now()))
+        Transaction currentTransaction = createTransaction(symbol, 15, soldPrice, TransactionStatus.COMPLETED)
+
+        and: "mock database"
+        madeDao.findByUserId(user.getId()) >> madeList
+        userDao.save(user) >> user
+
+        and: "verify the initial user's score"
+        user.getScore() == initialScore
+
+        when: "Updating a user's score"
+        transactionService.updateUserScore(order, user, currentTransaction)
+
+        then: "User should have made +30 points"
+        user.getScore() == initialScore + (soldPrice - boughtPrice)
+        user.getScore() == finalScore
     }
 
     Stock buildStock(Asset asset) {
