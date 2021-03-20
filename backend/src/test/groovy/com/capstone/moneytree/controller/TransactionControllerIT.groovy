@@ -76,7 +76,7 @@ class TransactionControllerIT extends Specification {
         transactionDao.delete(transaction2)
     }
 
-    // TODO: Fix in another story
+    // TODO: Needs to be fixed in another story
     @Ignore("Needs to be fixed")
     def "Execute a transaction in the database"() {
         setup: "Persist a user and an order"
