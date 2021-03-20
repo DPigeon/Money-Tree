@@ -152,7 +152,11 @@ public class DefaultTransactionService implements TransactionService {
                break;
             }
          }
-         calculateScoreAndUpdate(boughtPrice, transaction.getTotal(), user);
+
+         float soldPrice = transaction.getTotal();
+         if (boughtPrice != soldPrice) { // No need to update score if prices are the same
+            calculateScoreAndUpdate(boughtPrice, soldPrice, user);
+         }
       }
    }
 

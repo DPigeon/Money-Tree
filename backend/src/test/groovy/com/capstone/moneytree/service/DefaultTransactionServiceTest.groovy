@@ -173,7 +173,7 @@ class DefaultTransactionServiceTest extends Specification {
         thrown(AlpacaException)
     }
 
-    def "Should update user score properly"() {
+    def "Should update user score properly with positive score"() {
         given: "A user with an order and an old transaction executed"
         String symbol = "TSLA"
         float boughtPrice = 10
@@ -202,6 +202,114 @@ class DefaultTransactionServiceTest extends Specification {
         then: "User should have made +30 points"
         user.getScore() == initialScore + (soldPrice - boughtPrice)
         user.getScore() == finalScore
+    }
+
+    def "Should not update the user's score when prices are equal"() {
+        given: "A user with an order and an old transaction executed"
+        String symbol = "TSLA"
+        float boughtPrice = 25
+        float soldPrice = 25
+        double initialScore = 100
+        double finalScore = 100
+        User user = createUser("test@test.com", "user", "pass", "User", "Name", "key")
+        user.setId(10)
+        user.setScore(initialScore)
+        Order order = createOrder("1", symbol, "10", "market", "DAY");
+        order.setSide("sell")
+        Transaction oldTransaction = createTransaction(symbol, 15, boughtPrice, TransactionStatus.COMPLETED)
+        List<Made> madeList = List.of(createMadeRelationship(user, oldTransaction, ZonedDateTime.now()))
+        Transaction currentTransaction = createTransaction(symbol, 15, soldPrice, TransactionStatus.COMPLETED)
+
+        and: "mock database"
+        madeDao.findByUserId(user.getId()) >> madeList
+
+        and: "verify the initial user's score"
+        user.getScore() == initialScore
+
+        when: "Updating a user's score"
+        transactionService.updateUserScore(order, user, currentTransaction)
+
+        then: "No updates made to user's score"
+        0 * userDao.save(user)
+        user.getScore() == initialScore
+        user.getScore() == finalScore
+    }
+
+    def "Should update user score properly with negative score"() {
+        given: "A user with an order and an old transaction executed"
+        String symbol = "TSLA"
+        float boughtPrice = 50
+        float soldPrice = 10
+        double initialScore = 10
+        double finalScore = -30
+        User user = createUser("test@test.com", "user", "pass", "User", "Name", "key")
+        user.setId(10)
+        user.setScore(initialScore)
+        Order order = createOrder("1", symbol, "10", "market", "DAY");
+        order.setSide("sell")
+        Transaction oldTransaction = createTransaction(symbol, 15, boughtPrice, TransactionStatus.COMPLETED)
+        List<Made> madeList = List.of(createMadeRelationship(user, oldTransaction, ZonedDateTime.now()))
+        Transaction currentTransaction = createTransaction(symbol, 15, soldPrice, TransactionStatus.COMPLETED)
+
+        and: "mock database"
+        madeDao.findByUserId(user.getId()) >> madeList
+        userDao.save(user) >> user
+
+        and: "verify the initial user's score"
+        user.getScore() == initialScore
+
+        when: "Updating a user's score"
+        transactionService.updateUserScore(order, user, currentTransaction)
+
+        then: "User should have made -30 points"
+        user.getScore() == initialScore + (soldPrice - boughtPrice)
+        user.getScore() == finalScore
+    }
+
+    def "Should not update user score if not a sell order"() {
+        given: "A user buying a stock"
+        String symbol = "TSLA"
+        User user = createUser("test@test.com", "user", "pass", "User", "Name", "key")
+        user.setId(5)
+        Order order = createOrder("1", symbol, "10", "market", "DAY");
+        order.setSide("buy")
+        Transaction currentTransaction = createTransaction(symbol, 15, 15, TransactionStatus.COMPLETED)
+
+        when: "Updating a user's score"
+        transactionService.updateUserScore(order, user, currentTransaction)
+
+        then: "Database should not be called"
+        0 * madeDao.findByUserId(user.getId())
+    }
+
+    def "Should throw exception when transaction is not found"() {
+        given: "A user with an order and an old transaction executed"
+        String symbol1 = "TSLA"
+        String symbol2 = "AAPL"
+        float boughtPrice = 10
+        float soldPrice = 40
+        double initialScore = 10
+        User user = createUser("test@test.com", "user", "pass", "User", "Name", "key")
+        user.setId(10)
+        user.setScore(initialScore)
+        Order order = createOrder("1", symbol1, "10", "market", "DAY");
+        order.setSide("sell")
+        Transaction oldTransaction = createTransaction(symbol1, 15, boughtPrice, TransactionStatus.COMPLETED)
+        List<Made> madeList = List.of(createMadeRelationship(user, oldTransaction, ZonedDateTime.now()))
+        Transaction currentTransaction = createTransaction(symbol2, 15, soldPrice, TransactionStatus.COMPLETED)
+
+        and: "mock database"
+        madeDao.findByUserId(user.getId()) >> madeList
+        userDao.save(user) >> user
+
+        and: "verify the initial user's score"
+        user.getScore() == initialScore
+
+        when: "Updating a user's score"
+        transactionService.updateUserScore(order, user, currentTransaction)
+
+        then: "Transaction not found exception thrown"
+        thrown(EntityNotFoundException)
     }
 
     Stock buildStock(Asset asset) {
