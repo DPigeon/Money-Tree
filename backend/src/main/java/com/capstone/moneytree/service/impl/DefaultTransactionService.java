@@ -7,7 +7,6 @@ import com.capstone.moneytree.dao.*;
 import com.capstone.moneytree.exception.AlpacaException;
 
 import com.capstone.moneytree.exception.EntityNotFoundException;
-import com.capstone.moneytree.model.relationship.Owns;
 import net.jacobpeterson.alpaca.enums.OrderSide;
 import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
 
@@ -105,9 +104,8 @@ public class DefaultTransactionService implements TransactionService {
          LOGGER.info("Executed order {}", alpacaOrder.getClientOrderId());
 
          transaction = constructTransactionFromOrder(alpacaOrder);
-         transactionDao.save(transaction);
-
          updateUserScore(order, user, transaction);
+         transactionDao.save(transaction);
 
          /*
           * create and save two relationships: Made and ToFulfill. User Made Transaction

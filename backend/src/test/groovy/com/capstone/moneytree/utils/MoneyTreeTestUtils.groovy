@@ -53,7 +53,7 @@ class MoneyTreeTestUtils {
    }
 
    static Order createOrder(String id, String symbol, String qty, String type, String timeInForce) {
-      return new Order(id, null, null, null, null, null, null,
+      return new Order(id, "1000000", ZonedDateTime.now(), ZonedDateTime.now(), ZonedDateTime.now(), ZonedDateTime.now(), null,
               null, null, null, null, null, null, symbol, null,
               qty, null, type, null, timeInForce, null, null, null, null,
               null, null, null, null, null)
