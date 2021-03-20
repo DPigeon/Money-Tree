@@ -16,10 +16,10 @@ import net.jacobpeterson.alpaca.AlpacaAPI
 import net.jacobpeterson.alpaca.enums.OrderSide
 import net.jacobpeterson.alpaca.enums.OrderTimeInForce
 import net.jacobpeterson.domain.alpaca.order.Order
-import org.junit.Ignore
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.time.ZonedDateTime
