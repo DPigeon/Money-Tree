@@ -1,6 +1,5 @@
 import { UserService } from 'src/app/services/user/user.service';
-import { isUserLoggedIn } from './../../store/selectors/app.selectors';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { StoreFacadeService } from '../../store/store-facade.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User, UserProfile } from 'src/app/interfaces/user';
@@ -75,9 +74,9 @@ export class ProfileComponent implements OnInit {
     return this.completeUserProfile ? this.completeUserProfile.following : null;
   }
   isLoggedInUserProfile(): boolean {
-    if (this.completeUserProfile && this.loggedInUserId) {
-      return this.completeUserProfile.id === Number(this.loggedInUserId);
-    }
+    return this.completeUserProfile == null || this.loggedInUserId == null
+      ? null
+      : this.completeUserProfile.id === Number(this.loggedInUserId);
   }
   followButtonLabel(): string {
     let label = 'Follow';
@@ -96,26 +95,16 @@ export class ProfileComponent implements OnInit {
       this.userService
         .followUser(this.loggedInUserId, this.completeUserProfile.id)
         .toPromise()
-        .then(() =>
-          this.storeFacade.loadCurrentUserFollowings(this.loggedInUserId)
-        )
-        .then(() =>
-          this.storeFacade.loadCurrentProfileUser(
-            this.completeUserProfile.username
-          )
-        );
+        .then(() => this.followersUpdate());
     } else if (label === 'Unfollow') {
       this.userService
         .unfollowUser(this.loggedInUserId, this.completeUserProfile.id)
         .toPromise()
-        .then(() =>
-          this.storeFacade.loadCurrentUserFollowings(this.loggedInUserId)
-        )
-        .then(() =>
-          this.storeFacade.loadCurrentProfileUser(
-            this.completeUserProfile.username
-          )
-        );
+        .then(() => this.followersUpdate());
     }
+  }
+  followersUpdate(): void {
+    this.storeFacade.loadCurrentUserFollowings(this.loggedInUserId);
+    this.storeFacade.loadCurrentProfileUser(this.completeUserProfile.username);
   }
 }
