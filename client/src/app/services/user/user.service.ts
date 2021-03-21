@@ -124,7 +124,7 @@ export class UserService {
     const result: UserSearch[] = [];
     response.forEach((e) => {
       result.push({
-        id: e.id,
+        id: e.username,
         firstName: e.firstName,
         lastName: e.lastName,
         username: e.username,

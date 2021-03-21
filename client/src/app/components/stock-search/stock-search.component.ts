@@ -83,6 +83,7 @@ export class StockSearchComponent implements OnInit {
   queryFilter(e: KeyboardEvent): void {
     if (this.query === '') {
       this.searchResults = [];
+      this.selectedSearchOption ='all'
     } else {
       if (this.selectedSearchOption === 'users') {
         this.searchResults = this.userSearcher.search(this.query).slice(0, 10);
@@ -100,10 +101,10 @@ export class StockSearchComponent implements OnInit {
 
   handleKeyboardSelectionEvent(): void {
     if (this.activeOption.id !== '' || this.activeOption.name !== '') {
-      this.router.navigate(['/stock-detail/' + this.activeOption.id]);
+      this.router.navigate([this.redirectSearch(this.activeOption.type)+ this.activeOption.id]);
       this.query = this.activeOption.name;
     } else if (this.searchResults.length > 0) {
-      this.router.navigate(['/stock-detail/' + this.searchResults[0].id]);
+      this.router.navigate([this.redirectSearch(this.searchResults[0].type) + this.searchResults[0].id]);
       this.query = this.searchResults[0].name;
     }
   }

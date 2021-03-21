@@ -1,5 +1,5 @@
 export interface UserSearch {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   username?: string;
