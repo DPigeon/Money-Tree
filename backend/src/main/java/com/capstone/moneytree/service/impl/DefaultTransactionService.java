@@ -33,6 +33,7 @@ import com.capstone.moneytree.service.api.TransactionService;
 import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
 import net.jacobpeterson.domain.alpaca.order.Order;
+import pl.zankowski.iextrading4j.api.stocks.Company;
 import pl.zankowski.iextrading4j.api.stocks.v1.KeyStats;
 
 @Service
@@ -98,10 +99,8 @@ public class DefaultTransactionService implements TransactionService {
          Stock stock = stockDao.findBySymbol(order.getSymbol());
          if (stock == null) { // if database does not have this stock object create and save it
             KeyStats stockInfo = stockMarketDataService.getKeyStats(order.getSymbol());
-            stock = Stock.builder()
-                    .symbol(order.getSymbol())
-                    .companyName(stockInfo.getCompanyName())
-                    .build();
+            Company company = stockMarketDataService.getCompanyInfo(order.getSymbol());
+            stock = Stock.builder().symbol(order.getSymbol()).companyName(stockInfo.getCompanyName()).industry(company.getIndustry()).build();
             stockDao.save(stock);
          }
 
@@ -154,6 +153,7 @@ public class DefaultTransactionService implements TransactionService {
                       .valueOf(alpacaOrder.getType().toUpperCase() + "_" + alpacaOrder.getSide().toUpperCase()))
               .quantity(Float.parseFloat(alpacaOrder.getQty())).purchasedAt(alpacaOrder.getSubmittedAt())
               .symbol(alpacaOrder.getSymbol())
+              .industry(stock.getIndustry())
               .build(); // avg price and total will be set only if stock got fulfilled
    }
 

@@ -37,4 +37,6 @@ public class Transaction extends Entity {
    TransactionStatus status;
 
    String symbol;
+
+   String industry;
 }
