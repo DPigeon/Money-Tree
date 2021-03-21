@@ -59,6 +59,19 @@ describe('ListOfFollowsComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should return correct emptyListMessage', () => {
+    component.follows = [];
+    component.listType = 'followers';
+    component.username = 'Johnny';
+    expect(component.emptyListMessage()).toEqual(
+      'Johnny is not followed by any other user!'
+    );
+    component.listType = 'followings';
+    expect(component.emptyListMessage()).toEqual(
+      'Johnny is not following any other user!'
+    );
+  });
+
   it('should emit the navigation to profile page of another user event', () => {
     spyOn(component.navigateToProfile, 'emit');
     component.navigateToFollowProfile('JohnDoe', '0');

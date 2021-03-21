@@ -1,7 +1,8 @@
 <div class="follow-list-container" *ngIf="follows">
     <button class="close-dialog-x" mat-dialog-close>X
     </button>
-    <h3 class='list-title'>{{listTitle}}</h3>
+    <h2>{{username}}'s {{listType}}:</h2>
+    <h4 class='list-title' *ngIf="follows.length===0">{{emptyListMessage()}}</h4>
     <ng-container *ngFor="let user of follows">
         <div class="user-container">
             <div class="user-left-part">

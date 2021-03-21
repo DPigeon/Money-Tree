@@ -127,4 +127,14 @@ export class StoreFacadeService {
   loadCurrentProfileUser(username: string): void {
     this.store.dispatch(appActions.loadUserProfile({ username }));
   }
+
+  followUser(followerId: number, userToFollowId: number): void {
+    this.store.dispatch(appActions.followUser({ followerId, userToFollowId }));
+  }
+
+  unfollowUser(followerId: number, userToUnfollowId: number): void {
+    this.store.dispatch(
+      appActions.unfollowUser({ followerId, userToUnfollowId })
+    );
+  }
 }

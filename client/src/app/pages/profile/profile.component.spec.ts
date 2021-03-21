@@ -9,13 +9,25 @@ import {
   NGRX_STORE_MODULE,
 } from '../../shared.module';
 import { RouterTestingModule } from '@angular/router/testing';
-import { UserService } from 'src/app/services/user/user.service';
 import { User, UserProfile } from 'src/app/interfaces/user';
 import { of } from 'rxjs';
 
-const mockUserService = {
-  followUser: jest.fn(() => of()),
-  unfollowUser: jest.fn(() => of()),
+const mockStoreFacade = {
+  followUser: jest.fn(),
+  unfollowUser: jest.fn(),
+  loadCurrentProfileUser: jest.fn(),
+} as any;
+
+const fakeMatDialog = {
+  openDialog: jest.fn(),
+} as any;
+
+const fakeActivatedRoute = {
+  queryParams: of(null),
+} as any;
+
+const fakeRoute = {
+  navigate: jest.fn(),
 } as any;
 
 const fakeFollowersList: User[] = [
@@ -79,16 +91,19 @@ describe('ProfileComponent', () => {
         TransactionHistoryComponent,
         StockSearchComponent,
       ],
-      providers: [
-        NGRX_STORE_MODULE,
-        { provide: UserService, useValue: mockUserService },
-      ],
+      providers: [NGRX_STORE_MODULE],
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProfileComponent);
     component = fixture.componentInstance;
+    component = new ProfileComponent(
+      mockStoreFacade,
+      fakeMatDialog,
+      fakeActivatedRoute,
+      fakeRoute
+    );
     component.completeUserProfile = fakeCompleteUserProfile;
     component.loggedInUserId = 0; // different from UserProfile
     fixture.detectChanges();
@@ -118,12 +133,17 @@ describe('ProfileComponent', () => {
   });
 
   it('should update followers list after calling follow/unfollow', () => {
-    const followSpy = jest.spyOn(mockUserService, 'followUser');
-    const unfollowSpy = jest.spyOn(mockUserService, 'unfollowUser');
+    const followSpy = jest.spyOn(mockStoreFacade, 'followUser');
+    const unfollowSpy = jest.spyOn(mockStoreFacade, 'unfollowUser');
+    const loadCurrentProfileUserSpy = jest.spyOn(
+      mockStoreFacade,
+      'loadCurrentProfileUser'
+    );
     component.followOrUnfollow();
     expect(followSpy).toHaveBeenCalled();
     component.loggedInUserId = 1;
     component.followOrUnfollow();
     expect(unfollowSpy).toHaveBeenCalled();
+    expect(loadCurrentProfileUserSpy).toHaveBeenCalled();
   });
 });

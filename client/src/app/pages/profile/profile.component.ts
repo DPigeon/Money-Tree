@@ -1,4 +1,3 @@
-import { UserService } from 'src/app/services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 import { StoreFacadeService } from '../../store/store-facade.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,12 +16,12 @@ export class ProfileComponent implements OnInit {
   completeUserProfile: UserProfile;
   followers: User[];
   followings: User[];
+  followButtonDisabled = false;
   constructor(
     private storeFacade: StoreFacadeService,
     public dialog: MatDialog,
     private route: ActivatedRoute,
-    private router: Router,
-    private userService: UserService
+    private router: Router
   ) {}
   ngOnInit(): void {
     const username = this.route.snapshot.paramMap.get('username');
@@ -43,13 +42,21 @@ export class ProfileComponent implements OnInit {
     switch (choice) {
       case 'followers':
         dialogRef = this.dialog.open(ListOfFollowsComponent, {
-          data: { followslist: this.getFollowers(), followsTitle: choice },
+          data: {
+            followslist: this.getFollowers(),
+            username: this.completeUserProfile.username,
+            listType: 'followers',
+          },
         });
         break;
 
       case 'followings':
         dialogRef = this.dialog.open(ListOfFollowsComponent, {
-          data: { followslist: this.getFollowings(), followsTitle: choice },
+          data: {
+            followslist: this.getFollowings(),
+            username: this.completeUserProfile.username,
+            listType: 'followings',
+          },
         });
         break;
     }
@@ -90,21 +97,30 @@ export class ProfileComponent implements OnInit {
     return label;
   }
   followOrUnfollow(): void {
+    this.followButtonDisabled = true;
     const label = this.followButtonLabel();
     if (label === 'Follow') {
-      this.userService
-        .followUser(this.loggedInUserId, this.completeUserProfile.id)
-        .toPromise()
-        .then(() => this.followersUpdate());
+      this.storeFacade.followUser(
+        this.loggedInUserId,
+        this.completeUserProfile.id
+      );
+      this.storeFacade.loadCurrentProfileUser(
+        this.completeUserProfile.username
+      );
     } else if (label === 'Unfollow') {
-      this.userService
-        .unfollowUser(this.loggedInUserId, this.completeUserProfile.id)
-        .toPromise()
-        .then(() => this.followersUpdate());
+      this.storeFacade.unfollowUser(
+        this.loggedInUserId,
+        this.completeUserProfile.id
+      );
     }
+    this.completeProfileUserUpdate();
   }
-  followersUpdate(): void {
-    this.storeFacade.loadCurrentUserFollowings(this.loggedInUserId);
-    this.storeFacade.loadCurrentProfileUser(this.completeUserProfile.username);
+  completeProfileUserUpdate(): void {
+    setTimeout(() => {
+      this.storeFacade.loadCurrentProfileUser(
+        this.completeUserProfile.username
+      );
+      this.followButtonDisabled = false;
+    }, 200);
   }
 }
