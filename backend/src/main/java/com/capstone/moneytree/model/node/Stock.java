@@ -22,6 +22,8 @@ public class Stock extends Entity {
 
     String companyName;
 
+    String industry;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
