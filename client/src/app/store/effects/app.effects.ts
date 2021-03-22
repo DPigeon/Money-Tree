@@ -301,6 +301,40 @@ export class Effects {
     )
   );
 
+  followUser$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.followUser),
+      switchMap((action) => {
+        return this.userService
+          .followUser(action.followerId, action.userToFollowId)
+          .pipe(
+            map(() => {
+              return appActions.loadCurrentUserFollowings({
+                id: action.followerId,
+              });
+            })
+          );
+      })
+    )
+  );
+
+  unfollowUser$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.unfollowUser),
+      switchMap((action) => {
+        return this.userService
+          .unfollowUser(action.followerId, action.userToUnfollowId)
+          .pipe(
+            map(() => {
+              return appActions.loadCurrentUserFollowings({
+                id: action.followerId,
+              });
+            })
+          );
+      })
+    )
+  );
+
   mirrorError(backendError: any): AppError {
     if (backendError && backendError.error) {
       const errorMessage: AppError = {

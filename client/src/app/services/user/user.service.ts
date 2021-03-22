@@ -9,7 +9,7 @@ import { DataFormatter } from '../../utilities/data-formatters';
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private api: ApiService, private dataFormatter: DataFormatter) { }
+  constructor(private api: ApiService, private dataFormatter: DataFormatter) {}
 
   createNewUser(user: User): Observable<User> {
     return this.api
@@ -29,11 +29,23 @@ export class UserService {
       .pipe(map((res: Response) => this.dataFormatter.userFormatter(res.body)));
   }
 
+  followUser(followerId: number, userToFollowId: number): Observable<any> {
+    return this.api.post(`users/${followerId}/follow/${userToFollowId}`);
+  }
+
+  unfollowUser(followerId: number, userToUnfollowId: number): Observable<any> {
+    return this.api.delete(`users/${followerId}/unfollow/${userToUnfollowId}`);
+  }
+
   // This method is used to get profile information, and will include all data for the user
   getUserByUsername(username: string): Observable<UserProfile> {
     return this.api
       .get('users/profile/' + username) // check if end point changes
-      .pipe(map((res: Response) => this.dataFormatter.userCompleteProfileFormatter(res.body)));
+      .pipe(
+        map((res: Response) =>
+          this.dataFormatter.userCompleteProfileFormatter(res.body)
+        )
+      );
   }
 
   userLogin(user: User): Observable<User> {
@@ -68,13 +80,16 @@ export class UserService {
   getFollowers(userId: number): Observable<User[]> {
     return this.api
       .get('users/followers/' + userId)
-      .pipe(map((res: Response) => this.dataFormatter.followUserListFormatter(res)));
+      .pipe(
+        map((res: Response) => this.dataFormatter.followUserListFormatter(res))
+      );
   }
 
   getFollowings(userId: number): Observable<User[]> {
     return this.api
       .get('users/followings/' + userId)
-      .pipe(map((res: Response) => this.dataFormatter.followUserListFormatter(res)));
+      .pipe(
+        map((res: Response) => this.dataFormatter.followUserListFormatter(res))
+      );
   }
-
 }

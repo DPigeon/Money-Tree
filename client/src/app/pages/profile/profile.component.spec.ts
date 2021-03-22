@@ -9,7 +9,70 @@ import {
   NGRX_STORE_MODULE,
 } from '../../shared.module';
 import { RouterTestingModule } from '@angular/router/testing';
+import { User, UserProfile } from 'src/app/interfaces/user';
+import { of } from 'rxjs';
 
+const mockStoreFacade = {
+  followUser: jest.fn(),
+  unfollowUser: jest.fn(),
+  loadCurrentProfileUser: jest.fn(),
+} as any;
+
+const fakeMatDialog = {
+  openDialog: jest.fn(),
+} as any;
+
+const fakeActivatedRoute = {
+  queryParams: of(null),
+} as any;
+
+const fakeRoute = {
+  navigate: jest.fn(),
+} as any;
+
+const fakeFollowersList: User[] = [
+  {
+    id: 1,
+    firstName: 'George',
+    lastName: 'White',
+    username: 'GeorgeWhite',
+    score: 50,
+  },
+  {
+    id: 2,
+    firstName: 'Jack',
+    lastName: 'Daniel',
+    username: 'JackDaniel',
+    score: 10,
+  },
+];
+
+const fakeFollowingsList: User[] = [
+  {
+    id: 3,
+    firstName: 'Karim',
+    lastName: 'Kamal',
+    username: 'KarimKamal',
+    score: 60,
+  },
+  {
+    id: 4,
+    firstName: 'Ashley',
+    lastName: 'Barber',
+    username: 'AshleyBarber',
+    score: 12,
+  },
+];
+
+const fakeCompleteUserProfile: UserProfile = {
+  id: 5,
+  firstName: 'profileUserFirstname',
+  lastName: 'profileUserLastName',
+  username: 'profileUserUserName',
+  score: 150,
+  followers: fakeFollowersList,
+  following: fakeFollowingsList,
+};
 
 describe('ProfileComponent', () => {
   let component: ProfileComponent;
@@ -22,25 +85,65 @@ describe('ProfileComponent', () => {
         FORM_MODULE_DPENDENCEIES,
         RouterTestingModule,
       ],
-      declarations: [ProfileComponent,
+      declarations: [
+        ProfileComponent,
         HeaderComponent,
         TransactionHistoryComponent,
         StockSearchComponent,
       ],
-      providers: [
-        NGRX_STORE_MODULE,
-      ],
-    })
-      .compileComponents();
+      providers: [NGRX_STORE_MODULE],
+    }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProfileComponent);
     component = fixture.componentInstance;
+    component = new ProfileComponent(
+      mockStoreFacade,
+      fakeMatDialog,
+      fakeActivatedRoute,
+      fakeRoute
+    );
+    component.completeUserProfile = fakeCompleteUserProfile;
+    component.loggedInUserId = 0; // different from UserProfile
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should return followers/followings correctly', () => {
+    expect(component.getFollowers()).toEqual(fakeFollowersList);
+    expect(component.getFollowings()).toEqual(fakeFollowingsList);
+  });
+
+  it('should detect if the current user is looking at his/her own profile', () => {
+    expect(component.isLoggedInUserProfile()).toBe(false);
+    component.loggedInUserId = component.completeUserProfile.id;
+    expect(component.isLoggedInUserProfile()).toBe(true);
+    component.loggedInUserId = null;
+    expect(component.isLoggedInUserProfile()).toEqual(null);
+  });
+
+  it('should use the right button label, follow/unfollow based on list of followings', () => {
+    expect(component.followButtonLabel()).toEqual('Follow');
+    component.loggedInUserId = 1; // an existing id in the followers
+    expect(component.followButtonLabel()).toEqual('Unfollow');
+  });
+
+  it('should update followers list after calling follow/unfollow', () => {
+    const followSpy = jest.spyOn(mockStoreFacade, 'followUser');
+    const unfollowSpy = jest.spyOn(mockStoreFacade, 'unfollowUser');
+    const loadCurrentProfileUserSpy = jest.spyOn(
+      mockStoreFacade,
+      'loadCurrentProfileUser'
+    );
+    component.followOrUnfollow();
+    expect(followSpy).toHaveBeenCalled();
+    component.loggedInUserId = 1;
+    component.followOrUnfollow();
+    expect(unfollowSpy).toHaveBeenCalled();
+    expect(loadCurrentProfileUserSpy).toHaveBeenCalled();
   });
 });

@@ -15,9 +15,8 @@ export class FollowingsSearchComponent implements OnInit {
   constructor(private router: Router) {}
   ngOnInit(): void {}
 
-  // Profile pages will be added in future commits
-  navigateToFollowingProfile(followingId: number): void {
-    this.router.navigate(['/user-profile/' + followingId]);
+  navigateToFollowingProfile(username: string): void {
+    this.router.navigate(['/profile/' + username]);
   }
 
   isSearchedFollowings(following: User): boolean {

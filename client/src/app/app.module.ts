@@ -39,6 +39,9 @@ import { UserOwnedStocksComponent } from './components/user-owned-stocks/user-ow
 import { SellOrBuyActionsComponent } from './components/sell-buy-stock/sell-buy-actions.component';
 import { FollowingsSearchComponent } from './components/followings-search/followings-search.component';
 import { StockAdditionalInfoComponent } from './components/stock-additional-info/stock-additional-info.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
+import { ListOfFollowsComponent } from './components/list-of-follows/list-of-follows.component';
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
@@ -48,8 +51,6 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
 
 // analytics
 import { NgxHotjarModule } from 'ngx-hotjar';
-import { ProfileComponent } from './pages/profile/profile.component';
-import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
 
 
 @NgModule({
@@ -72,6 +73,7 @@ import { TransactionHistoryComponent } from './components/transaction-history/tr
     StockAdditionalInfoComponent,
     ProfileComponent,
     TransactionHistoryComponent,
+    ListOfFollowsComponent,
   ],
   imports: [
     BrowserModule,

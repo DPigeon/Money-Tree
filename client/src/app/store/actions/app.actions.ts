@@ -119,3 +119,13 @@ export const setCurrentProfileUser = createAction(
   '[User] Update the new profile user',
   props<{ currentProfileUser: UserProfile }>()
 );
+
+export const followUser = createAction(
+  '[User] Follow user',
+  props<{ followerId: number, userToFollowId: number }>()
+);
+
+export const unfollowUser = createAction(
+  '[User] Unfollow user',
+  props<{ followerId: number, userToUnfollowId: number }>()
+);

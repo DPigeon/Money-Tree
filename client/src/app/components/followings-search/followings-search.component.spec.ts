@@ -72,10 +72,11 @@ describe('FollowingsSearchComponent Unit Test', () => {
       id: 1,
       firstName: 'Razine',
       lastName: 'Bensari',
+      username: 'username',
       score: 180,
     };
     const routingSpy = jest.spyOn(mockRouter, 'navigate');
-    component.navigateToFollowingProfile(fakeUser1.id);
+    component.navigateToFollowingProfile(fakeUser1.username);
     expect(routingSpy).toHaveBeenCalledTimes(1); // to be changed to user id
   });
 });

@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditProfileComponent } from '../../components/edit-profile/edit-profile.component';
 import { Transaction } from 'src/app/interfaces/transaction';
 import { Stock } from 'src/app/interfaces/stock';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -26,7 +26,6 @@ export class HomeComponent implements OnInit {
   constructor(
     private storeFacade: StoreFacadeService,
     public dialog: MatDialog,
-    private route: ActivatedRoute,
     private router: Router
   ) {
     this.currentUser = null; // otherwise there would be an undefined error because of waiting for the currentUser values to fetch
@@ -54,10 +53,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  goToProfile(): void {  // click -> navigate to profile/username
-    this.router.navigate(['/profile/' + this.currentUser.username])
-    .then(() => this.storeFacade.loadUserTransactions(this.currentUser.id));
-
+  goToProfile(): void {
+    this.router
+      .navigate(['/profile/' + this.currentUser.username])
+      .then(() => this.storeFacade.loadUserTransactions(this.currentUser.id));
   }
   openDialog(): void {
     const dialogRef = this.dialog.open(EditProfileComponent, {
@@ -88,5 +87,4 @@ export class HomeComponent implements OnInit {
       }
     );
   }
-
 }

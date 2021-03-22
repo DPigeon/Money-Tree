@@ -165,7 +165,6 @@ public class UserController {
    @DeleteMapping("/{userId}/unfollow/{userToUnfollowId}")
    ResponseEntity<Long> unfollowUser(@PathVariable Long userId, @PathVariable Long userToUnfollowId) {
       Long res = this.userService.unfollowUser(userId, userToUnfollowId);
-
       return ResponseEntity.ok(res);
    }
 

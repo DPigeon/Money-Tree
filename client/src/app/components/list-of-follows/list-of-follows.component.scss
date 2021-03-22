@@ -1,0 +1,98 @@
+@import "../../../styles.scss";
+
+.follow-list-container {
+  padding: 10px;
+  height: calc(100% - 100px);
+  width: 400px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+
+  .close-dialog-x {
+    float: right;
+    position: relative;
+    top: -40px;
+    right: -30px;
+    color: $mt-red;
+    font-weight: 500;
+    background: none;
+    border: none;
+  }
+
+  .list-title {
+    color: $mt-dark;
+    font-weight: 500;
+    padding-left: 10px;
+  }
+  .user-container {
+    display: flex;
+    margin-top: 10px;
+
+    .user-left-part {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      .user-picture {
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      .user-first-and-last-name {
+        display: block;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+
+        .user-name {
+          outline: none;
+          cursor: pointer;
+          font-weight: 500;
+        }
+      }
+    }
+    .user-right-part {
+      margin-left: auto;
+      align-items: center;
+      padding: 10px;
+      .user-score-label {
+        color: $mt-red;
+        font-weight: 500;
+        font-size: 12px;
+      }
+
+      .user-score {
+        color: $primary-color;
+        font-weight: 500;
+        font-size: 12px;
+        margin-left: 5px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .follow-list-container {
+    width: 300px;
+    margin-top: 40px;
+  }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
