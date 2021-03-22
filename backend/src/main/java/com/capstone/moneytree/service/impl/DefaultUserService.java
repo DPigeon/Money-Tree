@@ -34,11 +34,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -372,6 +368,18 @@ public class DefaultUserService implements UserService {
             throw new EntityNotFoundException(USER_NOT_FOUND);
         }
         userDao.delete(existingUser);
+    }
+
+    @Override
+    public List<SanitizedUser> getLeaderboard() {
+        return userDao.findAll().stream()
+                // sort by score desc
+                .sorted(Comparator.comparing(User::getScore).reversed())
+                // sanitize user list
+                .map(SanitizedUser::new)
+                // limit to 50 top investors
+                .limit(50)
+                .collect(Collectors.toList());
     }
 
     @Override
