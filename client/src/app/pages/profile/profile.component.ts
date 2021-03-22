@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { StoreFacadeService } from '../../store/store-facade.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { User, UserProfile } from 'src/app/interfaces/user';
 import { MatDialog } from '@angular/material/dialog';
 import { ListOfFollowsComponent } from 'src/app/components/list-of-follows/list-of-follows.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -24,7 +25,7 @@ export class ProfileComponent implements OnInit {
     private router: Router
   ) {}
   ngOnInit(): void {
-    const username = this.route.snapshot.paramMap.get('username');
+    let username = this.route.snapshot.paramMap.get('username');
     this.storeFacade.loadCurrentProfileUser(username);
     this.currentProfileUser$.subscribe((data: UserProfile) => {
       if (data) {
@@ -35,6 +36,12 @@ export class ProfileComponent implements OnInit {
       if (loggedInUser) {
         this.loggedInUserId = loggedInUser.id;
       }
+    });
+    this.router.events
+    .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
+    .subscribe(() => {
+      username = this.route.snapshot.paramMap.get('username');
+      this.storeFacade.loadCurrentProfileUser(username);
     });
   }
   openDialog(choice: string): void {

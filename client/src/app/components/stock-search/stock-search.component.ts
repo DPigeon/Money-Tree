@@ -133,8 +133,10 @@ export class StockSearchComponent implements OnInit {
   }
 
   navigateTo(type: string, id: string, name: string): void {
+    debugger
+    const route = (type === 'user' ? '/profile/' : '/stock-detail/') + id
     this.router.navigate([
-      type === 'user' ? '/profile/' : '/stock-detail/' + id,
+     route
     ]);
     this.query = name;
   }
