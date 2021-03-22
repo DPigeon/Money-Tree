@@ -59,12 +59,13 @@ class MoneyTreeTestUtils {
               null, null, null, null, null)
    }
 
-   static Transaction createTransaction(String symbol, float avgPrice, float total, TransactionStatus status) {
+   static Transaction createTransaction(String symbol, float avgPrice, float total, TransactionStatus status, float qty) {
       return Transaction.builder()
                .symbol(symbol)
                .avgPrice(avgPrice)
                .total(total)
                .status(status)
+               .quantity(qty)
                .build()
    }
 

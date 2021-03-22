@@ -58,8 +58,8 @@ class TransactionControllerIT extends Specification {
         setup: "Persist some transactions"
         String symbol1 = "AAPL"
         String symbol2 = "TSLA"
-        Transaction transaction1 = createTransaction(symbol1, 10, 24, TransactionStatus.PENDING)
-        Transaction transaction2 = createTransaction(symbol2, 100, 75, TransactionStatus.COMPLETED)
+        Transaction transaction1 = createTransaction(symbol1, 10, 24, TransactionStatus.PENDING, 1)
+        Transaction transaction2 = createTransaction(symbol2, 100, 75, TransactionStatus.COMPLETED, 1)
         transactionDao.save(transaction1)
         transactionDao.save(transaction2)
 
@@ -120,8 +120,8 @@ class TransactionControllerIT extends Specification {
         User persistedUser = userDao.save(user)
         String symbol1 = "AAPL"
         String symbol2 = "TSLA"
-        Transaction transaction1 = createTransaction(symbol1, 100, 24, TransactionStatus.PENDING)
-        Transaction transaction2 = createTransaction(symbol2, 110, 4, TransactionStatus.PENDING)
+        Transaction transaction1 = createTransaction(symbol1, 100, 24, TransactionStatus.PENDING, 1)
+        Transaction transaction2 = createTransaction(symbol2, 110, 4, TransactionStatus.PENDING, 1)
         transactionDao.save(transaction1)
         transactionDao.save(transaction2)
         Made made1 = createMadeRelationship(persistedUser, transaction1, ZonedDateTime.now())

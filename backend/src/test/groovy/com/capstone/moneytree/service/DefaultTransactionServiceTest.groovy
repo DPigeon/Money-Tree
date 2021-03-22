@@ -176,18 +176,29 @@ class DefaultTransactionServiceTest extends Specification {
     def "Should update user score properly with positive score"() {
         given: "A user with an order and an old transaction executed"
         String symbol = "TSLA"
-        float boughtPrice = 10
+        float price1 = 10
+        float price2 = 20
+        float price3 = 5
+        float qty1 = 5
+        float qty2 = 3
+        float qty3 = 1
+        float boughtPrice = 13
         float soldPrice = 40
         double initialScore = 20
-        double finalScore = 50
+        double finalScore = initialScore + soldPrice - boughtPrice
         User user = createUser("test@test.com", "user", "pass", "User", "Name", "key")
         user.setId(10)
         user.setScore(initialScore)
         Order order = createOrder("1", symbol, "10", "market", "DAY");
         order.setSide("sell")
-        Transaction oldTransaction = createTransaction(symbol, 15, boughtPrice, TransactionStatus.COMPLETED)
-        List<Made> madeList = List.of(createMadeRelationship(user, oldTransaction, ZonedDateTime.now()))
-        Transaction currentTransaction = createTransaction(symbol, 15, soldPrice, TransactionStatus.COMPLETED)
+        Transaction transaction1 = createTransaction(symbol, 15, price1, TransactionStatus.COMPLETED, qty1)
+        Transaction transaction2 = createTransaction(symbol, 15, price2, TransactionStatus.COMPLETED, qty2)
+        Transaction transaction3 = createTransaction(symbol, 15, price3, TransactionStatus.COMPLETED, qty3)
+        List<Made> madeList = List.of(
+                createMadeRelationship(user, transaction1, ZonedDateTime.now()),
+                createMadeRelationship(user, transaction2, ZonedDateTime.now()),
+                createMadeRelationship(user, transaction3, ZonedDateTime.now()))
+        Transaction currentTransaction = createTransaction(symbol, 15, soldPrice, TransactionStatus.COMPLETED, 1)
 
         and: "mock database"
         madeDao.findByUserId(user.getId()) >> madeList
@@ -199,8 +210,7 @@ class DefaultTransactionServiceTest extends Specification {
         when: "Updating a user's score"
         transactionService.updateUserScore(order, user, currentTransaction)
 
-        then: "User should have made +30 points"
-        user.getScore() == initialScore + (soldPrice - boughtPrice)
+        then: "User should have made +27 points"
         user.getScore() == finalScore
     }
 
@@ -216,9 +226,9 @@ class DefaultTransactionServiceTest extends Specification {
         user.setScore(initialScore)
         Order order = createOrder("1", symbol, "10", "market", "DAY");
         order.setSide("sell")
-        Transaction oldTransaction = createTransaction(symbol, 15, boughtPrice, TransactionStatus.COMPLETED)
-        List<Made> madeList = List.of(createMadeRelationship(user, oldTransaction, ZonedDateTime.now()))
-        Transaction currentTransaction = createTransaction(symbol, 15, soldPrice, TransactionStatus.COMPLETED)
+        Transaction transaction = createTransaction(symbol, 15, boughtPrice, TransactionStatus.COMPLETED, 1)
+        List<Made> madeList = List.of(createMadeRelationship(user, transaction, ZonedDateTime.now()))
+        Transaction currentTransaction = createTransaction(symbol, 15, soldPrice, TransactionStatus.COMPLETED, 1)
 
         and: "mock database"
         madeDao.findByUserId(user.getId()) >> madeList
@@ -238,18 +248,29 @@ class DefaultTransactionServiceTest extends Specification {
     def "Should update user score properly with negative score"() {
         given: "A user with an order and an old transaction executed"
         String symbol = "TSLA"
-        float boughtPrice = 50
-        float soldPrice = 10
+        float price1 = 10
+        float price2 = 20
+        float price3 = 5
+        float qty1 = 5
+        float qty2 = 3
+        float qty3 = 1
+        float boughtPrice = 13
+        float soldPrice = 1
         double initialScore = 10
-        double finalScore = -30
+        double finalScore = initialScore + soldPrice - boughtPrice
         User user = createUser("test@test.com", "user", "pass", "User", "Name", "key")
         user.setId(10)
         user.setScore(initialScore)
         Order order = createOrder("1", symbol, "10", "market", "DAY");
         order.setSide("sell")
-        Transaction oldTransaction = createTransaction(symbol, 15, boughtPrice, TransactionStatus.COMPLETED)
-        List<Made> madeList = List.of(createMadeRelationship(user, oldTransaction, ZonedDateTime.now()))
-        Transaction currentTransaction = createTransaction(symbol, 15, soldPrice, TransactionStatus.COMPLETED)
+        Transaction transaction1 = createTransaction(symbol, 15, price1, TransactionStatus.COMPLETED, qty1)
+        Transaction transaction2 = createTransaction(symbol, 15, price2, TransactionStatus.COMPLETED, qty2)
+        Transaction transaction3 = createTransaction(symbol, 15, price3, TransactionStatus.COMPLETED, qty3)
+        List<Made> madeList = List.of(
+                createMadeRelationship(user, transaction1, ZonedDateTime.now()),
+                createMadeRelationship(user, transaction2, ZonedDateTime.now()),
+                createMadeRelationship(user, transaction3, ZonedDateTime.now()))
+        Transaction currentTransaction = createTransaction(symbol, 15, soldPrice, TransactionStatus.COMPLETED, 1)
 
         and: "mock database"
         madeDao.findByUserId(user.getId()) >> madeList
@@ -261,8 +282,7 @@ class DefaultTransactionServiceTest extends Specification {
         when: "Updating a user's score"
         transactionService.updateUserScore(order, user, currentTransaction)
 
-        then: "User should have made -30 points"
-        user.getScore() == initialScore + (soldPrice - boughtPrice)
+        then: "User should have made -12 points"
         user.getScore() == finalScore
     }
 
@@ -273,7 +293,7 @@ class DefaultTransactionServiceTest extends Specification {
         user.setId(5)
         Order order = createOrder("1", symbol, "10", "market", "DAY");
         order.setSide("buy")
-        Transaction currentTransaction = createTransaction(symbol, 15, 15, TransactionStatus.COMPLETED)
+        Transaction currentTransaction = createTransaction(symbol, 15, 15, TransactionStatus.COMPLETED, 1)
 
         when: "Updating a user's score"
         transactionService.updateUserScore(order, user, currentTransaction)
@@ -294,9 +314,9 @@ class DefaultTransactionServiceTest extends Specification {
         user.setScore(initialScore)
         Order order = createOrder("1", symbol1, "10", "market", "DAY");
         order.setSide("sell")
-        Transaction oldTransaction = createTransaction(symbol1, 15, boughtPrice, TransactionStatus.COMPLETED)
-        List<Made> madeList = List.of(createMadeRelationship(user, oldTransaction, ZonedDateTime.now()))
-        Transaction currentTransaction = createTransaction(symbol2, 15, soldPrice, TransactionStatus.COMPLETED)
+        Transaction transaction = createTransaction(symbol1, 15, boughtPrice, TransactionStatus.COMPLETED, 1)
+        List<Made> madeList = List.of(createMadeRelationship(user, transaction, ZonedDateTime.now()))
+        Transaction currentTransaction = createTransaction(symbol2, 15, soldPrice, TransactionStatus.COMPLETED, 1)
 
         and: "mock database"
         madeDao.findByUserId(user.getId()) >> madeList

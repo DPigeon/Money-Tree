@@ -140,33 +140,37 @@ public class DefaultTransactionService implements TransactionService {
 
    // ISSUE-346
    public void updateUserScore(Order order, User user, Transaction transaction) {
+      // Formula: sum(price * qty)/sum(qty)
       if (order.getSide().equals("sell")) {
-         float boughtPrice = 0;
+         float sumQtyPrice = 0;
+         float sumQty = 0;
          List<Made> userMade = madeDao.findByUserId(user.getId());
          for (Made made : userMade) {
-            Transaction oldTransaction = made.getTransaction();
-            if (oldTransaction.getSymbol().equals(transaction.getSymbol())) {
-               boughtPrice = oldTransaction.getTotal();
-               break;
+            Transaction otherTransaction = made.getTransaction();
+            if (otherTransaction.getSymbol().equals(transaction.getSymbol())) {
+               sumQtyPrice = sumQtyPrice + otherTransaction.getTotal() * otherTransaction.getQuantity();
+               sumQty = sumQty + otherTransaction.getQuantity();
             }
          }
 
-         float soldPrice = transaction.getTotal();
-         if (boughtPrice != soldPrice) { // No need to update score if prices are the same
-            calculateScoreAndUpdate(boughtPrice, soldPrice, user);
+         if (sumQty != 0) {
+            calculateScoreAndUpdate(sumQtyPrice, sumQty, transaction, user);
+         } else {
+            throw new EntityNotFoundException("Transaction not found while selling stock!");
          }
       }
    }
 
-   private void calculateScoreAndUpdate(float boughtPrice, float soldPrice, User user) {
-      if (boughtPrice > 0) {
-         double score = soldPrice - boughtPrice;
-         double updatedScore = user.getScore() + score;
-         user.setScore(updatedScore);
-         userDao.save(user);
-      } else {
-         throw new EntityNotFoundException("Transaction not found while selling stock!");
+   private void calculateScoreAndUpdate(float sumQtyPrice, float sumQty, Transaction transaction, User user) {
+      int roundedBoughtPrice = Math.round(sumQtyPrice / sumQty);
+      float soldPrice = transaction.getTotal();
+      if (roundedBoughtPrice == soldPrice) {
+         return; // No need to update score if prices are the same
       }
+      double score = soldPrice - roundedBoughtPrice;
+      double updatedScore = user.getScore() + score;
+      user.setScore(updatedScore);
+      userDao.save(user);
    }
 
    @Override
