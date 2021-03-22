@@ -18,4 +18,10 @@ describe('loadHistoricalData', () => {
       }).type
     ).toBe('[Stock History] Load Stock Historical Data');
   });
+
+  it('should return an action (all users)', () => {
+    expect(fromActions.loadUserSearchList().type).toBe(
+      '[User Search List] Load all users'
+    );
+  });
 });

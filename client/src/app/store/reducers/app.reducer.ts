@@ -5,6 +5,7 @@ import { AppError } from 'src/app/interfaces/app-error';
 import { Stock } from 'src/app/interfaces/stock';
 import { User, UserProfile } from 'src/app/interfaces/user';
 import * as appActions from '../actions/app.actions';
+import { UserSearch } from 'src/app/interfaces/userSearch';
 
 export const reducerFeatureKey = 'reducer';
 
@@ -19,6 +20,7 @@ export interface State {
   followings: User[];
   userTransactions: Transaction[];
   userOwnedStocks: Stock[];
+  searchUserList: UserSearch[];
 }
 
 export const initialState: State = {
@@ -32,6 +34,7 @@ export const initialState: State = {
   followings: null,
   userTransactions: null,
   userOwnedStocks: null,
+  searchUserList: null,
 };
 
 export const reducer = createReducer(
@@ -77,6 +80,11 @@ export const reducer = createReducer(
   on(appActions.updateUserOwnedStocks, (state, { stocks }) => ({
     ...state,
     userOwnedStocks: stocks,
+  })),
+
+  on(appActions.loadUserSearchListSuccess, (state, { userSearchList }) => ({
+    ...state,
+    searchUserList: userSearchList,
   })),
 
   on(appActions.setAppError, (state, { errorMessage }) => ({

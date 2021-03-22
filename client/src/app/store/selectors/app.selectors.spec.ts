@@ -2,6 +2,7 @@ import * as appSelectors from '../selectors/app.selectors';
 import * as appReducers from '../reducers/app.reducer';
 import { Stock } from '../../interfaces/stock';
 import { StockHistory } from 'src/app/interfaces/stockHistory';
+import { UserSearch } from 'src/app/interfaces/userSearch';
 
 const stockInfo: Stock = {
   tickerSymbol: 'AC',
@@ -64,6 +65,9 @@ const stockHistoricalData: StockHistory = {
   ],
   currency: 'USD',
 };
+const users: UserSearch[] = [
+  { id: 'u1', firstName: 'Money', lastName: 'Tree', email: 'money@tree.ca' },
+];
 
 describe('Selectors', () => {
   it('should select the currently loaded stock', () => {
@@ -81,5 +85,11 @@ describe('Selectors', () => {
     expect(appSelectors.selectStockHistoricalData.projector(appState)).toBe(
       stockHistoricalData
     );
+  });
+
+  it('should select user list', () => {
+    const appState = appReducers.initialState;
+    appState.searchUserList = users;
+    expect(appSelectors.selectUserSearchList.projector(appState)).toBe(users);
   });
 });

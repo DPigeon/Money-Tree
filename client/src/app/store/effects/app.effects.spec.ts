@@ -8,6 +8,7 @@ import { Effects } from './app.effects';
 import { UserService } from 'src/app/services/user/user.service';
 import { MATERIAL_MODULE_DEPENDENCIES } from 'src/app/shared.module';
 import { StockHistory } from 'src/app/interfaces/stockHistory';
+import { UserSearch } from 'src/app/interfaces/userSearch';
 
 const stockInfo = {
   tickerSymbol: 'AC',
@@ -86,6 +87,10 @@ const userInfo = {
   transactions: [],
 };
 
+const users: UserSearch[] = [
+  { id: 'u1', firstName: 'Money', lastName: 'Tree', email: 'money@tree.ca' },
+];
+
 // Missing error handling cases
 describe('Effects', () => {
   let actions$: Observable<any> = new Observable();
@@ -99,6 +104,7 @@ describe('Effects', () => {
     createNewUser: jest.fn(() => of(userInfo)),
     updateUser: jest.fn(() => of(userInfo)),
     getUser: jest.fn(() => of(userInfo)),
+    getAllUsers: jest.fn(() => of(users)),
     userLogin: jest.fn(() => of(userInfo)),
   } as any;
 
@@ -181,5 +187,14 @@ describe('Effects', () => {
     const backendError = undefined;
     expect(effects.mirrorError(backendError)).toEqual(null);
     done();
+  });
+
+  it('should load user list', (done) => {
+    actions$ = of(appActions.loadUserSearchList());
+    effects.loadUserSearchList$.subscribe((res) => {
+      const key = 'userSearchList';
+      expect(res[key]).toEqual(users);
+      done();
+    });
   });
 });
