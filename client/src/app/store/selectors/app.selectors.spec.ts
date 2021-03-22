@@ -66,7 +66,7 @@ const stockHistoricalData: StockHistory = {
   currency: 'USD',
 };
 const users: UserSearch[] = [
-  { id: 20, firstName: 'Money', lastName: 'Tree', email: 'money@tree.ca' },
+  { id: 'u1', firstName: 'Money', lastName: 'Tree', email: 'money@tree.ca' },
 ];
 
 describe('Selectors', () => {
@@ -90,9 +90,6 @@ describe('Selectors', () => {
   it('should select user list', () => {
     const appState = appReducers.initialState;
     appState.searchUserList = users;
-    // we have our selector (selectCurrentStock)
-    // we pass in the state we want to test it with (appState)
-    // we look for the result (stockInfo)
     expect(appSelectors.selectUserSearchList.projector(appState)).toBe(users);
   });
 });

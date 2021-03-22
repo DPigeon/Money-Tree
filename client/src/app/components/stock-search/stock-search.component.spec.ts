@@ -1,4 +1,3 @@
-import { componentFactoryName } from '@angular/compiler';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import FuzzySearch from 'fuzzy-search';
@@ -49,21 +48,21 @@ describe('StockSearchComponent Unit Test', () => {
     {
       type: 'user',
       name: 'user user',
-      id: '',
+      id: 'u1',
       profileImage:
         'https://moneytree-profile-pictures.s3.amazonaws.com/DEFAULT-profile.jpg',
     },
     {
       type: 'user',
       name: 'money tree',
-      id: '',
+      id: 'u2',
       profileImage:
         'https://moneytree-profile-pictures.s3.amazonaws.com/AGWLLGVS3AJ327O2T-im.jpg',
     },
     {
       type: 'user',
       name: 'tree money',
-      id: '',
+      id: 'u3',
       profileImage:
         'https://moneytree-profile-pictures.s3.amazonaws.com/DEFAULT-profile.jpg',
     },
@@ -151,11 +150,17 @@ describe('StockSearchComponent Unit Test', () => {
   });
 
   it('should return the correct classes', () => {
-    expect(component.redirectSearch('user')).toBe('/profile/');
-    expect(component.redirectSearch('stock')).toBe('/stock-detail/');
     component.selectedSearchOption = 'stocks';
     expect(component.isSelectedClass('stocks')).toBe('selectedOption');
     component.selectedSearchOption = 'users';
     expect(component.isSelectedClass('stocks')).toBe('searchOption');
+  });
+
+  it('should navigate to corresponding page', () => {
+    const routingSpy = jest.spyOn(mockRouter, 'navigate');
+    routingSpy.mockClear();
+    component.navigateTo('user', 'u1', 'me');
+    expect(routingSpy).toHaveBeenCalledTimes(1);
+    expect(component.query).toBe('me');
   });
 });

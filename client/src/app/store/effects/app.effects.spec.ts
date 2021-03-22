@@ -88,7 +88,7 @@ const userInfo = {
 };
 
 const users: UserSearch[] = [
-  { id: 20, firstName: 'Money', lastName: 'Tree', email: 'money@tree.ca' },
+  { id: 'u1', firstName: 'Money', lastName: 'Tree', email: 'money@tree.ca' },
 ];
 
 // Missing error handling cases

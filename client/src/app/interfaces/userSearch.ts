@@ -1,8 +1,7 @@
 export interface UserSearch {
-  id: string;
+  id: string; // username
   firstName: string;
   lastName: string;
-  username?: string;
   avatarURL?: string;
   email: string;
 }

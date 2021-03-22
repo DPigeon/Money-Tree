@@ -18,8 +18,24 @@ const fakeReponse: User = {
   alpacaApiKey: null,
 };
 
-const fakeUsers: UserSearch[] = [
-  { id: 20, firstName: 'Money', lastName: 'Tree', email: 'money@tree.ca' },
+const fakeUsers: any = [
+  {
+    id: 1,
+    username: 'u1',
+    firstName: 'Money',
+    lastName: 'Tree',
+    email: 'money@tree.ca',
+    avatarURL: 'https://icotar.com/avatar/craig',
+  },
+];
+const formateedFakeUsers: UserSearch[] = [
+  {
+    id: 'u1',
+    firstName: 'Money',
+    lastName: 'Tree',
+    email: 'money@tree.ca',
+    avatarURL: 'https://icotar.com/avatar/craig',
+  },
 ];
 
 describe('UserService', () => {
@@ -43,6 +59,6 @@ describe('UserService', () => {
 
   it('should format the user to the expected User Search model', () => {
     const transformedResponse = service.userSearchFormatter(fakeUsers);
-    expect(transformedResponse).toEqual(fakeUsers);
+    expect(transformedResponse).toEqual(formateedFakeUsers);
   });
 });

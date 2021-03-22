@@ -127,7 +127,6 @@ export class UserService {
         id: e.username,
         firstName: e.firstName,
         lastName: e.lastName,
-        username: e.username,
         avatarURL: e.avatarURL,
         email: e.email,
       });

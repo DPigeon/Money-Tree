@@ -66,7 +66,7 @@ const stockHistoricalData = {
   currency: 'USD',
 };
 const users: UserSearch[] = [
-  { id: 20, firstName: 'Money', lastName: 'Tree', email: 'money@tree.ca' },
+  { id: 'u1', firstName: 'Money', lastName: 'Tree', email: 'money@tree.ca' },
 ];
 
 const userInfo: User = {
