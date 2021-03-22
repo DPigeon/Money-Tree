@@ -57,4 +57,13 @@ export class StockDetail {
   getMarketNextOpenMsg(): ElementFinder {
     return element(by.id('market-next-open-msg'));
   }
+  getStockChart(): ElementFinder {
+    return element(by.id('stock-chart'));
+  }
+  getStockUnavailableChart(): ElementFinder {
+    return element(by.id('unavailable-chart'));
+  }
+  getChartOptions(): ElementFinder {
+    return element(by.id('chart-options'));
+  }
 }

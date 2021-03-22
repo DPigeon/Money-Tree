@@ -37,6 +37,33 @@ export class Effects {
       })
     )
   );
+  getStockHistoricalData$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadStockHistoricalData),
+      switchMap((action) => {
+        return this.stockService
+          .loadStockHistoricalData(
+            action.stockTicker,
+            action.chartRange,
+            action.chartInterval
+          )
+          .pipe(
+            map((data) =>
+              appActions.stockHistoricalDataLoadSuccess({
+                stockHistoricalData: data,
+              })
+            ),
+            catchError((data) =>
+              of(
+                appActions.setAppError({
+                  errorMessage: this.mirrorError(data),
+                })
+              )
+            )
+          );
+      })
+    )
+  );
   loadMarketClock$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
       ofType(appActions.loadMarketClock),

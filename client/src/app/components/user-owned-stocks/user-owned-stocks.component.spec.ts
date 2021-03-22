@@ -1,4 +1,3 @@
-import { StockDetailComponent } from './../../pages/stock-detail/stock-detail.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Stock } from 'src/app/interfaces/stock';
 import { StoreFacadeService } from 'src/app/store/store-facade.service';
@@ -6,6 +5,7 @@ import {
   FORM_MODULE_DPENDENCEIES,
   MATERIAL_MODULE_DEPENDENCIES,
   NGRX_STORE_MODULE,
+  NGX_ECHART,
 } from '../../shared.module';
 import { UserOwnedStocksComponent } from './user-owned-stocks.component';
 import { StockDetailHeaderComponent } from '../stock-detail-header/stock-detail-header.component';
@@ -15,6 +15,8 @@ import { HeaderComponent } from '../header/header.component';
 import { StockSearchComponent } from '../stock-search/stock-search.component';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { StockDetailComponent } from './../../pages/stock-detail/stock-detail.component';
+import { StockHistoricalChartComponent } from './../stock-historical-chart/stock-historical-chart.component';
 
 // integration tests
 describe('UserOwnedStocksComponent', () => {
@@ -77,6 +79,7 @@ describe('UserOwnedStocksComponent', () => {
         MATERIAL_MODULE_DEPENDENCIES,
         RouterTestingModule,
         FORM_MODULE_DPENDENCEIES,
+        NGX_ECHART,
       ],
       declarations: [
         StockDetailComponent,
@@ -86,6 +89,7 @@ describe('UserOwnedStocksComponent', () => {
         StockAdditionalInfoComponent,
         HeaderComponent,
         StockSearchComponent,
+        StockHistoricalChartComponent,
       ],
       providers: [
         StoreFacadeService,

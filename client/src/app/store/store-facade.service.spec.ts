@@ -50,6 +50,19 @@ describe('StoreFacadeService', () => {
     );
   });
 
+  it('should dispatch load stock historical data action', () => {
+    const spy = jest.spyOn(store, 'dispatch');
+    service.loadCurrentStockHistoricalData('TSLA', '1d', '5m');
+    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith(
+      appActions.loadStockHistoricalData({
+        stockTicker: 'TSLA',
+        chartRange: '1d',
+        chartInterval: '5m',
+      })
+    );
+  });
+
   it('should dispatach create new user', () => {
     const spy = jest.spyOn(store, 'dispatch');
     service.createNewUser(userInfo);
