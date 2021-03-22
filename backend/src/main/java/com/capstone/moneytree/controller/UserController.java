@@ -193,4 +193,9 @@ public class UserController {
    public ResponseEntity<List<Map<String, String>>> getSearchUsers() {
       return ResponseEntity.ok(userService.getSearchUsers());
    }
+
+   @GetMapping("/leaderboard")
+   public List<SanitizedUser> getLeaderboard(){
+      return userService.getLeaderboard();
+   }
 }
