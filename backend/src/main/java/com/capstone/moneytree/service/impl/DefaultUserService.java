@@ -125,6 +125,7 @@ public class DefaultUserService implements UserService {
         user.setPassword(encryptedPassword);
         user.setAvatarURL(String.format("https://%s.s3.amazonaws.com/%s", bucketName, DEFAULT_PROFILE_NAME));
         user.setCoverPhotoURL(String.format("https://%s.s3.amazonaws.com/%s", bucketName, "COVER-"  + DEFAULT_PROFILE_NAME));
+        user.setScore(0.0);
 
         userDao.save(user);
 

@@ -3,6 +3,7 @@ package com.capstone.moneytree.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.capstone.moneytree.dao.*;
 import com.capstone.moneytree.exception.AlpacaException;
 
 import com.capstone.moneytree.exception.EntityNotFoundException;
@@ -15,11 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.capstone.moneytree.dao.StockDao;
-import com.capstone.moneytree.dao.TransactionDao;
-import com.capstone.moneytree.dao.UserDao;
-import com.capstone.moneytree.dao.MadeDao;
-import com.capstone.moneytree.dao.ToFulfillDao;
 import com.capstone.moneytree.facade.AlpacaSession;
 import com.capstone.moneytree.model.MoneyTreeOrderType;
 import com.capstone.moneytree.model.TransactionStatus;
@@ -98,13 +94,17 @@ public class DefaultTransactionService implements TransactionService {
          Stock stock = stockDao.findBySymbol(order.getSymbol());
          if (stock == null) { // if database does not have this stock object create and save it
             KeyStats stockInfo = stockMarketDataService.getKeyStats(order.getSymbol());
-            stock = Stock.builder().symbol(order.getSymbol()).companyName(stockInfo.getCompanyName()).build();
+            stock = Stock.builder()
+                    .symbol(order.getSymbol())
+                    .companyName(stockInfo.getCompanyName())
+                    .build();
             stockDao.save(stock);
          }
 
          LOGGER.info("Executed order {}", alpacaOrder.getClientOrderId());
 
          transaction = constructTransactionFromOrder(alpacaOrder);
+         updateUserScore(order, user, transaction);
          transactionDao.save(transaction);
 
          /*
@@ -127,12 +127,50 @@ public class DefaultTransactionService implements TransactionService {
    }
 
    private Transaction constructTransactionFromOrder(Order alpacaOrder) {
-      return Transaction.builder().status(TransactionStatus.PENDING).purchasedAt(alpacaOrder.getCreatedAt())
+      return Transaction.builder()
+              .status(TransactionStatus.PENDING)
+              .purchasedAt(alpacaOrder.getCreatedAt())
               .clientOrderId(alpacaOrder.getClientOrderId())
               .moneyTreeOrderType(MoneyTreeOrderType
                       .valueOf(alpacaOrder.getType().toUpperCase() + "_" + alpacaOrder.getSide().toUpperCase()))
               .quantity(Float.parseFloat(alpacaOrder.getQty())).purchasedAt(alpacaOrder.getSubmittedAt())
-              .symbol(alpacaOrder.getSymbol()).build(); // avg price and total will be set only if stock got fulfilled
+              .symbol(alpacaOrder.getSymbol())
+              .build(); // avg price and total will be set only if stock got fulfilled
+   }
+
+   // ISSUE-346
+   public void updateUserScore(Order order, User user, Transaction transaction) {
+      // Formula: sum(price * qty)/sum(qty)
+      if (order.getSide().equals("sell")) {
+         float sumQtyPrice = 0;
+         float sumQty = 0;
+         List<Made> userMade = madeDao.findByUserId(user.getId());
+         for (Made made : userMade) {
+            Transaction otherTransaction = made.getTransaction();
+            if (otherTransaction.getSymbol().equals(transaction.getSymbol())) {
+               sumQtyPrice = sumQtyPrice + otherTransaction.getTotal() * otherTransaction.getQuantity();
+               sumQty = sumQty + otherTransaction.getQuantity();
+            }
+         }
+
+         if (sumQty != 0) {
+            calculateScoreAndUpdate(sumQtyPrice, sumQty, transaction, user);
+         } else {
+            throw new EntityNotFoundException("Transaction not found while selling stock!");
+         }
+      }
+   }
+
+   private void calculateScoreAndUpdate(float sumQtyPrice, float sumQty, Transaction transaction, User user) {
+      int roundedBoughtPrice = Math.round(sumQtyPrice / sumQty);
+      float soldPrice = transaction.getTotal();
+      if (roundedBoughtPrice == soldPrice) {
+         return; // No need to update score if prices are the same
+      }
+      double score = soldPrice - roundedBoughtPrice;
+      double updatedScore = user.getScore() + score;
+      user.setScore(updatedScore);
+      userDao.save(user);
    }
 
    @Override

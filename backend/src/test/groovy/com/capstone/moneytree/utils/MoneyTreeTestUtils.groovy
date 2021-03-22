@@ -53,18 +53,19 @@ class MoneyTreeTestUtils {
    }
 
    static Order createOrder(String id, String symbol, String qty, String type, String timeInForce) {
-      return new Order(id, null, null, null, null, null, null,
+      return new Order(id, "1000000", ZonedDateTime.now(), ZonedDateTime.now(), ZonedDateTime.now(), ZonedDateTime.now(), null,
               null, null, null, null, null, null, symbol, null,
               qty, null, type, null, timeInForce, null, null, null, null,
               null, null, null, null, null)
    }
 
-   static Transaction createTransaction(String symbol, float avgPrice, float total, TransactionStatus status) {
+   static Transaction createTransaction(String symbol, float avgPrice, float total, TransactionStatus status, float qty) {
       return Transaction.builder()
                .symbol(symbol)
                .avgPrice(avgPrice)
                .total(total)
                .status(status)
+               .quantity(qty)
                .build()
    }
 

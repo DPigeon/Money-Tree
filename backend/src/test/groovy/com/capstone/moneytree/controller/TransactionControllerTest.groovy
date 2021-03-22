@@ -1,7 +1,6 @@
 package com.capstone.moneytree.controller
 
 import com.capstone.moneytree.dao.StockDao
-import com.capstone.moneytree.model.node.Stock
 import com.capstone.moneytree.model.node.Transaction
 import com.capstone.moneytree.service.impl.DefaultTransactionService
 

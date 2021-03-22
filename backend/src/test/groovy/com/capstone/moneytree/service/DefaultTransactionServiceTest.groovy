@@ -17,6 +17,9 @@ import com.capstone.moneytree.model.relationship.Made
 import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.api.TransactionService
 import com.capstone.moneytree.service.impl.DefaultTransactionService
+import net.jacobpeterson.domain.alpaca.order.Order
+
+import java.time.ZonedDateTime
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildMarketOrder
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildTransactions
@@ -29,6 +32,11 @@ import net.jacobpeterson.alpaca.enums.OrderTimeInForce
 import net.jacobpeterson.domain.alpaca.account.Account
 import net.jacobpeterson.domain.alpaca.asset.Asset
 import spock.lang.Specification
+
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createMadeRelationship
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createOrder
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createTransaction
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
 
 /**
  * This class is used to test all basic implementation for the Transaction Service.
@@ -163,6 +171,165 @@ class DefaultTransactionServiceTest extends Specification {
 
         then:
         thrown(AlpacaException)
+    }
+
+    def "Should update user score properly with positive score"() {
+        given: "A user with an order and an old transaction executed"
+        String symbol = "TSLA"
+        float price1 = 10
+        float price2 = 20
+        float price3 = 5
+        float qty1 = 5
+        float qty2 = 3
+        float qty3 = 1
+        float boughtPrice = 13
+        float soldPrice = 40
+        double initialScore = 20
+        double finalScore = initialScore + soldPrice - boughtPrice
+        User user = createUser("test@test.com", "user", "pass", "User", "Name", "key")
+        user.setId(10)
+        user.setScore(initialScore)
+        Order order = createOrder("1", symbol, "10", "market", "DAY");
+        order.setSide("sell")
+        Transaction transaction1 = createTransaction(symbol, 15, price1, TransactionStatus.COMPLETED, qty1)
+        Transaction transaction2 = createTransaction(symbol, 15, price2, TransactionStatus.COMPLETED, qty2)
+        Transaction transaction3 = createTransaction(symbol, 15, price3, TransactionStatus.COMPLETED, qty3)
+        List<Made> madeList = List.of(
+                createMadeRelationship(user, transaction1, ZonedDateTime.now()),
+                createMadeRelationship(user, transaction2, ZonedDateTime.now()),
+                createMadeRelationship(user, transaction3, ZonedDateTime.now()))
+        Transaction currentTransaction = createTransaction(symbol, 15, soldPrice, TransactionStatus.COMPLETED, 1)
+
+        and: "mock database"
+        madeDao.findByUserId(user.getId()) >> madeList
+        userDao.save(user) >> user
+
+        and: "verify the initial user's score"
+        user.getScore() == initialScore
+
+        when: "Updating a user's score"
+        transactionService.updateUserScore(order, user, currentTransaction)
+
+        then: "User should have made +27 points"
+        user.getScore() == finalScore
+    }
+
+    def "Should not update the user's score when prices are equal"() {
+        given: "A user with an order and an old transaction executed"
+        String symbol = "TSLA"
+        float boughtPrice = 25
+        float soldPrice = 25
+        double initialScore = 100
+        double finalScore = 100
+        User user = createUser("test@test.com", "user", "pass", "User", "Name", "key")
+        user.setId(10)
+        user.setScore(initialScore)
+        Order order = createOrder("1", symbol, "10", "market", "DAY");
+        order.setSide("sell")
+        Transaction transaction = createTransaction(symbol, 15, boughtPrice, TransactionStatus.COMPLETED, 1)
+        List<Made> madeList = List.of(createMadeRelationship(user, transaction, ZonedDateTime.now()))
+        Transaction currentTransaction = createTransaction(symbol, 15, soldPrice, TransactionStatus.COMPLETED, 1)
+
+        and: "mock database"
+        madeDao.findByUserId(user.getId()) >> madeList
+
+        and: "verify the initial user's score"
+        user.getScore() == initialScore
+
+        when: "Updating a user's score"
+        transactionService.updateUserScore(order, user, currentTransaction)
+
+        then: "No updates made to user's score"
+        0 * userDao.save(user)
+        user.getScore() == initialScore
+        user.getScore() == finalScore
+    }
+
+    def "Should update user score properly with negative score"() {
+        given: "A user with an order and an old transaction executed"
+        String symbol = "TSLA"
+        float price1 = 10
+        float price2 = 20
+        float price3 = 5
+        float qty1 = 5
+        float qty2 = 3
+        float qty3 = 1
+        float boughtPrice = 13
+        float soldPrice = 1
+        double initialScore = 10
+        double finalScore = initialScore + soldPrice - boughtPrice
+        User user = createUser("test@test.com", "user", "pass", "User", "Name", "key")
+        user.setId(10)
+        user.setScore(initialScore)
+        Order order = createOrder("1", symbol, "10", "market", "DAY");
+        order.setSide("sell")
+        Transaction transaction1 = createTransaction(symbol, 15, price1, TransactionStatus.COMPLETED, qty1)
+        Transaction transaction2 = createTransaction(symbol, 15, price2, TransactionStatus.COMPLETED, qty2)
+        Transaction transaction3 = createTransaction(symbol, 15, price3, TransactionStatus.COMPLETED, qty3)
+        List<Made> madeList = List.of(
+                createMadeRelationship(user, transaction1, ZonedDateTime.now()),
+                createMadeRelationship(user, transaction2, ZonedDateTime.now()),
+                createMadeRelationship(user, transaction3, ZonedDateTime.now()))
+        Transaction currentTransaction = createTransaction(symbol, 15, soldPrice, TransactionStatus.COMPLETED, 1)
+
+        and: "mock database"
+        madeDao.findByUserId(user.getId()) >> madeList
+        userDao.save(user) >> user
+
+        and: "verify the initial user's score"
+        user.getScore() == initialScore
+
+        when: "Updating a user's score"
+        transactionService.updateUserScore(order, user, currentTransaction)
+
+        then: "User should have made -12 points"
+        user.getScore() == finalScore
+    }
+
+    def "Should not update user score if not a sell order"() {
+        given: "A user buying a stock"
+        String symbol = "TSLA"
+        User user = createUser("test@test.com", "user", "pass", "User", "Name", "key")
+        user.setId(5)
+        Order order = createOrder("1", symbol, "10", "market", "DAY");
+        order.setSide("buy")
+        Transaction currentTransaction = createTransaction(symbol, 15, 15, TransactionStatus.COMPLETED, 1)
+
+        when: "Updating a user's score"
+        transactionService.updateUserScore(order, user, currentTransaction)
+
+        then: "Database should not be called"
+        0 * madeDao.findByUserId(user.getId())
+    }
+
+    def "Should throw exception when transaction is not found"() {
+        given: "A user with an order and an old transaction executed"
+        String symbol1 = "TSLA"
+        String symbol2 = "AAPL"
+        float boughtPrice = 10
+        float soldPrice = 40
+        double initialScore = 10
+        User user = createUser("test@test.com", "user", "pass", "User", "Name", "key")
+        user.setId(10)
+        user.setScore(initialScore)
+        Order order = createOrder("1", symbol1, "10", "market", "DAY");
+        order.setSide("sell")
+        Transaction transaction = createTransaction(symbol1, 15, boughtPrice, TransactionStatus.COMPLETED, 1)
+        List<Made> madeList = List.of(createMadeRelationship(user, transaction, ZonedDateTime.now()))
+        Transaction currentTransaction = createTransaction(symbol2, 15, soldPrice, TransactionStatus.COMPLETED, 1)
+
+        and: "mock database"
+        madeDao.findByUserId(user.getId()) >> madeList
+        userDao.save(user) >> user
+
+        and: "verify the initial user's score"
+        user.getScore() == initialScore
+
+        when: "Updating a user's score"
+        transactionService.updateUserScore(order, user, currentTransaction)
+
+        then: "Transaction not found exception thrown"
+        thrown(EntityNotFoundException)
     }
 
     Stock buildStock(Asset asset) {
