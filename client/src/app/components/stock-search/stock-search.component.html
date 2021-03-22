@@ -40,8 +40,7 @@
     <mat-option
       *ngFor="let item of searchResults"
       [value]="item"
-      [routerLink]="redirectSearch(item.type) + item.id"
-      (click)="query = item.name"
+      (click)="navigateTo(item.type,item.id, item.name) "
     >
       <div class="option-container">
         <div class="picture-name">

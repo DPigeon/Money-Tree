@@ -73,7 +73,7 @@ export class StockSearchComponent implements OnInit {
       allSearch.push({
         type: u.type,
         name: u.firstName + ' ' + u.lastName,
-        id: '',
+        id: u.id,
         profileImage: u.avatarURL,
       });
     });
@@ -83,7 +83,7 @@ export class StockSearchComponent implements OnInit {
   queryFilter(e: KeyboardEvent): void {
     if (this.query === '') {
       this.searchResults = [];
-      this.selectedSearchOption ='all'
+      this.selectedSearchOption = 'all';
     } else {
       if (this.selectedSearchOption === 'users') {
         this.searchResults = this.userSearcher.search(this.query).slice(0, 10);
@@ -101,11 +101,18 @@ export class StockSearchComponent implements OnInit {
 
   handleKeyboardSelectionEvent(): void {
     if (this.activeOption.id !== '' || this.activeOption.name !== '') {
-      this.router.navigate([this.redirectSearch(this.activeOption.type)+ this.activeOption.id]);
+      this.navigateTo(
+        this.activeOption.type,
+        this.activeOption.id,
+        this.activeOption.name
+      );
       this.query = this.activeOption.name;
     } else if (this.searchResults.length > 0) {
-      this.router.navigate([this.redirectSearch(this.searchResults[0].type) + this.searchResults[0].id]);
-      this.query = this.searchResults[0].name;
+      this.navigateTo(
+        this.searchResults[0].type,
+        this.searchResults[0].id,
+        this.searchResults[0].name
+      );
     }
   }
 
@@ -118,12 +125,17 @@ export class StockSearchComponent implements OnInit {
       };
     }
   }
+
   isSelectedClass(type: string): string {
     return type === this.selectedSearchOption
       ? 'selectedOption'
       : 'searchOption';
   }
-  redirectSearch(type: string): string {
-    return type === 'user' ? '/profile/' : '/stock-detail/';
+
+  navigateTo(type: string, id: string, name: string): void {
+    this.router.navigate([
+      type === 'user' ? '/profile/' : '/stock-detail/' + id,
+    ]);
+    this.query = name;
   }
 }
