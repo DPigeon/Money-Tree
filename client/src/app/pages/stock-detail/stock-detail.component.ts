@@ -47,10 +47,10 @@ export class StockDetailComponent implements OnInit {
       this.chartRange,
       this.chartInterval
     );
-    if( !!this.stockHistoricalData$){
-    this.showStockChart = true;
+    if (!!this.stockHistoricalData$) {
+      this.showStockChart = true;
     }
-   
+
     this.router.events
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
       .subscribe(() => {
