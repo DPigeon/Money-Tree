@@ -53,7 +53,7 @@ import * as echarts from 'echarts';
 
 // analytics
 import { NgxHotjarModule } from 'ngx-hotjar';
-import { ProfileInformationComponent } from './components/profile-information/profile-information.component';
+
 
 
 @NgModule({
@@ -78,7 +78,6 @@ import { ProfileInformationComponent } from './components/profile-information/pr
     TransactionHistoryComponent,
     ListOfFollowsComponent,
     StockHistoricalChartComponent,
-    ProfileInformationComponent,
   ],
   imports: [
     BrowserModule,
