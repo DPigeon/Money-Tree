@@ -3,6 +3,7 @@ import { HeaderComponent } from '../../components/header/header.component';
 import { TransactionHistoryComponent } from '../../components/transaction-history/transaction-history.component';
 import { ProfileComponent } from './profile.component';
 import { StockSearchComponent } from '../../components/stock-search/stock-search.component';
+import { ListOfFollowsComponent } from 'src/app/components/list-of-follows/list-of-follows.component';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
   FORM_MODULE_DPENDENCEIES,
@@ -65,6 +66,8 @@ const fakeFollowingsList: User[] = [
 ];
 
 const fakeCompleteUserProfile: UserProfile = {
+  coverPhotoURL:'https://www.cn.ca/-/media/Images/Stories/2021/20210222-RISE-Employee-Resource-Group-600X400.jpg',
+  avatarURL:'https://www.cn.ca/-/media/Images/Stories/2021/20210222-RISE-Employee-Resource-Group-600X400.jpg',
   id: 5,
   firstName: 'profileUserFirstname',
   lastName: 'profileUserLastName',
@@ -90,6 +93,7 @@ describe('ProfileComponent', () => {
         HeaderComponent,
         TransactionHistoryComponent,
         StockSearchComponent,
+        ListOfFollowsComponent,
       ],
       providers: [NGRX_STORE_MODULE],
     }).compileComponents();
