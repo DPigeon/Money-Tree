@@ -130,4 +130,7 @@ export class ProfileComponent implements OnInit {
       this.followButtonDisabled = false;
     }, 200);
   }
+  bioText(): string {
+    return this.completeUserProfile.biography.length > 0 ? this.completeUserProfile.biography : 'This user has no biography yet.';
+  }
 }

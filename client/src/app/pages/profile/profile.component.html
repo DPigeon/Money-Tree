@@ -1,14 +1,30 @@
 <app-header></app-header>
 
-<app-profile-information class="profile-info-container" [currentProfileUser]="currentProfileUser$ | async">
-</app-profile-information>
+<div class="profile-info-container">
+    <div class="picture-wrap">
+        <img alt="cover picture" class="cover-picture" src="{{completeUserProfile.coverPhotoURL}}">
+        <img alt="profile picture" class="profile-picture" src="{{completeUserProfile.avatarURL}}">
+    </div>
+    <div class="labels">
+        <div class="username"> {{ completeUserProfile.username }} </div>
+        <mat-chip class="industry">TECH
+        </mat-chip>
+        <div class="followers-follwings-container" *ngIf="completeUserProfile">
+            <button mat-button class="follow-unfollow-label" (click)="openDialog('followers')">{{getFollowers().length}}
+                followers</button>
+            <button mat-button class="follow-unfollow-label"
+                (click)="openDialog('followings')">{{getFollowings().length}}
+                followings</button>
+            <button mat-button class="follow-unfollow-button" *ngIf="!isLoggedInUserProfile()"
+                (click)="followOrUnfollow()" [disabled]="followButtonDisabled">{{followButtonLabel()}}</button>
+        </div>
+        <button mat-button>FOOLOWSGOT</button>
+    </div>
+    <mat-card class="bio">
+        {{ bioText() }}
+    </mat-card>
+
+</div>
+
 <app-transaction-history class="transaction-history-container" [currentProfileUser]="currentProfileUser$ | async">
 </app-transaction-history>
-<div class="followers-follwings-container" *ngIf="completeUserProfile">
-    <button mat-button class="follow-unfollow-label" (click)="openDialog('followers')">{{getFollowers().length}}
-        followers</button>
-    <button mat-button class="follow-unfollow-label" (click)="openDialog('followings')">{{getFollowings().length}}
-        followings</button>
-    <button mat-button class="follow-unfollow-button" *ngIf="!isLoggedInUserProfile()" (click)="followOrUnfollow()"
-        [disabled]="followButtonDisabled">{{followButtonLabel()}}</button>
-</div>
