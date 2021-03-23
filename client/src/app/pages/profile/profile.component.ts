@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
   ngOnInit(): void {
     let username = this.route.snapshot.paramMap.get('username');
     this.storeFacade.loadCurrentProfileUser(username);
@@ -142,5 +142,16 @@ export class ProfileComponent implements OnInit {
   }
   bioText(): string {
     return this.completeUserProfile.biography.length > 0 ? this.completeUserProfile.biography : 'This user has no biography yet.';
+  }
+  getInvestorType():string {
+    let counts = {};
+    console.log('stock',this.completeUserProfile.portfolio)
+    console.log('transaction',this.completeUserProfile.transactions)
+    this.completeUserProfile.portfolio.forEach((element) => {
+      //console.log('industry',element.industry)
+      counts[element.industry] ? counts[element.industry] += 1 : counts[element.industry] = 1;
+    })
+    //console.log('Investor types', counts);
+    return "REEEE";
   }
 }

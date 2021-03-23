@@ -7,8 +7,6 @@
     </div>
     <div class="labels">
         <div class="username"> {{ completeUserProfile.username }} </div>
-        <mat-chip class="industry">TECH
-        </mat-chip>
         <div class="followers-follwings-container" *ngIf="completeUserProfile">
             <button mat-button class="follow-unfollow-label" (click)="openDialog('followers')">{{getFollowers().length}}
                 followers</button>
@@ -18,7 +16,6 @@
             <button mat-button class="follow-unfollow-button" *ngIf="!isLoggedInUserProfile()"
                 (click)="followOrUnfollow()" [disabled]="followButtonDisabled">{{followButtonLabel()}}</button>
         </div>
-        <button mat-button>FOOLOWSGOT</button>
     </div>
     <mat-card class="bio">
         {{ bioText() }}
