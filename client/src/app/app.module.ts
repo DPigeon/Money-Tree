@@ -50,6 +50,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
 import { NgxHotjarModule } from 'ngx-hotjar';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
+import { ProfileInformationComponent } from './components/profile-information/profile-information.component';
 
 
 @NgModule({
@@ -72,6 +73,7 @@ import { TransactionHistoryComponent } from './components/transaction-history/tr
     StockAdditionalInfoComponent,
     ProfileComponent,
     TransactionHistoryComponent,
+    ProfileInformationComponent,
   ],
   imports: [
     BrowserModule,

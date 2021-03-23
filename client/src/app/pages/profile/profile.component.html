@@ -1,3 +1,6 @@
 <app-header></app-header>
+
+<app-profile-information class="profile-info-container" [currentProfileUser]="currentProfileUser$ | async">
+</app-profile-information>
 <app-transaction-history class="transaction-history-container" [currentProfileUser]="currentProfileUser$ | async">
 </app-transaction-history>
