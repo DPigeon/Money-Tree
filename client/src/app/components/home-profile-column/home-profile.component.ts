@@ -35,7 +35,6 @@ export class HomeProfileComponent implements OnChanges {
       .navigate(['/profile/' + this.currentUser.username])
       .then(() => this.storeFacade.loadUserTransactions(this.currentUser.id));
   }
-
   openDialog(): void {
     const dialogRef = this.dialog.open(EditProfileComponent, {
       data: this.currentUser,
