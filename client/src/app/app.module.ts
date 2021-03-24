@@ -54,6 +54,8 @@ import * as echarts from 'echarts';
 // analytics
 import { NgxHotjarModule } from 'ngx-hotjar';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
