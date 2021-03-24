@@ -75,6 +75,7 @@ const fakeCompleteUserProfile: UserProfile = {
   score: 150,
   followers: fakeFollowersList,
   following: fakeFollowingsList,
+  biography:"Here comes the pain train!"
 };
 
 describe('ProfileComponent', () => {
@@ -149,5 +150,13 @@ describe('ProfileComponent', () => {
     component.followOrUnfollow();
     expect(unfollowSpy).toHaveBeenCalled();
     expect(loadCurrentProfileUserSpy).toHaveBeenCalled();
+  });
+
+  it('should print the right message for bio', () => {
+    expect(component.bioText()).toEqual('Here comes the pain train!');
+    component.completeUserProfile.biography = '';
+    expect(component.bioText()).toEqual('This user has no biography yet.');
+    component.completeUserProfile.biography = null;
+    expect(component.bioText()).toEqual('This user has no biography yet.');
   });
 });

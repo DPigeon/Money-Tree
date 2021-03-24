@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<div class="profile-info-container">
+<div class="profile-info-container" *ngIf="completeUserProfile">
     <div class="picture-wrap">
         <img alt="cover picture" class="cover-picture" src="{{completeUserProfile.coverPhotoURL}}">
         <img alt="profile picture" class="profile-picture" src="{{completeUserProfile.avatarURL}}">
