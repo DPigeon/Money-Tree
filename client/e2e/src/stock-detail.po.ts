@@ -66,4 +66,27 @@ export class StockDetail {
   getChartOptions(): ElementFinder {
     return element(by.id('chart-options'));
   }
+  getStockStockBuyButton(): ElementFinder {
+    return element(by.buttonText('BUY'));
+  }
+  getStockQuantityInput(): ElementFinder {
+    return element(by.id('stock-quantity-input'));
+  }
+  getPopupStockActionButton(): ElementFinder {
+    return element(by.className('sell-buy-button'));
+  }
+  getStockConfirmationSnackBar(): ElementFinder {
+    return element(by.className("mat-snack-bar-container"));
+  }
+  placeMarketOrder() {
+    this.navigateToStockDetailPage('bb');
+    const buyButton = this.getStockStockBuyButton();
+    buyButton.click();
+    browser.sleep(1000);
+    const quantityInput = this.getStockQuantityInput();
+    quantityInput.sendKeys(1);
+    const popupBuyButton = this.getPopupStockActionButton();
+    browser.sleep(1000);
+    popupBuyButton.click();
+  }
 }

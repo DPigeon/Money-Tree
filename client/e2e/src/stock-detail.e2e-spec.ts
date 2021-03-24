@@ -63,4 +63,14 @@ describe('stock detail page system test', () => {
     });
     browser.sleep(5000);
   });
+
+  it('should place a market buy order', () => {
+    browser.sleep(2000);
+    page.placeMarketOrder();
+    expect(page.getStockConfirmationSnackBar().isPresent()).toBeTruthy();
+  })
+  it('should place a market sell order', () => {
+    page.placeMarketOrder();
+
+  })
 });

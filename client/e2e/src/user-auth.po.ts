@@ -14,7 +14,7 @@ const systemTestUser2 = {
   score: 12,
   rank: 10000,
   balance: 223,
-  alpacaApiKey: '123-456-789',
+  alpacaApiKey: 'bc3b0e9a-30d4-4f99-9bcd-b324417eb428', // this is local to my only for my system test
   portfolio: [],
   transactions: [],
 };
