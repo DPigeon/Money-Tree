@@ -37,12 +37,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -381,6 +376,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+
     public List<User> getTopUsers(String symbol) {
         List<User> users = new ArrayList<>();
         // get a list of all user who own a stock with this symbol
@@ -404,6 +400,19 @@ public class DefaultUserService implements UserService {
         return users.stream()
                 .limit(top10percent)
                 .collect(toList());
+    }
+  
+    public List<SanitizedUser> getLeaderboard() {
+        return userDao.findAll().stream()
+                // discarding null scores
+                .filter(user -> user.getScore()!=null)
+                // sort by score desc
+                .sorted(Comparator.comparing(User::getScore).reversed())
+                // sanitize user list
+                .map(SanitizedUser::new)
+                // limit to 50 top investors
+                .limit(50)
+                .collect(Collectors.toList());
     }
 
     @Override

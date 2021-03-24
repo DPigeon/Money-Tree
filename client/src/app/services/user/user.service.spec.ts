@@ -1,3 +1,4 @@
+import { DataFormatter } from './../../utilities/data-formatters';
 import { TestBed } from '@angular/core/testing';
 import { UserService } from './user.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -40,6 +41,7 @@ const formateedFakeUsers: UserSearch[] = [
 
 describe('UserService', () => {
   let service: UserService;
+  const dataFormatter = new DataFormatter();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -53,12 +55,12 @@ describe('UserService', () => {
   });
 
   it('should format the user to the expected User model', () => {
-    const transformedResponse = service.userFormatter(fakeReponse);
+    const transformedResponse = dataFormatter.userFormatter(fakeReponse);
     expect(transformedResponse).toEqual(fakeReponse);
   });
 
   it('should format the user to the expected User Search model', () => {
-    const transformedResponse = service.userSearchFormatter(fakeUsers);
+    const transformedResponse = dataFormatter.userSearchFormatter(fakeUsers);
     expect(transformedResponse).toEqual(formateedFakeUsers);
   });
 });

@@ -3,23 +3,68 @@
   position: relative;
 }
 .transaction-history-container {
-  position: absolute;
-  right: 3em;
-  bottom: 3em;
-  width: 345px;
-  height: 375px;
+  display: flex;
 }
-.followers-follwings-container {
-  .follow-unfollow-label {
-    color: $primary-color;
-    text-decoration: underline;
-    font-size: medium;
+
+.profile-right-col {
+  padding-right: 5vw;
+  padding-top:  1.5rem;
+}
+
+.profile-info-container {
+  padding: 1.5rem 5vw;
+  height: 500px;
+  .picture-wrap {
+    height: 60%;
+    width: 100%;
+    position: relative;
+    .cover-picture {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+    }
+    .profile-picture {
+      position: absolute;
+      border-radius: 50%;
+      height: 125px;
+      width: 125px;
+      left: 5em;
+      top: 12em;
+      border: white solid 5px;
+    }
   }
-  .follow-unfollow-button {
-    color: white;
-    background-color: $primary-color;
-    margin: 2px;
-    width: 150px;
-    text-align: center;
+  .profile-information-row {
+    display: flex;
+    align-items: center;
+    margin-top: 2.2rem;
+    justify-content: space-between;
+     .username{
+      margin-left: 1em;
+      font-weight: bold;
+      color: rgba(0,0,0,0.7);
+      font-size: 20px;
+    }
+    .followers-follwings-container {
+      .follow-unfollow-label {
+        color: $primary-color;
+        text-decoration: underline;
+        font-size: medium;
+      }
+      .follow-unfollow-button {
+        color: white;
+        background-color: $primary-color;
+        margin: 2px;
+        width: 150px;
+        text-align: center;
+      }
+    }
+    .industry {
+      font-weight: 300;
+    }
+  }
+  .bio {
+    top: 5em;
+    width: 96%;
+    height: auto;
   }
 }
