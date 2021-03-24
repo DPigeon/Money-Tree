@@ -1,8 +1,7 @@
 import { StoreFacadeService } from 'src/app/store/store-facade.service';
-import { Component, OnInit, AfterContentInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/interfaces/user';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-leaderboard',

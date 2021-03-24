@@ -16,7 +16,7 @@
                 <ng-container *ngFor="let user of topUsers; index as i">
                     <div class="leaderboard-users-container">
                         <div class="img-container">
-                            <img class="user-picture" alt="Profile Picture" width="40" height="40"
+                            <img class="user-picture" id="user-image" alt="Profile Picture" width="40" height="40"
                                 src="{{user.avatarURL}}" (click)="navigateToProfile(user.username)" />
                         </div>
                         <div class="user-rank">{{i+1}}</div>
