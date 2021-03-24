@@ -49,6 +49,14 @@ describe('profile page system tests', () => {
         const profileBio = page.getProfileBio();
         expect(profileBio.getText()).toBe(updatedBioText);
         browser.sleep(1000);
+    });
+
+    it('should be able to search for a username', () => {
+        const searchbar = stockDetail.getStockSearchBar();
+        searchbar.sendKeys("SystemTestUser");
+        const firstSearchResult = stockDetail.getFirstSearchResult();
+        browser.sleep(2000);
+        expect(firstSearchResult).toMatch('System Test\n' + 'SystemTestUser');
     })
 });
 
