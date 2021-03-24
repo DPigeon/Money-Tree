@@ -130,42 +130,32 @@ export class UserService {
       .get(`users/${userId}/owned_by_followers/${symbol}`)
       .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
   }
-
-  getPortfolioHistoricalData(
+  
+  loadPortfolioHistoricalData(
     userId: string,
     periodLength: number,
     periodUnit: string,
     timeFrame: string,
     dateEnd: string,
     extendedHours: string
-  ): Promise<StockHistory> {
-    return new Promise((resolve, reject) => {
-      this.api
-        .get(
-          'alpaca/portfolio/userId=' +
-            userId +
-            '&period=' +
-            periodLength +
-            '&unit=' +
-            periodUnit +
-            '&timeframe=' +
-            timeFrame +
-            '&dateend=' +
-            dateEnd +
-            '&extended=' +
-            extendedHours
-        )
-        .subscribe(
-          (result: any) => {
-            resolve(this.formatAlpacaPortfolio(result.body));
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
+  ): Observable<StockHistory> {
+    return this.api
+      .get(
+        'alpaca/portfolio/userId=' +
+          userId +
+          '&periodLength=' +
+          periodLength +
+          '&periodUnit=' +
+          periodUnit +
+          '&timeFrame=' +
+          timeFrame +
+          '&dateEnd=' +
+          dateEnd +
+          '&extendedHours=' +
+          extendedHours
+      )
+      .pipe(map((res: Response) => this.dataFormatter.formatAlpacaPortfolio(res.body)));
   }
-
   formatAlpacaPortfolio(response: any): StockHistory {
     const stockHistoricalData: StockHistory = {
       symbol: '',

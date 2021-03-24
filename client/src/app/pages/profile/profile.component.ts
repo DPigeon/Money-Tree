@@ -14,8 +14,12 @@ import { UserService } from 'src/app/services/user/user.service';
 import { StockHistory } from 'src/app/interfaces/stockHistory';
 
 export interface ChartDataOptions {
-  range: string;
-  interval: string;
+  userId: string;
+  periodLength: number;
+  periodUnit: string;
+  timeFrame: string;
+  dateEnd: Date;
+  extendedHours: string;
 }
 @Component({
   selector: 'app-profile',
@@ -29,8 +33,14 @@ export class ProfileComponent implements OnInit {
   followers: User[];
   followings: User[];
   followButtonDisabled = false;
-  profileHistoryChartData: StockHistory;
-  userId = '';
+  portfolioHistoricalData$ = this.storeFacade.stockHistoricalDataLoaded$;
+  showPortfolioChart = false;
+  userId= '';
+  periodLength: 1;
+  periodUnit: 'D';
+  timeFrame: '5Min';
+  dateEnd:"2021-05-05";
+  extendedHours: '1D';
   constructor(
     private storeFacade: StoreFacadeService,
     public dialog: MatDialog,
@@ -39,12 +49,13 @@ export class ProfileComponent implements OnInit {
     private userService: UserService
   ) {}
   ngOnInit(): void {
+   
     let username = this.route.snapshot.paramMap.get('username');
     this.storeFacade.loadCurrentProfileUser(username);
     this.currentProfileUser$.subscribe((data: UserProfile) => {
       if (data) {
         this.completeUserProfile = data;
-        this.userId = String(this.completeUserProfile.id);
+        this.userId =this.completeUserProfile.username
       }
     });
     this.storeFacade.currentUser$.subscribe((loggedInUser: User) => {
@@ -52,25 +63,17 @@ export class ProfileComponent implements OnInit {
         this.loggedInUserId = loggedInUser.id;
       }
     });
-
-    const currentDate = new Date();
-
-    this.userService
-      .getPortfolioHistoricalData(
-        String(this.completeUserProfile.id),
-        1,
-        'DAY',
-        'FIFTEEN_MINUTE',
-        currentDate.getFullYear() +
-          '-' +
-          String(currentDate.getMonth() + 1).padStart(2, '0') +
-          '-' +
-          String(currentDate.getDate()).padStart(2, '0'),
-        'false'
-      )
-      .then((res) => {
-        this.profileHistoryChartData = res;
-      });
+    this.storeFacade.loadCurrentPortfolioHistoricalData(
+      this.userId,
+      this.periodLength,
+      this.periodUnit,
+      this.timeFrame,
+      this.dateEnd,
+      this.extendedHours,
+    );
+    if (!!this.portfolioHistoricalData$) {
+      this.showPortfolioChart = true;
+    }
 
     this.router.events
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
@@ -78,22 +81,14 @@ export class ProfileComponent implements OnInit {
         username = this.route.snapshot.paramMap.get('username');
         this.storeFacade.loadCurrentProfileUser(username);
       });
-    this.userService
-      .getPortfolioHistoricalData(
-        this.userId,
-        1,
-        'DAY',
-        'FIFTEEN_MINUTE',
-        currentDate.getFullYear() +
-          '-' +
-          String(currentDate.getMonth() + 1).padStart(2, '0') +
-          '-' +
-          String(currentDate.getDate()).padStart(2, '0'),
-        'false'
-      )
-      .then((res) => {
-        this.profileHistoryChartData = res;
-      });
+    this.storeFacade.loadCurrentPortfolioHistoricalData(
+      this.userId,
+      this.periodLength,
+      this.periodUnit,
+      this.timeFrame,
+      this.dateEnd,
+      this.extendedHours,
+    );
   }
   openDialog(choice: string): void {
     let dialogRef;
@@ -188,74 +183,14 @@ export class ProfileComponent implements OnInit {
       : 'This user has no biography yet.';
   }
 
-  changeChartRangeInterval(chartOptions: ChartDataOptions): void {
-    const currentDate = new Date();
-    let unit = '';
-    let length = 0;
-    let interval = '';
-    switch (chartOptions.range) {
-      case '1d':
-        unit = 'DAY';
-        length = 1;
-        break;
-      case '5d':
-        unit = 'DAY';
-        length = 5;
-        break;
-      case '1mo':
-        unit = 'MONTH';
-        length = 1;
-        break;
-      case '6mo':
-        unit = 'MONTH';
-        length = 6;
-        break;
-      case '1y':
-        unit = 'YEAR';
-        length = 1;
-        break;
-      case '5y':
-        unit = 'YEAR';
-        length = 5;
-        break;
-      default:
-      case '5y':
-        // to be changed in the futur
-        unit = 'YEAR';
-        length = 5;
-        break;
-    }
-    switch (chartOptions.interval) {
-      case '5m':
-        interval = 'FIVE_MINUTE';
-        break;
-      case '15m':
-        interval = 'FIFTEEN_MINUTE';
-        break;
-      case '1h':
-        interval = 'ONE_HOUR';
-        break;
-      case '1d':
-        interval = 'ONE_DAY';
-        break;
-      default:
-        interval = 'ONE_DAY';
-    }
-    this.userService
-      .getPortfolioHistoricalData(
-        this.userId,
-        length,
-        unit,
-        interval,
-        currentDate.getFullYear() +
-          '-' +
-          String(currentDate.getMonth() + 1).padStart(2, '0') +
-          '-' +
-          String(currentDate.getDate()).padStart(2, '0'),
-        'false'
-      )
-      .then((res) => {
-        this.profileHistoryChartData = res;
-      });
+  changeChartRangeInterval(chartViewOptions: ChartDataOptions): void {
+    this.storeFacade.loadCurrentPortfolioHistoricalData(
+      this.userId,
+      this.periodLength,
+      this.periodUnit,
+      this.timeFrame,
+      this.dateEnd,
+      this.extendedHours,
+    );
   }
 }

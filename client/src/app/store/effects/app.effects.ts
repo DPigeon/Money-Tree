@@ -64,6 +64,36 @@ export class Effects {
       })
     )
   );
+  getPortfolioHistoricalData$: Observable<Action> = createEffect(() =>
+  this.actions$.pipe(
+    ofType(appActions.loadPortfolioHistoricalData),
+    switchMap((action) => {
+      return this.userService
+        .loadPortfolioHistoricalData(
+          action.userId,
+          action.periodLength,
+          action.periodUnit,
+          action.timeFrame,
+          action.dateEnd,
+          action.extendedHours
+        )
+        .pipe(
+          map((data) =>
+            appActions.portfolioHistoricalDataLoadSuccess({
+              portfolioHistoricalData: data,
+            })
+          ),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
+            )
+          )
+        );
+    })
+  )
+);
   loadMarketClock$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
       ofType(appActions.loadMarketClock),

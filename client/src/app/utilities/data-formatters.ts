@@ -127,7 +127,8 @@ export class DataFormatter {
     };
     return stock;
   }
-  YahooDataToModel(response: any): StockHistory {
+
+  formatAlpacaPortfolio(response: any): StockHistory {
     const stockHistoricalData: StockHistory = {
       symbol: response.chart.result[0].meta.symbol,
       closePrice: response.chart.result[0].indicators.quote[0].close,
@@ -136,6 +137,7 @@ export class DataFormatter {
     };
     return stockHistoricalData;
   }
+  
   marketClockFormatter(response: any): MarketClock {
     const fromattedMarketClock: MarketClock = {
       isOpen: response.body.isOpen,

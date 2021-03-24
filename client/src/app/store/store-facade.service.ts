@@ -19,6 +19,7 @@ import { StockPercentage } from '../interfaces/stock-percentage';
 export class StoreFacadeService {
   currentStockLoaded$: Observable<Stock>;
   stockHistoricalDataLoaded$: Observable<any>;
+  portfolioHistoricalDataLoaded$: Observable<any>;
   currentUser$: Observable<User>;
   currentProfileUser$: Observable<UserProfile>;
   appError$: Observable<AppError>;
@@ -46,6 +47,9 @@ export class StoreFacadeService {
     );
     this.stockHistoricalDataLoaded$ = this.store.select(
       appSelectors.selectStockHistoricalData
+    );
+    this.portfolioHistoricalDataLoaded$ = this.store.select(
+      appSelectors.selectPortfolioHistoricalData
     );
     this.currentUser$ = this.store.select(appSelectors.selectCurrentUser);
     this.appError$ = this.store.select(appSelectors.selectAppError);
@@ -110,6 +114,26 @@ export class StoreFacadeService {
         stockTicker: ticker,
         chartRange: range,
         chartInterval: interval,
+      })
+    );
+  }
+
+  loadCurrentPortfolioHistoricalData(
+    userId: string,
+    periodLength: number,
+    periodUnit: string,
+    timeFrame: string,
+    dateEnd: string,
+    extendedHours: string
+  ): void {
+    this.store.dispatch(
+      appActions.loadPortfolioHistoricalData({
+        userId,
+        periodLength,
+        periodUnit,
+        timeFrame,
+        dateEnd,
+        extendedHours,
       })
     );
   }
