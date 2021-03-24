@@ -1,10 +1,10 @@
 <div class="header-container">
   <app-header [userPhotoURL]="userPhotoURL"></app-header>
 </div>
-<button mat-button (click)="goToProfile()">Go to profile page</button>
+
 <div fxLayout="row wrap" fxLayoutAlign="center stretch">
   <div fxFlex="20%" fxFlex.lt-sm="100%">
-    <button mat-raised-button (click)="openDialog()">Edit Profile</button>
+   <app-home-profile [currentUser]="currentUser"></app-home-profile>
   </div>
   <div fxFlex="58%" fxFlex.lt-sm="100%" *ngIf="currentUser$ | async as user">
     <h1>Welcome to home page!</h1>

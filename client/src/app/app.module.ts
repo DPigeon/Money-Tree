@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
+import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -28,6 +29,7 @@ import { StockDetailComponent } from './pages/stock-detail/stock-detail.componen
 import { StockDetailHeaderComponent } from './components/stock-detail-header/stock-detail-header.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
+import { HomeProfileComponent } from './components/home-profile-column/home-profile.component';
 import { StockStatsComponent } from './components/stock-stats/stock-stats.component';
 import { LoginSignupComponent } from './pages/login-signup/login-signup.component';
 import { SignupFormComponent } from './components/signup-form/signup-form.component';
@@ -70,6 +72,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     SignupFormComponent,
     LoginFormComponent,
     HomeComponent,
+    HomeProfileComponent,
     EditProfileComponent,
     SellOrBuyActionsComponent,
     FollowingsSearchComponent,
@@ -95,6 +98,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     MatDividerModule,
     MatMenuModule,
     MatButtonModule,
+    MatTableModule,
     MatInputModule,
     MatFormFieldModule,
     FormsModule,

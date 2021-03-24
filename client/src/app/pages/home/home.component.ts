@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
 import { StoreFacadeService } from '../../store/store-facade.service';
 import { MatDialog } from '@angular/material/dialog';
-import { EditProfileComponent } from '../../components/edit-profile/edit-profile.component';
 import { Transaction } from 'src/app/interfaces/transaction';
 import { Stock } from 'src/app/interfaces/stock';
 import { Router } from '@angular/router';
@@ -53,38 +52,4 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  goToProfile(): void {
-    this.router
-      .navigate(['/profile/' + this.currentUser.username])
-      .then(() => this.storeFacade.loadUserTransactions(this.currentUser.id));
-  }
-  openDialog(): void {
-    const dialogRef = this.dialog.open(EditProfileComponent, {
-      data: this.currentUser,
-    });
-
-    dialogRef.componentInstance.userPhotoUpdate.subscribe((imageFile: File) => {
-      this.storeFacade.updatePictureURL(
-        this.currentUser.id,
-        imageFile,
-        'avatarURL'
-      );
-    });
-
-    dialogRef.componentInstance.userCoverPhotoUpdate.subscribe(
-      (imageFile: File) => {
-        this.storeFacade.updatePictureURL(
-          this.currentUser.id,
-          imageFile,
-          'coverPhotoURL'
-        );
-      }
-    );
-
-    dialogRef.componentInstance.userUpdate.subscribe(
-      (updatedUserInfo: User) => {
-        this.storeFacade.updateUser(updatedUserInfo);
-      }
-    );
-  }
 }
