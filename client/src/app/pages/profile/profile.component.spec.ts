@@ -66,8 +66,8 @@ const fakeFollowingsList: User[] = [
 ];
 
 const fakeCompleteUserProfile: UserProfile = {
-  coverPhotoURL:'https://www.cn.ca/-/media/Images/Stories/2021/20210222-RISE-Employee-Resource-Group-600X400.jpg',
-  avatarURL:'https://www.cn.ca/-/media/Images/Stories/2021/20210222-RISE-Employee-Resource-Group-600X400.jpg',
+  coverPhotoURL: 'https://www.cn.ca/-/media/Images/Stories/2021/20210222-RISE-Employee-Resource-Group-600X400.jpg',
+  avatarURL: 'https://www.cn.ca/-/media/Images/Stories/2021/20210222-RISE-Employee-Resource-Group-600X400.jpg',
   id: 5,
   firstName: 'profileUserFirstname',
   lastName: 'profileUserLastName',
@@ -75,7 +75,7 @@ const fakeCompleteUserProfile: UserProfile = {
   score: 150,
   followers: fakeFollowersList,
   following: fakeFollowingsList,
-  biography:"Here comes the pain train!"
+  biography: 'Here comes the pain train!',
 };
 
 describe('ProfileComponent', () => {
