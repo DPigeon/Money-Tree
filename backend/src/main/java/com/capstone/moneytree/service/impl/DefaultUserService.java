@@ -78,7 +78,7 @@ public class DefaultUserService implements UserService {
     private final String bucketName;
 
     @Autowired
-    public DefaultUserService(UserDao userDao, FollowsDao followsDao, OwnsDao ownsDao, StockDao stockDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service,
+    public DefaultUserService(UserDao userDao, FollowsDao followsDao, OwnsDao ownsDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service,
                               @Value("${aws.profile.pictures.bucket}") String bucketName) {
         this.userDao = userDao;
         this.followsDao = followsDao;
