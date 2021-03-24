@@ -197,4 +197,9 @@ public class UserController {
    public ResponseEntity<List<User>> getTopUserForStock(@PathVariable String symbol) {
       return ResponseEntity.ok(userService.getTopUsers(symbol));
    }
+
+   @GetMapping("{id}/owned_by_followers/{symbol}")
+   public ResponseEntity<List<User>> getStockOwnedByFollowers(@PathVariable Long id, @PathVariable String symbol) {
+      return ResponseEntity.ok(userService.getFollowersWhoOwnsTheStock(id, symbol));
+   }
 }

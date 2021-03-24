@@ -61,4 +61,6 @@ public interface UserService {
     void deleteUserByEmail(String email);
 
     List<User> getTopUsers(String symbol);
+
+    List<User> getFollowersWhoOwnsTheStock(Long id, String symbol);
 }

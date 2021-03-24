@@ -3,6 +3,7 @@ package com.capstone.moneytree.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.model.SanitizedStock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,8 @@ import com.capstone.moneytree.service.api.StockService;
 @Service
 @Transactional
 public class DefaultStockService implements StockService {
+
+    private static final String STOCK_NOT_FOUND = "The requested stock was not found";
 
     private final StockDao stockDao;
     private final OwnsDao ownsDao;
@@ -44,5 +47,14 @@ public class DefaultStockService implements StockService {
             userStocks.add(new SanitizedStock(rel));
         }
         return userStocks;
+    }
+
+    @Override
+    public Stock getStockBySymbol(String symbol) {
+        Stock stock = stockDao.findBySymbol(symbol);
+        if (stock == null) {
+            throw new EntityNotFoundException(STOCK_NOT_FOUND);
+        }
+        return stock;
     }
 }

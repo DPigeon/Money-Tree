@@ -7,6 +7,8 @@ import javax.security.auth.login.CredentialNotFoundException;
 
 import com.capstone.moneytree.ActiveProfile;
 import com.capstone.moneytree.model.AlpacaOAuthResponse;
+import com.capstone.moneytree.model.node.Stock;
+import com.capstone.moneytree.service.api.StockService;
 import com.google.gson.Gson;
 
 import org.apache.commons.lang3.StringUtils;
@@ -60,16 +62,20 @@ public class DefaultUserService implements UserService {
     private static final String USER_ALREADY_FOLLOWED = "User already followed";
 
     @Value("${alpaca.key.id}")
-    String clientId;
+    private String clientId;
     @Value("${alpaca.secret}")
-    String clientSecret;
+    private String clientSecret;
 
     @Autowired
-    ActiveProfile activeProfile;
+    private ActiveProfile activeProfile;
+
+    @Autowired
+    private StockService stockService;
 
     private final UserDao userDao;
     private final OwnsDao ownsDao;
     private final FollowsDao followsDao;
+    private final StockDao stockDao;
     private final ValidatorFactory validatorFactory;
     private final MoneyTreePasswordEncryption passwordEncryption;
     private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
@@ -87,6 +93,7 @@ public class DefaultUserService implements UserService {
         this.amazonS3Service = amazonS3Service;
         this.bucketName = bucketName;
         this.ownsDao = ownsDao;
+        this.stockDao = stockDao;
     }
 
     @Override
@@ -404,6 +411,30 @@ public class DefaultUserService implements UserService {
         return users.stream()
                 .limit(top10percent)
                 .collect(toList());
+    }
+
+    @Override
+    public List<User> getFollowersWhoOwnsTheStock(Long id, String symbol) {
+//        User user = getUserById(id);
+//        Stock stock = stockService.getStockBySymbol(symbol);
+//        List<Follows> followers = followsDao.findByUserToFollowId(user.getId());
+//
+//        List<User> followersWhoOwnsThisStock = new ArrayList<>();
+//
+//        followers.forEach(follower -> {
+//            ownsDao.findByUserIdAndStockId()
+//            if () {
+//
+//            }
+//        });
+//
+//        List<Owns> ownedStocks = ownsDao.findAll().stream()
+//                .filter(owns -> owns.getStock().getSymbol().equals(stock.getSymbol()))
+//                .collect(toList());
+        return null;
+
+
+
     }
 
     @Override
