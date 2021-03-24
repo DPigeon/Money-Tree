@@ -19,6 +19,22 @@ const systemTestUser2 = {
   transactions: [],
 };
 
+const userToFollow = {
+  firstName: 'Paul',
+  lastName: 'SystemTest',
+  username: 'SystemTestPaul',
+  avatarURL: '',
+  coverPhotoURL: '',
+  password: 'Hunter42',
+  email: 'systemtestpaul@systemtestuser.com',
+  score: 12,
+  rank: 10000,
+  balance: 223,
+  alpacaApiKey: 'bc3b0e9a-30d4-4f99-9bcd-b324417eb428', // this is local to my only for my system test
+  portfolio: [],
+  transactions: [],
+};
+
 export class UserAuthPage {
   navigateHome(): Promise<unknown> {
     return browser.get(browser.baseUrl) as Promise<unknown>;
@@ -41,9 +57,17 @@ export class UserAuthPage {
     loginBtn.click();
   }
 
+  createUserToFollowe(): void {
+    http.post('users/', userToFollow);
+  }
+
   cleanAuthenticatedUser(): void {
     http.delete('/users/delete-by-email/' + systemTestUser2.email);
     browser.executeScript('window.sessionStorage.clear();');
     browser.executeScript('window.localStorage.clear();');
+  }
+
+  cleanUserToFollowe(): void {
+    http.delete('/users/delete-by-email/' + userToFollow.email);
   }
 }
