@@ -75,7 +75,6 @@ public class DefaultUserService implements UserService {
     private final UserDao userDao;
     private final OwnsDao ownsDao;
     private final FollowsDao followsDao;
-    private final StockDao stockDao;
     private final ValidatorFactory validatorFactory;
     private final MoneyTreePasswordEncryption passwordEncryption;
     private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
@@ -93,7 +92,6 @@ public class DefaultUserService implements UserService {
         this.amazonS3Service = amazonS3Service;
         this.bucketName = bucketName;
         this.ownsDao = ownsDao;
-        this.stockDao = stockDao;
     }
 
     @Override
@@ -415,26 +413,14 @@ public class DefaultUserService implements UserService {
 
     @Override
     public List<User> getFollowersWhoOwnsTheStock(Long id, String symbol) {
-//        User user = getUserById(id);
-//        Stock stock = stockService.getStockBySymbol(symbol);
-//        List<Follows> followers = followsDao.findByUserToFollowId(user.getId());
-//
-//        List<User> followersWhoOwnsThisStock = new ArrayList<>();
-//
-//        followers.forEach(follower -> {
-//            ownsDao.findByUserIdAndStockId()
-//            if () {
-//
-//            }
-//        });
-//
-//        List<Owns> ownedStocks = ownsDao.findAll().stream()
-//                .filter(owns -> owns.getStock().getSymbol().equals(stock.getSymbol()))
-//                .collect(toList());
-        return null;
+        List<User> followersWhoOwnsThisStock = new ArrayList<>();
 
+        User user = getUserById(id);
+        Stock stock = stockService.getStockBySymbol(symbol);
+        List<Follows> followers = followsDao.findByUserToFollowId(user.getId());
 
-
+        followers.forEach(follower -> addFollowerToList(follower, followersWhoOwnsThisStock, stock));
+        return followersWhoOwnsThisStock;
     }
 
     @Override
@@ -447,7 +433,13 @@ public class DefaultUserService implements UserService {
         return validatorFactory.getUserValidator();
     }
 
-
+    private void addFollowerToList(Follows follower, List<User> followersWhoOwnTheStock, Stock stock) {
+        // add the follower to the list only if he owns the given stock
+        List<Owns> ownedStock = ownsDao.findByUserIdAndStockId(follower.getFollower().getId(), stock.getId());
+        if (!ownedStock.isEmpty()) {
+            followersWhoOwnTheStock.add(follower.getFollower());
+        }
+    }
 
     public String encryptData(String text) {
         return passwordEncryption.toGraphProperty(text);
