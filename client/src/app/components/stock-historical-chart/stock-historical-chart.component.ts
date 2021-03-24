@@ -46,7 +46,10 @@ export class StockHistoricalChartComponent implements OnInit, OnChanges {
   isUnavailableChart = false;
 
   async ngOnInit(): Promise<void> {
-    if (this.historicalData.closePrice.filter((h) => h !== null).length > 1) {
+    if (
+      this.historicalData &&
+      this.historicalData.closePrice.filter((h) => h !== null).length > 1
+    ) {
       await this.formatChartData();
       this.displayChart();
       this.isUnavailableChart = false;
@@ -55,16 +58,18 @@ export class StockHistoricalChartComponent implements OnInit, OnChanges {
     }
   }
   async ngOnChanges(): Promise<void> {
-    if (this.currentStock !== this.historicalData.symbol) {
-      this.selectedRange = '1d';
-      this.currentStock = this.historicalData.symbol;
-    }
-    if (this.historicalData.closePrice.filter((h) => h !== null).length > 1) {
-      await this.formatChartData();
-      this.displayChart();
-      this.isUnavailableChart = false;
-    } else {
-      this.isUnavailableChart = true;
+    if (this.historicalData) {
+      if (this.currentStock !== this.historicalData.symbol) {
+        this.selectedRange = '1d';
+        this.currentStock = this.historicalData.symbol;
+      }
+      if (this.historicalData.closePrice.filter((h) => h !== null).length > 1) {
+        await this.formatChartData();
+        this.displayChart();
+        this.isUnavailableChart = false;
+      } else {
+        this.isUnavailableChart = true;
+      }
     }
   }
 

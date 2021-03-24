@@ -10,7 +10,7 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: #f8f8fb
+  background-color: #f8f8fb;
 }
 
 $primary-color: #07367c;
@@ -19,8 +19,26 @@ $mt-red: #c42126;
 $action-color: #f79630;
 $mt-dark: #282224;
 $mt-white: #f8f8fb;
-$mt-coral: #AF6060;
+$mt-coral: #af6060;
 $placeholder-color: #979797;
+
+// Scroll bar styling:
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 
 @import "./theme.scss";
 @import "./forms.scss";

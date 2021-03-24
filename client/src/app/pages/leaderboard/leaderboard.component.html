@@ -1,1 +1,35 @@
-<p>leaderboard works!</p>
+<app-header></app-header>
+<div class="main-container">
+    <div class="card-container">
+        <div class='title'>
+            <h1>Leaderboard</h1>
+        </div>
+        <mat-card>
+            <div class="leaderboard-list-container" *ngIf="topUsers">
+                <div class='column-titles-container'>
+                    <div class='hidden-column'></div>
+                    <p class='column1-title'>Rank</p>
+                    <p class='column2-title'>Investor's Name</p>
+                    <p class='column3-title'>Score</p>
+                </div>
+
+                <ng-container *ngFor="let user of topUsers; index as i">
+                    <div class="leaderboard-users-container">
+                        <div class="img-container">
+                            <img class="user-picture" id="user-image" alt="Profile Picture" width="40" height="40"
+                                src="{{user.avatarURL}}" (click)="navigateToProfile(user.username)" />
+                        </div>
+                        <div class="user-rank">{{i+1}}</div>
+                        <div class=" user-first-and-last-name" (click)="navigateToProfile(user.username)">
+                            <span class="user-name">{{
+                                user.firstName
+                                + " " + user.lastName }}</span>
+                        </div>
+                        <div class="user-score">{{user.score}}</div>
+                    </div>
+                    <mat-divider></mat-divider>
+                </ng-container>
+            </div>
+        </mat-card>
+    </div>
+</div>

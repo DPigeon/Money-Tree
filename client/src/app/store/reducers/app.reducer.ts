@@ -21,6 +21,7 @@ export interface State {
   userTransactions: Transaction[];
   userOwnedStocks: Stock[];
   searchUserList: UserSearch[];
+  leaderboardUsers: User[];
 }
 
 export const initialState: State = {
@@ -35,6 +36,7 @@ export const initialState: State = {
   userTransactions: null,
   userOwnedStocks: null,
   searchUserList: null,
+  leaderboardUsers: null,
 };
 
 export const reducer = createReducer(
@@ -100,4 +102,12 @@ export const reducer = createReducer(
   on(appActions.setCurrentProfileUser, (state, { currentProfileUser }) => {
     return { ...state, currentProfileUser };
   }),
+
+  on(
+    appActions.setCurrentLeaderboardUsers,
+    (state, { currentLeaderboardUsers }) => ({
+      ...state,
+      leaderboardUsers: currentLeaderboardUsers,
+    })
+  )
 );

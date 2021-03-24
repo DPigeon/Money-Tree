@@ -79,3 +79,8 @@ export const selectUserSearchList = createSelector(
   selectAppState,
   (appState: State) => appState.searchUserList
 );
+
+export const selectLeaderboardUsers = createSelector(
+  selectAppState,
+  (appState: State) => appState.leaderboardUsers
+);
