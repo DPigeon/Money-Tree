@@ -16,6 +16,7 @@ export interface State {
   currentProfileUser: UserProfile;
   currentStockLoaded: Stock;
   stockHistoricalDataLoaded: any;
+  portfolioHistoricalDataLoaded:any;
   currentMarketClock: MarketClock;
   errorMessage: AppError;
   followers: User[];
@@ -35,6 +36,7 @@ export const initialState: State = {
   currentProfileUser: null,
   currentStockLoaded: null,
   stockHistoricalDataLoaded: null,
+  portfolioHistoricalDataLoaded:null,
   errorMessage: null,
   currentMarketClock: null,
   followers: null,
@@ -60,6 +62,13 @@ export const reducer = createReducer(
     (state, { stockHistoricalData }) => ({
       ...state,
       stockHistoricalDataLoaded: stockHistoricalData,
+    })
+  ),
+  on(
+    appActions.portfolioHistoricalDataLoadSuccess,
+    (state, { portfolioHistoricalData }) => ({
+      ...state,
+      portfolioHistoricalDataLoaded: portfolioHistoricalData,
     })
   ),
   on(appActions.loadMarketClockSuccess, (state, { marketClock }) => ({

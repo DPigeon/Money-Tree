@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DataFormatter } from '../../utilities/data-formatters';
 import { AlpacaUserPosition } from 'src/app/interfaces/alpacaPosition';
+import { StockHistory } from 'src/app/interfaces/stockHistory';
 
 @Injectable({
   providedIn: 'root',
@@ -115,6 +116,7 @@ export class UserService {
       .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
   }
 
+
   getTopInvestors(symbol: string): Observable<User[]> {
     return this.api
       .get('users/' + symbol + '/top')
@@ -128,5 +130,91 @@ export class UserService {
     return this.api
       .get(`users/${userId}/owned_by_followers/${symbol}`)
       .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
+  }
+
+  loadPortfolioHistoricalData(
+    userId: string,
+    periodLength: number,
+    periodUnit: string,
+    timeFrame: string,
+    dateEnd: string,
+    extendedHours: string
+  ): Observable<StockHistory> {
+    return this.api
+      .get(
+        'alpaca/portfolio/userId=' +
+          userId +
+          '&periodLength=' +
+          periodLength +
+          '&periodUnit=' +
+          periodUnit +
+          '&timeFrame=' +
+          timeFrame +
+          '&dateEnd=' +
+          dateEnd +
+          '&extendedHours=' +
+          extendedHours
+      )
+      .pipe(map((res: Response) => this.formatAlpacaPortfolio(res.body)));
+  }
+
+  formatAlpacaPortfolio(response: any): StockHistory {
+    const stockHistoricalData: StockHistory = {
+      symbol: response.chart.result[0].meta.symbol,
+      closePrice: response.chart.result[0].indicators.quote[0].close,
+      timestamp: response.chart.result[0].timestamp,
+      currency: response.chart.result[0].meta.currency,
+    };
+    return stockHistoricalData;
+  }
+  userFormatter(response: any): User {
+    const formattedUser: User = {
+      id: response.id,
+      firstName: response.firstName,
+      lastName: response.lastName,
+      username: response.username,
+      avatarURL: response.avatarURL,
+      coverPhotoURL: response.coverPhotoURL,
+      email: response.email,
+      score: response.score,
+      rank: response.rank,
+      balance: response.balance,
+      alpacaApiKey: response.alpacaApiKey,
+      // portfolio: response.portfolio,
+      // transactions: response.transactions,
+      biography: response.biography,
+    };
+    return formattedUser;
+  }
+
+  userSearchFormatter(response: any): UserSearch[] {
+    const result: UserSearch[] = [];
+    response.forEach((e) => {
+      result.push({
+        id: e.username,
+        firstName: e.firstName,
+        lastName: e.lastName,
+        avatarURL: e.avatarURL,
+        email: e.email,
+      });
+    });
+    return result;
+  }
+
+  followUserListFormatter(response: any): User[] {
+    const result: User[] = [];
+    for (const fetchedUser of response.body) {
+      result.push({
+        id: fetchedUser.id,
+        firstName: fetchedUser.firstName,
+        lastName: fetchedUser.lastName,
+        username: fetchedUser.username,
+        avatarURL: fetchedUser.avatarURL,
+        score: fetchedUser.score,
+        rank: fetchedUser.rank,
+        balance: fetchedUser.balance,
+      });
+    }
+    return result;
   }
 }

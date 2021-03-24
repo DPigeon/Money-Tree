@@ -42,6 +42,7 @@ import { SellOrBuyActionsComponent } from './components/sell-buy-stock/sell-buy-
 import { FollowingsSearchComponent } from './components/followings-search/followings-search.component';
 import { StockAdditionalInfoComponent } from './components/stock-additional-info/stock-additional-info.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { PortfolioValueChartComponent } from './components/portfolio-value-chart/portfolio-value-chart.component';
 import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
 import { ListOfFollowsComponent } from './components/list-of-follows/list-of-follows.component';
 import { StockHistoricalChartComponent } from './components/stock-historical-chart/stock-historical-chart.component';
@@ -80,6 +81,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     FollowingsSearchComponent,
     StockAdditionalInfoComponent,
     ProfileComponent,
+    PortfolioValueChartComponent,
     TransactionHistoryComponent,
     ListOfFollowsComponent,
     StockHistoricalChartComponent,

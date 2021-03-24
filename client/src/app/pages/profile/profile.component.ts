@@ -11,6 +11,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { ListOfFollowsComponent } from 'src/app/components/list-of-follows/list-of-follows.component';
 import { filter } from 'rxjs/operators';
 
+export interface ChartDataOptions {
+  userId: string;
+  periodLength: number;
+  periodUnit: string;
+  timeFrame: string;
+  dateEnd: Date;
+  extendedHours: string;
+}
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -23,6 +31,14 @@ export class ProfileComponent implements OnInit {
   followers: User[];
   followings: User[];
   followButtonDisabled = false;
+  portfolioHistoricalData$ = this.storeFacade.stockHistoricalDataLoaded$;
+  showPortfolioChart = false;
+  userId= '';
+  periodLength: 1;
+  periodUnit: 'D';
+  timeFrame: '5Min';
+  dateEnd:"2021-05-05";
+  extendedHours: '1D';
   constructor(
     private storeFacade: StoreFacadeService,
     public dialog: MatDialog,
@@ -30,11 +46,13 @@ export class ProfileComponent implements OnInit {
     private router: Router
   ) {}
   ngOnInit(): void {
+   
     let username = this.route.snapshot.paramMap.get('username');
     this.storeFacade.loadCurrentProfileUser(username);
     this.currentProfileUser$.subscribe((data: UserProfile) => {
       if (data) {
         this.completeUserProfile = data;
+        this.userId =this.completeUserProfile.username
       }
     });
     this.storeFacade.currentUser$.subscribe((loggedInUser: User) => {
@@ -42,12 +60,32 @@ export class ProfileComponent implements OnInit {
         this.loggedInUserId = loggedInUser.id;
       }
     });
+    this.storeFacade.loadCurrentPortfolioHistoricalData(
+      this.userId,
+      this.periodLength,
+      this.periodUnit,
+      this.timeFrame,
+      this.dateEnd,
+      this.extendedHours,
+    );
+    if (!!this.portfolioHistoricalData$) {
+      this.showPortfolioChart = true;
+    }
+
     this.router.events
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
       .subscribe(() => {
         username = this.route.snapshot.paramMap.get('username');
         this.storeFacade.loadCurrentProfileUser(username);
       });
+    this.storeFacade.loadCurrentPortfolioHistoricalData(
+      this.userId,
+      this.periodLength,
+      this.periodUnit,
+      this.timeFrame,
+      this.dateEnd,
+      this.extendedHours,
+    );
   }
   openDialog(choice: string): void {
     let dialogRef;
@@ -140,5 +178,16 @@ export class ProfileComponent implements OnInit {
       this.completeUserProfile.biography.length > 0
       ? this.completeUserProfile.biography
       : 'This user has no biography yet.';
+  }
+
+  changeChartRangeInterval(chartViewOptions: ChartDataOptions): void {
+    this.storeFacade.loadCurrentPortfolioHistoricalData(
+      this.userId,
+      this.periodLength,
+      this.periodUnit,
+      this.timeFrame,
+      this.dateEnd,
+      this.extendedHours,
+    );
   }
 }
