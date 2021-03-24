@@ -1,5 +1,8 @@
 package com.capstone.moneytree.service.impl;
 
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
+
 import javax.security.auth.login.CredentialNotFoundException;
 
 import com.capstone.moneytree.ActiveProfile;
@@ -35,6 +38,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +68,7 @@ public class DefaultUserService implements UserService {
     ActiveProfile activeProfile;
 
     private final UserDao userDao;
+    private final OwnsDao ownsDao;
     private final FollowsDao followsDao;
     private final ValidatorFactory validatorFactory;
     private final MoneyTreePasswordEncryption passwordEncryption;
@@ -73,7 +78,7 @@ public class DefaultUserService implements UserService {
     private final String bucketName;
 
     @Autowired
-    public DefaultUserService(UserDao userDao, FollowsDao followsDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service,
+    public DefaultUserService(UserDao userDao, FollowsDao followsDao, OwnsDao ownsDao, StockDao stockDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service,
                               @Value("${aws.profile.pictures.bucket}") String bucketName) {
         this.userDao = userDao;
         this.followsDao = followsDao;
@@ -81,6 +86,7 @@ public class DefaultUserService implements UserService {
         this.passwordEncryption = new MoneyTreePasswordEncryption();
         this.amazonS3Service = amazonS3Service;
         this.bucketName = bucketName;
+        this.ownsDao = ownsDao;
     }
 
     @Override
@@ -375,6 +381,32 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    public List<User> getTopUsers(String symbol) {
+        List<User> users = new ArrayList<>();
+        // get a list of all user who own a stock with this symbol
+        ownsDao.findAll().stream()
+                .filter(owns -> owns.getStock().getSymbol().equals(symbol))
+                .collect(toList())
+                .forEach(owns -> users.add(owns.getUser()));
+
+        if (users.isEmpty()) {
+            return emptyList();
+        }
+
+        // sort user by ascending score order
+        Collections.sort(users);
+
+        // reverse to get biggest score first
+        Collections.reverse(users);
+
+        int top10percent = users.size() / 10; // rounded down for conservative results
+
+        return users.stream()
+                .limit(top10percent)
+                .collect(toList());
+    }
+
+    @Override
     public List<Map<String, String>> getSearchUsers() {
         return userDao.getSearchUsers();
     }
@@ -383,6 +415,8 @@ public class DefaultUserService implements UserService {
     public UserValidator getUserValidator() {
         return validatorFactory.getUserValidator();
     }
+
+
 
     public String encryptData(String text) {
         return passwordEncryption.toGraphProperty(text);

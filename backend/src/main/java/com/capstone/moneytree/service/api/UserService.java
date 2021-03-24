@@ -59,4 +59,6 @@ public interface UserService {
     List<Map<String, String>> getSearchUsers();
 
     void deleteUserByEmail(String email);
+
+    List<User> getTopUsers(String symbol);
 }

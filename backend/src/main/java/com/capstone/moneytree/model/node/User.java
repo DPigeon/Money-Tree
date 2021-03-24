@@ -1,6 +1,7 @@
 package com.capstone.moneytree.model.node;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.neo4j.ogm.annotation.NodeEntity;
 
 import com.capstone.moneytree.model.Entity;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends Entity {
+public class User extends Entity implements Comparable<User> {
 
     String firstName;
 
@@ -67,5 +68,10 @@ public class User extends Entity {
         }
 
         return false;
+    }
+
+    @Override
+    public int compareTo(@NotNull User user) {
+        return getScore().compareTo(user.getScore());
     }
 }

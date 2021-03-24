@@ -192,4 +192,9 @@ public class UserController {
    public ResponseEntity<List<Map<String, String>>> getSearchUsers() {
       return ResponseEntity.ok(userService.getSearchUsers());
    }
+
+   @GetMapping("{symbol}/top")
+   public ResponseEntity<List<User>> getTopUserForStock(@PathVariable String symbol) {
+      return ResponseEntity.ok(userService.getTopUsers(symbol));
+   }
 }
