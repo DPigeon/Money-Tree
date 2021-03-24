@@ -68,9 +68,18 @@ describe('stock detail page system test', () => {
     browser.sleep(2000);
     page.placeMarketOrder();
     expect(page.getStockConfirmationSnackBar().isPresent()).toBeTruthy();
-  })
+  });
+  // TO BE TESTED WHEN THE STOCK MARKET IS OPEN
   it('should place a market sell order', () => {
     page.placeMarketOrder();
-
+    browser.sleep(1000);
+    const sellStockButton = page.getStockStockSellButton();
+    sellStockButton.click();
+    browser.sleep(1000);
+    const quantityInput = page.getStockQuantityInput();
+    quantityInput.sendKeys(1);
+    const sellActionButton = page.getPopupStockActionButton();
+    sellActionButton.click();
+    expect(page.getStockConfirmationSnackBar().isPresent()).toBeTruthy();
   })
 });

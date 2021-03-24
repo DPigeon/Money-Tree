@@ -33,6 +33,22 @@ describe('profile page system tests', () => {
         expect(page.getProfileUsername().isPresent()).toBeTruthy();
         expect(page.getProfilePicture().isPresent()).toBeTruthy();
         expect(page.getProfileCoverPicture().isPresent()).toBeTruthy();
+    });
+
+    it('should be able to edit a user profile', () => {
+        const updatedBioText = "This is a test bio for the system";
+        authentication.navigateToBasePage();
+        const editProfileBtn = page.getEditUserButton();
+        editProfileBtn.click();
+        const bioInput = page.getEditProfileBio();
+        bioInput.sendKeys(updatedBioText);
+        browser.sleep(1000);
+        const editProfileSaveChangesBtn = page.getEditProfileSaveChanges();
+        editProfileSaveChangesBtn.click();
+        page.navigateToProfilePage("SystemTestUser");
+        const profileBio = page.getProfileBio();
+        expect(profileBio.getText()).toBe(updatedBioText);
+        browser.sleep(1000);
     })
 });
 

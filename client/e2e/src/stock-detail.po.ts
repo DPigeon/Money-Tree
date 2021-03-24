@@ -69,6 +69,9 @@ export class StockDetail {
   getStockStockBuyButton(): ElementFinder {
     return element(by.buttonText('BUY'));
   }
+  getStockStockSellButton(): ElementFinder {
+    return element(by.buttonText('SELL'));
+  }
   getStockQuantityInput(): ElementFinder {
     return element(by.id('stock-quantity-input'));
   }

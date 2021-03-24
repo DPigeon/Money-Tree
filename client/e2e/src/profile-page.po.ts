@@ -35,4 +35,13 @@ export class UserProfilePage {
     getProfileCoverPicture(): ElementFinder {
         return element(by.className("cover-picture"));
     }
+    getEditUserButton(): ElementFinder {
+        return element(by.buttonText("Edit Profile"));
+    }
+    getEditProfileBio(): ElementFinder {
+        return element(by.css('textarea[data-placeholder="Bio"]'))
+    }
+    getEditProfileSaveChanges(): ElementFinder {
+        return element(by.buttonText("Save Changes"));
+    }
 }
