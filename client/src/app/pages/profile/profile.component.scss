@@ -3,17 +3,16 @@
   position: relative;
 }
 .transaction-history-container {
-  position: absolute;
-  right: 3em;
-  bottom: 3em;
-  width: 345px;
-  height: 375px;
+  display: flex;
 }
+
+.profile-right-col {
+  padding-right: 5vw;
+  padding-top:  1.5rem;
+}
+
 .profile-info-container {
-  position: absolute;
-  top: 10em;
-  left: 4em;
-  width: 900px;
+  padding: 1.5rem 5vw;
   height: 500px;
   .picture-wrap {
     height: 60%;
@@ -30,21 +29,22 @@
       height: 125px;
       width: 125px;
       left: 5em;
-      top: 14em;
+      top: 12em;
       border: white solid 5px;
     }
   }
-  .labels {
+  .profile-information-row {
     display: flex;
-    position: absolute;
-    line-height: 35px;
-    margin-top: 10px;
-    left: 15em;
+    align-items: center;
+    margin-top: 2.2rem;
+    justify-content: space-between;
      .username{
       margin-left: 1em;
+      font-weight: bold;
+      color: rgba(0,0,0,0.7);
+      font-size: 20px;
     }
     .followers-follwings-container {
-      margin-left: 16em;
       .follow-unfollow-label {
         color: $primary-color;
         text-decoration: underline;
@@ -60,9 +60,6 @@
     }
     .industry {
       font-weight: 300;
-    }
-    .username {
-      font-weight: bold;
     }
   }
   .bio {
