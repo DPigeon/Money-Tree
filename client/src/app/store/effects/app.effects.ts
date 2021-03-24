@@ -1,3 +1,4 @@
+import { setCurrentLeaderboardUsers } from './../actions/app.actions';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -380,6 +381,28 @@ export class Effects {
               });
             })
           );
+      })
+    )
+  );
+
+  loadLeaderboardUsers$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadLeaderboardUsers),
+      switchMap((action) => {
+        return this.userService.getLeaderBoard().pipe(
+          map((data) => {
+            return appActions.setCurrentLeaderboardUsers({
+              currentLeaderboardUsers: data,
+            });
+          }),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
+            )
+          )
+        );
       })
     )
   );

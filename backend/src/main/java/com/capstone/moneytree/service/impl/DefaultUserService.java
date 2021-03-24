@@ -373,6 +373,8 @@ public class DefaultUserService implements UserService {
     @Override
     public List<SanitizedUser> getLeaderboard() {
         return userDao.findAll().stream()
+                // discarding null scores
+                .filter(user -> user.getScore()!=null)
                 // sort by score desc
                 .sorted(Comparator.comparing(User::getScore).reversed())
                 // sanitize user list
