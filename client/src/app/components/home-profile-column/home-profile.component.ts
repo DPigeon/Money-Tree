@@ -3,10 +3,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Stock } from 'src/app/interfaces/stock';
 import { User } from 'src/app/interfaces/user';
-import { UserService } from 'src/app/services/user/user.service';
 import { StoreFacadeService } from 'src/app/store/store-facade.service';
 import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 
+export interface Earnings {
+  earnings: number;
+  totalGain: number;
+}
 @Component({
   selector: 'app-home-profile',
   templateUrl: './home-profile.component.html',
@@ -18,6 +21,7 @@ export class HomeProfileComponent implements OnChanges {
   followingSearch = '';
   user: User;
   userOwnedStockDetails: Stock[] = [];
+  earnings={amount:'0', gain:'0', percentage:'0', positive:true};
 
   constructor(
     private router: Router,
@@ -63,5 +67,14 @@ export class HomeProfileComponent implements OnChanges {
         this.storeFacade.updateUser(updatedUserInfo);
       }
     );
+  }
+  setEarnings(e: Earnings): void {
+    this.earnings.amount =e.earnings.toFixed(2);
+    this.earnings.gain=e.totalGain.toFixed(2);
+    this.earnings.percentage = (e.totalGain/(e.earnings-e.totalGain)).toFixed(2);
+  }
+
+  getEarningsClass(positive: boolean): string {
+    return positive ? 'positive-change' : 'negative-change';
   }
 }

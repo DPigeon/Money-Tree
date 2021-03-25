@@ -46,8 +46,21 @@
   overflow: hidden;
   margin-bottom: 20px;
   max-height: 300px;
+  text-align: center;
 }
 .your-earnings {
   width: 80%;
   margin-bottom: 20px;
+  text-align: center;
+}
+.negative-change {
+  color: $mt-red;
+  font-size: 12px;
+}
+.positive-change {
+  color: $mt-green;
+  font-size: 12px;
+}
+.earning-amount {
+  font-weight: 500;
 }

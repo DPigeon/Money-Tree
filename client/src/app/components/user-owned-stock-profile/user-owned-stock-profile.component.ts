@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Stock } from 'src/app/interfaces/stock';
@@ -21,6 +21,11 @@ export class UserOwnedStockProfileComponent implements OnChanges {
   @Input() currentUser: User;
   @Input() location: string;
   @Input() userOwnedStocks: Stock[];
+  @Output() changeEarnings = new EventEmitter<{
+    earnings:number;
+    totalGain:number;
+    positive:boolean;
+  }>();
   displayedColumns: string[] = [
     'company',
     'amount',
@@ -45,6 +50,8 @@ export class UserOwnedStockProfileComponent implements OnChanges {
     this.userService
       .getUserAlpacaPosition(this.currentUser.id)
       .then((result) => {
+        let earnings = 0
+        let totalGain =0;
         result.forEach((r) => {
           let amount = 0;
           let quantity = 0;
@@ -56,13 +63,14 @@ export class UserOwnedStockProfileComponent implements OnChanges {
             .forEach((o) => {
               quantity += Number(o.quantity);
               amount += Number(o.quantity) * Number(o.avgPrice);
+              earnings +=amount;
               gain +=
                 (Number(r.currentPrice) - Number(o.avgPrice)) *
                 Number(o.quantity);
-              change = Number(r.currentPrice) - Number(o.avgPrice);
+              change = Number(r.currentPrice) - Number(o.avgPrice);  
+              totalGain += gain;
             });
           price = amount / quantity;
-
           data.push({
             company: r.symbol,
             amount: amount.toFixed(2),
@@ -72,6 +80,11 @@ export class UserOwnedStockProfileComponent implements OnChanges {
           });
         });
         this.dataSource.data = data;
+        this.changeEarnings.emit({
+         earnings:(earnings<0?-1*earnings:earnings),
+         totalGain,
+         positive:earnings>0,
+        });
       });
   }
 
