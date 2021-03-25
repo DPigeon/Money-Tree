@@ -19,7 +19,7 @@
 
     <ng-container matColumnDef="gain_loss">
       <th mat-header-cell *matHeaderCellDef>Gain/Loss $</th>
-      <td mat-cell *matCellDef="let element" [ngClass]="stockChangeColor()">
+      <td mat-cell *matCellDef="let element" [class]="stockChangeColor(element.gain_loss)">
         <span *ngIf="element.gain_loss < 0">&darr;</span>
         <span *ngIf="element.gain_loss > 0">&uarr;</span>
         {{ formatStat(element.gain_loss) }}
@@ -33,7 +33,7 @@
 
     <ng-container matColumnDef="change">
       <th mat-header-cell *matHeaderCellDef>Change $</th>
-      <td mat-cell *matCellDef="let element" [ngClass]="stockChangeColor()">
+      <td mat-cell *matCellDef="let element" [class]="stockChangeColor(element.change)">
         <span *ngIf="element.change < 0">&darr;</span>
         <span *ngIf="element.change > 0">&uarr;</span>
         {{ formatStat(element.change) }}

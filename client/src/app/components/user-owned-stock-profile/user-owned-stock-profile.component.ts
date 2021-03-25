@@ -79,13 +79,14 @@ export class UserOwnedStockProfileComponent implements OnChanges {
               totalGain += gain;
             });
           price = amount / quantity;
+          if(amount!=0){
           data.push({
             company: r.symbol,
             amount: amount.toFixed(2),
             gain_loss: gain,
             price: price.toFixed(2),
             change,
-          });
+          });}
         });
         this.dataSource.data = data;
         this.changeEarnings.emit({
