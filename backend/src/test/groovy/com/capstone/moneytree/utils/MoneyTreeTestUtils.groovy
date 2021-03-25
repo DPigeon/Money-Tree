@@ -108,6 +108,24 @@ class MoneyTreeTestUtils {
    }
 
    /**
+    * Utility method to build a limit order
+    */
+   static buildLimitOrder(String symbol = "AAPL", String qty = "3", String side = "BUY", String clientOrderId = "clientId", String type = "market") {
+      def order = new Order()
+      order.setSymbol(symbol)
+      order.setQty(qty)
+      order.setSide(side)
+      order.setClientOrderId(clientOrderId)
+      order.setTimeInForce(OrderTimeInForce.DAY as String)
+      order.setCreatedAt(ZonedDateTime.now())
+      order.setSubmittedAt(ZonedDateTime.now())
+      order.setType(type)
+      order.setExtendedHours(false)
+      order.setLimitPrice("11.00")
+      return order
+   }
+
+   /**
     * Utility method to build an asset
     */
    static buildAsset(String symbol = "AAPL", String exchange = "NASDAQ", String status = "active") {
