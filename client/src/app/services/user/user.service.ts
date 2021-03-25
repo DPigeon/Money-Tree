@@ -169,7 +169,7 @@ export class UserService {
   formatAlpacaPortfolio(response: any): StockHistory {
     const stockHistoricalData: StockHistory = {
       symbol: '',
-      closePrice: response.profitLoss,
+      closePrice: response.equity,
       timestamp: response.timestamp,
       currency: 'USD',
     };
