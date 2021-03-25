@@ -30,13 +30,7 @@ export class ProfileComponent implements OnInit {
   followings: User[];
   followButtonDisabled = false;
   profileHistoryChartData: StockHistory;
-  showPortfolioChart = false;
   userId = '';
-  periodLength: 1;
-  periodUnit: 'DAY';
-  timeFrame: 'FIFTEEN_MINUTE';
-  dateEnd: '2021-05-05';
-  extendedHours: 'false';
   constructor(
     private storeFacade: StoreFacadeService,
     public dialog: MatDialog,
@@ -49,7 +43,8 @@ export class ProfileComponent implements OnInit {
     this.storeFacade.loadCurrentProfileUser(username);
     this.currentProfileUser$.subscribe((data: UserProfile) => {
       if (data) {
-        this.completeUserProfile = data;
+        this.completeUserProfile = data; 
+        this.userId = String(this.completeUserProfile.id);
       }
     });
     this.storeFacade.currentUser$.subscribe((loggedInUser: User) => {
@@ -57,12 +52,12 @@ export class ProfileComponent implements OnInit {
         this.loggedInUserId = loggedInUser.id;
       }
     });
-    this.userId = String(this.completeUserProfile.id);
+   
     const currentDate = new Date();
 
     this.userService
       .getPortfolioHistoricalData(
-        this.userId,
+        String(this.completeUserProfile.id),
         1,
         'DAY',
         'FIFTEEN_MINUTE',
