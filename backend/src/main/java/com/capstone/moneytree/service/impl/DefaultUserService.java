@@ -1,5 +1,6 @@
 package com.capstone.moneytree.service.impl;
 
+import static com.capstone.moneytree.handler.ExceptionMessage.USER_ALREADY_FOLLOWED;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -39,12 +40,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -59,7 +55,6 @@ public class DefaultUserService implements UserService {
     private static final String AUTHORIZATION_CODE = "authorization_code";
     private static final String NOT_FOLLOWED_BY_THIS_USER = "The user is not followed";
     private static final String USER_CANT_BE_FOLLOWED_BY_ITSELF = "User cannot followed by itself";
-    private static final String USER_ALREADY_FOLLOWED = "User already followed";
 
     @Value("${alpaca.key.id}")
     private String clientId;
@@ -304,7 +299,7 @@ public class DefaultUserService implements UserService {
         List<Follows> alreadyFollowed = followsDao.findByFollowerIdAndUserToFollowId(userId, userToFollowId);
         // check to see if user already following the other user
         if (!alreadyFollowed.isEmpty()) {
-            throw new FollowsRelationshipException(USER_ALREADY_FOLLOWED);
+            throw new FollowsRelationshipException(USER_ALREADY_FOLLOWED.getMessage());
         }
         Date currentDate = new Date();
         Follows newFollowRel = new Follows(user, userToFollow, currentDate);
@@ -387,28 +382,35 @@ public class DefaultUserService implements UserService {
 
     @Override
     public List<User> getTopUsers(String symbol) {
-        List<User> users = new ArrayList<>();
-        // get a list of all user who own a stock with this symbol
-        ownsDao.findAll().stream()
-                .filter(owns -> owns.getStock().getSymbol().equals(symbol))
-                .collect(toList())
-                .forEach(owns -> users.add(owns.getUser()));
+        List<User> users = ownsDao.findAll().stream()
+                        .filter(owns -> owns.getUser().getScore() != null && owns.getStock().getSymbol().equals(symbol))
+                        .distinct() // removes duplicates owns relationship
+                        .map(Owns::getUser)
+                        .sorted(Comparator.comparing(User::getScore).reversed())
+                        .collect(toList());
 
         if (users.isEmpty()) {
             return emptyList();
         }
-
-        // sort user by ascending score order
-        Collections.sort(users);
-
-        // reverse to get biggest score first
-        Collections.reverse(users);
 
         int top10percent = users.size() / 10; // rounded down for conservative results
 
         return users.stream()
                 .limit(top10percent)
                 .collect(toList());
+    }
+  
+    public List<SanitizedUser> getLeaderboard() {
+        return userDao.findAll().stream()
+                // discarding null scores
+                .filter(user -> user.getScore()!=null)
+                // sort by score desc
+                .sorted(Comparator.comparing(User::getScore).reversed())
+                // sanitize user list
+                .map(SanitizedUser::new)
+                // limit to 50 top investors
+                .limit(50)
+                .collect(Collectors.toList());
     }
 
     @Override

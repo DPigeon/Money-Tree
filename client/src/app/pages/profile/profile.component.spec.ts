@@ -3,6 +3,7 @@ import { HeaderComponent } from '../../components/header/header.component';
 import { TransactionHistoryComponent } from '../../components/transaction-history/transaction-history.component';
 import { ProfileComponent } from './profile.component';
 import { StockSearchComponent } from '../../components/stock-search/stock-search.component';
+import { ListOfFollowsComponent } from 'src/app/components/list-of-follows/list-of-follows.component';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
   FORM_MODULE_DPENDENCEIES,
@@ -65,6 +66,8 @@ const fakeFollowingsList: User[] = [
 ];
 
 const fakeCompleteUserProfile: UserProfile = {
+  coverPhotoURL: 'https://www.cn.ca/-/media/Images/Stories/2021/20210222-RISE-Employee-Resource-Group-600X400.jpg',
+  avatarURL: 'https://www.cn.ca/-/media/Images/Stories/2021/20210222-RISE-Employee-Resource-Group-600X400.jpg',
   id: 5,
   firstName: 'profileUserFirstname',
   lastName: 'profileUserLastName',
@@ -72,6 +75,7 @@ const fakeCompleteUserProfile: UserProfile = {
   score: 150,
   followers: fakeFollowersList,
   following: fakeFollowingsList,
+  biography: 'Here comes the pain train!',
 };
 
 describe('ProfileComponent', () => {
@@ -90,6 +94,7 @@ describe('ProfileComponent', () => {
         HeaderComponent,
         TransactionHistoryComponent,
         StockSearchComponent,
+        ListOfFollowsComponent,
       ],
       providers: [NGRX_STORE_MODULE],
     }).compileComponents();
@@ -145,5 +150,13 @@ describe('ProfileComponent', () => {
     component.followOrUnfollow();
     expect(unfollowSpy).toHaveBeenCalled();
     expect(loadCurrentProfileUserSpy).toHaveBeenCalled();
+  });
+
+  it('should print the right message for bio', () => {
+    expect(component.bioText()).toEqual('Here comes the pain train!');
+    component.completeUserProfile.biography = '';
+    expect(component.bioText()).toEqual('This user has no biography yet.');
+    component.completeUserProfile.biography = null;
+    expect(component.bioText()).toEqual('This user has no biography yet.');
   });
 });

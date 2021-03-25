@@ -63,4 +63,6 @@ public interface UserService {
     List<User> getTopUsers(String symbol);
 
     List<User> getFollowersWhoOwnsTheStock(Long id, String symbol);
+
+    List<SanitizedUser> getLeaderboard();
 }

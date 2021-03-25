@@ -142,10 +142,19 @@ export const setCurrentProfileUser = createAction(
 
 export const followUser = createAction(
   '[User] Follow user',
-  props<{ followerId: number, userToFollowId: number }>()
+  props<{ followerId: number; userToFollowId: number }>()
 );
 
 export const unfollowUser = createAction(
   '[User] Unfollow user',
-  props<{ followerId: number, userToUnfollowId: number }>()
+  props<{ followerId: number; userToUnfollowId: number }>()
+);
+
+export const loadLeaderboardUsers = createAction(
+  '[User] Load leaderboard top 50 users'
+);
+
+export const setCurrentLeaderboardUsers = createAction(
+  '[User] Update the new leaderboard users',
+  props<{ currentLeaderboardUsers: User[] }>()
 );

@@ -33,11 +33,13 @@
       justify-content: flex-start;
       align-items: center;
       .user-picture {
+        cursor: pointer;
         border-radius: 50%;
         margin-right: 10px;
       }
 
       .user-first-and-last-name {
+        cursor: pointer;
         display: block;
         flex-direction: column;
         justify-content: center;

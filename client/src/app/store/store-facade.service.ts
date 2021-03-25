@@ -32,6 +32,7 @@ export class StoreFacadeService {
   userTransactions$: Observable<Transaction[]>;
   userOwnedStocks$: Observable<Stock[]>;
   userSearch$: Observable<UserSearch[]>;
+  leaderboardUsers$: Observable<User[]>;
 
   constructor(private store: Store<{ appState: State }>) {
     this.currentStockLoaded$ = this.store.select(
@@ -68,6 +69,9 @@ export class StoreFacadeService {
       appSelectors.selectCurrentLoadedProfile
     );
     this.userSearch$ = this.store.select(appSelectors.selectUserSearchList);
+    this.leaderboardUsers$ = this.store.select(
+      appSelectors.selectLeaderboardUsers
+    );
   }
 
   loadCurrentStock(ticker: string): void {
@@ -161,5 +165,9 @@ export class StoreFacadeService {
     this.store.dispatch(
       appActions.unfollowUser({ followerId, userToUnfollowId })
     );
+  }
+
+  loadLeaderboardUsers(): void {
+    this.store.dispatch(appActions.loadLeaderboardUsers());
   }
 }

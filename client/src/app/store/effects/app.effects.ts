@@ -384,6 +384,28 @@ export class Effects {
     )
   );
 
+  loadLeaderboardUsers$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadLeaderboardUsers),
+      switchMap((action) => {
+        return this.userService.getLeaderBoard().pipe(
+          map((data) => {
+            return appActions.setCurrentLeaderboardUsers({
+              currentLeaderboardUsers: data,
+            });
+          }),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
+            )
+          )
+        );
+      })
+    )
+  );
+
   mirrorError(backendError: any): AppError {
     if (backendError && backendError.error) {
       const errorMessage: AppError = {

@@ -12,7 +12,9 @@ public enum ExceptionMessage {
     CREDENTIALS_NOT_FOUND("Credentials not found"),
     ALPACA_ERROR("A request to alpaca failed"),
     ORDER_ERROR("Could not process order to send to alpaca"),
-    ALPACA_CLOCK_ERROR("Getting Alpaca market clock info failed");
+    ALPACA_CLOCK_ERROR("Getting Alpaca market clock info failed"),
+    USER_ALREADY_FOLLOWED("User already followed"),
+    STOCK_NOT_FOUND("The requested stock was not found");
 
     private final String message;
 

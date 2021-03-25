@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { StoreFacadeService } from '../../store/store-facade.service';
-import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterEvent,
+} from '@angular/router';
 import { User, UserProfile } from 'src/app/interfaces/user';
 import { MatDialog } from '@angular/material/dialog';
 import { ListOfFollowsComponent } from 'src/app/components/list-of-follows/list-of-follows.component';
@@ -23,7 +28,7 @@ export class ProfileComponent implements OnInit {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
   ngOnInit(): void {
     let username = this.route.snapshot.paramMap.get('username');
     this.storeFacade.loadCurrentProfileUser(username);
@@ -38,11 +43,11 @@ export class ProfileComponent implements OnInit {
       }
     });
     this.router.events
-    .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
-    .subscribe(() => {
-      username = this.route.snapshot.paramMap.get('username');
-      this.storeFacade.loadCurrentProfileUser(username);
-    });
+      .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        username = this.route.snapshot.paramMap.get('username');
+        this.storeFacade.loadCurrentProfileUser(username);
+      });
   }
   openDialog(choice: string): void {
     let dialogRef;
@@ -128,6 +133,10 @@ export class ProfileComponent implements OnInit {
         this.completeUserProfile.username
       );
       this.followButtonDisabled = false;
-    }, 200);
+    }, 500);
   }
+  bioText(): string {
+    return  this.completeUserProfile.biography && this.completeUserProfile.biography.length > 0  ? this.completeUserProfile.biography : 'This user has no biography yet.';
+  }
+
 }
