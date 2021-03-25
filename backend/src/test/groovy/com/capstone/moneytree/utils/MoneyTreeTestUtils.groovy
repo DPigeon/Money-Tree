@@ -19,7 +19,7 @@ class MoneyTreeTestUtils {
    /**
     * Utility method to create a user with random ID
     */
-   static User createUser(String email, String username, String password, String firstName, String lastName, String alpacaApiKey) {
+   static User createUser(String email, String username, String password, String firstName, String lastName, String alpacaApiKey, Double score = 0.0) {
       User user = User.builder()
               .email(email)
               .username(username)
@@ -27,6 +27,7 @@ class MoneyTreeTestUtils {
               .firstName(firstName)
               .lastName(lastName)
               .alpacaApiKey(alpacaApiKey)
+              .score(score)
               .avatarURL("https://moneytree-profile-pictures.s3.amazonaws.com/DEFAULT-profile.jpg")
               .build()
       return user

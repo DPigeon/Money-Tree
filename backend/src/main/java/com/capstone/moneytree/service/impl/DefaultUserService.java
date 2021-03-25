@@ -1,5 +1,8 @@
 package com.capstone.moneytree.service.impl;
 
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
+
 import javax.security.auth.login.CredentialNotFoundException;
 
 import com.capstone.moneytree.ActiveProfile;
@@ -60,6 +63,7 @@ public class DefaultUserService implements UserService {
     ActiveProfile activeProfile;
 
     private final UserDao userDao;
+    private final OwnsDao ownsDao;
     private final FollowsDao followsDao;
     private final ValidatorFactory validatorFactory;
     private final MoneyTreePasswordEncryption passwordEncryption;
@@ -69,7 +73,7 @@ public class DefaultUserService implements UserService {
     private final String bucketName;
 
     @Autowired
-    public DefaultUserService(UserDao userDao, FollowsDao followsDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service,
+    public DefaultUserService(UserDao userDao, FollowsDao followsDao, OwnsDao ownsDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service,
                               @Value("${aws.profile.pictures.bucket}") String bucketName) {
         this.userDao = userDao;
         this.followsDao = followsDao;
@@ -77,6 +81,7 @@ public class DefaultUserService implements UserService {
         this.passwordEncryption = new MoneyTreePasswordEncryption();
         this.amazonS3Service = amazonS3Service;
         this.bucketName = bucketName;
+        this.ownsDao = ownsDao;
     }
 
     @Override
@@ -371,6 +376,25 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    public List<User> getTopUsers(String symbol) {
+        List<User> users = ownsDao.findAll().stream()
+                        .filter(owns -> owns.getUser().getScore() != null && owns.getStock().getSymbol().equals(symbol))
+                        .map(Owns::getUser)
+                        .sorted(Comparator.comparing(User::getScore).reversed())
+                        .distinct() // distinct users in results
+                        .collect(toList());
+
+        if (users.isEmpty()) {
+            return emptyList();
+        }
+
+        int top10percent = Math.max(users.size() / 10 , 1); // rounded down for conservative results
+
+        return users.stream()
+                .limit(top10percent)
+                .collect(toList());
+    }
+  
     public List<SanitizedUser> getLeaderboard() {
         return userDao.findAll().stream()
                 // discarding null scores
@@ -393,6 +417,8 @@ public class DefaultUserService implements UserService {
     public UserValidator getUserValidator() {
         return validatorFactory.getUserValidator();
     }
+
+
 
     public String encryptData(String text) {
         return passwordEncryption.toGraphProperty(text);
