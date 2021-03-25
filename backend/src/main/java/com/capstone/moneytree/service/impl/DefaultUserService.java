@@ -379,16 +379,16 @@ public class DefaultUserService implements UserService {
     public List<User> getTopUsers(String symbol) {
         List<User> users = ownsDao.findAll().stream()
                         .filter(owns -> owns.getUser().getScore() != null && owns.getStock().getSymbol().equals(symbol))
-                        .distinct() // removes duplicates owns relationship
                         .map(Owns::getUser)
                         .sorted(Comparator.comparing(User::getScore).reversed())
+                        .distinct() // distinct users in results
                         .collect(toList());
 
         if (users.isEmpty()) {
             return emptyList();
         }
 
-        int top10percent = users.size() / 10; // rounded down for conservative results
+        int top10percent = Math.max(users.size() / 10 , 1); // rounded down for conservative results
 
         return users.stream()
                 .limit(top10percent)
