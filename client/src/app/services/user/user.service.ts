@@ -130,8 +130,8 @@ export class UserService {
       .get(`users/${userId}/owned_by_followers/${symbol}`)
       .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
   }
-  
-  loadPortfolioHistoricalData(
+
+  getPortfolioHistoricalData(
     userId: string,
     periodLength: number,
     periodUnit: string,
@@ -154,7 +154,11 @@ export class UserService {
           '&extendedHours=' +
           extendedHours
       )
-      .pipe(map((res: Response) => this.dataFormatter.formatAlpacaPortfolio(res.body)));
+      .pipe(
+        map((res: Response) =>
+          this.dataFormatter.formatAlpacaPortfolio(res.body)
+        )
+      );
   }
   formatAlpacaPortfolio(response: any): StockHistory {
     const stockHistoricalData: StockHistory = {
