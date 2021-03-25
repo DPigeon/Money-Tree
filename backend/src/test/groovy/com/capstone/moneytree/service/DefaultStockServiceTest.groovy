@@ -64,19 +64,18 @@ class DefaultStockServiceTest extends Specification {
         owns.size() == 1
     }
 
-    @Ignore // for some reason this test fail. I have wasted too much time. if anyone knows how to fix it please do!!!
     def "Should get that stock using the symbol"() {
         given: "a stock"
-        Stock stock = new Stock("AAPL", "Apple")
+        Stock stock0 = new Stock("AAPL", "Apple")
 
         and:
-        stockDao.findBySymbol(_ as String) >> stock
+        stockDao.findBySymbol("AAPL") >> stock0
 
         when:
-        stockService.getStockBySymbol("AAPL")
+        Stock stock1 = stockService.getStockBySymbol("AAPL")
 
         then:
-        1 * stockDao.findBySymbol(_)
+        stock1 == stock0
     }
 
     def "Should thrown entity not found exception if find by symbol returns null"() {
