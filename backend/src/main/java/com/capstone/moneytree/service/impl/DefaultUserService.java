@@ -1,5 +1,6 @@
 package com.capstone.moneytree.service.impl;
 
+import static com.capstone.moneytree.handler.ExceptionMessage.USER_ALREADY_FOLLOWED;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -54,7 +55,6 @@ public class DefaultUserService implements UserService {
     private static final String AUTHORIZATION_CODE = "authorization_code";
     private static final String NOT_FOLLOWED_BY_THIS_USER = "The user is not followed";
     private static final String USER_CANT_BE_FOLLOWED_BY_ITSELF = "User cannot followed by itself";
-    private static final String USER_ALREADY_FOLLOWED = "User already followed";
 
     @Value("${alpaca.key.id}")
     private String clientId;
@@ -299,7 +299,7 @@ public class DefaultUserService implements UserService {
         List<Follows> alreadyFollowed = followsDao.findByFollowerIdAndUserToFollowId(userId, userToFollowId);
         // check to see if user already following the other user
         if (!alreadyFollowed.isEmpty()) {
-            throw new FollowsRelationshipException(USER_ALREADY_FOLLOWED);
+            throw new FollowsRelationshipException(USER_ALREADY_FOLLOWED.getMessage());
         }
         Date currentDate = new Date();
         Follows newFollowRel = new Follows(user, userToFollow, currentDate);

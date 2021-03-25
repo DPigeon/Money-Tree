@@ -1,5 +1,7 @@
 package com.capstone.moneytree.service.impl;
 
+import static com.capstone.moneytree.handler.ExceptionMessage.STOCK_NOT_FOUND;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +22,6 @@ import com.capstone.moneytree.service.api.StockService;
 @Service
 @Transactional
 public class DefaultStockService implements StockService {
-
-    private static final String STOCK_NOT_FOUND = "The requested stock was not found";
 
     private final StockDao stockDao;
     private final OwnsDao ownsDao;
@@ -53,7 +53,7 @@ public class DefaultStockService implements StockService {
     public Stock getStockBySymbol(String symbol) {
         Stock stock = stockDao.findBySymbol(symbol);
         if (stock == null) {
-            throw new EntityNotFoundException(STOCK_NOT_FOUND);
+            throw new EntityNotFoundException(STOCK_NOT_FOUND.getMessage());
         }
         return stock;
     }
