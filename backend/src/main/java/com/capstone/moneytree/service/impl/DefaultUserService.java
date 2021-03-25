@@ -376,24 +376,17 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-
     public List<User> getTopUsers(String symbol) {
-        List<User> users = new ArrayList<>();
-        // get a list of all user who own a stock with this symbol
-        ownsDao.findAll().stream()
-                .filter(owns -> owns.getStock().getSymbol().equals(symbol))
-                .collect(toList())
-                .forEach(owns -> users.add(owns.getUser()));
+        List<User> users = ownsDao.findAll().stream()
+                        .filter(owns -> owns.getUser().getScore() != null && owns.getStock().getSymbol().equals(symbol))
+                        .distinct() // removes duplicates owns relationship
+                        .map(Owns::getUser)
+                        .sorted(Comparator.comparing(User::getScore).reversed())
+                        .collect(toList());
 
         if (users.isEmpty()) {
             return emptyList();
         }
-
-        // sort user by ascending score order
-        Collections.sort(users);
-
-        // reverse to get biggest score first
-        Collections.reverse(users);
 
         int top10percent = users.size() / 10; // rounded down for conservative results
 
