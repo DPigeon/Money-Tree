@@ -6,6 +6,7 @@ import com.capstone.moneytree.dao.StockDao
 import com.capstone.moneytree.dao.ToFulfillDao
 import com.capstone.moneytree.dao.TransactionDao
 import com.capstone.moneytree.facade.AlpacaSession
+import com.capstone.moneytree.model.SanitizedUser
 import com.capstone.moneytree.model.relationship.Follows
 import com.capstone.moneytree.model.relationship.Owns
 import com.capstone.moneytree.service.api.StockMarketDataService
@@ -919,5 +920,34 @@ class UserControllerTest extends Specification {
         File file = new File("./src/test/resources/image/${PIC_FILE_NAME}")
         MockMultipartFile imageFile = new MockMultipartFile(file.getName(), file.getAbsolutePath(), null, file.getBytes())
         return amazonS3Facade.uploadImageToS3Bucket(imageFile, BUCKET_NAME)
+    }
+
+    def "getLeaderboard test"() {
+        given: "a list of users sorted by username (list0)"
+        List<User> list0 = new ArrayList<>();
+        for(int i = 0; i < 75; i++){
+            User user = User.builder()
+                    .username("username" + i)
+                    .score(i)
+                    .build();
+            list0.add(user);
+        }
+        and: "list0 sanitized, limited to 50 entries, and sorted by score (list1)"
+        List<SanitizedUser> list1 = new ArrayList<>();
+        //this is intentionally generated to not reuse the same code than in the getLeaderboard method, in case there was an issue with it.
+        for(int i = 74; i >= 25; i--){
+            User user = User.builder()
+                    .username("username" + i)
+                    .score(i)
+                    .build();
+            SanitizedUser sanitizedUser = new SanitizedUser(user);
+            list1.add(sanitizedUser);
+        }
+        and: "mock userDao.findAll() to return list0"
+        userDao.findAll() >> list0
+        when: "getLeaderboard"
+        List<SanitizedUser> response = userController.getLeaderboard()
+        then: "response should match list1"
+        response == list1
     }
 }

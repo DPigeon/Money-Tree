@@ -52,7 +52,9 @@ export class UserService {
   getAllUsers(): Observable<UserSearch[]> {
     return this.api
       .get('users/search')
-      .pipe(map((res: Response) => this.userSearchFormatter(res.body)));
+      .pipe(
+        map((res: Response) => this.dataFormatter.userSearchFormatter(res.body))
+      );
   }
 
   userLogin(user: User): Observable<User> {
@@ -71,6 +73,12 @@ export class UserService {
     return this.api.delete('users/delete-by-email/' + email);
   }
 
+  getLeaderBoard(): Observable<User[]> {
+    return this.api
+      .get('users/leaderboard')
+      .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
+  }
+
   updatePictureURL(
     userId: number,
     imageFile: File,
@@ -87,67 +95,12 @@ export class UserService {
   getFollowers(userId: number): Observable<User[]> {
     return this.api
       .get('users/followers/' + userId)
-      .pipe(
-        map((res: Response) => this.dataFormatter.followUserListFormatter(res))
-      );
+      .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
   }
 
   getFollowings(userId: number): Observable<User[]> {
     return this.api
       .get('users/followings/' + userId)
-      .pipe(
-        map((res: Response) => this.dataFormatter.followUserListFormatter(res))
-      );
-  }
-
-  userFormatter(response: any): User {
-    const formattedUser: User = {
-      id: response.id,
-      firstName: response.firstName,
-      lastName: response.lastName,
-      username: response.username,
-      avatarURL: response.avatarURL,
-      coverPhotoURL: response.coverPhotoURL,
-      email: response.email,
-      score: response.score,
-      rank: response.rank,
-      balance: response.balance,
-      alpacaApiKey: response.alpacaApiKey,
-      // portfolio: response.portfolio,
-      // transactions: response.transactions,
-      biography: response.biography,
-    };
-    return formattedUser;
-  }
-
-  userSearchFormatter(response: any): UserSearch[] {
-    const result: UserSearch[] = [];
-    response.forEach((e) => {
-      result.push({
-        id: e.username,
-        firstName: e.firstName,
-        lastName: e.lastName,
-        avatarURL: e.avatarURL,
-        email: e.email,
-      });
-    });
-    return result;
-  }
-
-  followUserListFormatter(response: any): User[] {
-    const result: User[] = [];
-    for (const fetchedUser of response.body) {
-      result.push({
-        id: fetchedUser.id,
-        firstName: fetchedUser.firstName,
-        lastName: fetchedUser.lastName,
-        username: fetchedUser.username,
-        avatarURL: fetchedUser.avatarURL,
-        score: fetchedUser.score,
-        rank: fetchedUser.rank,
-        balance: fetchedUser.balance,
-      });
-    }
-    return result;
+      .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
   }
 }
