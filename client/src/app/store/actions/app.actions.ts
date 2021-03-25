@@ -29,21 +29,6 @@ export const stockHistoricalDataLoadSuccess = createAction(
   props<{ stockHistoricalData: StockHistory }>()
 );
 
-export const loadPortfolioHistoricalData = createAction(
-  '[Portfolio History] Load Portfolio Historical Data',
-  props<{ userId: string,
-    periodLength: number,
-    periodUnit: string,
-    timeFrame: string,
-    dateEnd: string,
-    extendedHours: string }>()
-);
-
-export const portfolioHistoricalDataLoadSuccess = createAction(
-  '[Portfolio History] Load Portfolio Historical Data Success',
-  props<{ portfolioHistoricalData: StockHistory }>()
-);
-
 export const loadMarketClock = createAction(
   '[Market Clock] Load Market Clock Info',
   props<{ userId: number }>()

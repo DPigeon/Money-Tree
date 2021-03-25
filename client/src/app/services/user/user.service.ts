@@ -116,7 +116,6 @@ export class UserService {
       .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
   }
 
-
   getTopInvestors(symbol: string): Observable<User[]> {
     return this.api
       .get('users/' + symbol + '/top')
@@ -132,38 +131,47 @@ export class UserService {
       .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
   }
 
-  loadPortfolioHistoricalData(
+  getPortfolioHistoricalData(
     userId: string,
     periodLength: number,
     periodUnit: string,
     timeFrame: string,
     dateEnd: string,
     extendedHours: string
-  ): Observable<StockHistory> {
-    return this.api
-      .get(
-        'alpaca/portfolio/userId=' +
-          userId +
-          '&periodLength=' +
-          periodLength +
-          '&periodUnit=' +
-          periodUnit +
-          '&timeFrame=' +
-          timeFrame +
-          '&dateEnd=' +
-          dateEnd +
-          '&extendedHours=' +
-          extendedHours
-      )
-      .pipe(map((res: Response) => this.formatAlpacaPortfolio(res.body)));
+  ): Promise<StockHistory> {
+    return new Promise((resolve, reject) => {
+      this.api
+        .get(
+          'alpaca/portfolio/userId=' +
+            userId +
+            '&period=' +
+            periodLength +
+            '&unit=' +
+            periodUnit +
+            '&timeframe=' +
+            timeFrame +
+            '&dateend=' +
+            dateEnd +
+            '&extended=' +
+            extendedHours
+        )
+        .subscribe(
+          (result: any) => {
+            resolve(this.formatAlpacaPortfolio(result.body));
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    });
   }
 
   formatAlpacaPortfolio(response: any): StockHistory {
     const stockHistoricalData: StockHistory = {
-      symbol: response.chart.result[0].meta.symbol,
-      closePrice: response.chart.result[0].indicators.quote[0].close,
-      timestamp: response.chart.result[0].timestamp,
-      currency: response.chart.result[0].meta.currency,
+      symbol: '',
+      closePrice: response.profitLoss,
+      timestamp: response.timestamp,
+      currency: 'USD',
     };
     return stockHistoricalData;
   }

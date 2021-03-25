@@ -75,7 +75,7 @@ public class AlpacaController extends AbstractController {
            @PathVariable(name = "periodLength") @Valid @NotBlank int periodLength,
            @PathVariable(name = "periodUnit") @Valid @NotBlank String periodUnit,
            @PathVariable(name = "timeFrame") @Valid @NotBlank String timeFrame,
-           @PathVariable(name = "dateEnd") @Valid @NotBlank LocalDate dateEnd,
+           @PathVariable(name = "dateEnd") @Valid @NotBlank String dateEnd,
            @PathVariable(name = "extendedHours") @Valid @NotBlank String extendedHours) {
       PortfolioHistory portfolioHistory = marketInteractionsFacade.getPortfolioHistory(
               userId,

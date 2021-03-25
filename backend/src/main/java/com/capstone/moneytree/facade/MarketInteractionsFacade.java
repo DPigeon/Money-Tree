@@ -154,14 +154,14 @@ public class MarketInteractionsFacade {
     */
    public PortfolioHistory getPortfolioHistory(String userId, @NotNull @NotBlank int periodLength,
                                                @NotNull @NotBlank String periodUnit, @NotNull @NotBlank String timeFrame,
-                                               @NotNull @NotBlank LocalDate dateEnd, @NotNull @NotBlank boolean extendedHours) {
+                                               @NotNull @NotBlank String dateEnd, @NotNull @NotBlank boolean extendedHours) {
       initializeAlpacaSession(userId);
       PortfolioHistory portfolioHistory = null;
       PortfolioPeriodUnit portfolioPeriodUnit = PortfolioPeriodUnit.valueOf(periodUnit);
       PortfolioTimeFrame portfolioTimeFrame = PortfolioTimeFrame.valueOf(timeFrame);
       try {
          portfolioHistory = alpacaAPI.getPortfolioHistory(periodLength, portfolioPeriodUnit, portfolioTimeFrame,
-                 dateEnd, extendedHours);
+                 LocalDate.parse(dateEnd), extendedHours);
          LOGGER.info("Get portfolio: {}", portfolioHistory);
       } catch (AlpacaAPIRequestException e) {
          LOGGER.error("Error getting the portfolio: {}", e.getMessage());
