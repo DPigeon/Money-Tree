@@ -18,7 +18,7 @@
   .user-first-name {
     font-size: 20px;
     margin-bottom: 5px;
-    cursor:pointer;
+    cursor: pointer;
   }
   .edit-profile {
     padding: 0 20px;
@@ -45,31 +45,9 @@
   width: 80%;
   overflow: hidden;
   margin-bottom: 20px;
-  max-height: 200px;
+  max-height: 300px;
 }
 .your-earnings {
   width: 80%;
   margin-bottom: 20px;
-}
-.mat-row {
-  height: auto;
-}
-
-th.mat-header-cell:last-of-type,
-th.mat-header-cell:first-of-type,
-td.mat-cell:first-of-type,
-td.mat-cell:last-of-type {
-  padding: 2px 3px;
-}
-.mat-header-cell {
-  padding: 2px 3px;
-}
-.mat-cell {
-  padding: 2px 3px;
-}
-.table-container {
-  overflow-x: auto;
-}
-table {
-  width: 100%;
 }

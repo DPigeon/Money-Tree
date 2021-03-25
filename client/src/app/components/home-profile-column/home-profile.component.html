@@ -7,7 +7,9 @@
     height="40"
     [src]="currentUser.avatarURL"
   />
-  <span (click)="goToProfile()" class="user-first-name">Hello {{ currentUser.firstName }} !</span>
+  <span (click)="goToProfile()" class="user-first-name"
+    >Hello {{ currentUser.firstName }} !</span
+  >
   <div>
     <span class="user-score-label">SCORE:</span>
     <span class="user-score">{{ currentUser.score || 0 }}</span>
@@ -19,7 +21,7 @@
     color="primary"
     (click)="openDialog()"
   >
-    Your Profile
+    Edit Profile
   </button>
   <mat-card class="your-earnings">
     <h2>Total Earnings:</h2>
@@ -28,34 +30,10 @@
   </mat-card>
   <mat-card class="your-stocks">
     <h2>Your Stocks:</h2>
-    <div class=table-container>
-      <table mat-table [dataSource]="dataSource" >
-   
-       
-       <ng-container matColumnDef="company">
-         <th mat-header-cell *matHeaderCellDef> Company </th>
-         <td mat-cell *matCellDef="let element"> {{element.company}} </td>
-       </ng-container>
-     
-       <ng-container matColumnDef="amount">
-         <th mat-header-cell *matHeaderCellDef> Amount </th>
-         <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
-       </ng-container>
-     
-       <ng-container matColumnDef="gain_d">
-         <th mat-header-cell *matHeaderCellDef> Gain $ </th>
-         <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
-       </ng-container>
-   
-       <ng-container matColumnDef="gain_p">
-         <th mat-header-cell *matHeaderCellDef> Gain % </th>
-         <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
-       </ng-container>
-     
-       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-     </table>
-   </div>
+    <app-user-owned-stock-profile
+      location="home"
+      [currentUser]="user"
+      [userOwnedStocks]="userOwnedStockDetails"
+    ></app-user-owned-stock-profile>
   </mat-card>
-  
 </div>

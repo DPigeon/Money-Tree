@@ -1,42 +1,41 @@
-import { ThrowStmt } from '@angular/compiler';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Stock } from 'src/app/interfaces/stock';
 import { User } from 'src/app/interfaces/user';
+import { UserService } from 'src/app/services/user/user.service';
 import { StoreFacadeService } from 'src/app/store/store-facade.service';
 import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 
-export interface StockProfile {
-  company: string;
-  amount: number;
-  gain_d: number;
-  gain_p: number;
-}
 @Component({
   selector: 'app-home-profile',
   templateUrl: './home-profile.component.html',
   styleUrls: ['./home-profile.component.scss'],
 })
-export class HomeProfileComponent implements OnInit {
+export class HomeProfileComponent implements OnChanges {
   @Input() currentUser: User;
+  @Input() userOwnedStocks: Stock[];
   followingSearch = '';
-  displayedColumns: string[] = ['company', 'amount', 'gain_d', 'gain_p'];
-  dataSource = [{ company: 'AC', amount: 0, gain_d: 0, gain_p: 0 }];
+  user: User;
+  userOwnedStockDetails: Stock[] = [];
 
   constructor(
     private router: Router,
     private storeFacade: StoreFacadeService,
     public dialog: MatDialog
   ) {}
-  ngOnInit(): void {}
+
+  ngOnChanges(): void {
+    this.user = this.currentUser;
+    this.userOwnedStockDetails = this.userOwnedStocks;
+  }
 
   goToProfile(): void {
     this.router
       .navigate(['/profile/' + this.currentUser.username])
       .then(() => this.storeFacade.loadUserTransactions(this.currentUser.id));
   }
-  
+
   openDialog(): void {
     const dialogRef = this.dialog.open(EditProfileComponent, {
       data: this.currentUser,

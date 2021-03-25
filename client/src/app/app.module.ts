@@ -30,6 +30,7 @@ import { StockDetailHeaderComponent } from './components/stock-detail-header/sto
 import { HeaderComponent } from './components/header/header.component';
 import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
 import { HomeProfileComponent } from './components/home-profile-column/home-profile.component';
+import { UserOwnedStockProfileComponent } from './components/user-owned-stock-profile/user-owned-stock-profile.component';
 import { StockStatsComponent } from './components/stock-stats/stock-stats.component';
 import { LoginSignupComponent } from './pages/login-signup/login-signup.component';
 import { SignupFormComponent } from './components/signup-form/signup-form.component';
@@ -73,6 +74,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     LoginFormComponent,
     HomeComponent,
     HomeProfileComponent,
+    UserOwnedStockProfileComponent,
     EditProfileComponent,
     SellOrBuyActionsComponent,
     FollowingsSearchComponent,
