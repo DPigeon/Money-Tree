@@ -21,11 +21,11 @@ export class HomeComponent implements OnInit {
   followers$: Observable<User[]>;
   userTransactions$: Observable<Transaction[]>;
   userOwnedStocks$: Observable<Stock[]>;
+  showProfileColumn = false;
 
   constructor(
     private storeFacade: StoreFacadeService,
     public dialog: MatDialog,
-    private router: Router
   ) {
     this.currentUser = null; // otherwise there would be an undefined error because of waiting for the currentUser values to fetch
   }
@@ -37,6 +37,7 @@ export class HomeComponent implements OnInit {
         this.currentUser = user;
         this.userPhotoURL = this.currentUser.avatarURL;
         this.coverPhotoURL = this.currentUser.coverPhotoURL;
+        this.showProfileColumn = true;
 
         // Loading followings and followers list and adding them to state
         this.storeFacade.loadCurrentUserFollowings(this.currentUser.id);
@@ -51,5 +52,4 @@ export class HomeComponent implements OnInit {
       }
     });
   }
-
 }

@@ -9,6 +9,7 @@ import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 export interface Earnings {
   earnings: number;
   totalGain: number;
+  positive: boolean;
 }
 @Component({
   selector: 'app-home-profile',
@@ -21,7 +22,7 @@ export class HomeProfileComponent implements OnChanges {
   followingSearch = '';
   user: User;
   userOwnedStockDetails: Stock[] = [];
-  earnings={amount:'0', gain:'0', percentage:'0', positive:true};
+  earnings = { amount: '0', gain: '0', percentage: '0', positive: true };
 
   constructor(
     private router: Router,
@@ -34,9 +35,9 @@ export class HomeProfileComponent implements OnChanges {
     this.userOwnedStockDetails = this.userOwnedStocks;
   }
 
-  goToProfile(): void {
+  goToProfile(username: string): void {
     this.router
-      .navigate(['/profile/' + this.currentUser.username])
+      .navigate(['/profile/' + username])
       .then(() => this.storeFacade.loadUserTransactions(this.currentUser.id));
   }
   openDialog(): void {
@@ -69,12 +70,19 @@ export class HomeProfileComponent implements OnChanges {
     );
   }
   setEarnings(e: Earnings): void {
-    this.earnings.amount =e.earnings.toFixed(2);
-    this.earnings.gain=e.totalGain.toFixed(2);
-    this.earnings.percentage = (e.totalGain/(e.earnings-e.totalGain)).toFixed(2);
+    this.earnings.amount = e.earnings.toFixed(2);
+    this.earnings.gain = e.totalGain.toFixed(2);
+    this.earnings.percentage = (
+      e.totalGain /
+      (e.earnings - e.totalGain)
+    ).toFixed(2);
+    this.earnings.positive = e.positive;
   }
 
   getEarningsClass(positive: boolean): string {
     return positive ? 'positive-change' : 'negative-change';
+  }
+  getEarningSign(positive: boolean): string {
+    return positive ? '+' : '-';
   }
 }

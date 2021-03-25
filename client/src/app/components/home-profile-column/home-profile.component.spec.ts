@@ -3,8 +3,10 @@ import { HomeProfileComponent } from './home-profile.component';
 import {
   FORM_MODULE_DPENDENCEIES,
   MATERIAL_MODULE_DEPENDENCIES,
+  NGRX_STORE_MODULE,
 } from '../../shared.module';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 // integration tests
 describe('HomeProfileComponent', () => {
@@ -19,6 +21,16 @@ describe('HomeProfileComponent', () => {
         FORM_MODULE_DPENDENCEIES,
       ],
       declarations: [HomeProfileComponent],
+      providers: [
+        NGRX_STORE_MODULE,
+        {
+          provide: MatDialogRef,
+          useValue: {
+            close: (dialogResult: any) => {},
+          },
+        },
+        { provide: MAT_DIALOG_DATA, useValue: [] },
+      ],
     }).compileComponents();
   });
 
@@ -33,50 +45,63 @@ describe('HomeProfileComponent', () => {
   });
 });
 
-// const mockRouter = {
-//   navigate: jest.fn(),
-// } as any;
+const mockRouter = {
+  navigate: jest.fn(),
+} as any;
 
-// // unit tests
-// describe('HomeProfileComponent Unit Test', () => {
-//   let component: HomeProfileComponent;
-//   beforeEach(() => {
-//     component = new HomeProfileComponent(mockRouter);
-//   });
+const mockDialog = {
+  open: jest.fn(),
+} as any;
 
-//   it('should display correct searched followings', () => {
-//     const fakeUser1 = {
-//       id: 1,
-//       firstName: 'Razine',
-//       lastName: 'Bensari',
-//       score: 180,
-//     };
-//     const fakeUser2 = {
-//       id: 0,
-//       firstName: 'Marwan',
-//       lastName: 'Ayadi',
-//       score: 120,
-//     };
-//     component.followingSearch = 'Ra';
-//     console.log(fakeUser1);
-//     expect(component.isSearchedFollowings(fakeUser1)).toBe(true);
-//     expect(component.isSearchedFollowings(fakeUser2)).toBe(false);
-//     component.followingSearch = '';
-//     expect(component.isSearchedFollowings(fakeUser2)).toBe(true);
-//     component.followingSearch = 'marwan ay';
-//     expect(component.isSearchedFollowings(fakeUser2)).toBe(true);
-//   });
+const mockStoreFacade = {
+  updatePictureURL: jest.fn(),
+  loadUserTransactions: jest.fn(),
+  updateUser: jest.fn(),
+} as any;
+// unit tests
+describe('HomeProfileComponent Unit Test', () => {
+  let component: HomeProfileComponent;
+  beforeEach(() => {
+    component = new HomeProfileComponent(
+      mockRouter,
+      mockStoreFacade,
+      mockDialog
+    );
+  });
 
-//   it('should navigate to the correct user profile', () => {
-//     const fakeUser1 = {
-//       id: 1,
-//       firstName: 'Razine',
-//       lastName: 'Bensari',
-//       username: 'username',
-//       score: 180,
-//     };
-//     const routingSpy = jest.spyOn(mockRouter, 'navigate');
-//     component.navigateToFollowingProfile(fakeUser1.username);
-//     expect(routingSpy).toHaveBeenCalledTimes(1); // to be changed to user id
-//   });
-// });
+  it('should set User Earnings', () => {
+    const fakeEarning1 = {
+      earnings: 1534521.123165,
+      totalGain: 213.5416516,
+      positive: true,
+    };
+    component.setEarnings(fakeEarning1);
+    expect(component.earnings).toEqual({
+      amount: '1534521.12',
+      gain: '213.54',
+      percentage: '0.00',
+      positive: true,
+    });
+    expect(component.getEarningSign(component.earnings.positive)).toBe('+');
+    expect(component.getEarningsClass(component.earnings.positive)).toBe(
+      'positive-change'
+    );
+
+    const fakeEarning2 = {
+      earnings: 1534521.123165,
+      totalGain: 213.5416516,
+      positive: false,
+    };
+    component.setEarnings(fakeEarning2);
+    expect(component.earnings).toEqual({
+      amount: '1534521.12',
+      gain: '213.54',
+      percentage: '0.00',
+      positive: false,
+    });
+    expect(component.getEarningSign(component.earnings.positive)).toBe('-');
+    expect(component.getEarningsClass(component.earnings.positive)).toBe(
+      'negative-change'
+    );
+  });
+});

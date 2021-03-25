@@ -2,12 +2,12 @@
   <img
     class="user-picture"
     alt="Profile Picture"
-    (click)="goToProfile()"
+    (click)="goToProfile(currentUser.username)"
     width="40"
     height="40"
     [src]="currentUser.avatarURL"
   />
-  <span (click)="goToProfile()" class="user-first-name"
+  <span (click)="goToProfile(currentUser.username)" class="user-first-name"
     >Hello {{ currentUser.firstName }} !</span
   >
   <div>
@@ -25,8 +25,13 @@
   </button>
   <mat-card class="your-earnings">
     <h2>Total Earnings:</h2>
-    <span class="earning-amount">${{earnings.amount}}</span><br>
-    <span [class]="getEarningsClass(earnings.positive)"> +${{earnings.gain}} (%{{earnings.percentage}})</span>
+    <span class="earning-amount">${{ earnings.amount }}</span
+    ><br />
+    <span [class]="getEarningsClass(earnings.positive)">
+      {{ getEarningSign(earnings.positive) }}${{ earnings.gain }} (%{{
+        earnings.percentage
+      }})</span
+    >
     <span></span>
   </mat-card>
   <mat-card class="your-stocks">

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Stock } from 'src/app/interfaces/stock';
@@ -22,9 +29,9 @@ export class UserOwnedStockProfileComponent implements OnChanges {
   @Input() location: string;
   @Input() userOwnedStocks: Stock[];
   @Output() changeEarnings = new EventEmitter<{
-    earnings:number;
-    totalGain:number;
-    positive:boolean;
+    earnings: number;
+    totalGain: number;
+    positive: boolean;
   }>();
   displayedColumns: string[] = [
     'company',
@@ -46,12 +53,13 @@ export class UserOwnedStockProfileComponent implements OnChanges {
           'price',
           'change',
         ]);
-    let data: StockProfile[] = [];
+    let data: StockProfile[];
+    data = [];
     this.userService
       .getUserAlpacaPosition(this.currentUser.id)
       .then((result) => {
-        let earnings = 0
-        let totalGain =0;
+        let earnings = 0;
+        let totalGain = 0;
         result.forEach((r) => {
           let amount = 0;
           let quantity = 0;
@@ -63,11 +71,11 @@ export class UserOwnedStockProfileComponent implements OnChanges {
             .forEach((o) => {
               quantity += Number(o.quantity);
               amount += Number(o.quantity) * Number(o.avgPrice);
-              earnings +=amount;
+              earnings += amount;
               gain +=
                 (Number(r.currentPrice) - Number(o.avgPrice)) *
                 Number(o.quantity);
-              change = Number(r.currentPrice) - Number(o.avgPrice);  
+              change = Number(r.currentPrice) - Number(o.avgPrice);
               totalGain += gain;
             });
           price = amount / quantity;
@@ -81,9 +89,9 @@ export class UserOwnedStockProfileComponent implements OnChanges {
         });
         this.dataSource.data = data;
         this.changeEarnings.emit({
-         earnings:(earnings<0?-1*earnings:earnings),
-         totalGain,
-         positive:earnings>0,
+          earnings: earnings < 0 ? -1 * earnings : earnings,
+          totalGain,
+          positive: earnings > 0,
         });
       });
   }
