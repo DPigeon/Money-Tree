@@ -43,7 +43,7 @@ export class ProfileComponent implements OnInit {
     this.storeFacade.loadCurrentProfileUser(username);
     this.currentProfileUser$.subscribe((data: UserProfile) => {
       if (data) {
-        this.completeUserProfile = data; 
+        this.completeUserProfile = data;
         this.userId = String(this.completeUserProfile.id);
       }
     });
@@ -52,7 +52,7 @@ export class ProfileComponent implements OnInit {
         this.loggedInUserId = loggedInUser.id;
       }
     });
-   
+
     const currentDate = new Date();
 
     this.userService
@@ -220,7 +220,7 @@ export class ProfileComponent implements OnInit {
         break;
       default:
       case '5y':
-        //to be changed in the futur
+        // to be changed in the futur
         unit = 'YEAR';
         length = 5;
         break;
