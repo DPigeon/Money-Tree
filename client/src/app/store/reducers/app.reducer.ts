@@ -1,3 +1,4 @@
+import { AlpacaUserPosition } from 'src/app/interfaces/alpacaPosition';
 import { Transaction } from './../../interfaces/transaction';
 import { MarketClock } from './../../interfaces/market-clock';
 import { createReducer, on } from '@ngrx/store';
@@ -22,6 +23,7 @@ export interface State {
   userOwnedStocks: Stock[];
   searchUserList: UserSearch[];
   leaderboardUsers: User[];
+  alpacaPositions: AlpacaUserPosition[];
 }
 
 export const initialState: State = {
@@ -37,6 +39,7 @@ export const initialState: State = {
   userOwnedStocks: null,
   searchUserList: null,
   leaderboardUsers: null,
+  alpacaPositions: null,
 };
 
 export const reducer = createReducer(
@@ -108,6 +111,14 @@ export const reducer = createReducer(
     (state, { currentLeaderboardUsers }) => ({
       ...state,
       leaderboardUsers: currentLeaderboardUsers,
+    })
+  ),
+
+  on(
+    appActions.setCurrentAlpacaPositions,
+    (state, { currentAlpacaPositions }) => ({
+      ...state,
+      alpacaPositions: currentAlpacaPositions,
     })
   )
 );

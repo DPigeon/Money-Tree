@@ -1,3 +1,7 @@
+import { StockSearchComponent } from 'src/app/components/stock-search/stock-search.component';
+import { FollowingsSearchComponent } from 'src/app/components/followings-search/followings-search.component';
+import { HeaderComponent } from 'src/app/components/header/header.component';
+import { HomeComponent } from './../../pages/home/home.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomeProfileComponent } from './home-profile.component';
 import {
@@ -7,6 +11,33 @@ import {
 } from '../../shared.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { UserOwnedStockProfileComponent } from '../user-owned-stock-profile/user-owned-stock-profile.component';
+import { SellOrBuyActionsComponent } from '../sell-buy-stock/sell-buy-actions.component';
+import { Router } from '@angular/router';
+import { User } from 'src/app/interfaces/user';
+import { EditProfileComponent } from '../edit-profile/edit-profile.component';
+
+const mockRouter = {
+  navigate: jest.fn(),
+} as any;
+
+const mockDialog = {
+  open: jest.fn(),
+} as any;
+
+const mockStoreFacade = {
+  userLogin: jest.fn(),
+  createNewUser: jest.fn(),
+  updateUser: jest.fn(),
+  loadAlpacaPositions: jest.fn(),
+} as any;
+
+const fakeUser: User = {
+  id: 0,
+  firstName: 'userfn',
+  lastName: 'userln',
+  username: 'username',
+};
 
 // integration tests
 describe('HomeProfileComponent', () => {
@@ -20,7 +51,16 @@ describe('HomeProfileComponent', () => {
         RouterTestingModule,
         FORM_MODULE_DPENDENCEIES,
       ],
-      declarations: [HomeProfileComponent],
+      declarations: [
+        HomeComponent,
+        HeaderComponent,
+        HomeProfileComponent,
+        StockSearchComponent,
+        EditProfileComponent,
+        FollowingsSearchComponent,
+        UserOwnedStockProfileComponent,
+        SellOrBuyActionsComponent,
+      ],
       providers: [
         NGRX_STORE_MODULE,
         {
@@ -30,6 +70,7 @@ describe('HomeProfileComponent', () => {
           },
         },
         { provide: MAT_DIALOG_DATA, useValue: [] },
+        { provide: Router, useValue: mockRouter },
       ],
     }).compileComponents();
   });
@@ -37,6 +78,7 @@ describe('HomeProfileComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HomeProfileComponent);
     component = fixture.componentInstance;
+    component.currentUser = fakeUser;
     fixture.detectChanges();
   });
 
@@ -45,19 +87,6 @@ describe('HomeProfileComponent', () => {
   });
 });
 
-const mockRouter = {
-  navigate: jest.fn(),
-} as any;
-
-const mockDialog = {
-  open: jest.fn(),
-} as any;
-
-const mockStoreFacade = {
-  updatePictureURL: jest.fn(),
-  loadUserTransactions: jest.fn(),
-  updateUser: jest.fn(),
-} as any;
 // unit tests
 describe('HomeProfileComponent Unit Test', () => {
   let component: HomeProfileComponent;

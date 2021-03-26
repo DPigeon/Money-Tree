@@ -7,11 +7,12 @@
   align-items: center;
 
   .user-picture {
-   width: 125px;
+    width: 125px;
     height: 125px;
     border-radius: 50%;
     margin-bottom: 20px;
     cursor: pointer;
+    object-fit: cover;
   }
   .user-first-name {
     font-size: 20px;

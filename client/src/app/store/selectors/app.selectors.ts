@@ -84,3 +84,8 @@ export const selectLeaderboardUsers = createSelector(
   selectAppState,
   (appState: State) => appState.leaderboardUsers
 );
+
+export const selectAlpacaPositions = createSelector(
+  selectAppState,
+  (appState: State) => appState.alpacaPositions
+);

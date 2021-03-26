@@ -1,16 +1,16 @@
+import { AlpacaUserPosition } from 'src/app/interfaces/alpacaPosition';
 import {
   Component,
   EventEmitter,
   Input,
   OnChanges,
-  OnInit,
   Output,
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Stock } from 'src/app/interfaces/stock';
 import { User } from 'src/app/interfaces/user';
-import { UserService } from 'src/app/services/user/user.service';
+import { StoreFacadeService } from 'src/app/store/store-facade.service';
 
 export interface StockProfile {
   company: string;
@@ -40,9 +40,13 @@ export class UserOwnedStockProfileComponent implements OnChanges {
     'price',
     'change',
   ];
+  userAlpacaPositions: AlpacaUserPosition[];
   public dataSource = new MatTableDataSource<StockProfile>([]);
 
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(
+    private router: Router,
+    private storeFacade: StoreFacadeService
+  ) {}
   ngOnChanges(): void {
     this.location === 'home'
       ? (this.displayedColumns = ['company', 'amount', 'gain_loss'])
@@ -53,48 +57,59 @@ export class UserOwnedStockProfileComponent implements OnChanges {
           'price',
           'change',
         ]);
+
+    if (this.currentUser) {
+      this.storeFacade.loadAlpacaPositions(this.currentUser.id);
+    }
+    this.storeFacade.userAlpacaPositions$.subscribe((result) => {
+      if (result) {
+        this.userAlpacaPositions = result;
+        this.tableDataGenerator();
+      }
+    });
+  }
+  tableDataGenerator(): void {
     let data: StockProfile[];
     data = [];
-    this.userService
-      .getUserAlpacaPosition(this.currentUser.id)
-      .then((result) => {
-        let earnings = 0;
-        let totalGain = 0;
-        result.forEach((r) => {
-          let amount = 0;
-          let quantity = 0;
-          let gain = 0;
-          let price = 0;
-          let change = 0;
-          this.userOwnedStocks
-            .filter((x) => x.tickerSymbol === r.symbol)
-            .forEach((o) => {
-              quantity += Number(o.quantity);
-              amount += Number(o.quantity) * Number(o.avgPrice);
-              earnings += amount;
-              gain +=
-                (Number(r.currentPrice) - Number(o.avgPrice)) *
-                Number(o.quantity);
-              change = Number(r.currentPrice) - Number(o.avgPrice);
-              totalGain += gain;
-            });
-          price = amount / quantity;
-          if(amount!=0){
+    if (this.userAlpacaPositions && this.userOwnedStocks) {
+      let earnings = 0;
+      let totalGain = 0;
+      this.userAlpacaPositions.forEach((r) => {
+        let amount = 0;
+        let quantity = 0;
+        let gain = 0;
+        let price = 0;
+        let change = 0;
+        this.userOwnedStocks
+          .filter((x) => x.tickerSymbol === r.symbol)
+          .forEach((o) => {
+            quantity += Number(o.quantity);
+            amount += Number(o.quantity) * Number(o.avgPrice);
+            earnings += amount;
+            gain +=
+              (Number(r.currentPrice) - Number(o.avgPrice)) *
+              Number(o.quantity);
+            change = Number(r.currentPrice) - Number(o.avgPrice);
+            totalGain += gain;
+          });
+        price = amount / quantity;
+        if (amount !== 0) {
           data.push({
             company: r.symbol,
             amount: amount.toFixed(2),
             gain_loss: gain,
             price: price.toFixed(2),
             change,
-          });}
-        });
-        this.dataSource.data = data;
-        this.changeEarnings.emit({
-          earnings: earnings < 0 ? -1 * earnings : earnings,
-          totalGain,
-          positive: earnings > 0,
-        });
+          });
+        }
       });
+      this.dataSource.data = data;
+      this.changeEarnings.emit({
+        earnings: earnings < 0 ? -1 * earnings : earnings,
+        totalGain,
+        positive: earnings > 0,
+      });
+    }
   }
 
   navigateToStockPage(symbol: string): void {

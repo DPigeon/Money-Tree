@@ -5,7 +5,7 @@ import { StoreFacadeService } from '../../store/store-facade.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Transaction } from 'src/app/interfaces/transaction';
 import { Stock } from 'src/app/interfaces/stock';
-import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private storeFacade: StoreFacadeService,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {
     this.currentUser = null; // otherwise there would be an undefined error because of waiting for the currentUser values to fetch
   }

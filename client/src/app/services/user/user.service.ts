@@ -58,17 +58,14 @@ export class UserService {
       );
   }
 
-  getUserAlpacaPosition(userId: number): Promise<AlpacaUserPosition[]> {
-    return new Promise((resolve, reject) => {
-      this.api.get('alpaca/positions/' + userId).subscribe(
-        (result: any) => {
-          resolve(this.alpacaUserPositionFormatter(result.body));
-        },
-        (error) => {
-          reject(error);
-        }
+  getUserAlpacaPosition(userId: number): Observable<AlpacaUserPosition[]> {
+    return this.api
+      .get('alpaca/positions/' + userId)
+      .pipe(
+        map((res: Response) =>
+          this.dataFormatter.alpacaUserPositionFormatter(res.body)
+        )
       );
-    });
   }
 
   userLogin(user: User): Observable<User> {
@@ -116,69 +113,5 @@ export class UserService {
     return this.api
       .get('users/followings/' + userId)
       .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
-  }
-
-  userFormatter(response: any): User {
-    const formattedUser: User = {
-      id: response.id,
-      firstName: response.firstName,
-      lastName: response.lastName,
-      username: response.username,
-      avatarURL: response.avatarURL,
-      coverPhotoURL: response.coverPhotoURL,
-      email: response.email,
-      score: response.score,
-      rank: response.rank,
-      balance: response.balance,
-      alpacaApiKey: response.alpacaApiKey,
-      // portfolio: response.portfolio,
-      // transactions: response.transactions,
-      biography: response.biography,
-    };
-    return formattedUser;
-  }
-
-  userSearchFormatter(response: any): UserSearch[] {
-    const result: UserSearch[] = [];
-    response.forEach((e) => {
-      result.push({
-        id: e.username,
-        firstName: e.firstName,
-        lastName: e.lastName,
-        avatarURL: e.avatarURL,
-        email: e.email,
-      });
-    });
-    return result;
-  }
-
-  alpacaUserPositionFormatter(response: any): AlpacaUserPosition[] {
-    const result: AlpacaUserPosition[] = [];
-    response.forEach((e) => {
-      result.push({
-        symbol: e.symbol,
-        avgEntryPrice: e.avgEntryPrice,
-        qty: e.qty,
-        currentPrice: e.currentPrice,
-      });
-    });
-    return result;
-  }
-
-  followUserListFormatter(response: any): User[] {
-    const result: User[] = [];
-    for (const fetchedUser of response.body) {
-      result.push({
-        id: fetchedUser.id,
-        firstName: fetchedUser.firstName,
-        lastName: fetchedUser.lastName,
-        username: fetchedUser.username,
-        avatarURL: fetchedUser.avatarURL,
-        score: fetchedUser.score,
-        rank: fetchedUser.rank,
-        balance: fetchedUser.balance,
-      });
-    }
-    return result;
   }
 }
