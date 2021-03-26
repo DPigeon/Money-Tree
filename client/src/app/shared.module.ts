@@ -15,10 +15,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
 
 // echarts
 import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
+import { UserService } from './services/user/user.service';
 
 export const MATERIAL_MODULE_DEPENDENCIES = [
   MatIconModule,
@@ -27,16 +29,18 @@ export const MATERIAL_MODULE_DEPENDENCIES = [
   MatMenuModule,
   MatDividerModule,
   MatButtonModule,
+  MatTableModule,
   MatFormFieldModule,
   MatInputModule,
   MatDialogModule,
   BrowserAnimationsModule,
   MatAutocompleteModule,
   MatRadioModule,
-  MatSnackBarModule
+  MatSnackBarModule,
 ];
 
 export const NGRX_STORE_MODULE = provideMockStore({ initialState });
+export const USER_SERVICE = UserService;
 
 export const NGX_ECHART = NgxEchartsModule.forRoot({ echarts });
 

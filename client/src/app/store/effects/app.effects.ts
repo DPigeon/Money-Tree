@@ -406,6 +406,28 @@ export class Effects {
     )
   );
 
+  loadAlpacaPositions$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadAlpacaPositions),
+      switchMap((action) => {
+        return this.userService.getUserAlpacaPosition(action.userId).pipe(
+          map((data) => {
+            return appActions.setCurrentAlpacaPositions({
+              currentAlpacaPositions: data,
+            });
+          }),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
+            )
+          )
+        );
+      })
+    )
+  );
+
   mirrorError(backendError: any): AppError {
     if (backendError && backendError.error) {
       const errorMessage: AppError = {
