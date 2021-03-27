@@ -1,5 +1,7 @@
 package com.capstone.moneytree.service
 
+import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildLimitOrder
+
 import com.capstone.moneytree.dao.MadeDao
 import com.capstone.moneytree.dao.ToFulfillDao
 import com.capstone.moneytree.dao.StockDao
@@ -76,12 +78,12 @@ class DefaultTransactionServiceTest extends Specification {
         })
     }
 
-    def "Validate the happy path when executing a transaction"() {
+    def "Validate the happy path when executing a transaction MARKET_BUY"() {
         given: "The session returns the mock api"
         session.alpaca(_) >> api
 
         and: "a valid order"
-        def order = buildMarketOrder()
+        def order = buildMarketOrder("AAPL", "3","BUY","clientId","market")
 
         and: "a valid stock"
         Stock newStock = new Stock()
@@ -93,6 +95,213 @@ class DefaultTransactionServiceTest extends Specification {
 
         and: "api returns a successful order"
         api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY) >> order
+        and: "api return asset for this symbol"
+        Asset asset = buildAsset()
+        api.getAssetBySymbol(order.getSymbol()) >> asset
+
+        and: "StockDao returns an existing stock object for that symbol"
+        stockDao.findBySymbol(order.getSymbol()) >> newStock
+
+        and: "user dao returns a user"
+        def user = new User()
+        user.setAlpacaApiKey("88999oikkjsga,mbsd")
+        Long userId = 1
+        user.setId(userId)
+        userDao.findUserById(userId) >> user
+
+        and: "returns a balance"
+        def balance = "1234.56"
+        api.getAccount() >> Stub(Account) {
+            getCash() >> balance
+        }
+
+        and: "returns the constructed transaction"
+        transactionService.constructTransactionFromOrder(order) >> newTransaction
+
+        and: "returns the user transactions "
+        List<Made> allMadeRels = new ArrayList<>()
+        allMadeRels.add(new Made(user, newTransaction, null))
+        madeDao.findByUserId(user.getId()) >> allMadeRels
+
+        and: "returns the user transactions "
+        List<Transaction> userTransactionsList = new ArrayList<>()
+        userTransactionsList.add(newTransaction)
+        transactionService.getUserTransactions(user.getId()) >> userTransactionsList
+
+
+        when: "execute is triggered"
+        transactionService.execute(Long.toString(user.getId()), order)
+
+
+        then:
+        1 * madeDao.save(_)
+        1 * toFulfillDao.save(_)
+        1 * transactionDao.save(_)
+        1 * userDao.save(_)
+        assert transactionService.execute(Long.toString(user.getId()), order) == userTransactionsList
+    }
+
+    def "Validate the happy path when executing a transaction MARKET_SELL"() {
+        given: "The session returns the mock api"
+        session.alpaca(_) >> api
+
+        and: "a valid order"
+        def order = buildMarketOrder("AAPL", "3","SELL","clientId","market")
+
+        and: "a valid stock"
+        Stock newStock = new Stock()
+        newStock.setSymbol(order.getSymbol())
+
+        and: "a valid transaction"
+        Transaction newTransaction = Transaction.builder()
+                .purchasedAt(order.getCreatedAt())
+                .moneyTreeOrderType(MoneyTreeOrderType.MARKET_SELL)
+                .clientOrderId(order.getClientOrderId())
+                .status(TransactionStatus.PENDING)
+                .quantity(2.00f).symbol("AAPL").build()
+
+        and: "api returns a successful order"
+        api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()), OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY) >> order
+        and: "api return asset for this symbol"
+        Asset asset = buildAsset()
+        api.getAssetBySymbol(order.getSymbol()) >> asset
+
+        and: "StockDao returns an existing stock object for that symbol"
+        stockDao.findBySymbol(order.getSymbol()) >> newStock
+
+        and: "user dao returns a user"
+        def user = new User()
+        user.setAlpacaApiKey("88999oikkjsga,mbsd")
+        Long userId = 1
+        user.setId(userId)
+        userDao.findUserById(userId) >> user
+
+        and: "returns a balance"
+        def balance = "1234.56"
+        api.getAccount() >> Stub(Account) {
+            getCash() >> balance
+        }
+
+        and: "returns the constructed transaction"
+        transactionService.constructTransactionFromOrder(order) >> newTransaction
+
+        and: "returns the user transactions "
+        List<Made> allMadeRels = new ArrayList<>()
+        allMadeRels.add(new Made(user, newTransaction, null))
+        madeDao.findByUserId(user.getId()) >> allMadeRels
+
+        and: "returns the user transactions "
+        List<Transaction> userTransactionsList = new ArrayList<>()
+        userTransactionsList.add(newTransaction)
+        transactionService.getUserTransactions(user.getId()) >> userTransactionsList
+
+
+        when: "execute is triggered"
+        transactionService.execute(Long.toString(user.getId()), order)
+
+
+        then:
+        1 * madeDao.save(_)
+        1 * toFulfillDao.save(_)
+        1 * transactionDao.save(_)
+        1 * userDao.save(_)
+        assert transactionService.execute(Long.toString(user.getId()), order) == userTransactionsList
+    }
+
+    def "Validate the happy path when executing a transaction LIMIT_BUY"() {
+        given: "The session returns the mock api"
+        session.alpaca(_) >> api
+
+        and: "a valid order"
+        def order = buildLimitOrder("AAPL", "3","BUY","clientId","limit")
+
+        and: "a valid stock"
+        Stock newStock = new Stock()
+        newStock.setSymbol(order.getSymbol())
+
+        and: "a valid transaction"
+        Transaction newTransaction = Transaction.builder()
+                .purchasedAt(order.getCreatedAt())
+                .moneyTreeOrderType(MoneyTreeOrderType.LIMIT_BUY)
+                .clientOrderId(order.getClientOrderId())
+                .status(TransactionStatus.PENDING)
+                .quantity(2.00f).symbol("AAPL").build()
+
+        and: "api returns a successful order"
+        api.requestNewLimitOrder(order.getSymbol(), Integer.parseInt(order.getQty()),
+                OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY,
+                Double.valueOf(order.getLimitPrice()), order.getExtendedHours()) >> order
+
+        and: "api return asset for this symbol"
+        Asset asset = buildAsset()
+        api.getAssetBySymbol(order.getSymbol()) >> asset
+
+        and: "StockDao returns an existing stock object for that symbol"
+        stockDao.findBySymbol(order.getSymbol()) >> newStock
+
+        and: "user dao returns a user"
+        def user = new User()
+        user.setAlpacaApiKey("88999oikkjsga,mbsd")
+        Long userId = 1
+        user.setId(userId)
+        userDao.findUserById(userId) >> user
+
+        and: "returns a balance"
+        def balance = "1234.56"
+        api.getAccount() >> Stub(Account) {
+            getCash() >> balance
+        }
+
+        and: "returns the constructed transaction"
+        transactionService.constructTransactionFromOrder(order) >> newTransaction
+
+        and: "returns the user transactions "
+        List<Made> allMadeRels = new ArrayList<>()
+        allMadeRels.add(new Made(user, newTransaction, null))
+        madeDao.findByUserId(user.getId()) >> allMadeRels
+
+        and: "returns the user transactions "
+        List<Transaction> userTransactionsList = new ArrayList<>()
+        userTransactionsList.add(newTransaction)
+        transactionService.getUserTransactions(user.getId()) >> userTransactionsList
+
+
+        when: "execute is triggered"
+        transactionService.execute(Long.toString(user.getId()), order)
+
+
+        then:
+        1 * madeDao.save(_)
+        1 * toFulfillDao.save(_)
+        1 * transactionDao.save(_)
+        1 * userDao.save(_)
+        assert transactionService.execute(Long.toString(user.getId()), order) == userTransactionsList
+    }
+
+    def "Validate the happy path when executing a transaction LIMIT_SELL"() {
+        given: "The session returns the mock api"
+        session.alpaca(_) >> api
+
+        and: "a valid order"
+        def order = buildLimitOrder("AAPL", "3","SELL","clientId","limit")
+
+        and: "a valid stock"
+        Stock newStock = new Stock()
+        newStock.setSymbol(order.getSymbol())
+
+        and: "a valid transaction"
+        Transaction newTransaction = Transaction.builder()
+                .purchasedAt(order.getCreatedAt())
+                .moneyTreeOrderType(MoneyTreeOrderType.LIMIT_BUY)
+                .clientOrderId(order.getClientOrderId())
+                .status(TransactionStatus.PENDING)
+                .quantity(2.00f).symbol("AAPL").build()
+
+        and: "api returns a successful order"
+        api.requestNewLimitOrder(order.getSymbol(), Integer.parseInt(order.getQty()),
+                OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY,
+                Double.valueOf(order.getLimitPrice()), order.getExtendedHours()) >> order
+
         and: "api return asset for this symbol"
         Asset asset = buildAsset()
         api.getAssetBySymbol(order.getSymbol()) >> asset
