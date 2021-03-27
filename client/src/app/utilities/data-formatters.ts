@@ -130,10 +130,10 @@ export class DataFormatter {
 
   formatAlpacaPortfolio(response: any): StockHistory {
     const stockHistoricalData: StockHistory = {
-      symbol: response.chart.result[0].meta.symbol,
-      closePrice: response.chart.result[0].indicators.quote[0].close,
-      timestamp: response.chart.result[0].timestamp,
-      currency: response.chart.result[0].meta.currency,
+      symbol: '',
+      closePrice: response.equity,
+      timestamp: response.timestamp,
+      currency: 'USD',
     };
     return stockHistoricalData;
   }

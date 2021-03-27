@@ -143,15 +143,15 @@ export class UserService {
       .get(
         'alpaca/portfolio/userId=' +
           userId +
-          '&periodLength=' +
+          '&period=' +
           periodLength +
-          '&periodUnit=' +
+          '&unit=' +
           periodUnit +
-          '&timeFrame=' +
+          '&timeframe=' +
           timeFrame +
-          '&dateEnd=' +
+          '&dateend=' +
           dateEnd +
-          '&extendedHours=' +
+          '&extended=' +
           extendedHours
       )
       .pipe(

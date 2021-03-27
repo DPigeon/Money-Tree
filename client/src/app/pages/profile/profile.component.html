@@ -22,7 +22,7 @@
         </mat-card>
         <app-stock-historical-chart
         *ngIf="showPortfolioChart"
-        [historicalData]="portfolioHistoricalData$ | async"
+        [historicalData]="profileHistoryChartData"
         (changeHistoricalChartRangeInterval)="changeChartRangeInterval($event)"
         ></app-stock-historical-chart>
     </div>
