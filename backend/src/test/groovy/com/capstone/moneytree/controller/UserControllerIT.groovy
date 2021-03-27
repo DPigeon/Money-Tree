@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
+import com.capstone.moneytree.dao.FollowsDao
 import com.capstone.moneytree.dao.OwnsDao
 import com.capstone.moneytree.dao.StockDao
 import com.capstone.moneytree.dao.UserDao
 import com.capstone.moneytree.exception.BadRequestException
 import com.capstone.moneytree.model.node.Stock
 import com.capstone.moneytree.model.node.User
+import com.capstone.moneytree.model.relationship.Follows
 import com.capstone.moneytree.model.relationship.Owns
 
 import spock.lang.Specification
@@ -34,6 +36,9 @@ class UserControllerIT extends Specification {
 
     @Autowired
     StockDao stockDao
+
+    @Autowired
+    FollowsDao followsDao
 
     def "a user is correctly persisted then fetched"() {
         setup: "Persist an initial user"
@@ -333,5 +338,63 @@ class UserControllerIT extends Specification {
         userDao.deleteAll()
         stockDao.deleteAll()
         ownsDao.deleteAll()
+    }
+
+    def "Should return all followers that own the given stock"() {
+        setup: "Persist a user (followee - the one that is followed)"
+        User followee = createUser("test0@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 1)
+        userDao.save(followee)
+
+        and: "persist 20 of his followers"
+        List<User> users = [
+                createUser("test1@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 1),
+                createUser("test2@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 2),
+                createUser("test3@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 3),
+                createUser("test4@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 4),
+                createUser("test5@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 5),
+                createUser("test6@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 6),
+                createUser("test7@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 7),
+                createUser("test8@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 8),
+                createUser("test9@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 9),
+                createUser("test10@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 10),
+                createUser("test11@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 11),
+                createUser("test12@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 12),
+                createUser("test13@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 13),
+                createUser("test14@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 14),
+                createUser("test15@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 15),
+                createUser("test16@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 16),
+                createUser("test17@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 17),
+                createUser("test18@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 18),
+                createUser("test19@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 19),
+                createUser("test20@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 20),
+        ]
+        userDao.saveAll(users)
+
+        and: "persist the relationship"
+        users.forEach({
+            followsDao.save(new Follows(it, followee, new Date()))
+        })
+
+        and: "the common stock is stored in db"
+        def symbol = "AAPL"
+        Stock stock = stockDao.save(new Stock(symbol: symbol, companyName: "Apple"))
+
+        and: "10 of his followers owns the given stock (first 10 in the list)"
+        (1..10).each{
+            ownsDao.save(ownsDao.save(new Owns(users[it], stock, new Date(), 3, 12.12, 26)))
+        }
+
+        when: "the request is made"
+        def res = userController.getStockOwnedByFollowers(followee.getId(), symbol)
+
+        then: "only the 10 followers are returned"
+        res.statusCode == HttpStatus.OK
+        res.getBody().size() == 10
+
+        cleanup:
+        userDao.deleteAll()
+        ownsDao.deleteAll()
+        stockDao.deleteAll()
+        followsDao.deleteAll()
     }
 }

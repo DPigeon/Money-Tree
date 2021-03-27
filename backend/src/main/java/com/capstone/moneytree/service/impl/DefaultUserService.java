@@ -1,5 +1,6 @@
 package com.capstone.moneytree.service.impl;
 
+import static com.capstone.moneytree.handler.ExceptionMessage.USER_ALREADY_FOLLOWED;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -7,6 +8,8 @@ import javax.security.auth.login.CredentialNotFoundException;
 
 import com.capstone.moneytree.ActiveProfile;
 import com.capstone.moneytree.model.AlpacaOAuthResponse;
+import com.capstone.moneytree.model.node.Stock;
+import com.capstone.moneytree.service.api.StockService;
 import com.google.gson.Gson;
 
 import org.apache.commons.lang3.StringUtils;
@@ -52,15 +55,17 @@ public class DefaultUserService implements UserService {
     private static final String AUTHORIZATION_CODE = "authorization_code";
     private static final String NOT_FOLLOWED_BY_THIS_USER = "The user is not followed";
     private static final String USER_CANT_BE_FOLLOWED_BY_ITSELF = "User cannot followed by itself";
-    private static final String USER_ALREADY_FOLLOWED = "User already followed";
 
     @Value("${alpaca.key.id}")
-    String clientId;
+    private String clientId;
     @Value("${alpaca.secret}")
-    String clientSecret;
+    private String clientSecret;
 
     @Autowired
-    ActiveProfile activeProfile;
+    private ActiveProfile activeProfile;
+
+    @Autowired
+    private StockService stockService;
 
     private final UserDao userDao;
     private final OwnsDao ownsDao;
@@ -294,7 +299,7 @@ public class DefaultUserService implements UserService {
         List<Follows> alreadyFollowed = followsDao.findByFollowerIdAndUserToFollowId(userId, userToFollowId);
         // check to see if user already following the other user
         if (!alreadyFollowed.isEmpty()) {
-            throw new FollowsRelationshipException(USER_ALREADY_FOLLOWED);
+            throw new FollowsRelationshipException(USER_ALREADY_FOLLOWED.getMessage());
         }
         Date currentDate = new Date();
         Follows newFollowRel = new Follows(user, userToFollow, currentDate);
@@ -409,6 +414,18 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    public List<User> getFollowersWhoOwnsTheStock(Long id, String symbol) {
+        List<User> followersWhoOwnsThisStock = new ArrayList<>();
+
+        User user = getUserById(id);
+        Stock stock = stockService.getStockBySymbol(symbol);
+        List<Follows> followers = followsDao.findByUserToFollowId(user.getId());
+
+        followers.forEach(follower -> addFollowerToList(follower, followersWhoOwnsThisStock, stock));
+        return followersWhoOwnsThisStock;
+    }
+
+    @Override
     public List<Map<String, String>> getSearchUsers() {
         return userDao.getSearchUsers();
     }
@@ -418,7 +435,13 @@ public class DefaultUserService implements UserService {
         return validatorFactory.getUserValidator();
     }
 
-
+    private void addFollowerToList(Follows follower, List<User> followersWhoOwnTheStock, Stock stock) {
+        // add the follower to the list only if he owns the given stock
+        List<Owns> ownedStock = ownsDao.findByUserIdAndStockId(follower.getFollower().getId(), stock.getId());
+        if (!ownedStock.isEmpty()) {
+            followersWhoOwnTheStock.add(follower.getFollower());
+        }
+    }
 
     public String encryptData(String text) {
         return passwordEncryption.toGraphProperty(text);

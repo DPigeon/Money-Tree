@@ -60,9 +60,9 @@ public interface UserService {
 
     void deleteUserByEmail(String email);
 
-
     List<User> getTopUsers(String symbol);
 
-    List<SanitizedUser> getLeaderboard();
+    List<User> getFollowersWhoOwnsTheStock(Long id, String symbol);
 
+    List<SanitizedUser> getLeaderboard();
 }

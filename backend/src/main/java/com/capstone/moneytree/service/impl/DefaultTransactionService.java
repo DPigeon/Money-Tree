@@ -1,11 +1,14 @@
 package com.capstone.moneytree.service.impl;
 
+import static com.capstone.moneytree.handler.ExceptionMessage.ORDER_ERROR;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import com.capstone.moneytree.dao.*;
 import com.capstone.moneytree.exception.AlpacaException;
 
+import com.capstone.moneytree.exception.BadRequestException;
 import com.capstone.moneytree.exception.EntityNotFoundException;
 import net.jacobpeterson.alpaca.enums.OrderSide;
 import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
@@ -28,6 +31,7 @@ import com.capstone.moneytree.service.api.StockMarketDataService;
 import com.capstone.moneytree.service.api.TransactionService;
 
 import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
 import net.jacobpeterson.domain.alpaca.order.Order;
 import pl.zankowski.iextrading4j.api.stocks.v1.KeyStats;
 
@@ -88,8 +92,8 @@ public class DefaultTransactionService implements TransactionService {
       Transaction transaction;
       try {
          AlpacaAPI api = session.alpaca(alpacaKey);
-         Order alpacaOrder = api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()),
-                 OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
+
+         Order alpacaOrder = executeRequest(api, order);
 
          Stock stock = stockDao.findBySymbol(order.getSymbol());
          if (stock == null) { // if database does not have this stock object create and save it
@@ -101,6 +105,7 @@ public class DefaultTransactionService implements TransactionService {
             stockDao.save(stock);
          }
 
+         assert alpacaOrder != null;
          LOGGER.info("Executed order {}", alpacaOrder.getClientOrderId());
 
          transaction = constructTransactionFromOrder(alpacaOrder);
@@ -124,6 +129,20 @@ public class DefaultTransactionService implements TransactionService {
       } catch (Exception e) {
          throw new AlpacaException(e.getMessage());
       }
+   }
+
+   private Order executeRequest(AlpacaAPI api, Order order) throws AlpacaAPIRequestException {
+      if (MoneyTreeOrderType.MARKET_BUY.name().equals(obtainMoneyTreeOrderType(order).name()) ||
+              MoneyTreeOrderType.MARKET_SELL.name().equals(obtainMoneyTreeOrderType(order).name())) {
+         return api.requestNewMarketOrder(order.getSymbol(), Integer.parseInt(order.getQty()),
+                 OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY);
+      }
+      else if (MoneyTreeOrderType.LIMIT_BUY.name().equals(obtainMoneyTreeOrderType(order).name()) ||
+              MoneyTreeOrderType.LIMIT_SELL.name().equals(obtainMoneyTreeOrderType(order).name())) {
+         return api.requestNewLimitOrder(order.getSymbol(), Integer.parseInt(order.getQty()),
+                 OrderSide.valueOf(order.getSide().toUpperCase()), OrderTimeInForce.DAY, Double.valueOf(order.getLimitPrice()), order.getExtendedHours());
+      }
+      throw new BadRequestException(ORDER_ERROR.getMessage());
    }
 
    private Transaction constructTransactionFromOrder(Order alpacaOrder) {
@@ -171,6 +190,9 @@ public class DefaultTransactionService implements TransactionService {
       double updatedScore = user.getScore() + score;
       user.setScore(updatedScore);
       userDao.save(user);
+   }
+   private MoneyTreeOrderType obtainMoneyTreeOrderType(Order order) {
+      return MoneyTreeOrderType.valueOf(order.getType().toUpperCase() + "_" + order.getSide().toUpperCase());
    }
 
    @Override

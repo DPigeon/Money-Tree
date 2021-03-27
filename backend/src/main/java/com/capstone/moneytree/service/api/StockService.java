@@ -12,4 +12,5 @@ public interface StockService {
 
     List<SanitizedStock> getUserStocks(Long userId);
 
+    Stock getStockBySymbol(String symbol);
 }
