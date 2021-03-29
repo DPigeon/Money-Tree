@@ -4,8 +4,9 @@ export interface Transaction {
   total?: number;
   side?: string; // buy / sell
   type: string; // market / limit
-  time_in_force: string;
+  timeInForce: string;
   status?: string; // This is the status of the order
   averagePricePerShare?: number;
   client_order_id?: string;
+  limitPrice?: number; // price for limit order
 }

@@ -74,7 +74,7 @@ export class DataFormatter {
     for (const fetchedTransaction of response) {
       result.push({
         qty: fetchedTransaction.quantity,
-        time_in_force: fetchedTransaction.purchasedAt,
+        timeInForce: fetchedTransaction.purchasedAt,
         type: fetchedTransaction.moneyTreeOrderType,
         client_order_id: fetchedTransaction.clienOrderId,
         status: fetchedTransaction.status,

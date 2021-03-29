@@ -45,7 +45,7 @@ export class SellOrBuyActionsComponent implements OnInit {
 
   clearInputs(): void {
     this.quantity = 0;
-    this.price = 0;
+    this.price = 0; // limit price
   }
 
   getProcessActionType(): string {
@@ -58,7 +58,8 @@ export class SellOrBuyActionsComponent implements OnInit {
       qty: this.quantity,
       side: this.data.type,
       type: this.isMarketOrder ? 'market' : 'limit',
-      time_in_force: 'day'
+      timeInForce: 'day',
+      limitPrice: this.isMarketOrder ? null : this.price,
     };
     this.storeFacade.processStockTransaction(transaction, this.data.userInfo.id);
     this.dialogRef.close();
