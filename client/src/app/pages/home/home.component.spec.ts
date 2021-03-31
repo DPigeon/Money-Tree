@@ -1,3 +1,5 @@
+import { UserOwnedStockProfileComponent } from './../../components/user-owned-stock-profile/user-owned-stock-profile.component';
+import { HomeProfileComponent } from './../../components/home-profile-column/home-profile.component';
 import { HomeComponent } from './home.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -26,9 +28,11 @@ describe('HomeComponent', () => {
       declarations: [
         HomeComponent,
         HeaderComponent,
+        HomeProfileComponent,
         StockSearchComponent,
         EditProfileComponent,
         FollowingsSearchComponent,
+        UserOwnedStockProfileComponent,
       ],
       providers: [
         NGRX_STORE_MODULE,

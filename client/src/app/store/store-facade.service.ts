@@ -1,3 +1,4 @@
+import { AlpacaUserPosition } from 'src/app/interfaces/alpacaPosition';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from './reducers/app.reducer';
@@ -33,6 +34,7 @@ export class StoreFacadeService {
   userOwnedStocks$: Observable<Stock[]>;
   userSearch$: Observable<UserSearch[]>;
   leaderboardUsers$: Observable<User[]>;
+  userAlpacaPositions$: Observable<AlpacaUserPosition[]>;
 
   constructor(private store: Store<{ appState: State }>) {
     this.currentStockLoaded$ = this.store.select(
@@ -71,6 +73,9 @@ export class StoreFacadeService {
     this.userSearch$ = this.store.select(appSelectors.selectUserSearchList);
     this.leaderboardUsers$ = this.store.select(
       appSelectors.selectLeaderboardUsers
+    );
+    this.userAlpacaPositions$ = this.store.select(
+      appSelectors.selectAlpacaPositions
     );
   }
 
@@ -169,5 +174,9 @@ export class StoreFacadeService {
 
   loadLeaderboardUsers(): void {
     this.store.dispatch(appActions.loadLeaderboardUsers());
+  }
+
+  loadAlpacaPositions(userId: number): void {
+    this.store.dispatch(appActions.loadAlpacaPositions({ userId }));
   }
 }

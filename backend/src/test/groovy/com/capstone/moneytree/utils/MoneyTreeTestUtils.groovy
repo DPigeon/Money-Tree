@@ -19,7 +19,7 @@ class MoneyTreeTestUtils {
    /**
     * Utility method to create a user with random ID
     */
-   static User createUser(String email, String username, String password, String firstName, String lastName, String alpacaApiKey) {
+   static User createUser(String email, String username, String password, String firstName, String lastName, String alpacaApiKey, Double score = 0.0) {
       User user = User.builder()
               .email(email)
               .username(username)
@@ -27,6 +27,7 @@ class MoneyTreeTestUtils {
               .firstName(firstName)
               .lastName(lastName)
               .alpacaApiKey(alpacaApiKey)
+              .score(score)
               .avatarURL("https://moneytree-profile-pictures.s3.amazonaws.com/DEFAULT-profile.jpg")
               .build()
       return user
@@ -103,6 +104,24 @@ class MoneyTreeTestUtils {
       order.setCreatedAt(ZonedDateTime.now())
       order.setSubmittedAt(ZonedDateTime.now())
       order.setType(type)
+      return order
+   }
+
+   /**
+    * Utility method to build a limit order
+    */
+   static buildLimitOrder(String symbol = "AAPL", String qty = "3", String side = "BUY", String clientOrderId = "clientId", String type = "market") {
+      def order = new Order()
+      order.setSymbol(symbol)
+      order.setQty(qty)
+      order.setSide(side)
+      order.setClientOrderId(clientOrderId)
+      order.setTimeInForce(OrderTimeInForce.DAY as String)
+      order.setCreatedAt(ZonedDateTime.now())
+      order.setSubmittedAt(ZonedDateTime.now())
+      order.setType(type)
+      order.setExtendedHours(false)
+      order.setLimitPrice("11.00")
       return order
    }
 

@@ -13,5 +13,9 @@ public interface StockService {
 
     List<SanitizedStock> getUserStocks(Long userId);
 
+
     HashMap<String, Long> getPeopleWhoOwnAlsoOwn(String symbol);
+
+    Stock getStockBySymbol(String symbol);
+
 }

@@ -2,6 +2,7 @@ import { User, UserProfile } from 'src/app/interfaces/user';
 import { Injectable } from '@angular/core';
 import { Transaction } from '../interfaces/transaction';
 import { UserSearch } from '../interfaces/userSearch';
+import { AlpacaUserPosition } from '../interfaces/alpacaPosition';
 
 @Injectable({
   providedIn: 'root',
@@ -73,7 +74,7 @@ export class DataFormatter {
     for (const fetchedTransaction of response) {
       result.push({
         qty: fetchedTransaction.quantity,
-        time_in_force: fetchedTransaction.purchasedAt,
+        timeInForce: fetchedTransaction.purchasedAt,
         type: fetchedTransaction.moneyTreeOrderType,
         client_order_id: fetchedTransaction.clienOrderId,
         status: fetchedTransaction.status,
@@ -82,6 +83,19 @@ export class DataFormatter {
         total: fetchedTransaction.total,
       });
     }
+    return result;
+  }
+
+  alpacaUserPositionFormatter(response: any): AlpacaUserPosition[] {
+    const result: AlpacaUserPosition[] = [];
+    response.forEach((e) => {
+      result.push({
+        symbol: e.symbol,
+        avgEntryPrice: e.avgEntryPrice,
+        qty: e.qty,
+        currentPrice: e.currentPrice,
+      });
+    });
     return result;
   }
 }

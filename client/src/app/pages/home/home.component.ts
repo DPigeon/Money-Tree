@@ -3,10 +3,9 @@ import { Observable } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
 import { StoreFacadeService } from '../../store/store-facade.service';
 import { MatDialog } from '@angular/material/dialog';
-import { EditProfileComponent } from '../../components/edit-profile/edit-profile.component';
 import { Transaction } from 'src/app/interfaces/transaction';
 import { Stock } from 'src/app/interfaces/stock';
-import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -22,11 +21,11 @@ export class HomeComponent implements OnInit {
   followers$: Observable<User[]>;
   userTransactions$: Observable<Transaction[]>;
   userOwnedStocks$: Observable<Stock[]>;
+  showProfileColumn = false;
 
   constructor(
     private storeFacade: StoreFacadeService,
-    public dialog: MatDialog,
-    private router: Router
+    public dialog: MatDialog
   ) {
     this.currentUser = null; // otherwise there would be an undefined error because of waiting for the currentUser values to fetch
   }
@@ -38,6 +37,7 @@ export class HomeComponent implements OnInit {
         this.currentUser = user;
         this.userPhotoURL = this.currentUser.avatarURL;
         this.coverPhotoURL = this.currentUser.coverPhotoURL;
+        this.showProfileColumn = true;
 
         // Loading followings and followers list and adding them to state
         this.storeFacade.loadCurrentUserFollowings(this.currentUser.id);
@@ -51,40 +51,5 @@ export class HomeComponent implements OnInit {
         this.userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
       }
     });
-  }
-
-  goToProfile(): void {
-    this.router
-      .navigate(['/profile/' + this.currentUser.username])
-      .then(() => this.storeFacade.loadUserTransactions(this.currentUser.id));
-  }
-  openDialog(): void {
-    const dialogRef = this.dialog.open(EditProfileComponent, {
-      data: this.currentUser,
-    });
-
-    dialogRef.componentInstance.userPhotoUpdate.subscribe((imageFile: File) => {
-      this.storeFacade.updatePictureURL(
-        this.currentUser.id,
-        imageFile,
-        'avatarURL'
-      );
-    });
-
-    dialogRef.componentInstance.userCoverPhotoUpdate.subscribe(
-      (imageFile: File) => {
-        this.storeFacade.updatePictureURL(
-          this.currentUser.id,
-          imageFile,
-          'coverPhotoURL'
-        );
-      }
-    );
-
-    dialogRef.componentInstance.userUpdate.subscribe(
-      (updatedUserInfo: User) => {
-        this.storeFacade.updateUser(updatedUserInfo);
-      }
-    );
   }
 }

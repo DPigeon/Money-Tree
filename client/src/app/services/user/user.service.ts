@@ -5,6 +5,7 @@ import { ApiService } from '../api/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DataFormatter } from '../../utilities/data-formatters';
+import { AlpacaUserPosition } from 'src/app/interfaces/alpacaPosition';
 
 @Injectable({
   providedIn: 'root',
@@ -54,6 +55,16 @@ export class UserService {
       .get('users/search')
       .pipe(
         map((res: Response) => this.dataFormatter.userSearchFormatter(res.body))
+      );
+  }
+
+  getUserAlpacaPosition(userId: number): Observable<AlpacaUserPosition[]> {
+    return this.api
+      .get('alpaca/positions/' + userId)
+      .pipe(
+        map((res: Response) =>
+          this.dataFormatter.alpacaUserPositionFormatter(res.body)
+        )
       );
   }
 

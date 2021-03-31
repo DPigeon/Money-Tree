@@ -1,6 +1,7 @@
 package com.capstone.moneytree.service
 
 import com.capstone.moneytree.dao.FollowsDao
+import com.capstone.moneytree.dao.OwnsDao
 import com.capstone.moneytree.dao.UserDao
 import com.capstone.moneytree.model.SanitizedUser
 import com.capstone.moneytree.model.node.User
@@ -25,13 +26,14 @@ class DefaultUserServiceTest extends Specification {
     private static String BUCKET_NAME = System.getenv("AWS_PROFILE_PICTURES_BUCKET")
 
     UserDao userDao = Mock()
+    OwnsDao ownsDao = Mock()
     FollowsDao followsDao = Mock()
     AmazonS3Service amazonS3Service = Mock()
     ValidatorFactory validatorFactory = Mock(ValidatorFactory) {
         UserValidator userValidator = Mock()
         it.getUserValidator() >> userValidator
     }
-    UserService userService = new DefaultUserService(userDao, followsDao, validatorFactory, amazonS3Service, BUCKET_NAME)
+    UserService userService = new DefaultUserService(userDao, followsDao, ownsDao, validatorFactory, amazonS3Service, BUCKET_NAME)
 
     def "Should get all users by calling the database once"() {
         given:

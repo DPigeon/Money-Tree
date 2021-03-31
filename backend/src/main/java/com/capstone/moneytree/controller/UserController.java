@@ -193,8 +193,18 @@ public class UserController {
       return ResponseEntity.ok(userService.getSearchUsers());
    }
 
+   @GetMapping("/{symbol}/top")
+   public ResponseEntity<List<User>> getTopUserForStock(@PathVariable String symbol) {
+      return ResponseEntity.ok(userService.getTopUsers(symbol));
+   }
+
+   @GetMapping("/{id}/owned_by_followers/{symbol}")
+   public ResponseEntity<List<User>> getStockOwnedByFollowers(@PathVariable Long id, @PathVariable String symbol) {
+      return ResponseEntity.ok(userService.getFollowersWhoOwnsTheStock(id, symbol));
+   }
+
    @GetMapping("/leaderboard")
-   public List<SanitizedUser> getLeaderboard(){
-      return userService.getLeaderboard();
+   public ResponseEntity<List<SanitizedUser>> getLeaderboard() {
+      return ResponseEntity.ok(userService.getLeaderboard());
    }
 }

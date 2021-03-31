@@ -5,25 +5,26 @@ import {
   MATERIAL_MODULE_DEPENDENCIES,
   FORM_MODULE_DPENDENCEIES,
 } from '../../shared.module';
+import { Transaction } from 'src/app/interfaces/transaction';
 
-const mockTransactionBuy = {
+const mockTransactionBuy: Transaction = {
   symbol: 'TSLA',
   qty: 5,
   total: 60,
   side: 'buy', // buy / sell
   type: 'MARKET_BUY', // market / limit
-  time_in_force: '2021-03-10',
+  timeInForce: '2021-03-10',
   status: 'PENDING', // This is the status of the order
   averagePricePerShare: 12,
   client_order_id: null,
 };
-const mockTransactionSell = {
+const mockTransactionSell: Transaction = {
   symbol: 'AAR',
   qty: 10,
   total: 600,
   side: 'sell', // buy / sell
   type: 'MARKET_SELL', // market / limit
-  time_in_force: '2021-03-10',
+  timeInForce: '2021-03-10',
   status: 'COMPLETED', // This is the status of the order
   averagePricePerShare: 60,
   client_order_id: null,

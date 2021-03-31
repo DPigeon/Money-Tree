@@ -90,7 +90,7 @@ class UserControllerTest extends Specification {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request))
         amazonS3Facade = new AmazonS3Facade(S3_ACCESS_KEY, S3_SECRET_KEY)
         amazonS3Service = new DefaultAmazonS3Service(amazonS3Facade)
-        defaultUserService = new DefaultUserService(userDao, followsDao, validatorFactory, amazonS3Service, BUCKET_NAME)
+        defaultUserService = new DefaultUserService(userDao, followsDao, ownsDao, validatorFactory, amazonS3Service, BUCKET_NAME)
         transactionService = new DefaultTransactionService(transactionDao, userDao, stockDao, madeDao, toFulfillDao, session, stockMarketDataService)
         stockService = new DefaultStockService(stockDao, ownsDao)
         userController = new UserController(defaultUserService, transactionService, stockService)
@@ -946,8 +946,9 @@ class UserControllerTest extends Specification {
         and: "mock userDao.findAll() to return list0"
         userDao.findAll() >> list0
         when: "getLeaderboard"
-        List<SanitizedUser> response = userController.getLeaderboard()
+        def res = userController.getLeaderboard()
         then: "response should match list1"
-        response == list1
+        res.statusCode == HttpStatus.OK
+        res.getBody() == list1
     }
 }

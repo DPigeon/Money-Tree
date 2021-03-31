@@ -1,0 +1,65 @@
+@import "../../../styles.scss";
+.profile-container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .user-picture {
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    cursor: pointer;
+    object-fit: cover;
+  }
+  .user-first-name {
+    font-size: 20px;
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+  .edit-profile {
+    padding: 0 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .user-score-label {
+    color: $mt-red;
+    font-weight: 500;
+    font-size: 12px;
+  }
+
+  .user-score {
+    color: $primary-color;
+    font-weight: 500;
+    font-size: 12px;
+    margin-left: 5px;
+  }
+}
+.column-name {
+  font-weight: 500;
+}
+.your-stocks {
+  width: 80%;
+  overflow: hidden;
+  margin-bottom: 20px;
+  max-height: 300px;
+  text-align: center;
+}
+.your-earnings {
+  width: 80%;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.negative-change {
+  color: $mt-red;
+  font-size: 12px;
+}
+.positive-change {
+  color: $mt-green;
+  font-size: 12px;
+}
+.earning-amount {
+  font-weight: 500;
+}

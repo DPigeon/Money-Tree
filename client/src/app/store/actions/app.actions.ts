@@ -1,3 +1,4 @@
+import { AlpacaUserPosition } from 'src/app/interfaces/alpacaPosition';
 import { createAction, props } from '@ngrx/store';
 import { Stock } from 'src/app/interfaces/stock';
 import { User, UserProfile } from 'src/app/interfaces/user';
@@ -157,4 +158,14 @@ export const loadLeaderboardUsers = createAction(
 export const setCurrentLeaderboardUsers = createAction(
   '[User] Update the new leaderboard users',
   props<{ currentLeaderboardUsers: User[] }>()
+);
+
+export const loadAlpacaPositions = createAction(
+  '[User] Load Alpaca positions for the user',
+  props<{ userId: number }>()
+);
+
+export const setCurrentAlpacaPositions = createAction(
+  '[User] Update the Alpaca positions for user',
+  props<{ currentAlpacaPositions: AlpacaUserPosition[] }>()
 );
