@@ -1,5 +1,6 @@
 package com.capstone.moneytree.service.api;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.capstone.moneytree.model.SanitizedStock;
@@ -12,4 +13,5 @@ public interface StockService {
 
     List<SanitizedStock> getUserStocks(Long userId);
 
+    HashMap<String, Long> getPeopleWhoOwnAlsoOwn(String symbol);
 }
