@@ -7,7 +7,6 @@ import {
   RouterEvent,
 } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { User } from 'src/app/interfaces/user';
 
 export interface ChartDataOptions {
   range: string;

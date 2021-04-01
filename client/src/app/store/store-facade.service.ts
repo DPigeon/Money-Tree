@@ -11,6 +11,7 @@ import { AppError } from '../interfaces/app-error';
 import { MarketClock } from './../interfaces/market-clock';
 import { Transaction } from '../interfaces/transaction';
 import { UserSearch } from '../interfaces/userSearch';
+import { StockPercentage } from '../interfaces/stock-percentage';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +36,9 @@ export class StoreFacadeService {
   userSearch$: Observable<UserSearch[]>;
   leaderboardUsers$: Observable<User[]>;
   userAlpacaPositions$: Observable<AlpacaUserPosition[]>;
+  topInvestorsOnAStock$: Observable<User[]>;
+  followersWithSameStock$: Observable<User[]>;
+  stocksOwnedByUsersOwnThisStock$: Observable<StockPercentage[]>;
 
   constructor(private store: Store<{ appState: State }>) {
     this.currentStockLoaded$ = this.store.select(
@@ -76,6 +80,15 @@ export class StoreFacadeService {
     );
     this.userAlpacaPositions$ = this.store.select(
       appSelectors.selectAlpacaPositions
+    );
+    this.topInvestorsOnAStock$ = this.store.select(
+      appSelectors.selectTopInvestorsOnAStock
+    );
+    this.followersWithSameStock$ = this.store.select(
+      appSelectors.selectFollowersWithSameStock
+    );
+    this.stocksOwnedByUsersOwnThisStock$ = this.store.select(
+      appSelectors.selectStocksOwnedByUsersOwnThisStock
     );
   }
 
@@ -178,5 +191,22 @@ export class StoreFacadeService {
 
   loadAlpacaPositions(userId: number): void {
     this.store.dispatch(appActions.loadAlpacaPositions({ userId }));
+  }
+
+  loadTopInvestorsOnAStock(stockSymbol: string): void {
+    this.store.dispatch(
+      appActions.loadTopInvestorsOnAStock({ symbol: stockSymbol })
+    );
+  }
+  loadFollowersWithSameStock(id: number, stockSymbol: string): void {
+    this.store.dispatch(
+      appActions.loadFollowersWithSameStock({ userId: id, symbol: stockSymbol })
+    );
+  }
+
+  loadStocksOwnedByUsersOwnThisStock(thisStockSymbol: string): void {
+    this.store.dispatch(
+      appActions.loadStocksOwnedByUsersOwnThisStock({ symbol: thisStockSymbol })
+    );
   }
 }

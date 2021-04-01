@@ -114,4 +114,19 @@ export class UserService {
       .get('users/followings/' + userId)
       .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
   }
+
+  getTopInvestors(symbol: string): Observable<User[]> {
+    return this.api
+      .get('users/' + symbol + '/top')
+      .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
+  }
+
+  getFollowersWithSameStock(
+    userId: number,
+    symbol: string
+  ): Observable<User[]> {
+    return this.api
+      .get(`users/${userId}/owned_by_followers/${symbol}`)
+      .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
+  }
 }

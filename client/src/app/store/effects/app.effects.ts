@@ -1,3 +1,7 @@
+import {
+  loadTopInvestorsOnAStock,
+  loadFollowersWithSameStock,
+} from './../actions/app.actions';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -424,6 +428,76 @@ export class Effects {
             )
           )
         );
+      })
+    )
+  );
+
+  loadTopInvestorsOnAStock$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadTopInvestorsOnAStock),
+      switchMap((action) => {
+        return this.userService.getTopInvestors(action.symbol).pipe(
+          map((data) => {
+            return appActions.setTopInvestorsOnAStock({
+              currentTopInvestorsOnAStock: data,
+            });
+          }),
+          catchError((data) =>
+            of(
+              appActions.setAppError({
+                errorMessage: this.mirrorError(data),
+              })
+            )
+          )
+        );
+      })
+    )
+  );
+
+  loadFollowersWithSameStock$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadFollowersWithSameStock),
+      switchMap((action) => {
+        return this.userService
+          .getFollowersWithSameStock(action.userId, action.symbol)
+          .pipe(
+            map((data) => {
+              return appActions.setFollowersWithSameStock({
+                currentFollowersWithSameStock: data,
+              });
+            }),
+            catchError((data) =>
+              of(
+                appActions.setAppError({
+                  errorMessage: this.mirrorError(data),
+                })
+              )
+            )
+          );
+      })
+    )
+  );
+
+  loadStocksOwnedByUsersOwnThisStock$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
+      ofType(appActions.loadStocksOwnedByUsersOwnThisStock),
+      switchMap((action) => {
+        return this.stockService
+          .getStocksOwnedByUsersOwnsThisStock(action.symbol)
+          .pipe(
+            map((data) => {
+              return appActions.setStocksOwnedByUsersOwnThisStock({
+                currentStocksOwnedByUsersOwnThisStock: data,
+              });
+            }),
+            catchError((data) =>
+              of(
+                appActions.setAppError({
+                  errorMessage: this.mirrorError(data),
+                })
+              )
+            )
+          );
       })
     )
   );
