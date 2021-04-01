@@ -20,11 +20,11 @@
         <mat-card class="bio">
             {{ bioText() }}
         </mat-card>
-        <app-stock-historical-chart
+        <app-historical-chart
         *ngIf="showPortfolioChart"
         [historicalData]="profileHistoryChartData"
         (changeHistoricalChartRangeInterval)="changeChartRangeInterval($event)"
-        ></app-stock-historical-chart>
+        ></app-historical-chart>
     </div>
     
     <div fxFlex="40%" class="profile-right-col">

@@ -15,11 +15,11 @@ export interface ChartViewOptions {
   interval: string;
 }
 @Component({
-  selector: 'app-stock-historical-chart',
-  templateUrl: './stock-historical-chart.component.html',
-  styleUrls: ['./stock-historical-chart.component.scss'],
+  selector: 'app-historical-chart',
+  templateUrl: './historical-chart.component.html',
+  styleUrls: ['./historical-chart.component.scss'],
 })
-export class StockHistoricalChartComponent implements OnInit, OnChanges {
+export class HistoricalChartComponent implements OnInit, OnChanges {
   @Input() historicalData: StockHistory;
   @Output() changeHistoricalChartRangeInterval = new EventEmitter<{
     range: string;
