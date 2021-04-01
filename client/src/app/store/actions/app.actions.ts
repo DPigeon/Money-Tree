@@ -182,7 +182,7 @@ export const setTopInvestorsOnAStock = createAction(
 );
 
 export const loadFollowersWithSameStock = createAction(
-  '[User] Load top ten percent of users invested on a stock',
+  '[User] Load followers users invested on a stock',
   props<{ userId: number; symbol: string }>()
 );
 
@@ -192,7 +192,7 @@ export const setFollowersWithSameStock = createAction(
 );
 
 export const loadStocksOwnedByUsersOwnThisStock = createAction(
-  '[User] Load top ten percent of users invested on a stock',
+  '[User] Load owned of users invested on a stock',
   props<{ symbol: string }>()
 );
 
