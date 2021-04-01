@@ -12,8 +12,8 @@ exports.config = {
   specs: [
     //'./src/**/*.e2e-spec.ts'
     //'./src/**/leaderboard-page.e2e-spec.ts'
-    //'./src/**/stock-detail.e2e-spec.ts'
-    './src/**/profile-page.e2e-spec.ts'
+    './src/**/stock-detail.e2e-spec.ts'
+    //'./src/**/profile-page.e2e-spec.ts'
   ],
   capabilities: {
     browserName: 'chrome',

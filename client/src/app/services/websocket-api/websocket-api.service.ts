@@ -85,13 +85,10 @@ export class WebsocketAPIService {
         'View',
         { duration: 5000 }
       );
+      this.storeFacade.loadAlpacaPositions(this.userId);
       setTimeout(() => {
-        this.storeFacade.loadUserOwnedStocks(
-          Number(localStorage.getItem('userId'))
-        );
-        this.storeFacade.loadUserTransactions(
-          Number(localStorage.getItem('userId'))
-        );
+        this.storeFacade.loadUserOwnedStocks(this.userId);
+        this.storeFacade.loadUserTransactions(this.userId);
       }, 2000);
     }
   }

@@ -92,4 +92,16 @@ export class StockDetail {
     browser.sleep(1000);
     popupBuyButton.click();
   }
+  getStockLimitRadioButton(): ElementFinder {
+    return element(by.id('buy-limit'));
+  }
+  getLimitPriceInput(): ElementFinder {
+    return element(by.id('limit-price-input'));
+  }
+  getStockSymbolHomePage(): ElementFinder {
+    return element(by.className('symbol'));
+  }
+  getUserScore(): ElementFinder {
+    return element(by.className('user-score'));
+  }
 }
