@@ -19,6 +19,7 @@ public class UserCompleteProfile {
     Double score;
     Double rank;
     Float balance;
+    Float percentile;
     List<SanitizedUser> followers;
     List<SanitizedUser> following;
     List<SanitizedStock> ownedStocks;

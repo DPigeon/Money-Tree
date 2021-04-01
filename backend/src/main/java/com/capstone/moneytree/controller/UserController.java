@@ -99,6 +99,7 @@ public class UserController extends AbstractController {
       completeUserProfile.setFollowing(userService.getFollowings(user.getId()));
       completeUserProfile.setTransactions(transactionService.getUserTransactions(user.getId()));
       completeUserProfile.setOwnedStocks(stockService.getUserStocks(user.getId()));
+      completeUserProfile.setPercentile(userService.getUserPercentile(user.getUsername()));
       return completeUserProfile;
    }
 

@@ -107,7 +107,7 @@ public class DefaultTransactionService implements TransactionService {
          assert alpacaOrder != null;
          LOGGER.info("Executed order {}", alpacaOrder.getClientOrderId());
 
-         transaction = constructTransactionFromOrder(alpacaOrder);
+         transaction = constructTransactionFromOrder(alpacaOrder, stock);
          updateUserScore(order, user, transaction);
          transactionDao.save(transaction);
 
@@ -148,7 +148,7 @@ public class DefaultTransactionService implements TransactionService {
       return MoneyTreeOrderType.valueOf(order.getType().toUpperCase() + "_" + order.getSide().toUpperCase());
    }
 
-   public Transaction constructTransactionFromOrder(Order alpacaOrder) {
+   private Transaction constructTransactionFromOrder(Order alpacaOrder, Stock stock) {
       return Transaction.builder()
               .status(TransactionStatus.PENDING)
               .purchasedAt(alpacaOrder.getCreatedAt())
