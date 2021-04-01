@@ -1,6 +1,5 @@
 package com.capstone.moneytree.controller;
 
-import com.amazonaws.services.dynamodbv2.model.Get;
 import com.capstone.moneytree.model.SanitizedStock;
 import com.capstone.moneytree.service.api.StockMarketDataService;
 import com.capstone.moneytree.service.api.StockService;

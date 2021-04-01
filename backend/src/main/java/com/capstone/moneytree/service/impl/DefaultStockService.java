@@ -67,7 +67,6 @@ public class DefaultStockService implements StockService {
         //for each user who owns the requested symbol, fetch all the stocks it owns
         for (User user:usersWhoOwnStock) {
             List<Owns> ownsList = ownsDao.findByUserId(user.getId());
-
             HashMap<String, Boolean> existsForUser = new HashMap<>();
 
             for (Owns own:ownsList) {
@@ -78,16 +77,10 @@ public class DefaultStockService implements StockService {
                     if (existsForUser.containsKey(s)) {
                         continue;
                     }
-                    else {
-                        existsForUser.put(s, true);
-                    }
+                    existsForUser.put(s, true);
                     //add stock to stockMap
-                    if (stockMap.containsKey(s)) {
-                        stockMap.replace(s, stockMap.get(s) + 1);
-                    }
-                    else {
-                        stockMap.put(s, Long.parseLong("1"));
-                    }
+                    stockMap.putIfAbsent(s, Long.valueOf(0));
+                    stockMap.replace(s, stockMap.get(s) + 1);
                 }
             }
         }
