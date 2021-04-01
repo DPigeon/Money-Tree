@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class SanitizedStock {
+
    Long id;
    String symbol;
    String companyName;

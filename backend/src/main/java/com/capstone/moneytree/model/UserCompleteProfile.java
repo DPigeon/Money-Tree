@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data
 public class UserCompleteProfile {
+
     Long id;
     String firstName;
     String lastName;

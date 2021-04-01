@@ -3,9 +3,13 @@ package com.capstone.moneytree.model;
 import com.capstone.moneytree.model.node.User;
 import lombok.Data;
 
+/**
+ * Used to return only the necessary info about a user for
+ * follower/followings API and other APIs
+ */
 @Data
-public class SanitizedUser { // this class will be used to return only the necessary info about a user for
-    // follower/followings api and other apis
+public class SanitizedUser {
+
     Long id;
     String firstName;
     String lastName;

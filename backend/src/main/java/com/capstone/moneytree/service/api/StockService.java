@@ -9,8 +9,6 @@ import com.capstone.moneytree.model.node.Stock;
 public interface StockService {
 
     List<Stock> getAllStocks();
-
     List<SanitizedStock> getUserStocks(Long userId);
-
     Stock getStockBySymbol(String symbol);
 }
