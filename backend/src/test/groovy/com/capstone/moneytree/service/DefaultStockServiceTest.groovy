@@ -89,4 +89,50 @@ class DefaultStockServiceTest extends Specification {
         def e = thrown(EntityNotFoundException)
         e.getMessage() == "The requested stock was not found"
     }
+
+    def "Should get all ratios for 'people who own this stock also own'"() {
+        given: "3 users"
+        User userA = MoneyTreeTestUtils.createUser("testA@test.com", "userA", "pass", "UserA", "NameA", "2a33-a242-A")
+        User userB = MoneyTreeTestUtils.createUser("testB@test.com", "userB", "pass", "UserB", "NameB", "2a33-a242-B")
+        User userC = MoneyTreeTestUtils.createUser("testC@test.com", "userC", "pass", "UserC", "NameC", "2a33-a242-C")
+
+        userA.setId(1)
+        userB.setId(2)
+        userC.setId(3)
+
+        and: "3 stocks"
+        Stock stock1 = new Stock("AAPL", "Apple")
+        Stock stock2 = new Stock("TSLA", "Tesla")
+        Stock stock3 = new Stock("GOOG", "Google")
+
+        and: "userA, userB and userC own Apple"
+        Owns ownsApple1 = new Owns(userA, stock1, new Date(), 1, 1, 1)
+        Owns ownsApple2 = new Owns(userB, stock1, new Date(), 1, 1, 1)
+        Owns ownsApple3 = new Owns(userC, stock1, new Date(), 1, 1, 1)
+
+        and: "userA and userB own Tesla"
+        Owns ownsTesla1 = new Owns(userA, stock2, new Date(), 1, 1, 1)
+        Owns ownsTesla2 = new Owns(userB, stock2, new Date(), 1, 1, 1)
+
+        and: "userC own Google"
+        Owns ownsGoogle3 = new Owns(userC, stock3, new Date(), 1, 1, 1)
+
+        and: "mocking findByStockSymbol using AAPL should return all 3 relationships"
+        ownsDao.findByStockSymbol("AAPL") >> [ownsApple1, ownsApple2, ownsApple3]
+
+        and: "mocking findByUserId for each user should return the owns relationship"
+        ownsDao.findByUserId(1) >> [ownsApple1, ownsTesla1]
+        ownsDao.findByUserId(2) >> [ownsApple2, ownsTesla2]
+        ownsDao.findByUserId(3) >> [ownsApple3, ownsGoogle3]
+
+        when:
+        HashMap<String, Long> stockMap = stockService.getPeopleWhoOwnAlsoOwn("AAPL")
+
+        then: "should get ratio for each stock"
+        assert stockMap != null
+        assert stockMap.size() == 2
+        assert !stockMap.containsKey("APPL")
+        assert stockMap.get("TSLA") == 66
+        assert stockMap.get("GOOG") == 33
+    }
 }

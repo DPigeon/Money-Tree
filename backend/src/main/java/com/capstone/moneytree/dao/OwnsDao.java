@@ -15,6 +15,7 @@ public interface OwnsDao extends Neo4jRepository<Owns, Long> {
 
     List<Owns> findAll();
     List<Owns> findByStockId(Long stockId);
+    List<Owns> findByStockSymbol(String symbol);
     List<Owns> findByUserId(Long userId);
     List<Owns> findByUserIdAndStockId(Long userId, Long stockId);
 }

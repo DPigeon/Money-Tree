@@ -3,10 +3,13 @@ package com.capstone.moneytree.service.impl;
 import static com.capstone.moneytree.handler.ExceptionMessage.STOCK_NOT_FOUND;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.model.SanitizedStock;
+import com.capstone.moneytree.model.node.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +53,47 @@ public class DefaultStockService implements StockService {
     }
 
     @Override
-    public Stock getStockBySymbol(String symbol) {
+    public HashMap<String, Long> getPeopleWhoOwnAlsoOwn(String symbol) {
+        List<Owns> all = ownsDao.findByStockSymbol(symbol);
+        List<User> usersWhoOwnStock = new ArrayList<>();
+
+        //fetch all users who own stock specified in request
+        for (Owns own:all) {
+            usersWhoOwnStock.add(own.getUser());
+        }
+
+        HashMap<String, Long> stockMap = new HashMap<>();
+
+        //for each user who owns the requested symbol, fetch all the stocks it owns
+        for (User user:usersWhoOwnStock) {
+            List<Owns> ownsList = ownsDao.findByUserId(user.getId());
+            HashMap<String, Boolean> existsForUser = new HashMap<>();
+
+            for (Owns own:ownsList) {
+                String s = own.getStock().getSymbol();
+                //must not be the stock in the request
+                if (!s.equals(symbol)) {
+                    //since user can own a single stock multiple time, ensure that each stock is only considered once
+                    if (existsForUser.containsKey(s)) {
+                        continue;
+                    }
+                    existsForUser.put(s, true);
+                    //add stock to stockMap
+                    stockMap.putIfAbsent(s, Long.valueOf(0));
+                    stockMap.replace(s, stockMap.get(s) + 1);
+                }
+            }
+        }
+
+        for (Map.Entry<String, Long> entry :stockMap.entrySet()) {
+            stockMap.replace(entry.getKey(), entry.getValue()*100/usersWhoOwnStock.size());
+        }
+
+        return stockMap;
+    }
+  
+  @Override  
+  public Stock getStockBySymbol(String symbol) {
         Stock stock = stockDao.findBySymbol(symbol);
         if (stock == null) {
             throw new EntityNotFoundException(STOCK_NOT_FOUND.getMessage());
