@@ -31,7 +31,7 @@ import com.capstone.moneytree.exception.ExceptionAmazonS3;
 public class AmazonS3Facade {
 
    private static final Logger LOG = LoggerFactory.getLogger(AmazonS3Facade.class);
-   private AmazonS3 s3;
+   private final AmazonS3 s3;
 
    public AmazonS3Facade(@Value("${aws.access.key.id}") String accessKey, @Value("${aws.secret.access.key}") String secretKey) {
       AWSCredentials credentials = new BasicAWSCredentials(

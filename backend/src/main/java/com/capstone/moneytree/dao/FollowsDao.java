@@ -14,11 +14,7 @@ import java.util.List;
 public interface FollowsDao extends Neo4jRepository<Follows, Long> {
 
     List<Follows> findAll();
-
     List<Follows> findByFollowerId(Long followerId);
-
     List<Follows> findByUserToFollowId(Long userToFollowId);
-
     List<Follows> findByFollowerIdAndUserToFollowId(Long followerId, Long userToFollowId);
-
 }

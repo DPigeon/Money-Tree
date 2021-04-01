@@ -1,6 +1,7 @@
 package com.capstone.moneytree.facade;
 
 
+import com.capstone.moneytree.handler.ExceptionMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +27,8 @@ public class AlpacaSession {
     */
    public AlpacaAPI alpaca(String alpacaKey) {
       if (StringUtils.isBlank(alpacaKey)) {
-         LOGGER.error("User token for alpaca api is blank!");
-         throw new BadRequestException("User token for alpaca api is blank!");
+         LOGGER.error(ExceptionMessage.ALPACA_TOKEN_BLANK.getMessage());
+         throw new BadRequestException(ExceptionMessage.ALPACA_TOKEN_BLANK.getMessage());
       }
       return new AlpacaAPI(alpacaKey);
    }

@@ -55,7 +55,7 @@ public class MarketInteractionsFacade {
    private final UserDao userDao;
    private AlpacaAPI alpacaAPI;
    private final Map<String, AlpacaStreamListener> userIdToStream;
-   private Map<String, Boolean> updateTracker;
+   private final Map<String, Boolean> updateTracker;
 
    @Autowired
    StockDao stockDao;

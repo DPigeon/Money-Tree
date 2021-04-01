@@ -14,7 +14,8 @@ public enum ExceptionMessage {
     ORDER_ERROR("Could not process order to send to alpaca"),
     ALPACA_CLOCK_ERROR("Getting Alpaca market clock info failed"),
     USER_ALREADY_FOLLOWED("User already followed"),
-    STOCK_NOT_FOUND("The requested stock was not found");
+    STOCK_NOT_FOUND("The requested stock was not found"),
+    ALPACA_TOKEN_BLANK("User token for alpaca API is blank!");
 
     private final String message;
 

@@ -17,6 +17,9 @@ class ExceptionMessageTest extends Specification {
         String credentialNotFound = ExceptionMessage.CREDENTIALS_NOT_FOUND.getMessage()
         String alpacaError = ExceptionMessage.ALPACA_ERROR.getMessage()
         String alpacaClockError = ExceptionMessage.ALPACA_CLOCK_ERROR.getMessage()
+        String userAlreadyFollowed = ExceptionMessage.USER_ALREADY_FOLLOWED.getMessage()
+        String stockNotFound = ExceptionMessage.STOCK_NOT_FOUND.getMessage()
+        String alpacaTokenBlank = ExceptionMessage.ALPACA_TOKEN_BLANK.getMessage()
 
         then: "It should be the right message"
         assert entityNotFound == ExceptionMessage.ENTITY_NOT_FOUND.message
@@ -30,5 +33,8 @@ class ExceptionMessageTest extends Specification {
         assert credentialNotFound == ExceptionMessage.CREDENTIALS_NOT_FOUND.message
         assert alpacaError == ExceptionMessage.ALPACA_ERROR.message
         assert alpacaClockError == ExceptionMessage.ALPACA_CLOCK_ERROR.message
+        assert userAlreadyFollowed == ExceptionMessage.USER_ALREADY_FOLLOWED.message
+        assert stockNotFound == ExceptionMessage.STOCK_NOT_FOUND.message
+        assert alpacaTokenBlank == ExceptionMessage.ALPACA_TOKEN_BLANK.message
     }
 }
