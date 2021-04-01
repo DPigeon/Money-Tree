@@ -21,6 +21,7 @@ import reactor.core.publisher.Mono;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.HashMap;
 import java.util.List;
 
 @MoneyTreeController
@@ -117,5 +118,16 @@ public class StockController {
         LOG.info("Returning {} owned stocks", userStocks.size());
 
         return userStocks;
+    }
+
+    /**
+     * A GET method that fetches people/stock ratio of people who own this stock also own
+     *
+     * @return A proper response with a list of all stock/ratios based on passed stock symbol
+     */
+
+    @GetMapping("/people-who-own-also-own/{symbol}")
+    HashMap<String, Long> getPeopleWhoOwnAlsoOwn(@PathVariable String symbol) {
+        return stockService.getPeopleWhoOwnAlsoOwn(symbol);
     }
 }
