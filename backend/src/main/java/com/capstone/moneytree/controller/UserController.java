@@ -1,33 +1,26 @@
 package com.capstone.moneytree.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.security.auth.login.CredentialNotFoundException;
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.exception.InvalidMediaFileException;
 import com.capstone.moneytree.handler.ExceptionMessage;
 import com.capstone.moneytree.model.SanitizedUser;
-import com.capstone.moneytree.model.node.User;
+import com.capstone.moneytree.model.TransactionStatus;
 import com.capstone.moneytree.model.UserCompleteProfile;
+import com.capstone.moneytree.model.node.Transaction;
+import com.capstone.moneytree.model.node.User;
+import com.capstone.moneytree.service.api.StockService;
 import com.capstone.moneytree.service.api.TransactionService;
 import com.capstone.moneytree.service.api.UserService;
-import com.capstone.moneytree.service.api.StockService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.security.auth.login.CredentialNotFoundException;
+import javax.validation.Valid;
+import java.util.*;
 
 @MoneyTreeController
 @RequestMapping("/users")
@@ -203,5 +196,27 @@ public class UserController extends AbstractController {
    @GetMapping("/leaderboard")
    public ResponseEntity<List<SanitizedUser>> getLeaderboard() {
       return ResponseEntity.ok(userService.getLeaderboard());
+   }
+
+   @GetMapping("/{userId}/timeline")
+   public ResponseEntity<List<Map<SanitizedUser, Transaction>>> getTimeline(@PathVariable Long userId){
+      List<Map<SanitizedUser,Transaction>> list = new ArrayList<>();
+      // get followings
+      this.userService.getFollowings(userId).stream()
+              // foreach followings: get completed transactions
+              .forEach(user -> {
+                  this.transactionService.getUserTransactions(user.getId()).stream()
+                          .filter(t -> t.getStatus() == TransactionStatus.COMPLETED)
+                          //foreach transactions: add to list along with user info
+                          .forEach(transaction -> {
+                             list.add(Map.of(user, transaction));
+                          });
+              });
+      // sort by transaction date desc
+      list.sort((map1, map2) ->
+              map2.entrySet().stream().findFirst().get().getValue().getPurchasedAt().compareTo(
+              map1.entrySet().stream().findFirst().get().getValue().getPurchasedAt()
+      ));
+      return ResponseEntity.ok(list);
    }
 }
