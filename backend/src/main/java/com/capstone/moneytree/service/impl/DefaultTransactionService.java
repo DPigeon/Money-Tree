@@ -145,6 +145,10 @@ public class DefaultTransactionService implements TransactionService {
       throw new BadRequestException(ORDER_ERROR.getMessage());
    }
 
+   private MoneyTreeOrderType obtainMoneyTreeOrderType(Order order) {
+      return MoneyTreeOrderType.valueOf(order.getType().toUpperCase() + "_" + order.getSide().toUpperCase());
+   }
+
    private Transaction constructTransactionFromOrder(Order alpacaOrder) {
       return Transaction.builder()
               .status(TransactionStatus.PENDING)
@@ -191,15 +195,12 @@ public class DefaultTransactionService implements TransactionService {
       user.setScore(updatedScore);
       userDao.save(user);
    }
-   private MoneyTreeOrderType obtainMoneyTreeOrderType(Order order) {
-      return MoneyTreeOrderType.valueOf(order.getType().toUpperCase() + "_" + order.getSide().toUpperCase());
-   }
 
    @Override
    public List<Transaction> getUserTransactions(Long userId) {
-      List<Made> allMadeRels = madeDao.findByUserId(userId);
+      List<Made> allMadeRelations = madeDao.findByUserId(userId);
       List<Transaction> userTransactions = new ArrayList<>();
-      for (Made rel : allMadeRels) {
+      for (Made rel : allMadeRelations) {
          userTransactions.add(rel.getTransaction());
       }
       return userTransactions;

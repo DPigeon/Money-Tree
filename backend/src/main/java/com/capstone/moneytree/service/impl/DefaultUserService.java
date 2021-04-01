@@ -34,7 +34,6 @@ import com.capstone.moneytree.utils.MoneyTreePasswordEncryption;
 import com.capstone.moneytree.validator.UserValidator;
 import com.capstone.moneytree.validator.ValidatorFactory;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -58,15 +57,15 @@ public class DefaultUserService implements UserService {
     private static final String USER_CANT_BE_FOLLOWED_BY_ITSELF = "User cannot followed by itself";
 
     @Value("${alpaca.key.id}")
-    private String clientId;
+    String clientId;
     @Value("${alpaca.secret}")
-    private String clientSecret;
+    String clientSecret;
 
     @Autowired
-    private ActiveProfile activeProfile;
+    ActiveProfile activeProfile;
 
     @Autowired
-    private StockService stockService;
+    StockService stockService;
 
     private final UserDao userDao;
     private final OwnsDao ownsDao;
@@ -75,7 +74,6 @@ public class DefaultUserService implements UserService {
     private final MoneyTreePasswordEncryption passwordEncryption;
     private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
     private final AmazonS3Service amazonS3Service;
-
     private final String bucketName;
 
     @Autowired
