@@ -48,6 +48,7 @@ import spock.lang.Specification
  * Unit Tests for the User Controller.
  */
 class UserControllerTest extends Specification {
+
     private static final String PIC_FILE_NAME = "profile.jpg"
 
     private static String S3_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY")
@@ -523,7 +524,6 @@ class UserControllerTest extends Specification {
         User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
         user1.setId(userId1)
         User user2 = user1
-
 
         and: "mock the way we retrieve the Follows relationships"
         userDao.findUserById(userId1) >> user1

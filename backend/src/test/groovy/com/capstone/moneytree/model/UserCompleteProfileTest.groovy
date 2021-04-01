@@ -6,8 +6,8 @@ import spock.lang.Specification
 /**
  * Unit Tests for the UserCompleteProfile model.
  */
-
 class UserCompleteProfileTest extends Specification {
+
     def "it should create a UserCompleteProfile from a User"() {
         given: "a User object created from User class"
         User newUser = new User()
