@@ -471,4 +471,17 @@ public class DefaultUserService implements UserService {
                 .headers("Content-Type", "application/x-www-form-urlencoded")
                 .POST(HttpRequest.BodyPublishers.ofString(form)).build();
     }
+
+    @Override
+    public Float getUserPercentile(String username) {
+        List<String> usernames = userDao.getUsernamesSortedByScoreDesc();
+        float index = 0;
+        for (int i = 0; i < usernames.size(); i++) {
+            if (usernames.get(i).equals(username)) {
+                index = i+1;
+                break;
+            }
+        }
+        return index/usernames.size()*100;
+    }
 }

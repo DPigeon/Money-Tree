@@ -26,4 +26,7 @@ public interface UserDao extends Neo4jRepository<User, Long> {
 
     @Query("MATCH (u:User) RETURN toString(ID(u)) as id, u.email as email, u.firstName as firstName, u.lastName as lastName, u.username as username, u.avatarURL as avatarURL")
     List<Map<String, String>> getSearchUsers();
+
+    @Query("MATCH (n:User) RETURN n.username ORDER BY n.score DESC")
+    List<String> getUsernamesSortedByScoreDesc();
 }
