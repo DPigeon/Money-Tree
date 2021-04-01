@@ -38,6 +38,7 @@ import pl.zankowski.iextrading4j.api.stocks.v1.KeyStats;
 @Service
 @Transactional
 public class DefaultTransactionService implements TransactionService {
+
    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultTransactionService.class);
 
    private final TransactionDao transactionDao;
@@ -79,19 +80,18 @@ public class DefaultTransactionService implements TransactionService {
       if (user == null) {
          throw new EntityNotFoundException("User does not exist!");
       }
-      String alpacaKey = user.getAlpacaApiKey();
 
       /* Build the transaction and persist and update user balance */
-      executeTransaction(alpacaKey, order, user);
+      executeTransaction(order, user);
       userDao.save(user);
 
       return getUserTransactions(user.getId());
    }
 
-   private void executeTransaction(String alpacaKey, Order order, User user) {
+   private void executeTransaction(Order order, User user) {
       Transaction transaction;
       try {
-         AlpacaAPI api = session.alpaca(alpacaKey);
+         AlpacaAPI api = session.alpaca(user.getAlpacaApiKey());
 
          Order alpacaOrder = executeRequest(api, order);
 
