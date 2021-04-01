@@ -1,7 +1,5 @@
 package com.capstone.moneytree.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,10 +17,9 @@ import net.jacobpeterson.domain.alpaca.order.Order;
 
 @MoneyTreeController
 @RequestMapping("/transactions")
-public class TransactionController {
+public class TransactionController extends AbstractController {
 
    private final TransactionService transactionService;
-   private static final Logger LOG = LoggerFactory.getLogger(TransactionController.class);
 
    @Autowired
    public TransactionController(TransactionService transactionService) {
@@ -37,8 +34,7 @@ public class TransactionController {
    @GetMapping
    List<Transaction> all() {
       List<Transaction> transactions = new ArrayList<>(transactionService.getAllTransactions());
-
-      LOG.info("Returning {} transactions", transactions.size());
+      LOGGER.info("Returning {} transactions", transactions.size());
 
       return transactions;
    }
@@ -64,8 +60,7 @@ public class TransactionController {
    @GetMapping("/{userId}")
    List<Transaction> getUserTransactions(@PathVariable String userId) {
       List<Transaction> userTransactions = transactionService.getUserTransactions(Long.parseLong(userId));
-
-      LOG.info("Returning {} transactions", userTransactions.size());
+      LOGGER.info("Returning {} transactions", userTransactions.size());
 
       return userTransactions;
    }

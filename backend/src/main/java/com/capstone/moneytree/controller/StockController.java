@@ -4,8 +4,6 @@ import com.capstone.moneytree.model.SanitizedStock;
 import com.capstone.moneytree.service.api.StockMarketDataService;
 import com.capstone.moneytree.service.api.StockService;
 import com.capstone.moneytree.service.api.YahooFinanceService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,18 +23,16 @@ import java.util.List;
 
 @MoneyTreeController
 @RequestMapping("/stock")
-public class StockController {
+public class StockController extends AbstractController {
 
     private final StockMarketDataService stockMarketDataService;
     private final YahooFinanceService yahooFinanceService;
     private final StockService stockService;
 
-    private static final Logger LOG = LoggerFactory.getLogger(StockController.class);
-
     @Autowired
     public StockController(StockMarketDataService stockMarketDataService, YahooFinanceService yahooFinanceService, StockService stockService) {
         this.yahooFinanceService = yahooFinanceService;
-        LOG.info("Initializing StockController");
+        LOGGER.info("Initializing StockController");
         this.stockMarketDataService = stockMarketDataService;
         this.stockService = stockService;
     }
@@ -114,7 +110,7 @@ public class StockController {
     List<SanitizedStock> getUserStocks(@PathVariable String userId) {
         List<SanitizedStock> userStocks = stockService.getUserStocks(Long.parseLong(userId));
 
-        LOG.info("Returning {} owned stocks", userStocks.size());
+        LOGGER.info("Returning {} owned stocks", userStocks.size());
 
         return userStocks;
     }

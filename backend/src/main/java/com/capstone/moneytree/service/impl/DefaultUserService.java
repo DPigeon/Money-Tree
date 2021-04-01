@@ -243,7 +243,6 @@ public class DefaultUserService implements UserService {
         user.setCoverPhotoURL(imageUrl);
         userDao.save(user);
         LOG.info("Edited {}'s profile cover photo successfully!", user.getUsername());
-        break;
     }
 
     @Override
@@ -269,7 +268,7 @@ public class DefaultUserService implements UserService {
             userDao.save(userToUpdate);
             LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
 
-        } catch (InterruptedException | IOException e) {
+        } catch (Exception e) {
             LOG.error("Error occurred while trying to process alpaca api key for user {}", e.getMessage());
         }
 

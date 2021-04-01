@@ -23,10 +23,9 @@ import net.jacobpeterson.domain.alpaca.position.Position;
 
 @MoneyTreeController
 @RequestMapping("/alpaca")
-public class AlpacaController {
+public class AlpacaController extends AbstractController {
 
    private final MarketInteractionsFacade marketInteractionsFacade;
-
    private final SimpMessagingTemplate messageSender;
 
    @Autowired
