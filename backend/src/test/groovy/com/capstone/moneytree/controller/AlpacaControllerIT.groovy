@@ -108,7 +108,7 @@ class AlpacaControllerIT extends Specification {
         int period = 1
         String unit = "WEEK"
         String timeFrame = "FIFTEEN_MINUTE"
-        LocalDate localDate = LocalDate.now()
+        String localDate = LocalDate.now().toString()
         String extended = "false"
 
         when: "Getting the portfolio"
@@ -137,7 +137,7 @@ class AlpacaControllerIT extends Specification {
         int period = 1
         String unit = null
         String timeFrame = "FIFTEEN_MINUTE"
-        LocalDate localDate = LocalDate.now()
+        String localDate = LocalDate.now().toString()
         String extended = "false"
 
         when: "Getting the portfolio with invalid unit"
@@ -164,7 +164,7 @@ class AlpacaControllerIT extends Specification {
         int period = 1
         String unit = "WEEK"
         String timeFrame = null
-        LocalDate localDate = LocalDate.now()
+        String localDate = LocalDate.now().toString()
         String extended = "false"
 
         when: "Getting the portfolio with invalid time frame"

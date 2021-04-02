@@ -5,11 +5,11 @@ import {
   FORM_MODULE_DPENDENCEIES,
   NGX_ECHART,
 } from '../../shared.module';
-import { HistoricalChartComponent } from './portfolio-value-chart.component';
+import { PortfolioValueChartComponent } from './portfolio-value-chart.component';
 
 describe('HistoricalChartComponent', () => {
-  let component: HistoricalChartComponent;
-  let fixture: ComponentFixture<HistoricalChartComponent>;
+  let component: PortfolioValueChartComponent;
+  let fixture: ComponentFixture<PortfolioValueChartComponent>;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -17,12 +17,12 @@ describe('HistoricalChartComponent', () => {
         FORM_MODULE_DPENDENCEIES,
         NGX_ECHART,
       ],
-      declarations: [HistoricalChartComponent],
+      declarations: [PortfolioValueChartComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HistoricalChartComponent);
+    fixture = TestBed.createComponent(PortfolioValueChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -56,10 +56,10 @@ const formatedValues: number[] = [689.88, 687.11, 688.99, null, 696.22, 691.09];
 
 // unit tests
 describe('Stock Historical chart', () => {
-  let component: HistoricalChartComponent;
+  let component: PortfolioValueChartComponent;
 
   beforeEach(() => {
-    component = new HistoricalChartComponent();
+    component = new PortfolioValueChartComponent();
     spyOn(component.changeHistoricalChartRangeInterval, 'emit');
   });
 

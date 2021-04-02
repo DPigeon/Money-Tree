@@ -1,3 +1,4 @@
+import { HistoricalChartComponent } from './../../components/historical-chart/historical-chart.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderComponent } from '../../components/header/header.component';
 import { TransactionHistoryComponent } from '../../components/transaction-history/transaction-history.component';
@@ -8,15 +9,21 @@ import {
   MATERIAL_MODULE_DEPENDENCIES,
   FORM_MODULE_DPENDENCEIES,
   NGRX_STORE_MODULE,
+  NGX_ECHART,
 } from '../../shared.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { User, UserProfile } from 'src/app/interfaces/user';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 
 const mockStoreFacade = {
   followUser: jest.fn(),
   unfollowUser: jest.fn(),
   loadCurrentProfileUser: jest.fn(),
+} as any;
+
+const mockUserService = {
+  getPortfolioHistoricalData: jest.fn(),
 } as any;
 
 const fakeMatDialog = {
@@ -29,6 +36,10 @@ const fakeActivatedRoute = {
 
 const fakeRoute = {
   navigate: jest.fn(),
+} as any;
+
+const fakeDatePipe = {
+  transform: jest.fn(),
 } as any;
 
 const fakeFollowersList: User[] = [
@@ -66,8 +77,10 @@ const fakeFollowingsList: User[] = [
 ];
 
 const fakeCompleteUserProfile: UserProfile = {
-  coverPhotoURL: 'https://www.cn.ca/-/media/Images/Stories/2021/20210222-RISE-Employee-Resource-Group-600X400.jpg',
-  avatarURL: 'https://www.cn.ca/-/media/Images/Stories/2021/20210222-RISE-Employee-Resource-Group-600X400.jpg',
+  coverPhotoURL:
+    'https://www.cn.ca/-/media/Images/Stories/2021/20210222-RISE-Employee-Resource-Group-600X400.jpg',
+  avatarURL:
+    'https://www.cn.ca/-/media/Images/Stories/2021/20210222-RISE-Employee-Resource-Group-600X400.jpg',
   id: 5,
   firstName: 'profileUserFirstname',
   lastName: 'profileUserLastName',
@@ -88,6 +101,8 @@ describe('ProfileComponent', () => {
         MATERIAL_MODULE_DEPENDENCIES,
         FORM_MODULE_DPENDENCEIES,
         RouterTestingModule,
+        NGX_ECHART,
+        HttpClientTestingModule,
       ],
       declarations: [
         ProfileComponent,
@@ -95,6 +110,7 @@ describe('ProfileComponent', () => {
         TransactionHistoryComponent,
         StockSearchComponent,
         ListOfFollowsComponent,
+        HistoricalChartComponent,
       ],
       providers: [NGRX_STORE_MODULE],
     }).compileComponents();
@@ -107,7 +123,9 @@ describe('ProfileComponent', () => {
       mockStoreFacade,
       fakeMatDialog,
       fakeActivatedRoute,
-      fakeRoute
+      fakeRoute,
+      fakeDatePipe,
+      mockUserService
     );
     component.completeUserProfile = fakeCompleteUserProfile;
     component.loggedInUserId = 0; // different from UserProfile
