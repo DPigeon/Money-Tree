@@ -5,7 +5,7 @@ import { StoreFacadeService } from '../../store/store-facade.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Transaction } from 'src/app/interfaces/transaction';
 import { Stock } from 'src/app/interfaces/stock';
-import { TransactionService } from 'src/app/services/transaction/transaction.service'
+import { TransactionService } from 'src/app/services/transaction/transaction.service';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private storeFacade: StoreFacadeService,
     public dialog: MatDialog,
-    private transactionService: TransactionService,
+    private transactionService: TransactionService
   ) {
     this.currentUser = null; // otherwise there would be an undefined error because of waiting for the currentUser values to fetch
   }
@@ -36,7 +36,10 @@ export class HomeComponent implements OnInit {
     this.currentUser$ = this.storeFacade.currentUser$;
     this.currentUser$.subscribe((user: User) => {
       if (user) {
-        // this.transactionService.getTimelineFeed(user.id)
+        this.transactionService.getTimelineFeed(user.id).subscribe(
+          (res) => {debugger},
+          (err) => {}
+        );
         this.currentUser = user;
         this.userPhotoURL = this.currentUser.avatarURL;
         this.coverPhotoURL = this.currentUser.coverPhotoURL;
@@ -53,6 +56,10 @@ export class HomeComponent implements OnInit {
         this.userTransactions$ = this.storeFacade.userTransactions$;
         this.userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
       }
-    });
+    });debugger
+    this.transactionService.getTimelineFeed(this.currentUser.id).subscribe(
+      (res) => {if(res){}},
+      (err) => {}
+    );
   }
 }
