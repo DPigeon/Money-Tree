@@ -3,7 +3,7 @@
 </div>
 
 <div fxLayout="row wrap" fxLayoutAlign="center stretch">
-  <div fxFlex="20%" fxFlex.lt-sm="100%">
+  <div class="profile-column" fxFlex="20%" fxFlex.lt-sm="100%">
     <app-home-profile
       *ngIf="showProfileColumn"
       [currentUser]="currentUser$ | async"
@@ -11,11 +11,7 @@
     ></app-home-profile>
   </div>
   <div fxFlex="58%" fxFlex.lt-sm="100%" *ngIf="currentUser$ | async as user">
-    <h1>Welcome to home page!</h1>
-    <h1>This is a test to see user state</h1>
-    <div>{{ user.firstName }}</div>
-    <div>{{ user.username }}</div>
-    <div>{{ user.email }}</div>
+    <app-home-timeline></app-home-timeline>
   </div>
   <app-followings-search
     [followings$]="followings$"

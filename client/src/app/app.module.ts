@@ -36,6 +36,7 @@ import { LoginSignupComponent } from './pages/login-signup/login-signup.componen
 import { SignupFormComponent } from './components/signup-form/signup-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { HomeComponent } from './pages/home/home.component';
+import { HomeTimelineComponent } from './components/home-timeline/home-timeline.component';
 import { StockSearchComponent } from './components/stock-search/stock-search.component';
 import { UserOwnedStocksComponent } from './components/user-owned-stocks/user-owned-stocks.component';
 import { SellOrBuyActionsComponent } from './components/sell-buy-stock/sell-buy-actions.component';
@@ -73,6 +74,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     SignupFormComponent,
     LoginFormComponent,
     HomeComponent,
+    HomeTimelineComponent,
     HomeProfileComponent,
     UserOwnedStockProfileComponent,
     EditProfileComponent,

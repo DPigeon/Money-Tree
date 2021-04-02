@@ -7,6 +7,7 @@ import { Stock } from '../interfaces/stock';
 import { MarketClock } from '../interfaces/market-clock';
 import { StockHistory } from '../interfaces/stockHistory';
 import { StockPercentage } from './../interfaces/stock-percentage';
+import { TimelineFeed } from '../interfaces/timelineFeed';
 
 @Injectable({
   providedIn: 'root',
@@ -169,6 +170,20 @@ export class DataFormatter {
         percentage: response[key],
       });
     }
+    return result;
+  }
+  timelineFormatter(response: any): TimelineFeed[] {
+    const result: TimelineFeed[] = [];
+    response.forEach((e) => {
+      result.push({
+        name: e.name,
+        stock: e.stock,
+        averagePrice: e.averagePrice,
+        time: e.time,
+        profilePicture: e.profile,
+        type: e.time,
+      });
+    });
     return result;
   }
 }

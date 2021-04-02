@@ -26,5 +26,12 @@ export class TransactionService {
       .post('transactions/execute/' + userId, transaction)
       .pipe(map((res: Response) => this.dataFormatter.transactionListFormatter(res.body)));
   }
+  getTimelineFeed(
+    userId: number
+  ): Observable<any> {
+    return this.api
+      .get('users/'+userId+'/timeline')
+      .pipe(map((res: Response) => this.dataFormatter.timelineFormatter(res.body)));
+  }
 
 }
