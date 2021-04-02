@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
   FORM_MODULE_DPENDENCEIES,
+  TRANSACTION_SERVICE,
 } from '../../shared.module';
 
 import { HomeTimelineComponent } from './home-timeline.component';
@@ -19,6 +20,8 @@ describe('HomeTimelineComponent', () => {
         FORM_MODULE_DPENDENCEIES,
       ],
       declarations: [HomeTimelineComponent],
+      providers: [
+        TRANSACTION_SERVICE,],
     }).compileComponents();
   });
 
