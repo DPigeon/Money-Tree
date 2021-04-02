@@ -177,11 +177,13 @@ export class DataFormatter {
     response.forEach((e) => {
       result.push({
         name: e.first.firstName + ' ' + e.first.lastName,
-        stock: e.second.symbol,
-        averagePrice: e.second.averagePrice,
+        username: e.first.username,
+        symbol: e.second.symbol,
+        avgPrice: e.second.avgPrice,
         time: e.second.purchasedAt,
-        profilePicture:e.first.avatarURL,
-        type:e.second.moneyTreeOrderType,
+        profilePicture: e.first.avatarURL,
+        type: e.second.moneyTreeOrderType,
+        quantity: e.second.quantity,
       });
     });
     return result;

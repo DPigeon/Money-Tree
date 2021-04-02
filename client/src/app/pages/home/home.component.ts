@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
   followers$: Observable<User[]>;
   userTransactions$: Observable<Transaction[]>;
   userOwnedStocks$: Observable<Stock[]>;
-  timelineFeed : Observable<TimelineFeed[]>
+  timelineFeed: Observable<TimelineFeed[]>;
   showProfileColumn = false;
 
   constructor(

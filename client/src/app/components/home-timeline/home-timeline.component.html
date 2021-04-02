@@ -1,30 +1,30 @@
 <div>Here is your network's recent activity</div>
 <div class="timeline-container">
-  <ng-container *ngFor="let f of feed" >
+  <ng-container *ngFor="let f of feed">
     <mat-card class="card-container">
-   
       <div class="feed-row">
-        <!-- image src to be changed -->
         <img
+          (click)="navigateTo('user', f.username)"
           class="profile-picture"
-          alt="Profile Picture"
+          alt="Avatar"
           width="50"
           height="50"
-          [src]="
-            f.profilePicture
-          "
+          [src]="f.profilePicture"
         />
         <div class="feed-col">
-        <span class="feed-user">{{f.name}}</span>
-        <span>Sold 10 shares of "BNS" stock at an average of $56 a share</span>
-        <span class="feed-time">time</span>
-    </div>
-  </div>
-   
-</mat-card>
+          <span (click)="navigateTo('user', f.username)" class="feed-link">{{
+            f.name
+          }}</span>
+          <span class="feed-line">
+            {{ getFeedLine(f.type, f.quantity, f.avgPrice)[0] }}
+            <span (click)="navigateTo('stock', f.symbol)" class="feed-link">{{
+              f.symbol
+            }}</span>
+            {{ getFeedLine(f.type, f.quantity, f.avgPrice)[1] }}</span
+          >
+          <span class="feed-time">{{ getFeedTime(f.time) }}</span>
+        </div>
+      </div>
+    </mat-card>
   </ng-container>
-  
 </div>
-
- 
-  
