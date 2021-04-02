@@ -176,12 +176,12 @@ export class DataFormatter {
     const result: TimelineFeed[] = [];
     response.forEach((e) => {
       result.push({
-        name: e.name,
-        stock: e.stock,
-        averagePrice: e.averagePrice,
-        time: e.time,
-        profilePicture: e.profile,
-        type: e.time,
+        name: e.first.firstName + ' ' + e.first.lastName,
+        stock: e.second.symbol,
+        averagePrice: e.second.averagePrice,
+        time: e.second.purchasedAt,
+        profilePicture:e.first.avatarURL,
+        type:e.second.moneyTreeOrderType,
       });
     });
     return result;

@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Transaction } from 'src/app/interfaces/transaction';
 import { Stock } from 'src/app/interfaces/stock';
 import { TransactionService } from 'src/app/services/transaction/transaction.service';
+import { TimelineFeed } from 'src/app/interfaces/timelineFeed';
 
 @Component({
   selector: 'app-home',
@@ -22,6 +23,7 @@ export class HomeComponent implements OnInit {
   followers$: Observable<User[]>;
   userTransactions$: Observable<Transaction[]>;
   userOwnedStocks$: Observable<Stock[]>;
+  timelineFeed : TimelineFeed[] = [];
   showProfileColumn = false;
 
   constructor(
@@ -37,8 +39,10 @@ export class HomeComponent implements OnInit {
     this.currentUser$.subscribe((user: User) => {
       if (user) {
         this.transactionService.getTimelineFeed(user.id).subscribe(
-          (res) => {debugger},
-          (err) => {}
+          (res) => {if(res){
+            this.timelineFeed = res;
+        }}
+         
         );
         this.currentUser = user;
         this.userPhotoURL = this.currentUser.avatarURL;
@@ -56,10 +60,13 @@ export class HomeComponent implements OnInit {
         this.userTransactions$ = this.storeFacade.userTransactions$;
         this.userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
       }
-    });debugger
+    });
     this.transactionService.getTimelineFeed(this.currentUser.id).subscribe(
-      (res) => {if(res){}},
-      (err) => {}
+      (res) => {
+        if(res){
+          this.timelineFeed = res;
+      }},
+     
     );
   }
 }

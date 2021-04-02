@@ -11,7 +11,7 @@
     ></app-home-profile>
   </div>
   <div fxFlex="58%" fxFlex.lt-sm="100%" *ngIf="currentUser$ | async as user">
-    <app-home-timeline></app-home-timeline>
+    <app-home-timeline [timeline]="timelineFeed | async"></app-home-timeline>
   </div>
   <app-followings-search
     [followings$]="followings$"
