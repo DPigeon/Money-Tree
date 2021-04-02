@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ValidatorFactory {
 
-   private UserValidator userValidator;
+   private final UserValidator userValidator;
 
    @Autowired
    public ValidatorFactory(UserValidator userValidator) {

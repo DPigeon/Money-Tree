@@ -8,13 +8,13 @@ import com.capstone.moneytree.dao.TransactionDao
 import com.capstone.moneytree.facade.AlpacaSession
 import com.capstone.moneytree.model.SanitizedUser
 import com.capstone.moneytree.model.relationship.Follows
-import com.capstone.moneytree.model.relationship.Owns
 import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.api.StockService
 import com.capstone.moneytree.service.api.TransactionService
 import com.capstone.moneytree.service.impl.DefaultStockService
 import com.capstone.moneytree.service.impl.DefaultTransactionService
 import org.springframework.http.ResponseEntity
+import spock.lang.Ignore
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.*
 
@@ -175,6 +175,7 @@ class UserControllerTest extends Specification {
         thrown(UserAlreadyExistsException)
     }
 
+    @Ignore("Needs integration test instead to use Alpaca Auth and requests")
     def "Should register an Alpaca key to a user successfully"() {
         given: "A registered user with an Alpaca key"
         String email = "moneytree@test.com"

@@ -34,6 +34,7 @@ import com.capstone.moneytree.utils.MoneyTreePasswordEncryption;
 import com.capstone.moneytree.validator.UserValidator;
 import com.capstone.moneytree.validator.ValidatorFactory;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -266,7 +267,7 @@ public class DefaultUserService implements UserService {
             userDao.save(userToUpdate);
             LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
 
-        } catch (Exception e) {
+        } catch (InterruptedException | IOException e) {
             LOG.error("Error occurred while trying to process alpaca api key for user {}", e.getMessage());
         }
 
