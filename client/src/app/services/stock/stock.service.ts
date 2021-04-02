@@ -43,7 +43,7 @@ export class StockService {
           interval
       )
       .pipe(
-        map((res: Response) => this.dataFormatter.formatAlpacaPortfolio(res.body))
+        map((res: Response) => this.dataFormatter.formatStockHistory(res.body))
       );
   }
 

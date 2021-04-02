@@ -222,6 +222,7 @@ export class ProfileComponent implements OnInit {
     length: number,
     unit: string
   ): void {
+    debugger
     const currentDate = this.datepipe.transform(Date.now(), 'yyyy-MM-dd');
     this.userService
       .getPortfolioHistoricalData(
