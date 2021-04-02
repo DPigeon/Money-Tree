@@ -42,7 +42,7 @@ export const MATERIAL_MODULE_DEPENDENCIES = [
 
 export const NGRX_STORE_MODULE = provideMockStore({ initialState });
 export const USER_SERVICE = UserService;
-export const TRANSACTION_SERVICE = TransactionService
+export const TRANSACTION_SERVICE = TransactionService;
 
 export const NGX_ECHART = NgxEchartsModule.forRoot({ echarts });
 

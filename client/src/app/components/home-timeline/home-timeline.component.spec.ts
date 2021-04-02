@@ -20,8 +20,7 @@ describe('HomeTimelineComponent', () => {
         FORM_MODULE_DPENDENCEIES,
       ],
       declarations: [HomeTimelineComponent],
-      providers: [
-        TRANSACTION_SERVICE,],
+      providers: [TRANSACTION_SERVICE],
     }).compileComponents();
   });
 
