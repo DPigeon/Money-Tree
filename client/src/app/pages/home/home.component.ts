@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
   followers$: Observable<User[]>;
   userTransactions$: Observable<Transaction[]>;
   userOwnedStocks$: Observable<Stock[]>;
-  timelineFeed : TimelineFeed[] = [];
+  timelineFeed : Observable<TimelineFeed[]>
   showProfileColumn = false;
 
   constructor(
@@ -38,12 +38,7 @@ export class HomeComponent implements OnInit {
     this.currentUser$ = this.storeFacade.currentUser$;
     this.currentUser$.subscribe((user: User) => {
       if (user) {
-        this.transactionService.getTimelineFeed(user.id).subscribe(
-          (res) => {if(res){
-            this.timelineFeed = res;
-        }}
-         
-        );
+        this.timelineFeed = this.transactionService.getTimelineFeed(user.id);
         this.currentUser = user;
         this.userPhotoURL = this.currentUser.avatarURL;
         this.coverPhotoURL = this.currentUser.coverPhotoURL;
@@ -61,12 +56,5 @@ export class HomeComponent implements OnInit {
         this.userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
       }
     });
-    this.transactionService.getTimelineFeed(this.currentUser.id).subscribe(
-      (res) => {
-        if(res){
-          this.timelineFeed = res;
-      }},
-     
-    );
   }
 }

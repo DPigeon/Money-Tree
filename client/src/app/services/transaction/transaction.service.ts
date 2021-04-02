@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserService } from '../user/user.service';
 import { DataFormatter } from '../../utilities/data-formatters';
+import { TimelineFeed } from 'src/app/interfaces/timelineFeed';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +29,7 @@ export class TransactionService {
   }
   getTimelineFeed(
     userId: number
-  ): Observable<any> {
+  ): Observable<TimelineFeed[]> {
     return this.api
       .get('users/'+userId+'/timeline')
       .pipe(map((res: Response) => this.dataFormatter.timelineFormatter(res.body)));

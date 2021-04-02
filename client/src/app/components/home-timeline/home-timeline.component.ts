@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { TimelineFeed } from 'src/app/interfaces/timelineFeed';
-import { Stock } from '../../interfaces/stock';
 
 @Component({
   selector: 'app-home-timeline',
