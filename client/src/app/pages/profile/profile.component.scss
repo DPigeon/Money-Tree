@@ -3,14 +3,13 @@
   position: relative;
 }
 
-
 .profile-right-col {
   padding-right: 5vw;
   padding-top: 1.5rem;
   height: 100vh;
   .transaction-history-container {
-  height: 50%;
-}
+    height: 50%;
+  }
 }
 
 .profile-info-container {
@@ -83,5 +82,3 @@
   padding: 0 5vw 0 5vw;
   height: 450px;
 }
-
-

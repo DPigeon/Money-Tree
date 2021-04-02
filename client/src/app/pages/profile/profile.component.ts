@@ -51,7 +51,7 @@ export class ProfileComponent implements OnInit {
       if (data) {
         this.completeUserProfile = data;
         this.userId = String(this.completeUserProfile.id);
-        this.generateData(String(data.id),'FIFTEEN_MINUTE',1,'DAY');
+        this.generateData(String(data.id), 'FIFTEEN_MINUTE', 1, 'DAY');
       }
     });
     this.storeFacade.currentUser$.subscribe((loggedInUser: User) => {
@@ -65,7 +65,6 @@ export class ProfileComponent implements OnInit {
       .subscribe(() => {
         username = this.route.snapshot.paramMap.get('username');
         this.storeFacade.loadCurrentProfileUser(username);
-       
       });
   }
   openDialog(choice: string): void {
@@ -197,7 +196,6 @@ export class ProfileComponent implements OnInit {
           unit = 'YEAR';
           length = 5;
           break;
-         
       }
       switch (chartOptions.interval) {
         case '5m':
@@ -219,7 +217,12 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  generateData(userId: string, interval: string, length: number, unit:string ): void {
+  generateData(
+    userId: string,
+    interval: string,
+    length: number,
+    unit: string
+  ): void {
     const currentDate = this.datepipe.transform(Date.now(), 'yyyy-MM-dd');
     this.userService
       .getPortfolioHistoricalData(
@@ -231,15 +234,16 @@ export class ProfileComponent implements OnInit {
         'false'
       )
       .subscribe(
-        res => {
-        if (res) {
-          this.profileHistoryChartData = res;
-          this.showPortfolioChart = true;
+        (res) => {
+          if (res) {
+            this.profileHistoryChartData = res;
+            this.showPortfolioChart = true;
+          }
+        },
+        (err) => {
+          this.profileHistoryChartData = null;
+          this.showPortfolioChart = false;
         }
-      },
-      err => {
-        this.profileHistoryChartData = null;
-        this.showPortfolioChart = false;
-      });
+      );
   }
 }
