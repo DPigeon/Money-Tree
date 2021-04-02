@@ -73,7 +73,7 @@ public class DefaultUserService implements UserService {
     private final FollowsDao followsDao;
     private final ValidatorFactory validatorFactory;
     private final MoneyTreePasswordEncryption passwordEncryption;
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultUserService.class);
     private final AmazonS3Service amazonS3Service;
     private final String bucketName;
 
@@ -118,7 +118,7 @@ public class DefaultUserService implements UserService {
         if (existingUser == null) {
             throw new EntityNotFoundException(USER_NOT_FOUND);
         }
-        LOG.info("Found user with email {}", existingUser.getEmail());
+        LOGGER.info("Found user with email {}", existingUser.getEmail());
         return existingUser;
     }
 
@@ -135,7 +135,7 @@ public class DefaultUserService implements UserService {
 
         userDao.save(user);
 
-        LOG.info("Created user: {}", user.getUsername());
+        LOGGER.info("Created user: {}", user.getUsername());
 
         return user;
     }
@@ -196,7 +196,7 @@ public class DefaultUserService implements UserService {
         }
 
         User updatedUser = userDao.save(userToUpdate);
-        LOG.info("Updated user: {}", updatedUser.getUsername());
+        LOGGER.info("Updated user: {}", updatedUser.getUsername());
 
         return updatedUser;
     }
@@ -211,7 +211,7 @@ public class DefaultUserService implements UserService {
                 selectCoverPhotoUrl(imageFile, user);
                 break;
             default:
-                LOG.info("Photo was not saved on Amazon S3!");
+                LOGGER.info("Photo was not saved on Amazon S3!");
                 throw new BadRequestException("Wrong selection string was put as parameter.");
         }
 
@@ -229,7 +229,7 @@ public class DefaultUserService implements UserService {
 
         user.setAvatarURL(imageUrl);
         userDao.save(user);
-        LOG.info("Edited {}'s profile picture successfully!", user.getUsername());
+        LOGGER.info("Edited {}'s profile picture successfully!", user.getUsername());
     }
 
     private void selectCoverPhotoUrl(MultipartFile imageFile, User user) {
@@ -241,7 +241,7 @@ public class DefaultUserService implements UserService {
 
         user.setCoverPhotoURL(imageUrl);
         userDao.save(user);
-        LOG.info("Edited {}'s profile cover photo successfully!", user.getUsername());
+        LOGGER.info("Edited {}'s profile cover photo successfully!", user.getUsername());
     }
 
     @Override
@@ -260,15 +260,16 @@ public class DefaultUserService implements UserService {
             // parse json response using gson
             Gson gson = new Gson();
             AlpacaOAuthResponse alpacaOAuthResponse = gson.fromJson(response.body().toString(), AlpacaOAuthResponse.class);
-            LOG.info("Alpaca code successfully converted into OAuth token {}", alpacaOAuthResponse.getAccessToken());
+            LOGGER.info("Alpaca code successfully converted into OAuth token {}", alpacaOAuthResponse.getAccessToken());
 
             // update alpacaApiKey; code => oauthToken
             userToUpdate.setAlpacaApiKey(alpacaOAuthResponse.getAccessToken());
             userDao.save(userToUpdate);
-            LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
+            LOGGER.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
 
         } catch (InterruptedException | IOException e) {
-            LOG.error("Error occurred while trying to process alpaca api key for user {}", e.getMessage());
+            LOGGER.error("Error occurred while trying to process alpaca api key for user {}", e.getMessage());
+            Thread.currentThread().interrupt();
         }
 
         return userToUpdate;
