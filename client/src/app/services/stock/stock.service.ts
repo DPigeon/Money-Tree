@@ -60,7 +60,7 @@ export class StockService {
       .get(`stock/people-who-own-also-own/${thisStockSymbol}`)
       .pipe(
         map((res: Response) =>
-          this.dataFormatter.stockPercentageFormatter(Array.of(res.json()))
+          this.dataFormatter.stockPercentageFormatter(res.body)
         )
       );
   }

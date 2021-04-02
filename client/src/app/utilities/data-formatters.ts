@@ -162,10 +162,11 @@ export class DataFormatter {
 
   stockPercentageFormatter(response: any): StockPercentage[] {
     const result: StockPercentage[] = [];
-    for (const fetchedStockPercentage of response) {
+    // tslint:disable-next-line:forin
+    for (const key in response) {
       result.push({
-        symbol: fetchedStockPercentage[0],
-        percentage: fetchedStockPercentage[1],
+        symbol: key,
+        percentage: response[key],
       });
     }
     return result;

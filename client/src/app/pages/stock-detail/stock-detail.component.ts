@@ -25,6 +25,7 @@ export class StockDetailComponent implements OnInit {
   userInfo$ = this.storeFacade.currentUser$;
   userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
   showStockChart = false;
+  userId = Number(localStorage.getItem('userId'));
   ticker = '';
   chartRange = '1d';
   chartInterval = '5m';
@@ -37,10 +38,8 @@ export class StockDetailComponent implements OnInit {
   ngOnInit(): void {
     this.ticker = this.route.snapshot.paramMap.get('ticker');
     this.storeFacade.loadCurrentStock(this.ticker);
-    this.storeFacade.loadMarketClock(Number(localStorage.getItem('userId')));
-    this.storeFacade.loadUserOwnedStocks(
-      Number(localStorage.getItem('userId'))
-    );
+    this.storeFacade.loadMarketClock(this.userId);
+    this.storeFacade.loadUserOwnedStocks(this.userId);
     this.storeFacade.loadCurrentStockHistoricalData(
       this.ticker,
       this.chartRange,

@@ -182,21 +182,21 @@ export const setTopInvestorsOnAStock = createAction(
 );
 
 export const loadFollowersWithSameStock = createAction(
-  '[User] Load followers users invested on a stock',
+  '[User] Load followers with who owns the same stock',
   props<{ userId: number; symbol: string }>()
 );
 
 export const setFollowersWithSameStock = createAction(
-  '[User] Update the top ten percent of users invested on a stock',
+  '[User] Update followers with who owns the same stock',
   props<{ currentFollowersWithSameStock: User[] }>()
 );
 
 export const loadStocksOwnedByUsersOwnThisStock = createAction(
-  '[User] Load owned of users invested on a stock',
+  '[User] Load stocks owned by users who owns a specific stock',
   props<{ symbol: string }>()
 );
 
 export const setStocksOwnedByUsersOwnThisStock = createAction(
-  '[User] Update the top ten percent of users invested on a stock',
+  '[User] Updates stocks owned by users who owns a specific stock',
   props<{ currentStocksOwnedByUsersOwnThisStock: StockPercentage[] }>()
 );
