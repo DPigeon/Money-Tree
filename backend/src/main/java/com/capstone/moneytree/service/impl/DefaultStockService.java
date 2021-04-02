@@ -1,13 +1,10 @@
 package com.capstone.moneytree.service.impl;
 
-import static com.capstone.moneytree.handler.ExceptionMessage.STOCK_NOT_FOUND;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.model.SanitizedStock;
 import com.capstone.moneytree.model.node.User;
 import org.slf4j.Logger;
@@ -94,7 +91,6 @@ public class DefaultStockService implements StockService {
   
   @Override  
   public Stock getStockBySymbol(String symbol) {
-        Stock stock = stockDao.findBySymbol(symbol);
-        return stock;
+        return stockDao.findBySymbol(symbol);
     }
 }

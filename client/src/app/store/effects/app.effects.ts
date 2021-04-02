@@ -1,7 +1,3 @@
-import {
-  loadTopInvestorsOnAStock,
-  loadFollowersWithSameStock,
-} from './../actions/app.actions';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';

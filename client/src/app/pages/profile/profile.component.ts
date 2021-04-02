@@ -137,7 +137,7 @@ export class ProfileComponent implements OnInit {
   }
   bioText(): string {
     return this.completeUserProfile.biography &&
-      this.completeUserProfile.biography
+      this.completeUserProfile.biography.length > 0
       ? this.completeUserProfile.biography
       : 'This user has no biography yet.';
   }
