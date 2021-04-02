@@ -3,7 +3,7 @@
   position: relative;
 }
 .transaction-history-container {
-  display: flex;
+  height: 150px;
 }
 
 .profile-right-col {
@@ -64,8 +64,21 @@
     }
   }
   .bio {
-    top: 5em;
+    margin: 20px 0;
     width: 96%;
     height: auto;
   }
 }
+.card-container {
+  height: 420px;
+}
+.chart-unavailable {
+  padding-top: 100px;
+  text-align: center;
+  color: gray;
+}
+.col-1 {
+ height: 100%;
+  
+}
+

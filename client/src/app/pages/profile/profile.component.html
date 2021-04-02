@@ -1,34 +1,78 @@
 <app-header></app-header>
-<div fxLayout="row wrap" fxLayoutAlign="center stretch">
-    <div fxFlex="60%" class="profile-info-container" *ngIf="completeUserProfile">
-        <div class="picture-wrap">
-            <img alt="cover picture" class="cover-picture" src="{{completeUserProfile.coverPhotoURL}}">
-            <img alt="profile picture" class="profile-picture" src="{{completeUserProfile.avatarURL}}">
-        </div>
-        <div class="profile-information-row">
-            <div class="username"> {{ completeUserProfile.username }} </div>
-            <div class="followers-follwings-container" *ngIf="completeUserProfile">
-                <button mat-button class="follow-unfollow-label" (click)="openDialog('followers')">{{getFollowers().length}}
-                    followers</button>
-                <button mat-button class="follow-unfollow-label"
-                    (click)="openDialog('followings')">{{getFollowings().length}}
-                    followings</button>
-                <button mat-button class="follow-unfollow-button" *ngIf="!isLoggedInUserProfile()"
-                    (click)="followOrUnfollow()" [disabled]="followButtonDisabled">{{followButtonLabel()}}</button>
-            </div>
-        </div>
-        <mat-card class="bio">
-            {{ bioText() }}
-        </mat-card>
-        <app-historical-chart
+<div fxLayout="row wrap" fxLayoutAlign="center">
+  <div
+    fxFlex="70%"
+    fxFlex.lt-sm="100%"
+    *ngIf="completeUserProfile"
+   class="profile-info-container"
+    fxLayout="column"
+  >
+    
+    <div class="picture-wrap">
+      <img
+        alt="cover picture"
+        class="cover-picture"
+        src="{{ completeUserProfile.coverPhotoURL }}"
+      />
+      <img
+        alt="profile picture"
+        class="profile-picture"
+        src="{{ completeUserProfile.avatarURL }}"
+      />
+    </div>
+    <div class="profile-information-row">
+      <div class="username">{{ completeUserProfile.username }}</div>
+      <div class="followers-follwings-container" *ngIf="completeUserProfile">
+        <button
+          mat-button
+          class="follow-unfollow-label"
+          (click)="openDialog('followers')"
+        >
+          {{ getFollowers().length }} followers
+        </button>
+        <button
+          mat-button
+          class="follow-unfollow-label"
+          (click)="openDialog('followings')"
+        >
+          {{ getFollowings().length }} followings
+        </button>
+        <button
+          mat-button
+          class="follow-unfollow-button"
+          *ngIf="!isLoggedInUserProfile()"
+          (click)="followOrUnfollow()"
+          [disabled]="followButtonDisabled"
+        >
+          {{ followButtonLabel() }}
+        </button>
+      </div>
+    </div>
+    <mat-card class="bio">
+      {{ bioText() }}
+    </mat-card>
+    <ng-container>
+      <app-historical-chart
         *ngIf="showPortfolioChart"
         [historicalData]="profileHistoryChartData"
         (changeHistoricalChartRangeInterval)="changeChartRangeInterval($event)"
-        ></app-historical-chart>
+      ></app-historical-chart>
+      <mat-card *ngIf="!showPortfolioChart" class="card-container">
+        <h2 id="unavailable-chart" class="chart-unavailable">
+          Unavailable Chart
+        </h2></mat-card>
+    </ng-container>
+</div>
+  
+
+  <div fxFlex="30%" fxFlex.lt-sm="90%" class="profile-right-col">
+    <div fxLayout="column">
+        <app-transaction-history
+        [currentProfileUser]="currentProfileUser$ | async"
+        class="transaction-history-container"
+      >
+      </app-transaction-history>
     </div>
-    
-    <div fxFlex="40%" class="profile-right-col">
-        <app-transaction-history class="transaction-history-container" [currentProfileUser]="currentProfileUser$ | async">
-        </app-transaction-history>
-    </div>
+   
+  </div>
 </div>

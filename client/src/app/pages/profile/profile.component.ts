@@ -51,7 +51,7 @@ export class ProfileComponent implements OnInit {
       if (data) {
         this.completeUserProfile = data;
         this.userId = String(this.completeUserProfile.id);
-        this.generateData(this.userId);
+        this.generateData(String(data.id),'FIFTEEN_MINUTE',1,'DAY');
       }
     });
     this.storeFacade.currentUser$.subscribe((loggedInUser: User) => {
@@ -65,7 +65,7 @@ export class ProfileComponent implements OnInit {
       .subscribe(() => {
         username = this.route.snapshot.paramMap.get('username');
         this.storeFacade.loadCurrentProfileUser(username);
-        this.generateData(this.userId);
+       
       });
   }
   openDialog(choice: string): void {
@@ -197,6 +197,7 @@ export class ProfileComponent implements OnInit {
           unit = 'YEAR';
           length = 5;
           break;
+         
       }
       switch (chartOptions.interval) {
         case '5m':
@@ -206,7 +207,7 @@ export class ProfileComponent implements OnInit {
           interval = 'FIFTEEN_MINUTE';
           break;
         case '1h':
-          interval = 'ONE_HOUR';
+          interval = 'ONE_DAY';
           break;
         case '1d':
           interval = 'ONE_DAY';
@@ -214,26 +215,31 @@ export class ProfileComponent implements OnInit {
         default:
           interval = 'ONE_DAY';
       }
-      this.generateData(this.userId);
+      this.generateData(this.userId, interval, length, unit);
     }
   }
 
-  generateData(userId: string): void {
+  generateData(userId: string, interval: string, length: number, unit:string ): void {
     const currentDate = this.datepipe.transform(Date.now(), 'yyyy-MM-dd');
     this.userService
       .getPortfolioHistoricalData(
         String(userId),
-        1,
-        'DAY',
-        'FIFTEEN_MINUTE',
+        length,
+        unit,
+        interval,
         currentDate,
         'false'
       )
-      .subscribe((res) => {
+      .subscribe(
+        res => {
         if (res) {
           this.profileHistoryChartData = res;
           this.showPortfolioChart = true;
         }
+      },
+      err => {
+        this.profileHistoryChartData = null;
+        this.showPortfolioChart = false;
       });
   }
 }
