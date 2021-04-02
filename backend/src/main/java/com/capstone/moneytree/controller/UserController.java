@@ -7,8 +7,6 @@ import java.util.Map;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,12 +31,11 @@ import com.capstone.moneytree.service.api.StockService;
 
 @MoneyTreeController
 @RequestMapping("/users")
-public class UserController {
+public class UserController extends AbstractController {
 
    private final UserService userService;
    private final TransactionService transactionService;
    private final StockService stockService;
-   private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
    @Autowired
    public UserController(UserService userService, TransactionService transactionService, StockService stockService) {
@@ -58,7 +55,7 @@ public class UserController {
 
       userService.getAllUsers().forEach(users::add);
 
-      LOG.info("Returning {} users", users.size());
+      LOGGER.info("Returning {} users", users.size());
 
       return users;
    }

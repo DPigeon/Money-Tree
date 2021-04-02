@@ -7,7 +7,6 @@ import com.capstone.moneytree.service.impl.DefaultTransactionService
 import net.jacobpeterson.domain.alpaca.order.Order
 import spock.lang.Specification
 
-
 class TransactionControllerTest extends Specification {
 
    DefaultTransactionService transactionService = Mock()

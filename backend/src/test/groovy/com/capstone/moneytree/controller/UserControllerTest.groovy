@@ -8,13 +8,13 @@ import com.capstone.moneytree.dao.TransactionDao
 import com.capstone.moneytree.facade.AlpacaSession
 import com.capstone.moneytree.model.SanitizedUser
 import com.capstone.moneytree.model.relationship.Follows
-import com.capstone.moneytree.model.relationship.Owns
 import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.api.StockService
 import com.capstone.moneytree.service.api.TransactionService
 import com.capstone.moneytree.service.impl.DefaultStockService
 import com.capstone.moneytree.service.impl.DefaultTransactionService
 import org.springframework.http.ResponseEntity
+import spock.lang.Ignore
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.*
 
@@ -48,6 +48,7 @@ import spock.lang.Specification
  * Unit Tests for the User Controller.
  */
 class UserControllerTest extends Specification {
+
     private static final String PIC_FILE_NAME = "profile.jpg"
 
     private static String S3_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY")
@@ -174,6 +175,7 @@ class UserControllerTest extends Specification {
         thrown(UserAlreadyExistsException)
     }
 
+    @Ignore("Needs integration test instead to use Alpaca Auth and requests")
     def "Should register an Alpaca key to a user successfully"() {
         given: "A registered user with an Alpaca key"
         String email = "moneytree@test.com"
@@ -523,7 +525,6 @@ class UserControllerTest extends Specification {
         User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
         user1.setId(userId1)
         User user2 = user1
-
 
         and: "mock the way we retrieve the Follows relationships"
         userDao.findUserById(userId1) >> user1

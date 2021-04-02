@@ -15,14 +15,9 @@ import java.util.List;
 @Repository
 public interface MadeDao extends Neo4jRepository<Made, Long> {
 
-    List<Made> findAll();
-
     Made findByTransactionId(Long transactionID);
-
+    List<Made> findAll();
     List<Made> findByTransactionDate(Date transactionDate);
-
     List<Made> findByUserId(Long userId);
-
     List<Made> findByTransactionStatus(TransactionStatus transactoinStatus);
-
 }

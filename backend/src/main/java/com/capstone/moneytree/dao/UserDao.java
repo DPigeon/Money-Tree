@@ -14,15 +14,11 @@ import java.util.Map;
 @Repository
 public interface UserDao extends Neo4jRepository<User, Long> {
 
-    List<User> findAll();
-
     User findUserById(Long id);
-
     User findUserByEmailAndUsername(String email, String username);
-
     User findUserByEmail(String email);
-
     User findUserByUsername(String username);
+    List<User> findAll();
 
     @Query("MATCH (u:User) RETURN toString(ID(u)) as id, u.email as email, u.firstName as firstName, u.lastName as lastName, u.username as username, u.avatarURL as avatarURL")
     List<Map<String, String>> getSearchUsers();

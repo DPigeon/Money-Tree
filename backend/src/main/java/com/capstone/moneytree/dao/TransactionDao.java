@@ -11,14 +11,10 @@ import java.util.List;
 
 @Repository
 public interface TransactionDao extends Neo4jRepository<Transaction, Long> {
+
     List<Transaction> findAll();
-
-    Transaction findTransactionById(Long id);
-
     List<Transaction> findByStatus(TransactionStatus status);
-
     List<Transaction> findByMoneyTreeOrderType(MoneyTreeOrderType moneyTreeOrderType);
-
     Transaction findByClientOrderId(String clientOrderId);
-
+    Transaction findTransactionById(Long id);
 }

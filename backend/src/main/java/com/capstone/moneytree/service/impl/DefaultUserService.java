@@ -34,6 +34,7 @@ import com.capstone.moneytree.utils.MoneyTreePasswordEncryption;
 import com.capstone.moneytree.validator.UserValidator;
 import com.capstone.moneytree.validator.ValidatorFactory;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -57,24 +58,23 @@ public class DefaultUserService implements UserService {
     private static final String USER_CANT_BE_FOLLOWED_BY_ITSELF = "User cannot followed by itself";
 
     @Value("${alpaca.key.id}")
-    private String clientId;
+    String clientId;
     @Value("${alpaca.secret}")
-    private String clientSecret;
+    String clientSecret;
 
     @Autowired
-    private ActiveProfile activeProfile;
+    ActiveProfile activeProfile;
 
     @Autowired
-    private StockService stockService;
+    StockService stockService;
 
     private final UserDao userDao;
     private final OwnsDao ownsDao;
     private final FollowsDao followsDao;
     private final ValidatorFactory validatorFactory;
     private final MoneyTreePasswordEncryption passwordEncryption;
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultUserService.class);
     private final AmazonS3Service amazonS3Service;
-
     private final String bucketName;
 
     @Autowired
@@ -118,7 +118,7 @@ public class DefaultUserService implements UserService {
         if (existingUser == null) {
             throw new EntityNotFoundException(USER_NOT_FOUND);
         }
-        LOG.info("Found user with email {}", existingUser.getEmail());
+        LOGGER.info("Found user with email {}", existingUser.getEmail());
         return existingUser;
     }
 
@@ -135,7 +135,7 @@ public class DefaultUserService implements UserService {
 
         userDao.save(user);
 
-        LOG.info("Created user: {}", user.getUsername());
+        LOGGER.info("Created user: {}", user.getUsername());
 
         return user;
     }
@@ -196,7 +196,7 @@ public class DefaultUserService implements UserService {
         }
 
         User updatedUser = userDao.save(userToUpdate);
-        LOG.info("Updated user: {}", updatedUser.getUsername());
+        LOGGER.info("Updated user: {}", updatedUser.getUsername());
 
         return updatedUser;
     }
@@ -204,38 +204,44 @@ public class DefaultUserService implements UserService {
     @Override
     public User editUserProfilePicture(User user, MultipartFile imageFile, String selection) {
         switch (selection) {
-            case "avatarURL": {
-                // since user exists, we can now upload image to s3 and save imageUrl into db
-                String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
-                // if user already has a profile picture that is not the default picture, handle
-                // deleting old picture
-                if (StringUtils.isNotBlank(user.getAvatarURL()) && !user.getAvatarURL().contains(DEFAULT_PROFILE_NAME)) {
-                    this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getAvatarURL());
-                }
-
-                user.setAvatarURL(imageUrl);
-                userDao.save(user);
-                LOG.info("Edited {}'s profile picture successfully!", user.getUsername());
+            case "avatarURL":
+                selectAvatarUrl(imageFile, user);
                 break;
-            }
-            case "coverPhotoURL": {
-                String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
-                if (StringUtils.isNotBlank(user.getCoverPhotoURL())
-                        && !user.getCoverPhotoURL().contains("COVER-"+DEFAULT_PROFILE_NAME)) {
-                    this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getCoverPhotoURL());
-                }
-
-                user.setCoverPhotoURL(imageUrl);
-                userDao.save(user);
-                LOG.info("Edited {}'s profile cover photo successfully!", user.getUsername());
+            case "coverPhotoURL":
+                selectCoverPhotoUrl(imageFile, user);
                 break;
-            }
             default:
-                LOG.info("Photo was not saved on Amazon S3!");
+                LOGGER.info("Photo was not saved on Amazon S3!");
                 throw new BadRequestException("Wrong selection string was put as parameter.");
         }
 
         return user;
+    }
+
+    private void selectAvatarUrl(MultipartFile imageFile, User user) {
+        // since user exists, we can now upload image to s3 and save imageUrl into db
+        String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
+        // if user already has a profile picture that is not the default picture, handle
+        // deleting old picture
+        if (StringUtils.isNotBlank(user.getAvatarURL()) && !user.getAvatarURL().contains(DEFAULT_PROFILE_NAME)) {
+            this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getAvatarURL());
+        }
+
+        user.setAvatarURL(imageUrl);
+        userDao.save(user);
+        LOGGER.info("Edited {}'s profile picture successfully!", user.getUsername());
+    }
+
+    private void selectCoverPhotoUrl(MultipartFile imageFile, User user) {
+        String imageUrl = amazonS3Service.uploadImageToS3Bucket(imageFile, getBucketName());
+        if (StringUtils.isNotBlank(user.getCoverPhotoURL())
+                && !user.getCoverPhotoURL().contains("COVER-"+DEFAULT_PROFILE_NAME)) {
+            this.amazonS3Service.deleteImageFromS3Bucket(getBucketName(), user.getCoverPhotoURL());
+        }
+
+        user.setCoverPhotoURL(imageUrl);
+        userDao.save(user);
+        LOGGER.info("Edited {}'s profile cover photo successfully!", user.getUsername());
     }
 
     @Override
@@ -254,15 +260,16 @@ public class DefaultUserService implements UserService {
             // parse json response using gson
             Gson gson = new Gson();
             AlpacaOAuthResponse alpacaOAuthResponse = gson.fromJson(response.body().toString(), AlpacaOAuthResponse.class);
-            LOG.info("Alpaca code successfully converted into OAuth token {}", alpacaOAuthResponse.getAccessToken());
+            LOGGER.info("Alpaca code successfully converted into OAuth token {}", alpacaOAuthResponse.getAccessToken());
 
             // update alpacaApiKey; code => oauthToken
             userToUpdate.setAlpacaApiKey(alpacaOAuthResponse.getAccessToken());
             userDao.save(userToUpdate);
-            LOG.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
+            LOGGER.info("Registered Alpaca key for user email {}", userToUpdate.getEmail());
 
-        } catch (Exception exception) {
-            LOG.error("Error occurred while trying to process alpaca api key for user {}", exception.getMessage());
+        } catch (InterruptedException | IOException e) {
+            LOGGER.error("Error occurred while trying to process alpaca api key for user {}", e.getMessage());
+            Thread.currentThread().interrupt();
         }
 
         return userToUpdate;

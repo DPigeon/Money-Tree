@@ -402,7 +402,7 @@ class DefaultTransactionServiceTest extends Specification {
         order.setSide("sell")
         Transaction transaction1 = createTransaction(symbol, 15, price1, TransactionStatus.COMPLETED, qty1)
         Transaction transaction2 = createTransaction(symbol, 15, price2, TransactionStatus.COMPLETED, qty2)
-        Transaction transaction3 = createTransaction(symbol, 15, price3, TransactionStatus.COMPLETED, qty3)
+        Transaction transaction3 = createTransaction(symbol, 15, price3, TransactionStatus.CANCELED, qty3)
         List<Made> madeList = List.of(
                 createMadeRelationship(user, transaction1, ZonedDateTime.now()),
                 createMadeRelationship(user, transaction2, ZonedDateTime.now()),

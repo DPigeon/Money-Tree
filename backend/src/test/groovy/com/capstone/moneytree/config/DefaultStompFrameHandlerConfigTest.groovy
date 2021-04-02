@@ -1,6 +1,5 @@
 package com.capstone.moneytree.config
 
-import org.junit.Test
 import spock.lang.Specification
 
 import java.util.concurrent.BlockingQueue
@@ -10,7 +9,6 @@ class DefaultStompFrameHandlerConfigTest extends Specification {
 
     private DefaultStompFrameHandlerConfig defaultStompFrameHandler
 
-    @Test
     def "It should initialize the STOMP frame handler"() {
         given: "The frame handler"
         BlockingQueue<String> blockingQueue = new LinkedBlockingDeque<>()

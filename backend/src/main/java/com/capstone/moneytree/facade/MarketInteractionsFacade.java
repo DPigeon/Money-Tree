@@ -55,7 +55,7 @@ public class MarketInteractionsFacade {
    private final UserDao userDao;
    private AlpacaAPI alpacaAPI;
    private final Map<String, AlpacaStreamListener> userIdToStream;
-   private Map<String, Boolean> updateTracker;
+   private final Map<String, Boolean> updateTracker;
 
    @Autowired
    StockDao stockDao;
@@ -221,8 +221,8 @@ public class MarketInteractionsFacade {
                   transaction = transactionDao.findByClientOrderId(clientOrderId);
                }
                String userIdForOrder = madeDao.findByTransactionId(transaction.getId()).getUser().getId().toString();
-               if (streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES && !updateTracker.get(clientOrderId) && userIdForOrder.equals(userId)
-                  ) {
+               Boolean isTradeUpdateAndNotUpdated = streamMessageType == AlpacaStreamMessageType.TRADE_UPDATES && !updateTracker.get(clientOrderId);
+               if (Boolean.TRUE.equals(isTradeUpdateAndNotUpdated) && userIdForOrder.equals(userId)) {
                      messageSender.convertAndSend("/queue/user-" + userId,
                              tradeUpdate.getOrder().getClientOrderId());
                      sendOrderCompletedEmail(userId, tradeUpdate);

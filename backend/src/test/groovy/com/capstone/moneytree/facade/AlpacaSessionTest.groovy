@@ -4,7 +4,6 @@ import com.capstone.moneytree.exception.BadRequestException
 
 import spock.lang.Specification
 
-
 class AlpacaSessionTest extends Specification {
 
    def alpacaSession = new AlpacaSession()

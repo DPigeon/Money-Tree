@@ -15,6 +15,7 @@ import com.capstone.moneytree.model.node.User;
 
 @Component
 public class UserValidator implements Validator {
+
    private static final Logger LOG = LoggerFactory.getLogger(UserValidator.class);
 
    private final UserDao userDao;

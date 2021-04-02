@@ -11,9 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AlpacaOAuthResponse {
+
     @SerializedName(value = "access_token")
     private String accessToken;
+
     @SerializedName(value = "token_type")
     private String tokenType;
+
     private String scope;
 }

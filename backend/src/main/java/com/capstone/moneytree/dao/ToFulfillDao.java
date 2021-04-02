@@ -13,12 +13,8 @@ import java.util.List;
 @Repository
 public interface ToFulfillDao extends Neo4jRepository<ToFulfill, Long> {
 
-    List<ToFulfill> findAll();
-
     ToFulfill findByTransactionId(Long transactionId);
-
+    List<ToFulfill> findAll();
     List<ToFulfill> findByStockId(Long stockId);
-
     List<ToFulfill> findByTransactionIdAndStockId(Long transactionId, Long stockId);
-
 }

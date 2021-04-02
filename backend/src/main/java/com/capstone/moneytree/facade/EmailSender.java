@@ -19,7 +19,7 @@ public class EmailSender {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailSender.class);
 
     @Autowired
-    private JavaMailSender mailSender;
+    JavaMailSender mailSender;
 
     public void sendOrderCompletedEmail(User user, TradeUpdate trade) {
         Mail mail = constructMail(user, trade);

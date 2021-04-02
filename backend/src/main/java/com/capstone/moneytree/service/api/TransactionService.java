@@ -11,7 +11,6 @@ import net.jacobpeterson.domain.alpaca.order.Order;
 public interface TransactionService {
 
     List<Transaction> getAllTransactions();
-
     List<Transaction> getTransactionsByOrderType(MoneyTreeOrderType moneyTreeOrderType);
 
     /**
@@ -21,6 +20,5 @@ public interface TransactionService {
      * @return the User that executed the transaction
      **/
     List<Transaction> execute(String userId, Order order);
-
     List<Transaction> getUserTransactions(Long userId);
 }
