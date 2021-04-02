@@ -3,6 +3,9 @@ package com.capstone.moneytree.service
 import com.capstone.moneytree.facade.StockMarketDataFacade
 import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.impl.DefaultStockMarketDataService
+import pl.zankowski.iextrading4j.client.IEXCloudTokenBuilder
+import pl.zankowski.iextrading4j.client.IEXTradingApiVersion
+import pl.zankowski.iextrading4j.client.IEXTradingClient
 import spock.lang.Specification;
 
 /**
@@ -12,6 +15,18 @@ class DefaultStockMarketDataServiceTest extends Specification {
 
     StockMarketDataFacade stockMarketDataFacade = Mock()
     StockMarketDataService stockMarketDataService = new DefaultStockMarketDataService(stockMarketDataFacade: stockMarketDataFacade)
+
+    def "Should use the IEXCloud API Prod version when needed"() {
+        given: "keys"
+        String pToken = "pToken"
+        String sToken = "sToken"
+
+        when:
+        StockMarketDataFacade stockMarketDataFacadeProd = new StockMarketDataFacade(pToken, sToken, "prod")
+
+        then:
+        stockMarketDataFacadeProd != null
+    }
 
     def "Should get batch stocks by symbol by calling the facade once"() {
         given:
