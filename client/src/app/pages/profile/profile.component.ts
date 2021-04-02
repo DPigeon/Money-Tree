@@ -154,8 +154,7 @@ export class ProfileComponent implements OnInit {
     }, 500);
   }
   bioText(): string {
-    return this.completeUserProfile.biography &&
-      this.completeUserProfile.biography
+    return this.completeUserProfile.biography
       ? this.completeUserProfile.biography
       : 'This user has no biography yet.';
   }
