@@ -95,9 +95,6 @@ public class DefaultStockService implements StockService {
   @Override  
   public Stock getStockBySymbol(String symbol) {
         Stock stock = stockDao.findBySymbol(symbol);
-        if (stock == null) {
-            throw new EntityNotFoundException(STOCK_NOT_FOUND.getMessage());
-        }
         return stock;
     }
 }

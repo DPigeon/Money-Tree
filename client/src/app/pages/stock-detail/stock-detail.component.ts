@@ -24,6 +24,11 @@ export class StockDetailComponent implements OnInit {
   marketClock$ = this.storeFacade.currentMarketClock$;
   userInfo$ = this.storeFacade.currentUser$;
   userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
+  stocksOwnedByUsersOwnThisStock$ = this.storeFacade
+    .stocksOwnedByUsersOwnThisStock$;
+  followersWithSameStock$ = this.storeFacade.followersWithSameStock$;
+  topInvestorsOnAStock$ = this.storeFacade.topInvestorsOnAStock$;
+
   showStockChart = false;
   userId = Number(localStorage.getItem('userId'));
   ticker = '';
@@ -48,6 +53,9 @@ export class StockDetailComponent implements OnInit {
     if (!!this.stockHistoricalData$) {
       this.showStockChart = true;
     }
+    this.storeFacade.loadTopInvestorsOnAStock(this.ticker);
+    this.storeFacade.loadFollowersWithSameStock(this.userId, this.ticker);
+    this.storeFacade.loadStocksOwnedByUsersOwnThisStock(this.ticker);
 
     this.router.events
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
@@ -59,6 +67,9 @@ export class StockDetailComponent implements OnInit {
           this.chartRange,
           this.chartInterval
         );
+        this.storeFacade.loadTopInvestorsOnAStock(this.ticker);
+        this.storeFacade.loadFollowersWithSameStock(this.userId, this.ticker);
+        this.storeFacade.loadStocksOwnedByUsersOwnThisStock(this.ticker);
       });
   }
   changeChartRangeInterval(chartViewOptions: ChartDataOptions): void {

@@ -58,7 +58,6 @@ describe('FollowingsSearchComponent Unit Test', () => {
       score: 120,
     };
     component.followingSearch = 'Ra';
-    console.log(fakeUser1);
     expect(component.isSearchedFollowings(fakeUser1)).toBe(true);
     expect(component.isSearchedFollowings(fakeUser2)).toBe(false);
     component.followingSearch = '';

@@ -1,9 +1,6 @@
-import { StoreFacadeService } from 'src/app/store/store-facade.service';
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Stock } from '../../interfaces/stock';
-import { StockPercentage } from './../../interfaces/stock-percentage';
-import { User } from 'src/app/interfaces/user';
 import { Observable } from 'rxjs';
 
 export interface Follower {
@@ -16,29 +13,13 @@ export interface Follower {
   templateUrl: './stock-additional-info.component.html',
   styleUrls: ['./stock-additional-info.component.scss'],
 })
-export class StockAdditionalInfoComponent implements OnInit, OnChanges {
+export class StockAdditionalInfoComponent {
   @Input() type: string;
   @Input() stockSymbol: string;
   @Input() userId: number;
-  list$: Observable<any>;
+  @Input() list$: Observable<any>;
 
-  topInvestors$: Observable<User[]> = this.storeFacade.topInvestorsOnAStock$;
-  followersWithSameStock$: Observable<User[]> = this.storeFacade
-    .followersWithSameStock$;
-  stockPercentages$: Observable<StockPercentage[]> = this.storeFacade
-    .stocksOwnedByUsersOwnThisStock$;
-
-  constructor(
-    private router: Router,
-    private storeFacade: StoreFacadeService
-  ) {}
-  ngOnInit(): void {
-    this.generateData();
-  }
-
-  ngOnChanges(): void {
-    this.generateData();
-  }
+  constructor(private router: Router) {}
 
   navigateToUserProfile(username: string): void {
     this.router.navigate([`/profile/${username}`]);
@@ -64,27 +45,6 @@ export class StockAdditionalInfoComponent implements OnInit, OnChanges {
       return 'trending_up';
     } else {
       return 'domain';
-    }
-  }
-
-  generateData(): void {
-    switch (this.type) {
-      case 'topInvestors':
-        this.storeFacade.loadTopInvestorsOnAStock(this.stockSymbol);
-        this.list$ = this.topInvestors$;
-        console.log('top investors loaded;');
-        break;
-      case 'followersWithSameStock':
-        this.storeFacade.loadFollowersWithSameStock(
-          this.userId,
-          this.stockSymbol
-        );
-        this.list$ = this.followersWithSameStock$;
-        break;
-      case 'stockPercentages':
-        this.storeFacade.loadStocksOwnedByUsersOwnThisStock(this.stockSymbol);
-        this.list$ = this.stockPercentages$;
-        break;
     }
   }
 }
