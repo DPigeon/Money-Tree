@@ -89,3 +89,18 @@ export const selectAlpacaPositions = createSelector(
   selectAppState,
   (appState: State) => appState.alpacaPositions
 );
+
+export const selectTopInvestorsOnAStock = createSelector(
+  selectAppState,
+  (appState: State) => appState.topInvestorsOnAStock
+);
+
+export const selectFollowersWithSameStock = createSelector(
+  selectAppState,
+  (appState: State) => appState.followersWithSameStock
+);
+
+export const selectStocksOwnedByUsersOwnThisStock = createSelector(
+  selectAppState,
+  (appState: State) => appState.stocksOwnedByUsersOwnThisStock
+);

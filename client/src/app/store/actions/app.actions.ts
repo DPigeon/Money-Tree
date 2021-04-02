@@ -1,3 +1,4 @@
+import { StockPercentage } from './../../interfaces/stock-percentage';
 import { AlpacaUserPosition } from 'src/app/interfaces/alpacaPosition';
 import { createAction, props } from '@ngrx/store';
 import { Stock } from 'src/app/interfaces/stock';
@@ -168,4 +169,34 @@ export const loadAlpacaPositions = createAction(
 export const setCurrentAlpacaPositions = createAction(
   '[User] Update the Alpaca positions for user',
   props<{ currentAlpacaPositions: AlpacaUserPosition[] }>()
+);
+
+export const loadTopInvestorsOnAStock = createAction(
+  '[User] Load top ten percent of users invested on a stock',
+  props<{ symbol: string }>()
+);
+
+export const setTopInvestorsOnAStock = createAction(
+  '[User] Update the top ten percent of users invested on a stock',
+  props<{ currentTopInvestorsOnAStock: User[] }>()
+);
+
+export const loadFollowersWithSameStock = createAction(
+  '[User] Load followers with who owns the same stock',
+  props<{ userId: number; symbol: string }>()
+);
+
+export const setFollowersWithSameStock = createAction(
+  '[User] Update followers with who owns the same stock',
+  props<{ currentFollowersWithSameStock: User[] }>()
+);
+
+export const loadStocksOwnedByUsersOwnThisStock = createAction(
+  '[User] Load stocks owned by users who owns a specific stock',
+  props<{ symbol: string }>()
+);
+
+export const setStocksOwnedByUsersOwnThisStock = createAction(
+  '[User] Updates stocks owned by users who owns a specific stock',
+  props<{ currentStocksOwnedByUsersOwnThisStock: StockPercentage[] }>()
 );

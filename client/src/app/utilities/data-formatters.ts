@@ -3,6 +3,10 @@ import { Injectable } from '@angular/core';
 import { Transaction } from '../interfaces/transaction';
 import { UserSearch } from '../interfaces/userSearch';
 import { AlpacaUserPosition } from '../interfaces/alpacaPosition';
+import { Stock } from '../interfaces/stock';
+import { MarketClock } from '../interfaces/market-clock';
+import { StockHistory } from '../interfaces/stockHistory';
+import { StockPercentage } from './../interfaces/stock-percentage';
 
 @Injectable({
   providedIn: 'root',
@@ -96,6 +100,75 @@ export class DataFormatter {
         currentPrice: e.currentPrice,
       });
     });
+    return result;
+  }
+
+  // Stock Service data formatters:
+  IEXtoModel(iex: any): Stock {
+    const stock: Stock = {
+      tickerSymbol: iex.company.symbol,
+      companyName: iex.company.companyName,
+      industry: iex.company.industry,
+      volatility: 'low',
+      stockChange: iex.book.quote.change,
+      stockChangePercent: iex.book.quote.changePercent * 100,
+      stockValue: iex.book.quote.latestPrice,
+      logo: iex.logo.url,
+      stats: {
+        open: iex.book.quote.open,
+        high: iex.book.quote.high,
+        low: iex.book.quote.low,
+        volume: iex.book.quote.volume,
+        mktCap: iex.book.quote.marketCap,
+        stock52weekHigh: iex.book.quote.week52High,
+        stock52weekLow: iex.book.quote.week52Low,
+        avgVolume: iex.book.quote.avgTotalVolume,
+      },
+    };
+    return stock;
+  }
+  YahooDataToModel(response: any): StockHistory {
+    const stockHistoricalData: StockHistory = {
+      symbol: response.chart.result[0].meta.symbol,
+      closePrice: response.chart.result[0].indicators.quote[0].close,
+      timestamp: response.chart.result[0].timestamp,
+      currency: response.chart.result[0].meta.currency,
+    };
+    return stockHistoricalData;
+  }
+  marketClockFormatter(response: any): MarketClock {
+    const fromattedMarketClock: MarketClock = {
+      isOpen: response.body.isOpen,
+      nextClose: response.body.nextClose,
+      nextOpen: response.body.nextOpen,
+      timestamp: response.body.timestamp,
+    };
+    return fromattedMarketClock;
+  }
+
+  stockListFormatter(response: any): Stock[] {
+    const result: Stock[] = [];
+    for (const fetchedStock of response.body) {
+      result.push({
+        companyName: fetchedStock.companyName,
+        tickerSymbol: fetchedStock.symbol,
+        since: fetchedStock.since,
+        avgPrice: fetchedStock.avgPrice,
+        quantity: fetchedStock.quantity,
+      });
+    }
+    return result;
+  }
+
+  stockPercentageFormatter(response: any): StockPercentage[] {
+    const result: StockPercentage[] = [];
+    // tslint:disable-next-line:forin
+    for (const key in response) {
+      result.push({
+        symbol: key,
+        percentage: response[key],
+      });
+    }
     return result;
   }
 }

@@ -29,7 +29,7 @@
   }
   .users-additional-container {
     overflow-y: auto;
-    height: 85%;
+    height: 80%;
 
     .additional-container {
       display: flex;
@@ -42,6 +42,8 @@
         border-radius: 50%;
         margin-right: 5px;
         margin-right: 10px;
+        cursor: pointer;
+        object-fit: cover;
       }
 
       .additional-info {

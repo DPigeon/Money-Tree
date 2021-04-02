@@ -22,7 +22,7 @@ class MockStoreFacadeService {
   currentStockLoaded$ = {};
   currentMarketClock$ = {};
   currentUser$ = {};
-  userOwnedStocks$={};
+  userOwnedStocks$ = {};
 }
 
 @Injectable()
@@ -118,6 +118,9 @@ describe('StockDetailComponent', () => {
     component.storeFacade.loadCurrentStockHistoricalData = jest.fn();
     component.storeFacade.loadMarketClock = jest.fn();
     component.storeFacade.loadUserOwnedStocks = jest.fn();
+    component.storeFacade.loadTopInvestorsOnAStock = jest.fn();
+    component.storeFacade.loadFollowersWithSameStock = jest.fn();
+    component.storeFacade.loadStocksOwnedByUsersOwnThisStock = jest.fn();
     component.router = component.router || {};
     component.router.events = observableOf({});
     component.ngOnInit();

@@ -426,6 +426,9 @@ public class DefaultUserService implements UserService {
 
         User user = getUserById(id);
         Stock stock = stockService.getStockBySymbol(symbol);
+        if(stock == null){
+            return List.of(); // empty list of users
+        }
         List<Follows> followers = followsDao.findByUserToFollowId(user.getId());
 
         followers.forEach(follower -> addFollowerToList(follower, followersWhoOwnsThisStock, stock));

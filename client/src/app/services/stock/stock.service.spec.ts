@@ -4,9 +4,11 @@ import { StockService } from './stock.service';
 import { Stock } from 'src/app/interfaces/stock';
 import { StockHistory } from 'src/app/interfaces/stockHistory';
 import yahooSampleChart from 'src/assets/stock-history/yahooSampleChart';
+import { DataFormatter } from 'src/app/utilities/data-formatters';
 
 describe('StockService', () => {
   let service: StockService;
+  const dataFormatter = new DataFormatter();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -77,12 +79,12 @@ describe('StockService', () => {
   };
 
   it('should convert iex data to frontend model', () => {
-    const transformedData = service.IEXtoModel(iexSampleResponse);
+    const transformedData = dataFormatter.IEXtoModel(iexSampleResponse);
     expect(transformedData).toEqual(expectedStock);
   });
 
   it('should convert yahoo data to frontend model', () => {
-    const transformedData = service.YahooDataToModel(yahooSampleResponse);
+    const transformedData = dataFormatter.YahooDataToModel(yahooSampleResponse);
     expect(transformedData).toEqual(expectedStockHistory);
   });
 });

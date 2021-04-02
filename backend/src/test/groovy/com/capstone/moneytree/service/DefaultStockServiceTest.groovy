@@ -78,18 +78,6 @@ class DefaultStockServiceTest extends Specification {
         stock1 == stock0
     }
 
-    def "Should thrown entity not found exception if find by symbol returns null"() {
-        given:
-        stockDao.findBySymbol("aapl") >> null
-
-        when:
-        stockService.getStockBySymbol("aapl")
-
-        then:
-        def e = thrown(EntityNotFoundException)
-        e.getMessage() == "The requested stock was not found"
-    }
-
     def "Should get all ratios for 'people who own this stock also own'"() {
         given: "3 users"
         User userA = MoneyTreeTestUtils.createUser("testA@test.com", "userA", "pass", "UserA", "NameA", "2a33-a242-A")

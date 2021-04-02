@@ -5,11 +5,8 @@
     <app-stock-detail-header [stockInfo]="stockInfo$ | async" [marketClock]="marketClock$ | async">
     </app-stock-detail-header>
     <br />
-    <app-stock-historical-chart
-      *ngIf="showStockChart"
-      [historicalData]="stockHistoricalData$ | async"
-      (changeHistoricalChartRangeInterval)="changeChartRangeInterval($event)"
-    ></app-stock-historical-chart>
+    <app-stock-historical-chart *ngIf="showStockChart" [historicalData]="stockHistoricalData$ | async"
+      (changeHistoricalChartRangeInterval)="changeChartRangeInterval($event)"></app-stock-historical-chart>
   </div>
   <div fxFlex="35%" fxFlex.lt-sm="100%">
     <app-user-stocks [userInfo]="userInfo$ | async" [userOwnedStocks]="userOwnedStocks$ | async"
@@ -19,7 +16,14 @@
   </div>
 </div>
 <div class="container" fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="16px grid">
-  <app-stock-additional-info fxFlex="33%" fxFlex.lt-sm="100%" type="followers"></app-stock-additional-info>
-  <app-stock-additional-info fxFlex="33%" fxFlex.lt-sm="100%" type="investors"></app-stock-additional-info>
-  <app-stock-additional-info fxFlex="33%" fxFlex.lt-sm="100%" type="stocks"></app-stock-additional-info>
+
+  <app-stock-additional-info fxFlex="33%" fxFlex.lt-sm="100%" [type]="'followersWithSameStock'" [stockSymbol]="ticker"
+    [userId]="userId" [list$]="followersWithSameStock$"></app-stock-additional-info>
+
+  <app-stock-additional-info fxFlex="33%" fxFlex.lt-sm="100%" [type]="'topInvestors'" [stockSymbol]="ticker"
+    [userId]="userId" [list$]="topInvestorsOnAStock$"></app-stock-additional-info>
+
+  <app-stock-additional-info fxFlex="33%" fxFlex.lt-sm="100%" [type]="'stockPercentages'" [stockSymbol]="ticker"
+    [userId]="userId" [list$]="stocksOwnedByUsersOwnThisStock$"></app-stock-additional-info>
+
 </div>

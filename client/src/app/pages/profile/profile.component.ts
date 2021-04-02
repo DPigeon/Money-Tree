@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {}
   ngOnInit(): void {
     let username = this.route.snapshot.paramMap.get('username');
     this.storeFacade.loadCurrentProfileUser(username);
@@ -136,7 +136,9 @@ export class ProfileComponent implements OnInit {
     }, 500);
   }
   bioText(): string {
-    return  this.completeUserProfile.biography && this.completeUserProfile.biography.length > 0  ? this.completeUserProfile.biography : 'This user has no biography yet.';
+    return this.completeUserProfile.biography &&
+      this.completeUserProfile.biography.length > 0
+      ? this.completeUserProfile.biography
+      : 'This user has no biography yet.';
   }
-
 }

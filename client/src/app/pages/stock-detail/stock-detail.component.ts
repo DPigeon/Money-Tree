@@ -7,7 +7,6 @@ import {
   RouterEvent,
 } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { User } from 'src/app/interfaces/user';
 
 export interface ChartDataOptions {
   range: string;
@@ -25,7 +24,13 @@ export class StockDetailComponent implements OnInit {
   marketClock$ = this.storeFacade.currentMarketClock$;
   userInfo$ = this.storeFacade.currentUser$;
   userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
+  stocksOwnedByUsersOwnThisStock$ = this.storeFacade
+    .stocksOwnedByUsersOwnThisStock$;
+  followersWithSameStock$ = this.storeFacade.followersWithSameStock$;
+  topInvestorsOnAStock$ = this.storeFacade.topInvestorsOnAStock$;
+
   showStockChart = false;
+  userId = Number(localStorage.getItem('userId'));
   ticker = '';
   chartRange = '1d';
   chartInterval = '5m';
@@ -38,10 +43,8 @@ export class StockDetailComponent implements OnInit {
   ngOnInit(): void {
     this.ticker = this.route.snapshot.paramMap.get('ticker');
     this.storeFacade.loadCurrentStock(this.ticker);
-    this.storeFacade.loadMarketClock(Number(localStorage.getItem('userId')));
-    this.storeFacade.loadUserOwnedStocks(
-      Number(localStorage.getItem('userId'))
-    );
+    this.storeFacade.loadMarketClock(this.userId);
+    this.storeFacade.loadUserOwnedStocks(this.userId);
     this.storeFacade.loadCurrentStockHistoricalData(
       this.ticker,
       this.chartRange,
@@ -50,6 +53,9 @@ export class StockDetailComponent implements OnInit {
     if (!!this.stockHistoricalData$) {
       this.showStockChart = true;
     }
+    this.storeFacade.loadTopInvestorsOnAStock(this.ticker);
+    this.storeFacade.loadFollowersWithSameStock(this.userId, this.ticker);
+    this.storeFacade.loadStocksOwnedByUsersOwnThisStock(this.ticker);
 
     this.router.events
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
@@ -61,6 +67,9 @@ export class StockDetailComponent implements OnInit {
           this.chartRange,
           this.chartInterval
         );
+        this.storeFacade.loadTopInvestorsOnAStock(this.ticker);
+        this.storeFacade.loadFollowersWithSameStock(this.userId, this.ticker);
+        this.storeFacade.loadStocksOwnedByUsersOwnThisStock(this.ticker);
       });
   }
   changeChartRangeInterval(chartViewOptions: ChartDataOptions): void {

@@ -1,3 +1,4 @@
+import { StockPercentage } from './../../interfaces/stock-percentage';
 import { AlpacaUserPosition } from 'src/app/interfaces/alpacaPosition';
 import { Transaction } from './../../interfaces/transaction';
 import { MarketClock } from './../../interfaces/market-clock';
@@ -24,6 +25,9 @@ export interface State {
   searchUserList: UserSearch[];
   leaderboardUsers: User[];
   alpacaPositions: AlpacaUserPosition[];
+  topInvestorsOnAStock: User[];
+  followersWithSameStock: User[];
+  stocksOwnedByUsersOwnThisStock: StockPercentage[]; // the array of [stockSymbol, percentages]
 }
 
 export const initialState: State = {
@@ -40,6 +44,9 @@ export const initialState: State = {
   searchUserList: null,
   leaderboardUsers: null,
   alpacaPositions: null,
+  topInvestorsOnAStock: null,
+  followersWithSameStock: null,
+  stocksOwnedByUsersOwnThisStock: null,
 };
 
 export const reducer = createReducer(
@@ -119,6 +126,30 @@ export const reducer = createReducer(
     (state, { currentAlpacaPositions }) => ({
       ...state,
       alpacaPositions: currentAlpacaPositions,
+    })
+  ),
+
+  on(
+    appActions.setTopInvestorsOnAStock,
+    (state, { currentTopInvestorsOnAStock }) => ({
+      ...state,
+      topInvestorsOnAStock: currentTopInvestorsOnAStock,
+    })
+  ),
+
+  on(
+    appActions.setFollowersWithSameStock,
+    (state, { currentFollowersWithSameStock }) => ({
+      ...state,
+      followersWithSameStock: currentFollowersWithSameStock,
+    })
+  ),
+
+  on(
+    appActions.setStocksOwnedByUsersOwnThisStock,
+    (state, { currentStocksOwnedByUsersOwnThisStock }) => ({
+      ...state,
+      stocksOwnedByUsersOwnThisStock: currentStocksOwnedByUsersOwnThisStock,
     })
   )
 );
