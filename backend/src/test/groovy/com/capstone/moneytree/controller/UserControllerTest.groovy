@@ -888,12 +888,14 @@ class UserControllerTest extends Specification {
         String firstName1 = "Billy"
         String lastName1 = "Bob"
         String alpacaApiKey1 = "RYFERH6ET5etETGTE6"
+
         User user1 = createUser(email1, username1, password1, firstName1, lastName1, alpacaApiKey1)
         user1.setId(userId1)
 
         and: "mock the way we retrieve the user from db"
         userDao.findUserByUsername(username1) >> user1
         userDao.findUserById(userId1) >> user1
+        userDao.getUsernamesSortedByScoreDesc() >> List.of(user1.getUsername())
 
         and: "mock the way we retrieve the user info"
         followsDao.findByUserToFollowId(userId1) >> List.of()
