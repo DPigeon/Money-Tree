@@ -137,8 +137,7 @@ class UserControllerIT extends Specification {
         }
 
         cleanup: "delete the created user"
-        for (User persistedUser : persistedUsers)
-            userDao.deleteAll()
+        userDao.deleteAll(persistedUsers)
     }
 
     def "a user can follow another user in the database"() {
@@ -316,14 +315,15 @@ class UserControllerIT extends Specification {
                 createUser("test19@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 19),
                 createUser("test20@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 20),
         ]
-        userDao.saveAll(users)
+        List<User> usersPersisted = userDao.saveAll(users)
 
         and: "apple stock should be in DB"
         Stock stock = stockDao.save(new Stock(symbol: "aapl", companyName: "Apple"))
 
         and: "Should all own the stock with appl symbol"
+        List<Owns> ownsList = new ArrayList<>()
         users.forEach({ user ->
-            ownsDao.save(new Owns(user, stock, new Date(), 3, 12.12, 26))
+            ownsList.add(ownsDao.save(new Owns(user, stock, new Date(), 3, 12.12, 26)))
         })
 
         when: "the request is received"
@@ -335,9 +335,9 @@ class UserControllerIT extends Specification {
         res.getBody().any {it.getScore() == 19 || it.getScore() == 20}
 
         cleanup:
-        userDao.deleteAll()
-        stockDao.deleteAll()
-        ownsDao.deleteAll()
+        ownsDao.deleteAll(ownsList)
+        stockDao.delete(stock)
+        userDao.deleteAll(usersPersisted)
     }
 
     def "Should return all followers that own the given stock"() {
@@ -368,11 +368,12 @@ class UserControllerIT extends Specification {
                 createUser("test19@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 19),
                 createUser("test20@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 20),
         ]
-        userDao.saveAll(users)
+        List<User> usersPersisted = userDao.saveAll(users)
 
         and: "persist the relationship"
+        List<Follows> followsList = new ArrayList<>()
         users.forEach({
-            followsDao.save(new Follows(it, followee, new Date()))
+            followsList.add(followsDao.save(new Follows(it, followee, new Date())))
         })
 
         and: "the common stock is stored in db"
@@ -380,8 +381,9 @@ class UserControllerIT extends Specification {
         Stock stock = stockDao.save(new Stock(symbol: symbol, companyName: "Apple"))
 
         and: "10 of his followers owns the given stock (first 10 in the list)"
+        List<Owns> ownsList = new ArrayList<>()
         (1..10).each{
-            ownsDao.save(ownsDao.save(new Owns(users[it], stock, new Date(), 3, 12.12, 26)))
+            ownsList.add(ownsDao.save(new Owns(users[it], stock, new Date(), 3, 12.12, 26)))
         }
 
         when: "the request is made"
@@ -392,9 +394,10 @@ class UserControllerIT extends Specification {
         res.getBody().size() == 10
 
         cleanup:
-        userDao.deleteAll()
-        ownsDao.deleteAll()
-        stockDao.deleteAll()
-        followsDao.deleteAll()
+        userDao.delete(followee)
+        userDao.deleteAll(usersPersisted)
+        ownsDao.deleteAll(ownsList)
+        stockDao.delete(stock)
+        followsDao.deleteAll(followsList)
     }
 }
