@@ -14,7 +14,7 @@ export interface SectorChart {
 export class SectorsPieChartComponent implements OnInit, OnChanges {
   @Input() currentProfileUser: UserProfile;
   @Input() user: User;
-  percentile: number=0;
+  percentile = 0;
 
   chartOption: EChartsOption;
   axisData: SectorChart[] = [];
@@ -25,7 +25,7 @@ export class SectorsPieChartComponent implements OnInit, OnChanges {
       this.currentProfileUser &&
       this.currentProfileUser.transactions.length > 0
     ) {
-      this.percentile =  this.currentProfileUser.percentile;
+      this.percentile = this.currentProfileUser.percentile;
       await this.formatChartData();
       this.displayChart();
       this.isUnavailableChart = false;
@@ -36,7 +36,7 @@ export class SectorsPieChartComponent implements OnInit, OnChanges {
   async ngOnChanges(): Promise<void> {
     if (this.currentProfileUser) {
       if (this.currentProfileUser.transactions.length > 1) {
-      this.percentile =  this.currentProfileUser.percentile;
+        this.percentile = this.currentProfileUser.percentile;
         await this.formatChartData();
         this.displayChart();
         this.isUnavailableChart = false;
