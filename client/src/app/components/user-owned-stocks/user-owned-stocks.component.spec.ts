@@ -16,7 +16,7 @@ import { StockSearchComponent } from '../stock-search/stock-search.component';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { StockDetailComponent } from './../../pages/stock-detail/stock-detail.component';
-import { StockHistoricalChartComponent } from './../stock-historical-chart/stock-historical-chart.component';
+import { HistoricalChartComponent } from '../historical-chart/historical-chart.component';
 
 // integration tests
 describe('UserOwnedStocksComponent', () => {
@@ -89,7 +89,7 @@ describe('UserOwnedStocksComponent', () => {
         StockAdditionalInfoComponent,
         HeaderComponent,
         StockSearchComponent,
-        StockHistoricalChartComponent,
+        HistoricalChartComponent,
       ],
       providers: [
         StoreFacadeService,

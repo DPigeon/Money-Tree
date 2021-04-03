@@ -74,7 +74,7 @@ class AlpacaControllerTest extends Specification {
         int period = 1
         String unit = "WEEK"
         String timeFrame = "FIFTEEN_MINUTE"
-        LocalDate localDate = LocalDate.now()
+        String localDate = LocalDate.now().toString()
         String extended = "false"
         PortfolioHistory portfolio = new PortfolioHistory()
 
@@ -82,7 +82,7 @@ class AlpacaControllerTest extends Specification {
         userDao.findUserById(Long.parseLong(userId)) >> createUser("test@money.ca", "user", "hello", "Yury", "Yes", "38rbb-sss")
         alpacaAPI.getPortfolioHistory(period, PortfolioPeriodUnit.valueOf(unit), PortfolioTimeFrame.valueOf(timeFrame), localDate, extended as Boolean) >> portfolio
 
-        when: "Retrieving the clock"
+        when: "Retrieving the portfolio"
         ResponseEntity<PortfolioHistory> response = alpacaController.getPortfolio(userId, period, unit, timeFrame, localDate, extended)
 
         then: "Account is retrieved"

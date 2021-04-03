@@ -127,7 +127,8 @@ export class DataFormatter {
     };
     return stock;
   }
-  YahooDataToModel(response: any): StockHistory {
+
+  formatStockHistory(response: any): StockHistory {
     const stockHistoricalData: StockHistory = {
       symbol: response.chart.result[0].meta.symbol,
       closePrice: response.chart.result[0].indicators.quote[0].close,
@@ -136,6 +137,17 @@ export class DataFormatter {
     };
     return stockHistoricalData;
   }
+
+  formatAlpacaPortfolio(response: any): StockHistory {
+    const stockHistoricalData: StockHistory = {
+      symbol: '',
+      closePrice: response.equity,
+      timestamp: response.timestamp,
+      currency: 'USD',
+    };
+    return stockHistoricalData;
+  }
+
   marketClockFormatter(response: any): MarketClock {
     const fromattedMarketClock: MarketClock = {
       isOpen: response.body.isOpen,

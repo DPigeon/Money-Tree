@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DataFormatter } from '../../utilities/data-formatters';
 import { AlpacaUserPosition } from 'src/app/interfaces/alpacaPosition';
+import { StockHistory } from 'src/app/interfaces/stockHistory';
 
 @Injectable({
   providedIn: 'root',
@@ -129,4 +130,35 @@ export class UserService {
       .get(`users/${userId}/owned_by_followers/${symbol}`)
       .pipe(map((res: Response) => this.dataFormatter.userListFormatter(res)));
   }
+
+  getPortfolioHistoricalData(
+    userId: string,
+    periodLength: number,
+    periodUnit: string,
+    timeFrame: string,
+    dateEnd: string,
+    extendedHours: string
+  ): Observable<StockHistory> {
+    return this.api
+      .get(
+        'alpaca/portfolio/userId=' +
+          userId +
+          '&period=' +
+          periodLength +
+          '&unit=' +
+          periodUnit +
+          '&timeframe=' +
+          timeFrame +
+          '&dateend=' +
+          dateEnd +
+          '&extended=' +
+          extendedHours
+      )
+      .pipe(
+        map((res: Response) =>
+          this.dataFormatter.formatAlpacaPortfolio(res.body)
+        )
+      );
+  }
+
 }

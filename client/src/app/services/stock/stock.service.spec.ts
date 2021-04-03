@@ -84,7 +84,7 @@ describe('StockService', () => {
   });
 
   it('should convert yahoo data to frontend model', () => {
-    const transformedData = dataFormatter.YahooDataToModel(yahooSampleResponse);
+    const transformedData = dataFormatter.formatStockHistory(yahooSampleResponse);
     expect(transformedData).toEqual(expectedStockHistory);
   });
 });

@@ -2,18 +2,19 @@
 .container {
   position: relative;
 }
-.transaction-history-container {
-  display: flex;
-}
 
 .profile-right-col {
   padding-right: 5vw;
   padding-top: 1.5rem;
+  height: 100vh;
+  .transaction-history-container {
+    height: 50%;
+  }
 }
 
 .profile-info-container {
-  padding: 1.5rem 5vw;
-  height: 500px;
+  padding: 1.5rem 5vw 0 5vw;
+  height: 450px;
   .picture-wrap {
     height: 60%;
     width: 100%;
@@ -64,8 +65,20 @@
     }
   }
   .bio {
-    top: 5em;
+    margin: 20px 0;
     width: 96%;
     height: auto;
   }
+}
+.card-container {
+  width: 80%;
+}
+.chart-unavailable {
+  padding-top: 100px;
+  text-align: center;
+  color: gray;
+}
+.chart {
+  padding: 0 5vw 0 5vw;
+  height: 450px;
 }

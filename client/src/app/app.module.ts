@@ -44,7 +44,7 @@ import { StockAdditionalInfoComponent } from './components/stock-additional-info
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
 import { ListOfFollowsComponent } from './components/list-of-follows/list-of-follows.component';
-import { StockHistoricalChartComponent } from './components/stock-historical-chart/stock-historical-chart.component';
+import { HistoricalChartComponent } from './components/historical-chart/historical-chart.component';
 
 // other imports:
 import { Effects } from './store/effects/app.effects';
@@ -82,7 +82,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     ProfileComponent,
     TransactionHistoryComponent,
     ListOfFollowsComponent,
-    StockHistoricalChartComponent,
+    HistoricalChartComponent,
   ],
   imports: [
     BrowserModule,
