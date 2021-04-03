@@ -13,6 +13,8 @@ import { filter } from 'rxjs/operators';
 import { StockHistory } from 'src/app/interfaces/stockHistory';
 import { DatePipe } from '@angular/common';
 import { UserService } from 'src/app/services/user/user.service';
+import { Observable } from 'rxjs';
+import { Stock } from 'src/app/interfaces/stock';
 
 export interface ChartDataOptions {
   range: string;
@@ -34,6 +36,8 @@ export class ProfileComponent implements OnInit {
   profileHistoryChartData: StockHistory;
   userId = null;
   showPortfolioChart = false;
+  userOwnedStocks$: Observable<Stock[]>;
+  showProfileColumn = false;
 
   constructor(
     private storeFacade: StoreFacadeService,
@@ -49,9 +53,12 @@ export class ProfileComponent implements OnInit {
     this.storeFacade.loadCurrentProfileUser(username);
     this.currentProfileUser$.subscribe((data: UserProfile) => {
       if (data) {
+        this.storeFacade.loadUserOwnedStocks(data.id);
+        this.userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
         this.completeUserProfile = data;
         this.userId = String(this.completeUserProfile.id);
         this.generateData(String(data.id), 'FIFTEEN_MINUTE', 1, 'DAY');
+        this.showProfileColumn = true;
       }
     });
     this.storeFacade.currentUser$.subscribe((loggedInUser: User) => {
