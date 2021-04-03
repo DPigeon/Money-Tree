@@ -488,7 +488,7 @@ public class DefaultUserService implements UserService {
         float index = 0;
         for (int i = 0; i < usernames.size(); i++) {
             if (usernames.get(i).equals(username)) {
-                index = i+1;
+                index = (float) i+1;
                 break;
             }
         }

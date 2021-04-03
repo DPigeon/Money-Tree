@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
-import { EChartsOption, graphic } from 'echarts';
+import { EChartsOption } from 'echarts';
 import { User, UserProfile } from 'src/app/interfaces/user';
 
 export interface SectorChart {

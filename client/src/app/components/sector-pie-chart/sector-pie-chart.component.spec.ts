@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { StockHistory } from 'src/app/interfaces/stockHistory';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
   FORM_MODULE_DPENDENCEIES,
