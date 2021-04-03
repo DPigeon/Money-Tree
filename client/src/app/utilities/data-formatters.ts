@@ -41,6 +41,7 @@ export class DataFormatter {
     user.following = response.following;
     user.transactions = this.transactionListFormatter(response.transactions);
     user.portfolio = response.ownedStocks;
+    user.percentile = response.percentile;
     return user;
   }
   userListFormatter(response: any): User[] {
@@ -86,6 +87,7 @@ export class DataFormatter {
         averagePricePerShare: fetchedTransaction.avgPrice,
         symbol: fetchedTransaction.symbol,
         total: fetchedTransaction.total,
+        industry: fetchedTransaction.industry,
       });
     }
     return result;

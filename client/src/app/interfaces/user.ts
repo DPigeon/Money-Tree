@@ -22,4 +22,5 @@ export interface UserProfile extends User {
   transactions?: Transaction[];
   following?: User[];
   followers?: User[];
+  percentile?: number;
 }

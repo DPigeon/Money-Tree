@@ -73,6 +73,7 @@
     class="profile-right-col"
     fxLayout="column"
   >
+  <app-sector-pie-chart [currentProfileUser]="currentProfileUser$ | async"></app-sector-pie-chart>
     <app-transaction-history
       [currentProfileUser]="currentProfileUser$ | async"
       class="transaction-history-container"
