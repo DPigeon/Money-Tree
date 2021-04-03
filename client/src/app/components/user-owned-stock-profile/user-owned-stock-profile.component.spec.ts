@@ -120,6 +120,7 @@ describe('UserOwnedStockProfileComponent Unit Test', () => {
     spyOn(component.changeEarnings, 'emit');
     component.userOwnedStocks = fakeStockList;
     component.userAlpacaPositions = fakePositions;
+    component.location = 'home';
     component.tableDataGenerator();
     expect(component.changeEarnings.emit).toHaveBeenCalled();
   });

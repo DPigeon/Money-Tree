@@ -9,7 +9,7 @@ import {
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Stock } from 'src/app/interfaces/stock';
-import { User } from 'src/app/interfaces/user';
+import { User, UserProfile } from 'src/app/interfaces/user';
 import { StoreFacadeService } from 'src/app/store/store-facade.service';
 
 export interface StockProfile {
@@ -25,7 +25,7 @@ export interface StockProfile {
   styleUrls: ['./user-owned-stock-profile.component.scss'],
 })
 export class UserOwnedStockProfileComponent implements OnChanges {
-  @Input() currentUser: User;
+  @Input() currentUser: User | UserProfile;
   @Input() location: string;
   @Input() userOwnedStocks: Stock[];
   @Output() changeEarnings = new EventEmitter<{
@@ -104,11 +104,13 @@ export class UserOwnedStockProfileComponent implements OnChanges {
         }
       });
       this.dataSource.data = data;
-      this.changeEarnings.emit({
-        earnings: earnings < 0 ? -1 * earnings : earnings,
-        totalGain,
-        positive: earnings > 0,
-      });
+      if (this.location === 'home') {
+        this.changeEarnings.emit({
+          earnings: earnings < 0 ? -1 * earnings : earnings,
+          totalGain,
+          positive: earnings > 0,
+        });
+      }
     }
   }
 
