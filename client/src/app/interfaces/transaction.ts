@@ -9,4 +9,5 @@ export interface Transaction {
   averagePricePerShare?: number;
   client_order_id?: string;
   limitPrice?: number; // price for limit order
+  industry?: string;
 }

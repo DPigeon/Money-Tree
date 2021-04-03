@@ -1,4 +1,5 @@
 import { UserOwnedStockProfileComponent } from './../../components/user-owned-stock-profile/user-owned-stock-profile.component';
+import { SectorsPieChartComponent } from './../../components/sector-pie-chart/sector-pie-chart.component';
 import { HistoricalChartComponent } from './../../components/historical-chart/historical-chart.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderComponent } from '../../components/header/header.component';
@@ -112,7 +113,8 @@ describe('ProfileComponent', () => {
         StockSearchComponent,
         ListOfFollowsComponent,
         HistoricalChartComponent,
-        UserOwnedStockProfileComponent
+        UserOwnedStockProfileComponent,
+        SectorsPieChartComponent
       ],
       providers: [NGRX_STORE_MODULE],
     }).compileComponents();

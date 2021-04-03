@@ -32,6 +32,7 @@ import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component'
 import { HomeProfileComponent } from './components/home-profile-column/home-profile.component';
 import { UserOwnedStockProfileComponent } from './components/user-owned-stock-profile/user-owned-stock-profile.component';
 import { StockStatsComponent } from './components/stock-stats/stock-stats.component';
+import { SectorsPieChartComponent } from './components/sector-pie-chart/sector-pie-chart.component';
 import { LoginSignupComponent } from './pages/login-signup/login-signup.component';
 import { SignupFormComponent } from './components/signup-form/signup-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
@@ -81,6 +82,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     SellOrBuyActionsComponent,
     FollowingsSearchComponent,
     StockAdditionalInfoComponent,
+    SectorsPieChartComponent,
     ProfileComponent,
     TransactionHistoryComponent,
     ListOfFollowsComponent,
