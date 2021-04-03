@@ -9,6 +9,7 @@ import com.capstone.moneytree.model.relationship.Follows
 import com.capstone.moneytree.service.api.AmazonS3Service
 import com.capstone.moneytree.service.api.UserService
 import com.capstone.moneytree.service.impl.DefaultUserService
+import com.capstone.moneytree.utils.MoneyTreeTestUtils
 import com.capstone.moneytree.validator.UserValidator
 import com.capstone.moneytree.validator.ValidatorFactory
 import org.springframework.test.context.ActiveProfiles
@@ -269,5 +270,31 @@ class DefaultUserServiceTest extends Specification {
 
         then:
         1 * userDao.getSearchUsers()
+    }
+
+    def "get user percentile based on his score"() {
+        given: "3 users with 3 different score"
+        User userA = MoneyTreeTestUtils.createUser("testA@test.com", "userA", "pass", "UserA", "NameA", "2a33-a242-A")
+        User userB = MoneyTreeTestUtils.createUser("testB@test.com", "userB", "pass", "UserB", "NameB", "2a33-a242-B")
+        User userC = MoneyTreeTestUtils.createUser("testC@test.com", "userC", "pass", "UserC", "NameC", "2a33-a242-C")
+        User userD = MoneyTreeTestUtils.createUser("testD@test.com", "userD", "pass", "UserD", "NameC", "2a33-a242-D")
+        User userE = MoneyTreeTestUtils.createUser("testE@test.com", "userE", "pass", "UserE", "NameC", "2a33-a242-E")
+        userA.setScore(100)
+        userB.setScore(200)
+        userC.setScore(300)
+        userD.setScore(400)
+        userE.setScore(500)
+
+        and: "mock userDao.getUsernamesSortedByScoreDesc()"
+        userDao.getUsernamesSortedByScoreDesc() >> ["userE", "userD", "userC", "userB", "userA"]
+
+        when:
+        Float percentileE = userService.getUserPercentile("userE")
+        Float percentileD = userService.getUserPercentile("userD")
+
+
+        then: "should get percentile for specified users"
+        assert percentileE == 20.0
+        assert percentileD == 40.0
     }
 }

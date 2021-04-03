@@ -32,8 +32,8 @@ class DefaultStockServiceTest extends Specification {
     def "Should get all stocks by calling the database once"() {
         given: "mocked database"
         List<Stock> stockList = List.of(
-                new Stock("AAPL", "Apple"),
-                new Stock("TSLA", "Tesla")
+                new Stock("AAPL", "Apple", "Technology"),
+                new Stock("TSLA", "Tesla", "Cars")
         )
         stockDao.findAll() >> stockList
 
@@ -49,7 +49,7 @@ class DefaultStockServiceTest extends Specification {
     def "Should get all user stocks"() {
         given: "the necessary info and a mocked database"
         User user = MoneyTreeTestUtils.createUser("test@test.com", "user", "pass", "User", "Name", "2a33-a242")
-        Stock stock = new Stock("AAPL", "Apple")
+        Stock stock = new Stock("AAPL", "Apple", "Technology")
         Long userId = 1
         List<Owns> ownsList = List.of(
                 new Owns(user, stock, new Date(), 10.0, 20.0, 30.0)
@@ -66,7 +66,7 @@ class DefaultStockServiceTest extends Specification {
 
     def "Should get that stock using the symbol"() {
         given: "a stock"
-        Stock stock0 = new Stock("AAPL", "Apple")
+        Stock stock0 = new Stock("AAPL", "Apple", "Technology")
 
         and:
         stockDao.findBySymbol("AAPL") >> stock0
@@ -89,9 +89,9 @@ class DefaultStockServiceTest extends Specification {
         userC.setId(3)
 
         and: "3 stocks"
-        Stock stock1 = new Stock("AAPL", "Apple")
-        Stock stock2 = new Stock("TSLA", "Tesla")
-        Stock stock3 = new Stock("GOOG", "Google")
+        Stock stock1 = new Stock("AAPL", "Apple", "Technology")
+        Stock stock2 = new Stock("TSLA", "Tesla", "Cars")
+        Stock stock3 = new Stock("GOOG", "Google", "Technology")
 
         and: "userA, userB and userC own Apple"
         Owns ownsApple1 = new Owns(userA, stock1, new Date(), 1, 1, 1)
