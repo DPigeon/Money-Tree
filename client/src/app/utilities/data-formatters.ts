@@ -7,6 +7,7 @@ import { Stock } from '../interfaces/stock';
 import { MarketClock } from '../interfaces/market-clock';
 import { StockHistory } from '../interfaces/stockHistory';
 import { StockPercentage } from './../interfaces/stock-percentage';
+import { TimelineFeed } from '../interfaces/timelineFeed';
 
 @Injectable({
   providedIn: 'root',
@@ -181,6 +182,22 @@ export class DataFormatter {
         percentage: response[key],
       });
     }
+    return result;
+  }
+  timelineFormatter(response: any): TimelineFeed[] {
+    const result: TimelineFeed[] = [];
+    response.forEach((e) => {
+      result.push({
+        name: e.first.firstName + ' ' + e.first.lastName,
+        username: e.first.username,
+        symbol: e.second.symbol,
+        avgPrice: e.second.avgPrice,
+        time: e.second.purchasedAt,
+        profilePicture: e.first.avatarURL,
+        type: e.second.moneyTreeOrderType,
+        quantity: e.second.quantity,
+      });
+    });
     return result;
   }
 }

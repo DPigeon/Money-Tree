@@ -1,3 +1,4 @@
+import { HomeTimelineComponent } from './../home-timeline/home-timeline.component';
 import { StockSearchComponent } from 'src/app/components/stock-search/stock-search.component';
 import { FollowingsSearchComponent } from 'src/app/components/followings-search/followings-search.component';
 import { HeaderComponent } from 'src/app/components/header/header.component';
@@ -60,6 +61,7 @@ describe('HomeProfileComponent', () => {
         FollowingsSearchComponent,
         UserOwnedStockProfileComponent,
         SellOrBuyActionsComponent,
+        HomeTimelineComponent
       ],
       providers: [
         NGRX_STORE_MODULE,

@@ -21,6 +21,7 @@ import { MatTableModule } from '@angular/material/table';
 import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
 import { UserService } from './services/user/user.service';
+import { TransactionService } from './services/transaction/transaction.service';
 
 export const MATERIAL_MODULE_DEPENDENCIES = [
   MatIconModule,
@@ -41,6 +42,7 @@ export const MATERIAL_MODULE_DEPENDENCIES = [
 
 export const NGRX_STORE_MODULE = provideMockStore({ initialState });
 export const USER_SERVICE = UserService;
+export const TRANSACTION_SERVICE = TransactionService;
 
 export const NGX_ECHART = NgxEchartsModule.forRoot({ echarts });
 

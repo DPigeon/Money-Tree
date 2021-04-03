@@ -8,11 +8,14 @@ import {
   MATERIAL_MODULE_DEPENDENCIES,
   NGRX_STORE_MODULE,
   FORM_MODULE_DPENDENCEIES,
+  TRANSACTION_SERVICE,
 } from '../../shared.module';
 import { StockSearchComponent } from '../../components/stock-search/stock-search.component';
 import { EditProfileComponent } from './../../components/edit-profile/edit-profile.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FollowingsSearchComponent } from 'src/app/components/followings-search/followings-search.component';
+import { HomeTimelineComponent } from 'src/app/components/home-timeline/home-timeline.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -24,6 +27,7 @@ describe('HomeComponent', () => {
         MATERIAL_MODULE_DEPENDENCIES,
         FORM_MODULE_DPENDENCEIES,
         RouterTestingModule,
+        HttpClientTestingModule
       ],
       declarations: [
         HomeComponent,
@@ -33,9 +37,11 @@ describe('HomeComponent', () => {
         EditProfileComponent,
         FollowingsSearchComponent,
         UserOwnedStockProfileComponent,
+        HomeTimelineComponent
       ],
       providers: [
         NGRX_STORE_MODULE,
+        TRANSACTION_SERVICE,
         {
           provide: MatDialogRef,
           useValue: {
