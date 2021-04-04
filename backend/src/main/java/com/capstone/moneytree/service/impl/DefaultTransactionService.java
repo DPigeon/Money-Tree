@@ -10,9 +10,9 @@ import com.capstone.moneytree.exception.AlpacaException;
 
 import com.capstone.moneytree.exception.BadRequestException;
 import com.capstone.moneytree.exception.EntityNotFoundException;
-import net.jacobpeterson.alpaca.enums.OrderSide;
-import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
 
+import net.jacobpeterson.alpaca.enums.order.OrderSide;
+import net.jacobpeterson.alpaca.enums.order.OrderTimeInForce;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,7 +5,7 @@ import com.capstone.moneytree.model.TransactionStatus
 import com.capstone.moneytree.model.node.Transaction
 import com.capstone.moneytree.model.node.User
 import com.capstone.moneytree.model.relationship.Made
-import net.jacobpeterson.alpaca.enums.OrderTimeInForce
+import net.jacobpeterson.alpaca.enums.order.OrderTimeInForce
 import net.jacobpeterson.domain.alpaca.asset.Asset
 import net.jacobpeterson.domain.alpaca.order.Order
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate

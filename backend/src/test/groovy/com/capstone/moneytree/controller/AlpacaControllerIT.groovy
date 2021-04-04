@@ -3,7 +3,7 @@ package com.capstone.moneytree.controller
 
 import com.capstone.moneytree.dao.UserDao
 import com.capstone.moneytree.model.node.User
-import net.jacobpeterson.alpaca.enums.PortfolioTimeFrame
+import net.jacobpeterson.alpaca.enums.portfolio.PortfolioTimeFrame
 import net.jacobpeterson.domain.alpaca.clock.Clock
 import org.springframework.beans.factory.annotation.Autowired
 import com.capstone.moneytree.config.DefaultStompFrameHandlerConfig

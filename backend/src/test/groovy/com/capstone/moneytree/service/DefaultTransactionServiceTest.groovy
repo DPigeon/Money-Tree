@@ -1,5 +1,8 @@
 package com.capstone.moneytree.service
 
+import net.jacobpeterson.alpaca.enums.order.OrderSide
+import net.jacobpeterson.alpaca.enums.order.OrderTimeInForce
+
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildLimitOrder
 
 import com.capstone.moneytree.dao.MadeDao
@@ -29,8 +32,6 @@ import static com.capstone.moneytree.utils.MoneyTreeTestUtils.buildAsset
 
 
 import net.jacobpeterson.alpaca.AlpacaAPI
-import net.jacobpeterson.alpaca.enums.OrderSide
-import net.jacobpeterson.alpaca.enums.OrderTimeInForce
 import net.jacobpeterson.domain.alpaca.account.Account
 import net.jacobpeterson.domain.alpaca.asset.Asset
 import spock.lang.Specification
