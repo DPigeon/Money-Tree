@@ -92,7 +92,7 @@ public class DefaultTransactionService implements TransactionService {
    private void executeTransaction(Order order, User user) {
       Transaction transaction;
       try {
-         AlpacaAPI api = session.alpaca(user.getAlpacaApiKey());
+         AlpacaAPI api = session.alpaca(user.getId().toString(), user.getAlpacaApiKey());
 
          Order alpacaOrder = executeRequest(api, order);
 

@@ -25,11 +25,13 @@ public class AlpacaSession {
     *
     * @return the alpaca client
     */
-   public AlpacaAPI alpaca(String alpacaKey) {
-      if (StringUtils.isBlank(alpacaKey)) {
+   public AlpacaAPI alpaca(String userId, String alpacaKey) {
+      LOGGER.info("Test for key: {}", alpacaKey);
+      if (alpacaKey.isBlank()) {
          LOGGER.error(ExceptionMessage.ALPACA_TOKEN_BLANK.getMessage());
          throw new BadRequestException(ExceptionMessage.ALPACA_TOKEN_BLANK.getMessage());
       }
+      LOGGER.info("Creating an Alpaca Session to user ID {}", userId);
       return new AlpacaAPI(alpacaKey);
    }
 }
