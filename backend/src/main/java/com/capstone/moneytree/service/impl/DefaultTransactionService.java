@@ -92,7 +92,7 @@ public class DefaultTransactionService implements TransactionService {
    private void executeTransaction(Order order, User user) {
       Transaction transaction;
       try {
-         AlpacaAPI api = session.alpaca(user.getAlpacaApiKey());
+         AlpacaAPI api = session.alpaca(user.getId().toString(), user.getAlpacaApiKey());
 
          Order alpacaOrder = executeRequest(api, order);
 
@@ -148,7 +148,7 @@ public class DefaultTransactionService implements TransactionService {
       return MoneyTreeOrderType.valueOf(order.getType().toUpperCase() + "_" + order.getSide().toUpperCase());
    }
 
-   private Transaction constructTransactionFromOrder(Order alpacaOrder, Stock stock) {
+   public Transaction constructTransactionFromOrder(Order alpacaOrder, Stock stock) {
       return Transaction.builder()
               .status(TransactionStatus.PENDING)
               .purchasedAt(alpacaOrder.getCreatedAt())

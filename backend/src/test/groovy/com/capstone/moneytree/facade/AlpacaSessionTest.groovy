@@ -13,10 +13,10 @@ class AlpacaSessionTest extends Specification {
       def userToken = null
 
       when:
-      alpacaSession.alpaca(userToken)
+      alpacaSession.alpaca("1", userToken)
 
       then:
-      thrown(BadRequestException)
+      thrown(NullPointerException)
    }
 
    def "Should throw an exception if the user token is empty"() {
@@ -24,7 +24,7 @@ class AlpacaSessionTest extends Specification {
       def userToken = ""
 
       when:
-      alpacaSession.alpaca(userToken)
+      alpacaSession.alpaca("2", userToken)
 
       then:
       thrown(BadRequestException)
@@ -35,7 +35,7 @@ class AlpacaSessionTest extends Specification {
       def userToken = "jh34g2j-23hg4j2-2jhg424"
 
       when:
-      def api = alpacaSession.alpaca(userToken)
+      def api = alpacaSession.alpaca("1", userToken)
 
       then:
       api != null

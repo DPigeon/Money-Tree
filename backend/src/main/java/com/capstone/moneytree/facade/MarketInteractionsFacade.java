@@ -83,7 +83,7 @@ public class MarketInteractionsFacade {
       User user = getUserById(Long.parseLong(userId));
       String alpacaKey = user.getAlpacaApiKey();
       AlpacaSession alpacaSession = new AlpacaSession();
-      alpacaAPI = alpacaSession.alpaca(alpacaKey);
+      alpacaAPI = alpacaSession.alpaca(userId, alpacaKey);
    }
 
    /**
