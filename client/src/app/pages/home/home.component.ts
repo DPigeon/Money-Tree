@@ -1,3 +1,4 @@
+import { AlpacaUserPosition } from 'src/app/interfaces/alpacaPosition';
 import { Component, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
@@ -23,6 +24,7 @@ export class HomeComponent implements OnInit {
   followers$: Observable<User[]>;
   userTransactions$: Observable<Transaction[]>;
   userOwnedStocks$: Observable<Stock[]>;
+  alpacaPositions$: Observable<AlpacaUserPosition[]>;
   timelineFeed: Observable<TimelineFeed[]>;
   showProfileColumn = false;
 
@@ -49,11 +51,13 @@ export class HomeComponent implements OnInit {
         this.storeFacade.loadCurrentUserFollowers(this.currentUser.id);
         this.storeFacade.loadUserTransactions(this.currentUser.id);
         this.storeFacade.loadUserOwnedStocks(this.currentUser.id);
+        this.storeFacade.loadAlpacaPositions(this.currentUser.id);
 
         this.followings$ = this.storeFacade.currentFollowings$;
         this.followers$ = this.storeFacade.currentFollowers$; // can be sent to any other component (as component's input) in future commits
         this.userTransactions$ = this.storeFacade.userTransactions$;
         this.userOwnedStocks$ = this.storeFacade.userOwnedStocks$;
+        this.alpacaPositions$ = this.storeFacade.userAlpacaPositions$;
       }
     });
   }

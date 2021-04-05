@@ -28,6 +28,7 @@ export class StockDetailComponent implements OnInit {
     .stocksOwnedByUsersOwnThisStock$;
   followersWithSameStock$ = this.storeFacade.followersWithSameStock$;
   topInvestorsOnAStock$ = this.storeFacade.topInvestorsOnAStock$;
+  alpacaPositions$ = this.storeFacade.userAlpacaPositions$;
 
   showStockChart = false;
   userId = Number(localStorage.getItem('userId'));
@@ -45,6 +46,7 @@ export class StockDetailComponent implements OnInit {
     this.storeFacade.loadCurrentStock(this.ticker);
     this.storeFacade.loadMarketClock(this.userId);
     this.storeFacade.loadUserOwnedStocks(this.userId);
+    this.storeFacade.loadAlpacaPositions(this.userId);
     this.storeFacade.loadCurrentStockHistoricalData(
       this.ticker,
       this.chartRange,

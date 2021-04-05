@@ -38,8 +38,8 @@ const fakeStockList: Stock[] = [
 ];
 
 const fakePositions: AlpacaUserPosition[] = [
-  { symbol: 'AAPL', avgEntryPrice: '5', qty: '3.00', currentPrice: '5' },
-  { symbol: 'TSLA', avgEntryPrice: '8', qty: '20', currentPrice: '2.00' },
+  { symbol: 'AAPL', avgPrice: '5', qty: '3.00', currentPrice: '5', gainAmount: '10' },
+  { symbol: 'TSLA', avgPrice: '8', qty: '20', currentPrice: '2.00', gainAmount: '-20' },
 ];
 
 // integration tests
@@ -92,12 +92,12 @@ const mockUserService = {
 describe('UserOwnedStockProfileComponent Unit Test', () => {
   let component: UserOwnedStockProfileComponent;
   beforeEach(() => {
-    component = new UserOwnedStockProfileComponent(mockRouter, mockUserService);
+    component = new UserOwnedStockProfileComponent(mockRouter);
   });
 
   it('should properly compare stocks and positions and generate table', () => {
     component.userOwnedStocks = fakeStockList;
-    component.userAlpacaPositions = fakePositions;
+    component.alpacaPositions = fakePositions;
     component.tableDataGenerator();
     expect(component.dataSource.data[0].company).toEqual('AAPL');
     expect(component.dataSource.data[1].company).toEqual('TSLA');
@@ -106,22 +106,13 @@ describe('UserOwnedStockProfileComponent Unit Test', () => {
 
   it('should choose the right color for +/- stock', () => {
     component.userOwnedStocks = fakeStockList;
-    component.userAlpacaPositions = fakePositions;
+    component.alpacaPositions = fakePositions;
     component.tableDataGenerator();
     expect(
-      component.stockChangeColor(component.dataSource.data[0].gain_loss)
+      component.stockChangeColor(Number(component.dataSource.data[0].gain_loss))
     ).toEqual('positive-change');
     expect(
-      component.stockChangeColor(component.dataSource.data[1].gain_loss)
+      component.stockChangeColor(Number(component.dataSource.data[1].gain_loss))
     ).toEqual('negative-change');
-  });
-
-  it('should emit change earnings after generating table data', () => {
-    spyOn(component.changeEarnings, 'emit');
-    component.userOwnedStocks = fakeStockList;
-    component.userAlpacaPositions = fakePositions;
-    component.location = 'home';
-    component.tableDataGenerator();
-    expect(component.changeEarnings.emit).toHaveBeenCalled();
   });
 });

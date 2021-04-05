@@ -26,6 +26,7 @@ const mockStoreFacade = {
 
 const mockUserService = {
   getPortfolioHistoricalData: jest.fn(),
+  getUserAlpacaPositions: jest.fn(),
 } as any;
 
 const fakeMatDialog = {
@@ -114,7 +115,7 @@ describe('ProfileComponent', () => {
         ListOfFollowsComponent,
         HistoricalChartComponent,
         UserOwnedStockProfileComponent,
-        SectorsPieChartComponent
+        SectorsPieChartComponent,
       ],
       providers: [NGRX_STORE_MODULE],
     }).compileComponents();

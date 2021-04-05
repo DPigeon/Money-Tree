@@ -10,14 +10,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Stock } from 'src/app/interfaces/stock';
 import { User, UserProfile } from 'src/app/interfaces/user';
-import { StoreFacadeService } from 'src/app/store/store-facade.service';
 
 export interface StockProfile {
   company: string;
   amount: string;
-  gain_loss: number;
+  gain_loss: string;
   price: string;
-  change: number;
+  change: string;
 }
 @Component({
   selector: 'app-user-owned-stock-profile',
@@ -28,11 +27,8 @@ export class UserOwnedStockProfileComponent implements OnChanges {
   @Input() currentUser: User | UserProfile;
   @Input() location: string;
   @Input() userOwnedStocks: Stock[];
-  @Output() changeEarnings = new EventEmitter<{
-    earnings: number;
-    totalGain: number;
-    positive: boolean;
-  }>();
+  @Input() alpacaPositions: AlpacaUserPosition[];
+
   displayedColumns: string[] = [
     'company',
     'amount',
@@ -40,13 +36,10 @@ export class UserOwnedStockProfileComponent implements OnChanges {
     'price',
     'change',
   ];
-  userAlpacaPositions: AlpacaUserPosition[];
+
   public dataSource = new MatTableDataSource<StockProfile>([]);
 
-  constructor(
-    private router: Router,
-    private storeFacade: StoreFacadeService
-  ) {}
+  constructor(private router: Router) {}
   ngOnChanges(): void {
     this.location === 'home'
       ? (this.displayedColumns = ['company', 'amount', 'gain_loss'])
@@ -58,59 +51,24 @@ export class UserOwnedStockProfileComponent implements OnChanges {
           'change',
         ]);
 
-    if (this.currentUser) {
-      this.storeFacade.loadAlpacaPositions(this.currentUser.id);
+    if (this.alpacaPositions) {
+      this.tableDataGenerator();
     }
-    this.storeFacade.userAlpacaPositions$.subscribe((result) => {
-      if (result) {
-        this.userAlpacaPositions = result;
-        this.tableDataGenerator();
-      }
-    });
   }
   tableDataGenerator(): void {
     let data: StockProfile[];
     data = [];
-    if (this.userAlpacaPositions && this.userOwnedStocks) {
-      let earnings = 0;
-      let totalGain = 0;
-      this.userAlpacaPositions.forEach((r) => {
-        let amount = 0;
-        let quantity = 0;
-        let gain = 0;
-        let price = 0;
-        let change = 0;
-        this.userOwnedStocks
-          .filter((x) => x.tickerSymbol === r.symbol)
-          .forEach((o) => {
-            quantity += Number(o.quantity);
-            amount += Number(o.quantity) * Number(o.avgPrice);
-            earnings += amount;
-            gain +=
-              (Number(r.currentPrice) - Number(o.avgPrice)) *
-              Number(o.quantity);
-            change = Number(r.currentPrice) - Number(o.avgPrice);
-            totalGain += gain;
-          });
-        price = amount / quantity;
-        if (amount !== 0) {
-          data.push({
-            company: r.symbol,
-            amount: amount.toFixed(2),
-            gain_loss: gain,
-            price: price.toFixed(2),
-            change,
-          });
-        }
-      });
-      this.dataSource.data = data;
-      if (this.location === 'home') {
-        this.changeEarnings.emit({
-          earnings: earnings < 0 ? -1 * earnings : earnings,
-          totalGain,
-          positive: earnings > 0,
+    if (this.alpacaPositions) {
+      for (const p of this.alpacaPositions) {
+        data.push({
+          company: p.symbol,
+          amount: Number(p.currentValue).toFixed(2),
+          gain_loss: Number(p.gainAmount).toFixed(2),
+          price: Number(p.avgPrice).toFixed(2),
+          change: Number(p.change).toFixed(2),
         });
       }
+      this.dataSource.data = data;
     }
   }
 
@@ -121,6 +79,6 @@ export class UserOwnedStockProfileComponent implements OnChanges {
     return e > 0 ? 'positive-change' : 'negative-change';
   }
   formatStat(e: number): string {
-    return e > 0 ? e.toFixed(2) : (e * -1).toFixed(2);
+    return e.toString();
   }
 }

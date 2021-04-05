@@ -8,6 +8,7 @@
       *ngIf="showProfileColumn"
       [currentUser]="currentUser$ | async"
       [userOwnedStocks]="userOwnedStocks$ | async"
+      [alpacaPositions$]="alpacaPositions$"
     ></app-home-profile>
   </div>
   <div fxFlex="58%" fxFlex.lt-sm="100%" *ngIf="currentUser$ | async as user">
