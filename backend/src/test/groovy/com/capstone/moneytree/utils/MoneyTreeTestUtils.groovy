@@ -5,7 +5,8 @@ import com.capstone.moneytree.model.TransactionStatus
 import com.capstone.moneytree.model.node.Transaction
 import com.capstone.moneytree.model.node.User
 import com.capstone.moneytree.model.relationship.Made
-import net.jacobpeterson.alpaca.enums.OrderTimeInForce
+import net.jacobpeterson.alpaca.enums.order.OrderStatus
+import net.jacobpeterson.alpaca.enums.order.OrderTimeInForce
 import net.jacobpeterson.domain.alpaca.asset.Asset
 import net.jacobpeterson.domain.alpaca.order.Order
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdate
@@ -54,10 +55,11 @@ class MoneyTreeTestUtils {
    }
 
    static Order createOrder(String id, String symbol, String qty, String type, String timeInForce) {
-      return new Order(id, "1000000", ZonedDateTime.now(), ZonedDateTime.now(), ZonedDateTime.now(), ZonedDateTime.now(), null,
-              null, null, null, null, null, null, symbol, null,
-              qty, null, type, null, timeInForce, null, null, null, null,
-              null, null, null, null, null)
+      return new Order(id, "1002012", ZonedDateTime.now(), ZonedDateTime.now(), ZonedDateTime.now(),
+              ZonedDateTime.now(), null, null, null, null, null,
+              null, "assetId", symbol, "assetClass", null, qty, null,
+              "10", null, null, type, null, timeInForce, null,
+              null, null, false, null, null, null, null)
    }
 
    static Transaction createTransaction(String symbol, float avgPrice, float total, TransactionStatus status, float qty) {
@@ -137,7 +139,7 @@ class MoneyTreeTestUtils {
    }
 
    static TradeUpdate createTradeUpdate(String id, String clientId, String symbol, String qty, String filledQty, String type, String limitPrice, String avgPrice, String event, String price, ZonedDateTime timestamp, String position) {
-      Order order = new Order(id, clientId, null, null, null, null, null, null, null, null, null, null, null, symbol, null, qty, filledQty, type, null, null, limitPrice, null, avgPrice, null, null, null, null, null, null)
+      Order order = new Order(id, clientId, null, null, null, null, null, null, null, null, null, null, null, symbol, null, qty, filledQty, type, null, null, limitPrice, null, avgPrice, null, null, null, null, null, null, null, null, null)
       return new TradeUpdate(event, price, timestamp, position, order)
    }
 

@@ -13,8 +13,8 @@ import com.capstone.moneytree.model.node.User
 import com.capstone.moneytree.model.relationship.Made
 import com.capstone.moneytree.model.relationship.ToFulfill
 import net.jacobpeterson.alpaca.AlpacaAPI
-import net.jacobpeterson.alpaca.enums.OrderSide
-import net.jacobpeterson.alpaca.enums.OrderTimeInForce
+import net.jacobpeterson.alpaca.enums.order.OrderSide
+import net.jacobpeterson.alpaca.enums.order.OrderTimeInForce
 import net.jacobpeterson.domain.alpaca.order.Order
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

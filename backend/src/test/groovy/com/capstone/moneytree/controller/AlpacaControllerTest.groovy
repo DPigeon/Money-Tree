@@ -1,8 +1,8 @@
 package com.capstone.moneytree.controller
 
 import net.jacobpeterson.alpaca.AlpacaAPI
-import net.jacobpeterson.alpaca.enums.PortfolioPeriodUnit
-import net.jacobpeterson.alpaca.enums.PortfolioTimeFrame
+import net.jacobpeterson.alpaca.enums.portfolio.PortfolioPeriodUnit
+import net.jacobpeterson.alpaca.enums.portfolio.PortfolioTimeFrame
 import net.jacobpeterson.domain.alpaca.account.Account
 import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory
 import net.jacobpeterson.domain.alpaca.position.Position
@@ -80,7 +80,7 @@ class AlpacaControllerTest extends Specification {
 
         and: "Mock the database and AlpacaAPI"
         userDao.findUserById(Long.parseLong(userId)) >> createUser("test@money.ca", "user", "hello", "Yury", "Yes", "38rbb-sss")
-        alpacaAPI.getPortfolioHistory(period, PortfolioPeriodUnit.valueOf(unit), PortfolioTimeFrame.valueOf(timeFrame), localDate, extended as Boolean) >> portfolio
+        alpacaAPI.getPortfolioHistory(period, PortfolioPeriodUnit.valueOf(unit), PortfolioTimeFrame.valueOf(timeFrame), localDate as LocalDate, extended as Boolean) >> portfolio
 
         when: "Retrieving the portfolio"
         ResponseEntity<PortfolioHistory> response = alpacaController.getPortfolio(userId, period, unit, timeFrame, localDate, extended)

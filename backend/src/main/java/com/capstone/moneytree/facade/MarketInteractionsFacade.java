@@ -22,6 +22,8 @@ import com.capstone.moneytree.model.node.User;
 import com.capstone.moneytree.model.relationship.Owns;
 import com.capstone.moneytree.model.relationship.Made;
 
+import net.jacobpeterson.alpaca.enums.portfolio.PortfolioPeriodUnit;
+import net.jacobpeterson.alpaca.enums.portfolio.PortfolioTimeFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +32,6 @@ import org.springframework.stereotype.Component;
 
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.AlpacaAPI;
-import net.jacobpeterson.alpaca.enums.PortfolioPeriodUnit;
-import net.jacobpeterson.alpaca.enums.PortfolioTimeFrame;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
 import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListener;
 import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListenerAdapter;
