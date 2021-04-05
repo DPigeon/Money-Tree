@@ -98,11 +98,16 @@ export class DataFormatter {
     response.forEach((e) => {
       result.push({
         symbol: e.symbol,
-        avgEntryPrice: e.avgEntryPrice,
+        avgPrice: e.avgEntryPrice,
         qty: e.qty,
         currentPrice: e.currentPrice,
+        cost: e.costBasis,
+        currentValue: e.marketValue,
+        gainAmount: e.unrealizedPl,
+        gainPercentage: (Number(e.unrealizedPlpc) * 100).toFixed(2),
       });
     });
+    console.log(result);
     return result;
   }
 

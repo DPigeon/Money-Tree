@@ -1,6 +1,10 @@
 export interface AlpacaUserPosition {
   symbol: string;
-  avgEntryPrice: string;
+  avgPrice: string;
   qty: string;
   currentPrice: string;
+  cost: string;
+  currentValue: string;
+  gainAmount: string;
+  gainPercentage: string;
 }
