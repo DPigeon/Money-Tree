@@ -105,9 +105,9 @@ export class DataFormatter {
         currentValue: e.marketValue,
         gainAmount: e.unrealizedPl,
         gainPercentage: (Number(e.unrealizedPlpc) * 100).toFixed(2),
+        change: e.changeToday,
       });
     });
-    console.log(result);
     return result;
   }
 

@@ -1,5 +1,5 @@
 <div class="table-container">
-  <table *ngIf="!!userAlpacaPositions && userAlpacaPositions.length != 0" mat-table [dataSource]="dataSource">
+  <table *ngIf="!!alpacaPositions && alpacaPositions.length != 0" mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="company">
       <th position="sticky" mat-header-cell *matHeaderCellDef>Company</th>
       <td
@@ -32,7 +32,7 @@
     </ng-container>
 
     <ng-container matColumnDef="change">
-      <th mat-header-cell *matHeaderCellDef>Change $</th>
+      <th mat-header-cell *matHeaderCellDef>Change Today</th>
       <td mat-cell *matCellDef="let element" [class]="stockChangeColor(element.change)">
         <span *ngIf="element.change < 0">&darr;</span>
         <span *ngIf="element.change > 0">&uarr;</span>
@@ -43,7 +43,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  <div *ngIf="!!userAlpacaPositions && userAlpacaPositions.length == 0">
+  <div *ngIf="!!alpacaPositions && alpacaPositions.length == 0">
     Currently owns no stocks
   </div>
 </div>

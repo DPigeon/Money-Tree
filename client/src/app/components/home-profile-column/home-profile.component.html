@@ -15,13 +15,13 @@
     <span class="earning-amount">${{ earningsInfo.balance }}</span><br />
     <span [class]="getEarningsClass(earningsInfo.positive)">
       {{ getEarningSign(earningsInfo.positive) }}${{ earningsInfo.gain }} (%{{
-        getEarningPercentge(earningsInfo.percentage)
+      getEarningPercentge(earningsInfo.percentage)
       }})</span>
     <span></span>
   </mat-card>
   <mat-card class="your-stocks">
     <h2>Your Stocks:</h2>
     <app-user-owned-stock-profile location="home" [currentUser]="user" [userOwnedStocks]="userOwnedStockDetails"
-      (changeEarnings)="setEarningsInfo($event)"></app-user-owned-stock-profile>
+      [alpacaPositions]="alpacaPositions"></app-user-owned-stock-profile>
   </mat-card>
 </div>

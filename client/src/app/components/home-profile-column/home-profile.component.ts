@@ -45,7 +45,10 @@ export class HomeProfileComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.alpacaPositions$.subscribe((data) => (this.alpacaPositions = data));
+    this.alpacaPositions$.subscribe((data) => {
+      this.alpacaPositions = data;
+      this.generateEarningsInfo();
+    });
   }
 
   ngOnChanges(): void {
@@ -86,9 +89,8 @@ export class HomeProfileComponent implements OnInit, OnChanges {
       }
     );
   }
-  setEarningsInfo(e: EarningsInfo): void {
+  generateEarningsInfo(): void {
     if (this.alpacaPositions) {
-      console.log(this.alpacaPositions);
       for (const position of this.alpacaPositions) {
         this.earningsInfo.balance -= Number(position.cost);
         this.earningsInfo.gain += Number(position.gainAmount);

@@ -7,4 +7,5 @@ export interface AlpacaUserPosition {
   currentValue: string;
   gainAmount: string;
   gainPercentage: string;
+  change: string;
 }
