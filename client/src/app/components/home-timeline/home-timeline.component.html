@@ -1,4 +1,4 @@
-<div>Here is your network's recent activity</div>
+<h1>Here is your network's recent activity</h1>
 <div class="timeline-container">
   <ng-container *ngFor="let f of feed">
     <mat-card class="card-container">
@@ -27,4 +27,8 @@
       </div>
     </mat-card>
   </ng-container>
+  <div *ngIf = "!!feed && feed.length == 0" class="no-feed-container">
+    <div>You have no news from your followers, try finding users in the leaderboard to follow for news</div>
+    <button mat-raised-button color="primary" routerLink="/leaderboard">View leaderboard</button>
+  </div>
 </div>

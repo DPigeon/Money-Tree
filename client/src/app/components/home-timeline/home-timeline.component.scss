@@ -6,6 +6,17 @@
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+
+  .no-feed-container {
+    text-align: center;
+    font-size: 16px;
+    margin: 2rem;
+    color: rgba(0,0,0,0.7);
+
+    button {
+      margin-top: 1rem;
+    }
+  }
 }
 
 .card-container {
