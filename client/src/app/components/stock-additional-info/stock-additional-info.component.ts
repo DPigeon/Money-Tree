@@ -35,7 +35,7 @@ export class StockAdditionalInfoComponent {
     } else if (this.type === 'topInvestors') {
       return `Top 10% Investors on ${this.stockSymbol}`;
     } else {
-      return `People who own ${this.stockSymbol} also own these stocks (% of users/stock)`;
+      return `People who own ${this.stockSymbol} also own`;
     }
   }
   getIconByType(): string {

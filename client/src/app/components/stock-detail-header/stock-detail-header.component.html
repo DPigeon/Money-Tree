@@ -4,17 +4,16 @@
     <h1>
       <span class="ticker">{{ companySymbol }}</span> {{ companyName }}
     </h1>
+    <div class="chips-container">
+      <mat-chip-list>
+        <mat-chip class="open-market" id="chip-open-market" *ngIf='marketClock && marketClock.isOpen'>Open Market
+        </mat-chip>
+        <mat-chip class="closed-market" id="chip-closed-market" *ngIf='marketClock && !marketClock.isOpen'>Closed Market
+        </mat-chip>
+        <mat-chip class='stock-industry'>{{ stockIndustry }}</mat-chip>
+      </mat-chip-list>
+    </div>
   </div>
-  <div class="chips-container">
-    <mat-chip-list>
-      <mat-chip class="open-market" id="chip-open-market" *ngIf='marketClock && marketClock.isOpen'>Open Market
-      </mat-chip>
-      <mat-chip class="closed-market" id="chip-closed-market" *ngIf='marketClock && !marketClock.isOpen'>Closed Market
-      </mat-chip>
-      <mat-chip class='stock-industry'>{{ stockIndustry }}</mat-chip>
-    </mat-chip-list>
-  </div>
-
 </div>
 <div class="next-opening-message">
   <p id="market-next-open-msg" *ngIf="marketClock && !marketClock.isOpen">Next market

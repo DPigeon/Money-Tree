@@ -8,11 +8,13 @@
 
   .company-header {
     display: flex;
-    flex-direction: row;
+    flex-flow: wrap;
     align-items: center;
+
     h1 {
       margin: 0;
       font-size: 30px;
+      margin-right: 1rem;
 
       .ticker {
         font-size: 36px;
@@ -20,6 +22,10 @@
         color: $primary-color;
         margin-right: 10px;
       }
+    }
+
+    .chips-container{
+      margin-top: 1rem ;
     }
 
     .company-logo {
@@ -31,9 +37,7 @@
       margin-right: 10px;
     }
   }
-  .chips-container{
-    float: right;
-  }
+
   .mat-chip {
     color: $primary-color;
     background-color: white;
