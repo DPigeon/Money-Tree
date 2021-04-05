@@ -121,17 +121,9 @@ describe('StockDetailComponent', () => {
     component.storeFacade.loadTopInvestorsOnAStock = jest.fn();
     component.storeFacade.loadFollowersWithSameStock = jest.fn();
     component.storeFacade.loadStocksOwnedByUsersOwnThisStock = jest.fn();
+    component.storeFacade.loadAlpacaPositions = jest.fn();
     component.router = component.router || {};
     component.router.events = observableOf({});
     component.ngOnInit();
-  });
-
-  it('should run #changeChartRangeInterval()', async () => {
-    component.storeFacade = component.storeFacade || {};
-    component.storeFacade.loadCurrentStockHistoricalData = jest.fn();
-    component.changeChartRangeInterval({
-      range: {},
-      interval: {},
-    });
   });
 });
