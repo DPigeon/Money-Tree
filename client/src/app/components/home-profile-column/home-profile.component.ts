@@ -6,10 +6,13 @@ import { User } from 'src/app/interfaces/user';
 import { StoreFacadeService } from 'src/app/store/store-facade.service';
 import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 
-export interface Earnings {
+export interface EarningsInfo {
   earnings: number;
   totalGain: number;
   positive: boolean;
+  amount?: string;
+  percentage?: string;
+  gain?: string;
 }
 @Component({
   selector: 'app-home-profile',
@@ -22,7 +25,14 @@ export class HomeProfileComponent implements OnChanges {
   followingSearch = '';
   user: User;
   userOwnedStockDetails: Stock[] = [];
-  earnings = { amount: '0', gain: '0', percentage: '0', positive: true };
+  earningsInfo: EarningsInfo = {
+    amount: '0',
+    gain: '0',
+    percentage: '0',
+    earnings: 0,
+    totalGain: 0,
+    positive: true,
+  };
 
   constructor(
     private router: Router,
@@ -69,20 +79,21 @@ export class HomeProfileComponent implements OnChanges {
       }
     );
   }
-  setEarnings(e: Earnings): void {
-    this.earnings.amount = e.earnings.toFixed(2);
-    this.earnings.gain = e.totalGain.toFixed(2);
-    this.earnings.percentage = (
+  setEarningsInfo(e: EarningsInfo): void {
+    this.earningsInfo.amount = e.earnings.toFixed(2);
+    this.earningsInfo.gain = e.totalGain.toFixed(2);
+    this.earningsInfo.percentage = (
       e.totalGain /
       (e.earnings - e.totalGain)
     ).toFixed(2);
-    this.earnings.positive = e.positive;
+    e.positive = e.totalGain >= 0;
+    this.earningsInfo.positive = e.positive;
   }
 
   getEarningsClass(positive: boolean): string {
     return positive ? 'positive-change' : 'negative-change';
   }
   getEarningSign(positive: boolean): string {
-    return positive ? '+' : '-';
+    return positive ? '+' : ''; // because for a negative number the - sign is already there
   }
 }
