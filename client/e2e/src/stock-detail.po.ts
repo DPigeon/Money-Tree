@@ -79,9 +79,9 @@ export class StockDetail {
     return element(by.className('sell-buy-button'));
   }
   getStockConfirmationSnackBar(): ElementFinder {
-    return element(by.className("mat-snack-bar-container"));
+    return element(by.className('mat-snack-bar-container'));
   }
-  placeMarketOrder(ticker ="bb") {
+  placeMarketOrder(ticker = 'bb'): void {
     this.navigateToStockDetailPage(ticker);
     const buyButton = this.getStockStockBuyButton();
     buyButton.click();

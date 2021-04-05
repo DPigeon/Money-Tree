@@ -84,7 +84,7 @@ describe('stock detail page system test', () => {
     const sellActionButton = page.getPopupStockActionButton();
     sellActionButton.click();
     expect(page.getStockConfirmationSnackBar().isPresent()).toBeTruthy();
-  })
+  });
 
   it('should place a limit buy order', () => {
     page.navigateToStockDetailPage('bb');
@@ -142,35 +142,38 @@ describe('stock detail page system test', () => {
     authentication.navigateToBasePage();
     browser.sleep(3000);
     const score = page.getUserScore();
-    expect(score.getText()).not.toBe("0");
-  })
+    expect(score.getText()).not.toBe('0');
+  });
 });
 
-describe('Social Stock Tests', () =>{
+describe('Social Stock Tests', () => {
   let page: StockDetail;
   let authentication: UserAuthPage;
   let userProfile: UserProfilePage;
 
   beforeEach(() => {
-      userProfile = new UserProfilePage();
-      page = new StockDetail();
-      authentication = new UserAuthPage();
-      authentication.authenticateUser();
-      authentication.createUserToFollowe();
-      browser.sleep(1000);
+    userProfile = new UserProfilePage();
+    page = new StockDetail();
+    authentication = new UserAuthPage();
+    authentication.authenticateUser();
+    authentication.createUserToFollowe();
+    browser.sleep(1000);
   });
 
   afterEach(() => {
-      authentication.cleanAuthenticatedUser();
-      authentication.cleanUserToFollowe();
-      browser.sleep(1000);
+    authentication.cleanAuthenticatedUser();
+    authentication.cleanUserToFollowe();
+    browser.sleep(1000);
   });
 
   it('should diplay list of top investors in stock', () => {
     page.placeMarketOrder();
     const logoutBtn = userProfile.getLogoutBtn();
     logoutBtn.click();
-    authentication.loginWithUserFromInitialPage("systemtestpaul@systemtestuser.com", "Hunter42");
+    authentication.loginWithUserFromInitialPage(
+      'systemtestpaul@systemtestuser.com',
+      'Hunter42'
+    );
     browser.sleep(1000);
     page.navigateToStockDetailPage('BB');
     const topInvestorBlock = page.getAdditionalInfomation();
@@ -182,10 +185,13 @@ describe('Social Stock Tests', () =>{
     page.placeMarketOrder('aapl');
     const logoutBtn = userProfile.getLogoutBtn();
     logoutBtn.click();
-    authentication.loginWithUserFromInitialPage("systemtestpaul@systemtestuser.com", "Hunter42");
+    authentication.loginWithUserFromInitialPage(
+      'systemtestpaul@systemtestuser.com',
+      'Hunter42'
+    );
     browser.sleep(1000);
-    //follow user
-    userProfile.navigateToProfilePage("SystemTestUser");
+    // follow user
+    userProfile.navigateToProfilePage('SystemTestUser');
     browser.sleep(1000);
     const followButton = userProfile.getFollowButton();
     followButton.click();
@@ -194,5 +200,5 @@ describe('Social Stock Tests', () =>{
     browser.sleep(2000);
     const getAdditionalInformation = page.getAdditionalInfomation();
     expect(getAdditionalInformation.isPresent()).toBeTruthy();
-  })
+  });
 });

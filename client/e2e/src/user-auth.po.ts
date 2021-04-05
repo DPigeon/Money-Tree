@@ -40,8 +40,8 @@ export class UserAuthPage {
     return browser.get(browser.baseUrl) as Promise<unknown>;
   }
 
-  navigateToBasePage(): Promise<unknown>  {
-    return browser.get(browser.baseUrl + "home") as Promise<unknown>;
+  navigateToBasePage(): Promise<unknown> {
+    return browser.get(browser.baseUrl + 'home') as Promise<unknown>;
   }
 
   navigateHomeWithAlpacaCode(): Promise<unknown> {
