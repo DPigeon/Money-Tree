@@ -58,14 +58,22 @@ describe('profile page system tests', () => {
         browser.sleep(2000);
         expect(firstSearchResult).toMatch('System Test\n' + 'SystemTestUser');
     })
+
+    it('should be able to view portfolio value over time', () => {
+        page.navigateToProfilePage("SystemTestUser");
+        const chart = page.getPorfolioChart();
+        expect(chart.isPresent()).toBeTruthy();
+    })
 });
 
 describe('follower / followee tests', () =>{
     let page: UserProfilePage;
     let authentication: UserAuthPage;
+    let stockDetail: StockDetail;
 
     beforeEach(() => {
         page = new UserProfilePage();
+        stockDetail = new StockDetail();
         authentication = new UserAuthPage();
         authentication.authenticateUser();
         authentication.createUserToFollowe();
@@ -106,5 +114,23 @@ describe('follower / followee tests', () =>{
         followersNumberButton.click();
         expect(page.getDetailedFollowingList().isPresent()).toBeTruthy();
         browser.sleep(1000);
+    });
+
+    it('should be able to view timeline', () => {
+        stockDetail.placeMarketOrder();
+        // logout
+        const logoutBtn = page.getLogoutBtn();
+        logoutBtn.click();
+        browser.sleep(1000);
+        // login as other other
+        authentication.loginWithUserFromInitialPage("systemtestpaul@systemtestuser.com", "Hunter42");
+        // follow the user that made the transaction
+        browser.sleep(1000);
+        page.navigateToProfilePage("SystemTestUser");
+        const followButton = page.getFollowButton();
+        followButton.click();
+        authentication.navigateToBasePage();
+        const feedElement = page.getTimelineFeedElement();
+        expect(feedElement.isPresent()).toBeTruthy();
     })
 })

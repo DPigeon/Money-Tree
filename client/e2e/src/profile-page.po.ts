@@ -44,4 +44,13 @@ export class UserProfilePage {
     getEditProfileSaveChanges(): ElementFinder {
         return element(by.buttonText("Save Changes"));
     }
+    getPorfolioChart(): ElementFinder {
+        return element(by.id('stock-chart'));
+    }
+    getLogoutBtn(): ElementFinder {
+        return element(by.id('logout-btn'));
+    }
+    getTimelineFeedElement(): ElementFinder {
+        return element(by.className('feed-row'));
+    }
 }

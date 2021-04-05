@@ -61,6 +61,16 @@ export class UserAuthPage {
     loginBtn.click();
   }
 
+  loginWithUserFromInitialPage(email: string, password: string): void {
+    this.navigateHome();
+    const emailInput = element(by.id('login-email'));
+    const passwordInput = element(by.id('login-password'));
+    const loginBtn = element(by.id('login-submit-btn'));
+    emailInput.sendKeys(email);
+    passwordInput.sendKeys(password);
+    loginBtn.click();
+  }
+
   createUserToFollowe(): void {
     http.post('users/', userToFollow);
   }

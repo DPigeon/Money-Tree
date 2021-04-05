@@ -81,8 +81,8 @@ export class StockDetail {
   getStockConfirmationSnackBar(): ElementFinder {
     return element(by.className("mat-snack-bar-container"));
   }
-  placeMarketOrder() {
-    this.navigateToStockDetailPage('bb');
+  placeMarketOrder(ticker ="bb") {
+    this.navigateToStockDetailPage(ticker);
     const buyButton = this.getStockStockBuyButton();
     buyButton.click();
     browser.sleep(1000);
@@ -103,5 +103,8 @@ export class StockDetail {
   }
   getUserScore(): ElementFinder {
     return element(by.className('user-score'));
+  }
+  getAdditionalInfomation(): ElementFinder {
+    return element(by.className('additional-info'));
   }
 }
