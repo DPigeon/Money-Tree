@@ -91,8 +91,9 @@ export class HomeProfileComponent implements OnInit, OnChanges {
   }
   generateEarningsInfo(): void {
     if (this.alpacaPositions) {
+      this.earningsInfo.balance = this.user && this.user.balance ? this.user.balance : 100000;
       for (const position of this.alpacaPositions) {
-        this.earningsInfo.balance -= Number(position.cost);
+        this.earningsInfo.balance += Number(position.cost);
         this.earningsInfo.gain += Number(position.gainAmount);
         this.earningsInfo.cost += Number(position.cost);
       }
