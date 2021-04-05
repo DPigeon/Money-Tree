@@ -2,6 +2,9 @@ package com.capstone.moneytree.facade;
 
 
 import com.capstone.moneytree.handler.ExceptionMessage;
+import net.jacobpeterson.alpaca.enums.api.DataAPIType;
+import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
+import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -25,12 +28,11 @@ public class AlpacaSession {
     * @return the alpaca client
     */
    public AlpacaAPI alpaca(String userId, String alpacaKey) {
-      LOGGER.info("Test for key: {}", alpacaKey);
       if (alpacaKey.isBlank()) {
          LOGGER.error(ExceptionMessage.ALPACA_TOKEN_BLANK.getMessage());
          throw new BadRequestException(ExceptionMessage.ALPACA_TOKEN_BLANK.getMessage());
       }
       LOGGER.info("Creating an Alpaca Session to user ID {}", userId);
-      return new AlpacaAPI(alpacaKey);
+      return new AlpacaAPI(null, null, alpacaKey, EndpointAPIType.PAPER, DataAPIType.IEX);
    }
 }
