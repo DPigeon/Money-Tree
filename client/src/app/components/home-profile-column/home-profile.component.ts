@@ -96,4 +96,7 @@ export class HomeProfileComponent implements OnChanges {
   getEarningSign(positive: boolean): string {
     return positive ? '+' : ''; // because for a negative number the - sign is already there
   }
+  getEarningPercentge(earningsInfoPercentage){
+    return !isNaN(earningsInfoPercentage) ? earningsInfoPercentage : "0.0";
+  }
 }

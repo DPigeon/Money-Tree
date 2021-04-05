@@ -1,5 +1,5 @@
 <div class="table-container">
-  <table mat-table [dataSource]="dataSource">
+  <table *ngIf="!!userAlpacaPositions && userAlpacaPositions.length != 0" mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="company">
       <th position="sticky" mat-header-cell *matHeaderCellDef>Company</th>
       <td
@@ -43,4 +43,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+  <div *ngIf="!!userAlpacaPositions && userAlpacaPositions.length == 0">
+    Currently owns no stocks
+  </div>
 </div>

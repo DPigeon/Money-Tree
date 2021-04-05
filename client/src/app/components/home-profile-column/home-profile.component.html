@@ -15,7 +15,7 @@
     <span class="earning-amount">${{ earningsInfo.amount }}</span><br />
     <span [class]="getEarningsClass(earningsInfo.positive)">
       {{ getEarningSign(earningsInfo.positive) }}${{ earningsInfo.gain }} (%{{
-      earningsInfo.percentage
+        getEarningPercentge(earningsInfo.percentage)
       }})</span>
     <span></span>
   </mat-card>
