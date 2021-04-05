@@ -4,7 +4,6 @@ package com.capstone.moneytree.facade;
 import com.capstone.moneytree.handler.ExceptionMessage;
 import net.jacobpeterson.alpaca.enums.api.DataAPIType;
 import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
-import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
