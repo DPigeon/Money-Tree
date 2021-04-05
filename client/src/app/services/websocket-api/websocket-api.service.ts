@@ -30,10 +30,10 @@ export class WebsocketAPIService {
   }
 
   connect(): void {
-    console.log('Initialize WebSocket Connection');
     const topic = '/queue/user-' + this.userId;
     const ws = new SockJS(this.webSocketEndPoint);
     this.stompClient = Stomp.over(ws);
+    this.stompClient.debug = () => {};
 
     const thisL = this;
     thisL.stompClient.connect(
@@ -57,6 +57,7 @@ export class WebsocketAPIService {
   // Disconnects the user from the client and the backend
   disconnect(): void {
     if (this.stompClient !== null && this.userId) {
+      this.stompClient.debug = () => {};
       this.stompClient.send('/app/trade/disconnect', {}, this.userId);
       this.stompSubscription.unsubscribe();
       this.stompClient.send(
@@ -66,7 +67,6 @@ export class WebsocketAPIService {
       );
       this.userId = null;
     }
-    console.log('Disconnected');
   }
 
   // on error, schedule a reconnection attempt
@@ -74,14 +74,11 @@ export class WebsocketAPIService {
     console.log('errorCallBack -> ' + error);
     setTimeout(() => {
       this.connect();
-      console.log('should try to reconnect');
     }, 5000);
   }
 
   onMessageReceived(message): void {
     this.count += 1;
-
-    console.log('Message Recieved from Server :: ', message.body);
     if (this.userId && message && message.body && message.body) {
       const snackBarRef = this.snackBar.open(
         'The status of one of your orders has been updated',
@@ -96,11 +93,6 @@ export class WebsocketAPIService {
           Number(localStorage.getItem('userId'))
         );
       }, 2000);
-      snackBarRef.onAction().subscribe(() => {
-        // currently the profile page does not exist but when it does, it will guide the users there
-        // this.router.navigate(['profile'])
-      });
     }
-    console.log('COUNT DEBUG: ', this.count);
   }
 }

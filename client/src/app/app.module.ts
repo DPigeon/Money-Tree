@@ -95,7 +95,7 @@ import { NgxHotjarModule } from 'ngx-hotjar';
     BrowserAnimationsModule,
     StoreModule.forRoot({ appState: reducer }),
     NgxHotjarModule.forRoot('2140693'),
-    StoreDevtoolsModule.instrument(),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([Effects]),
     MatCardModule,
     FlexLayoutModule,
