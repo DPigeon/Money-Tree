@@ -10,7 +10,7 @@
   <button class="edit-profile" mat-raised-button color="primary" (click)="openDialog()">
     Edit Profile
   </button>
-  <mat-card class="your-earnings" *ngIf="earningsInfo">
+  <mat-card class="your-earnings">
     <h2>Total Earnings:</h2>
     <span class="earning-amount">${{ earningsInfo.amount }}</span><br />
     <span [class]="getEarningsClass(earningsInfo.positive)">
