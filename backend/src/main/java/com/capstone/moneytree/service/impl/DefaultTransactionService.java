@@ -148,7 +148,7 @@ public class DefaultTransactionService implements TransactionService {
       return MoneyTreeOrderType.valueOf(order.getType().toUpperCase() + "_" + order.getSide().toUpperCase());
    }
 
-   private Transaction constructTransactionFromOrder(Order alpacaOrder, Stock stock) {
+   public Transaction constructTransactionFromOrder(Order alpacaOrder, Stock stock) {
       return Transaction.builder()
               .status(TransactionStatus.PENDING)
               .purchasedAt(alpacaOrder.getCreatedAt())
