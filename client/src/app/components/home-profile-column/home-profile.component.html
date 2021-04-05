@@ -12,7 +12,7 @@
   </button>
   <mat-card class="your-earnings">
     <h2>Total Earnings:</h2>
-    <span class="earning-amount">${{ earningsInfo.amount }}</span><br />
+    <span class="earning-amount">${{ earningsInfo.balance }}</span><br />
     <span [class]="getEarningsClass(earningsInfo.positive)">
       {{ getEarningSign(earningsInfo.positive) }}${{ earningsInfo.gain }} (%{{
         getEarningPercentge(earningsInfo.percentage)

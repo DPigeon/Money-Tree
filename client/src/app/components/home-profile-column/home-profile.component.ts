@@ -10,11 +10,11 @@ import { Observable } from 'rxjs';
 
 export interface EarningsInfo {
   earnings: number;
-  totalGain: number;
   positive: boolean;
-  amount?: number;
+  balance?: number;
   percentage?: number;
   gain?: number;
+  cost?: number;
 }
 @Component({
   selector: 'app-home-profile',
@@ -30,11 +30,11 @@ export class HomeProfileComponent implements OnInit, OnChanges {
   user: User;
   userOwnedStockDetails: Stock[] = [];
   earningsInfo: EarningsInfo = {
-    amount: 0,
+    balance: 100000, // initialing the balance
     gain: 0,
+    cost: 0,
     percentage: 0,
     earnings: 0,
-    totalGain: 0,
     positive: true,
   };
 
@@ -50,7 +50,6 @@ export class HomeProfileComponent implements OnInit, OnChanges {
 
   ngOnChanges(): void {
     this.user = this.currentUser;
-    this.userOwnedStockDetails = this.userOwnedStocks;
   }
 
   goToProfile(username: string): void {
@@ -89,15 +88,16 @@ export class HomeProfileComponent implements OnInit, OnChanges {
   }
   setEarningsInfo(e: EarningsInfo): void {
     if (this.alpacaPositions) {
-      this.earningsInfo.amount = 100000; // initial balance
+      console.log(this.alpacaPositions);
       for (const position of this.alpacaPositions) {
-        this.earningsInfo.amount += Number(position.currentValue);
+        this.earningsInfo.balance -= Number(position.cost);
         this.earningsInfo.gain += Number(position.gainAmount);
+        this.earningsInfo.cost += Number(position.cost);
       }
-      this.earningsInfo.amount = Number(this.earningsInfo.amount.toFixed(2));
+      this.earningsInfo.balance = Number(this.earningsInfo.balance.toFixed(2));
       this.earningsInfo.gain = Number(this.earningsInfo.gain.toFixed(2));
       this.earningsInfo.percentage = Number(
-        ((this.earningsInfo.gain / this.earningsInfo.amount) * 100).toFixed(2)
+        ((this.earningsInfo.gain / this.earningsInfo.cost) * 100).toFixed(2)
       );
       this.earningsInfo.positive = this.earningsInfo.gain > 0;
     }
