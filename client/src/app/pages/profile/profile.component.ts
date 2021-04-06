@@ -61,12 +61,10 @@ export class ProfileComponent implements OnInit {
         this.userId = String(this.completeUserProfile.id);
         this.generateData(String(data.id), 'FIFTEEN_MINUTE', 1, 'DAY');
         this.showProfileColumn = true;
-        console.log(data.id);
         this.userService
           .getUserAlpacaPosition(this.completeUserProfile.id)
           .subscribe((positions) => {
             this.alpacaPositions = positions;
-            console.log(`id is now: ${this.completeUserProfile.id}`);
           });
       }
     });
