@@ -12,9 +12,24 @@ export const selectCurrentStock = createSelector(
   (appState: State) => appState.currentStockLoaded
 );
 
+export const selectStockHistoricalData = createSelector(
+  selectAppState,
+  (appState: State) => appState.stockHistoricalDataLoaded
+);
+
 export const selectCurrentUser = createSelector(
   selectAppState,
   (appState: State) => appState.user
+);
+
+export const selectCurrentFollowers = createSelector(
+  selectAppState,
+  (appState: State) => appState.followers
+);
+
+export const selectCurrentFollowings = createSelector(
+  selectAppState,
+  (appState: State) => appState.followings
 );
 
 export const selectAppError = createSelector(
@@ -24,15 +39,68 @@ export const selectAppError = createSelector(
 
 export const selectShouldAlpacaRedirect = createSelector(
   selectAppState,
-  (appState: State) => (!!appState.user && !appState.user.alpacaApiKey)
+  (appState: State) => !!appState.user && !appState.user.alpacaApiKey
 );
 
 export const isUserLoggedIn = createSelector(
   selectAppState,
-  (appState: State) => (!!appState.user && !!appState.user.alpacaApiKey)
+  (appState: State) => !!appState.user && !!appState.user.alpacaApiKey
 );
 
 export const selectAuthenticationInformation = createSelector(
   selectAppState,
-  (appState: State) => ({userExists: !!appState.user, hasAlpacaCode: !!(appState.user && appState.user.alpacaApiKey)})
+  (appState: State) => ({
+    userExists: !!appState.user,
+    hasAlpacaCode: !!(appState.user && appState.user.alpacaApiKey),
+  })
+);
+
+export const selectCurrentMarketClock = createSelector(
+  selectAppState,
+  (appState: State) => appState.currentMarketClock
+);
+
+export const selectUserTransactions = createSelector(
+  selectAppState,
+  (appState: State) => appState.userTransactions
+);
+
+export const selectUserOwnedStocks = createSelector(
+  selectAppState,
+  (appState: State) => appState.userOwnedStocks
+);
+
+export const selectCurrentLoadedProfile = createSelector(
+  selectAppState,
+  (appState: State) => appState.currentProfileUser
+);
+
+export const selectUserSearchList = createSelector(
+  selectAppState,
+  (appState: State) => appState.searchUserList
+);
+
+export const selectLeaderboardUsers = createSelector(
+  selectAppState,
+  (appState: State) => appState.leaderboardUsers
+);
+
+export const selectAlpacaPositions = createSelector(
+  selectAppState,
+  (appState: State) => appState.alpacaPositions
+);
+
+export const selectTopInvestorsOnAStock = createSelector(
+  selectAppState,
+  (appState: State) => appState.topInvestorsOnAStock
+);
+
+export const selectFollowersWithSameStock = createSelector(
+  selectAppState,
+  (appState: State) => appState.followersWithSameStock
+);
+
+export const selectStocksOwnedByUsersOwnThisStock = createSelector(
+  selectAppState,
+  (appState: State) => appState.stocksOwnedByUsersOwnThisStock
 );

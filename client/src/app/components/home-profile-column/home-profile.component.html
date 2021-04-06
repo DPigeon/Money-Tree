@@ -1,0 +1,27 @@
+<div class="profile-container">
+  <img class="user-picture" alt="Profile Picture" (click)="goToProfile(currentUser.username)" width="40" height="40"
+    [src]="currentUser.avatarURL" />
+  <span (click)="goToProfile(currentUser.username)" class="user-first-name">Hello {{ currentUser.firstName }}!</span>
+  <div>
+    <span class="user-score-label">SCORE:</span>
+    <span class="user-score">{{ currentUser.score || 0 }}</span>
+  </div>
+
+  <button class="edit-profile" mat-raised-button color="primary" (click)="openDialog()">
+    Edit Profile
+  </button>
+  <mat-card class="your-earnings">
+    <h2>Total Earnings:</h2>
+    <span class="earning-amount">${{ earningsInfo.balance }}</span><br />
+    <span [class]="getEarningsClass(earningsInfo.positive)">
+      {{ getEarningSign(earningsInfo.positive) }}${{ earningsInfo.gain }} (%{{
+      getEarningPercentge(earningsInfo.percentage)
+      }})</span>
+    <span></span>
+  </mat-card>
+  <mat-card class="your-stocks">
+    <h2>Your Stocks:</h2>
+    <app-user-owned-stock-profile location="home" [currentUser]="user" [userOwnedStocks]="userOwnedStockDetails"
+      [alpacaPositions]="alpacaPositions"></app-user-owned-stock-profile>
+  </mat-card>
+</div>

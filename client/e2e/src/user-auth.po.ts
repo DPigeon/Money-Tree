@@ -7,15 +7,14 @@ const systemTestUser2 = {
   firstName: 'System',
   lastName: 'Test',
   username: 'SystemTestUser',
-  avatarUrl: '',
+  avatarURL: '',
+  coverPhotoURL: '',
   password: 'Hunter42',
-  email: 'systemtestuser1@systemtestuser.com',
+  email: 'systemtestuser6@systemtestuser.com',
   score: 12,
   rank: 10000,
   balance: 223,
   alpacaApiKey: '123-456-789',
-  follows: [],
-  followers: [],
   portfolio: [],
   transactions: [],
 };
@@ -42,7 +41,7 @@ export class UserAuthPage {
     loginBtn.click();
   }
 
-  cleanAuthenticatedUser(): void  {
+  cleanAuthenticatedUser(): void {
     http.delete('/users/delete-by-email/' + systemTestUser2.email);
     browser.executeScript('window.sessionStorage.clear();');
     browser.executeScript('window.localStorage.clear();');

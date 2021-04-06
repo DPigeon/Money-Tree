@@ -1,5 +1,12 @@
 package com.capstone.moneytree.controller
 
+import com.capstone.moneytree.dao.OwnsDao
+import com.capstone.moneytree.dao.StockDao
+import com.capstone.moneytree.facade.YahooFinanceFacade
+import com.capstone.moneytree.service.api.StockService
+import com.capstone.moneytree.service.api.YahooFinanceService
+import com.capstone.moneytree.service.impl.DefaultStockService
+import com.capstone.moneytree.service.impl.DefaultYahooFinanceService
 import org.junit.platform.commons.util.StringUtils
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
@@ -8,37 +15,42 @@ import org.springframework.test.context.ActiveProfiles
 import com.capstone.moneytree.facade.StockMarketDataFacade
 import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.impl.DefaultStockMarketDataService
-
+import org.springframework.web.reactive.function.client.WebClient
 import pl.zankowski.iextrading4j.api.exception.IEXTradingException
-import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
- * Tests for the Stock Controller. Tests the StockMarketDataFacade as well.
+ * Tests for the Stock Controller. Tests the StockMarketDataFacade as well. Tests the YahooFinance facade and service.
  * */
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("dev")
 class StockControllerIT extends Specification {
 
    private static final String PUBLISH_TOKEN = System.getenv().get("IEXCLOUD_PUBLISHABLE_TOKEN_SANDBOX")
    private static final String SECRET_TOKEN = System.getenv().get("IEXCLOUD_SECRET_TOKEN_SANDBOX")
 
+   StockDao stockDao
+   OwnsDao ownsDao
+
    StockMarketDataFacade stockMarketDataFacade = new StockMarketDataFacade(PUBLISH_TOKEN, SECRET_TOKEN, "dev")
    StockMarketDataService stockMarketDataService = new DefaultStockMarketDataService(stockMarketDataFacade: stockMarketDataFacade)
-   StockController stockController = new StockController(stockMarketDataService)
+   YahooFinanceFacade yahooFinanceFacade = new YahooFinanceFacade(WebClient.builder())
+   YahooFinanceService yahooFinanceService = new DefaultYahooFinanceService(yahooFinanceFacade: yahooFinanceFacade)
+   StockService stockService = new DefaultStockService(stockDao, ownsDao)
 
-   @Ignore("Fails, needs to be fixed")
+   StockController stockController = new StockController(stockMarketDataService, yahooFinanceService, stockService)
+
    def "Validates GET batch returns stock information"() {
       given: "A stock symbol"
-      def appl = "AAPL"
+      def symbol = "AAPL"
 
       when: "A call to the batch endpoint is made"
-      def res = stockController.getBatchStocksBySymbol(appl)
+      def res = stockController.getBatchStocksBySymbol(symbol)
 
       then: "We get a valid Batch object"
       res.statusCode == HttpStatus.OK
       res.getBody() != null
-      res.getBody().company.symbol == appl
+      res.getBody().company.symbol == symbol
    }
 
    def "GET batch throws IEXTrading Exception when symbol is not valid"() {
@@ -159,18 +171,17 @@ class StockControllerIT extends Specification {
       thrown(IEXTradingException)
    }
 
-   @Ignore("Fails, needs to be fixed")
    def "Validates GET keyStats returns keyStats information"() {
       given: "A stock symbol"
-      def appl = "AAPL"
+      def symbol = "AAPL"
 
       when: "A call to the keyStats endpoint is made"
-      def res = stockController.getKeyStats(appl)
+      def res = stockController.getKeyStats(symbol)
 
       then: "We get a valid keyStats object"
       res.statusCode == HttpStatus.OK
       res.getBody() != null
-      res.getBody().companyName == "Apple, Inc."
+      res.getBody().companyName == "Apple Inc"
    }
 
    def "GET keyStats throws IEXTrading Exception when symbol is not valid"() {
@@ -184,16 +195,18 @@ class StockControllerIT extends Specification {
       thrown(IEXTradingException)
    }
 
-   def "Validates GET chart for the DAY returns chart information"() {
+   def "Validates GET chart for the DAY, WEEK, MONTH, YEAR, default returns chart information"() {
       given: "A stock symbol"
-      def appl = "AAPL"
+      def symbol = "AAPL"
+      def ranges = ["DAY", "WEEK", "MONTH", "YEAR", "other"]
 
-      when: "A call to the chart endpoint is made"
-      def res = stockController.getChart(appl, "DAY")
-
-      then: "We get a valid chart object"
-      res.statusCode == HttpStatus.OK
-      res.getBody() != null
+      for(range in ranges){
+         when: "A call to the chart endpoint is made"
+         def res = stockController.getChart(symbol, range)
+         then: "We get a valid chart object"
+         res.getBody() != null
+         res.statusCode == HttpStatus.OK
+      }
    }
 
    def "GET chart throws IEXTrading Exception when symbol is not valid"() {
@@ -241,5 +254,18 @@ class StockControllerIT extends Specification {
 
       then: "We get an exception"
       thrown(IEXTradingException)
+   }
+
+   def "Validates GET yahooChart returns chart information"() {
+      given: "A stock symbol"
+      def symbol = "AAPL"
+      def range = "1d"
+      def interval = "1m"
+
+      when: "A call to the yahooChart endpoint is made"
+      def res = stockController.getYahooChart(symbol, range, interval)
+
+      then: "We get a valid chart object"
+      res != null
    }
 }

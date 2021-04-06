@@ -1,96 +1,403 @@
 package com.capstone.moneytree.controller
 
+import org.apache.commons.lang3.RandomStringUtils
+import org.springframework.http.HttpStatus
+
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.createUser
 
-import org.junit.Rule
-import org.neo4j.harness.junit.rule.Neo4jRule
-import org.neo4j.ogm.config.Configuration
-import org.neo4j.ogm.session.Session
-import org.neo4j.ogm.session.SessionFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
+import com.capstone.moneytree.dao.FollowsDao
+import com.capstone.moneytree.dao.OwnsDao
+import com.capstone.moneytree.dao.StockDao
 import com.capstone.moneytree.dao.UserDao
 import com.capstone.moneytree.exception.BadRequestException
+import com.capstone.moneytree.model.node.Stock
 import com.capstone.moneytree.model.node.User
+import com.capstone.moneytree.model.relationship.Follows
+import com.capstone.moneytree.model.relationship.Owns
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
-@Ignore
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("dev")
 class UserControllerIT extends Specification {
 
-   @Autowired
-   private UserController userController
+    @Autowired
+    UserController userController
 
-   @Autowired
-   UserDao userDao
+    @Autowired
+    UserDao userDao
 
-   @Rule
-   public Neo4jRule neoServer = new Neo4jRule()
+    @Autowired
+    OwnsDao ownsDao
 
-   private Session session
+    @Autowired
+    StockDao stockDao
 
-   def setup() {
-      Configuration configuration = new Configuration.Builder()
-              .uri(neoServer.boltURI().toString())
-              .build()
+    @Autowired
+    FollowsDao followsDao
 
-      SessionFactory sessionFactory = new SessionFactory(configuration, User.class.getPackage().getName());
-      session = sessionFactory.openSession();
-      session.purgeDatabase()
-   }
+    def "a user is correctly persisted then fetched"() {
+        setup: "Persist an initial user"
+        userDao.save(createUser("test@test9009.com", "raz123412", "pass", "razine1234", "bensari2341", null))
 
-   def "a user is correctly updated; request body is valid"() {
-      setup: "Persist an initial user"
-      userDao.save(createUser("test@test9009.com", "raz123412", "pass", "razine1234", "bensari2341", null))
-      def persistedUser = userDao.findUserByEmail("test@test9009.com")
+        when: "We fetch the user"
+        def persistedUser = userDao.findUserByEmail("test@test9009.com")
 
-      and: " a new user from request body"
-      String newEmail = "test@test2123.com"
-      String username = "razine123"
-      String password = "encrypted"
-      String firstName = "razineFristName"
-      String lastName = "BENSARI-razine"
-      User newUser = createUser(persistedUser.getId(), newEmail, username, password, firstName, lastName, null)
+        then: "The user has the correct field"
+        persistedUser.getEmail() == "test@test9009.com"
+        persistedUser.getId() != null
 
-      when: " we update the user"
-      def updatedUser = userController.editUserProfile(persistedUser.getId(), newUser)
+        cleanup:
+        userDao.delete(persistedUser)
+    }
 
-      then: " the user should have the updated fields"
-      updatedUser.getBody().getEmail() == newEmail
-      updatedUser.getBody().getFirstName() == firstName
-      updatedUser.getBody().getLastName() == lastName
-      updatedUser.getBody().getUsername() == username
+    def "a user is correctly updated; request body is valid"() {
+        setup: "Persist an initial user"
+        def persistedUser = userDao.save(createUser("test@test9009.com", "raz123412", "pass", "razine1234", "bensari2341", null))
 
-      cleanup: "delete the created user"
-      userDao.delete(persistedUser)
-   }
+        and: " a new user from request body"
+        String newEmail = "test@test2123.com"
+        String username = "razine123"
+        String password = "encrypted"
+        String firstName = "razineFristName"
+        String lastName = "BENSARI-razine"
+        User newUser = createUser(newEmail, username, password, firstName, lastName, null)
+        newUser.setId(persistedUser.getId())
 
-   def "the passed user has a different id than the path"() {
-      setup: "Persist an initial user"
-      userDao.save(createUser("test@test9092345209.com", "raz23452", "pass2345", "razine2345234", "bensari2345", null))
-      def persistedUser = userDao.findUserByEmail("test@test9092345209.com")
+        when: " we update the user"
+        def updatedUser = userController.editUserProfile(persistedUser.getId(), newUser)
 
-      and: " a new user from request body"
-      String newEmail = "test@test2.com"
-      String username = "Test"
-      String password = "encrypted"
-      String firstName = "John"
-      String lastName = "Doe"
-      Long differentId = 123
-      User newUser = createUser(differentId, newEmail, username, password, firstName, lastName, null)
+        then: " the user should have the updated fields"
+        updatedUser.getBody().getEmail() == newEmail
+        updatedUser.getBody().getFirstName() == firstName
+        updatedUser.getBody().getLastName() == lastName
+        updatedUser.getBody().getUsername() == username
 
-      when: " we update the user"
-      userController.editUserProfile(persistedUser.getId(), newUser)
+        cleanup: "delete the created user"
+        userDao.delete(persistedUser)
+        userDao.delete(newUser)
+    }
 
-      then: " the user should have the updated fields"
-      thrown(BadRequestException)
+    def "the passed user has a different id than the path"() {
+        setup: "Persist an initial user"
+        def persistedUser = userDao.save(createUser("test@test9092345209.com", "raz23452", "pass2345", "razine2345234", "bensari2345", null))
 
-      cleanup: "delete the created user"
-      userDao.delete(persistedUser)
-   }
+        and: " a new user from request body"
+        String newEmail = "test@test2.com"
+        String username = "Test"
+        String password = "encrypted"
+        String firstName = "John"
+        String lastName = "Doe"
+        // by saving a new user, an ID will be autogenerated
+        User newUser = userDao.save(createUser(newEmail, username, password, firstName, lastName, null))
+
+        when: " we update the user"
+        userController.editUserProfile(persistedUser.getId(), newUser)
+
+        then: " the user should have the updated fields"
+        thrown(BadRequestException)
+
+        cleanup: "delete the created user"
+        userDao.delete(persistedUser)
+        userDao.delete(newUser)
+    }
+
+    def "a search request is made to retrieve only the essential properties of a User"() {
+        setup: "Persist an initial set of users"
+        userDao.save(createUser("test@test909234sd202.com", "raz23452", "pass2345", "razine2345234", "bensari2345", null))
+        userDao.save(createUser("test@test2156ds587482.com", "raz54612", "pass1235", "razine8453123", "bensari2315", null))
+        List<User> persistedUsers = new ArrayList<User>()
+        persistedUsers.push(userDao.findUserByEmail("test@test909234sd202.com"))
+        persistedUsers.push(userDao.findUserByEmail("test@test2156ds587482.com"))
+
+        when: "we obtain the search users"
+        def searchUsers = userDao.getSearchUsers()
+
+        then: "each persisted user should be return represented with only the essential fields for the search list"
+        for (Map<String, String> user : searchUsers) {
+            for (User persistedUser : persistedUsers) {
+                if (user.get("id") == Long.toString(persistedUser.getId())) {
+                    assert user.get("id") == Long.toString(persistedUser.getId())
+                    assert user.get("firstName") == persistedUser.getFirstName()
+                    assert user.get("lastName") == persistedUser.getLastName()
+                    assert user.get("email") == persistedUser.getEmail()
+                    assert user.get("username") == persistedUser.getUsername()
+                    assert user.get("avatarURL") == persistedUser.getAvatarURL()
+                    assert user.get("alpacaApiKey") == null
+                    assert user.get("balance") == null
+                    assert user.get("score") == null
+                    assert user.get("rank") == null
+                    assert user.get("password") == null
+                }
+            }
+        }
+
+        cleanup: "delete the created user"
+        userDao.deleteAll(persistedUsers)
+    }
+
+    def "a user can follow another user in the database"() {
+        setup: 'Persist an initial user'
+
+        String newEmail1 = 'test@test.com'
+        String username1 = 'daveUsername'
+        String password1 = 'encrypted'
+        String firstName1 = 'DaveFirstname'
+        String lastName1 = 'DaveLastName'
+        User user1 = createUser(newEmail1, username1, password1, firstName1, lastName1, '459fr2w-')
+        userDao.save(user1)
+
+        and: 'persist the other user we want to follow'
+
+        String newEmail2 = 'test@test2123.com'
+        String username2 = 'razine123'
+        String password2 = 'encrypted'
+        String firstName2 = 'razineFristName'
+        String lastName2 = 'BENSARI-razine'
+        User user2 = createUser(newEmail2, username2, password2, firstName2, lastName2, '258459fr2w-')
+        userDao.save(user2)
+
+        when: 'following the user'
+        def response = userController.followUser(user1.getId(), user2.getId())
+
+        then: 'user 1 should follow user 2'
+        assert response.statusCode == HttpStatus.OK
+        assert response.body == user2.getId()
+
+        cleanup: 'delete the created users'
+        userDao.delete(user1)
+        userDao.delete(user2)
+    }
+
+    def "a user can unfollow another user in the database"() {
+        setup: 'Persist an initial user'
+
+        String newEmail1 = 'test@test.com'
+        String username1 = 'daveUsername'
+        String password1 = 'encrypted'
+        String firstName1 = 'DaveFirstname'
+        String lastName1 = 'DaveLastName'
+        User user1 = createUser(newEmail1, username1, password1, firstName1, lastName1, '459fr2w-')
+        userDao.save(user1)
+
+        and: 'persist the other user we want to follow & follow it'
+
+        String newEmail2 = 'test@test2123.com'
+        String username2 = 'razine123'
+        String password2 = 'encrypted'
+        String firstName2 = 'razineFristName'
+        String lastName2 = 'BENSARI-razine'
+        User user2 = createUser(newEmail2, username2, password2, firstName2, lastName2, '258459fr2w-')
+        userDao.save(user2)
+        userController.followUser(user1.getId(), user2.getId())
+
+        when: 'user1 unfollowing user2'
+        def response = userController.unfollowUser(user1.getId(), user2.getId())
+
+        then: 'user 1 should unfollow user 2'
+        assert response.statusCode == HttpStatus.OK
+        assert response.body == user2.getId()
+
+        cleanup: 'delete the created users'
+        userDao.delete(user1)
+        userDao.delete(user2)
+    }
+
+    def "a list of followings for user should be correctly returned"() {
+        setup: 'Persist an initial user'
+
+        String newEmail1 = 'test@test.com'
+        String username1 = 'daveUsername'
+        String password1 = 'encrypted'
+        String firstName1 = 'DaveFirstname'
+        String lastName1 = 'DaveLastName'
+        User user1 = createUser(newEmail1, username1, password1, firstName1, lastName1, '459fr2w-')
+        userDao.save(user1)
+
+        and: 'persist the other user we want to follow & follow it'
+
+        String newEmail2 = 'test@test2123.com'
+        String username2 = 'razine123'
+        String password2 = 'encrypted'
+        String firstName2 = 'razineFristName'
+        String lastName2 = 'BENSARI-razine'
+        User user2 = createUser(newEmail2, username2, password2, firstName2, lastName2, '258459fr2w-')
+        userDao.save(user2)
+        userController.followUser(user1.getId(), user2.getId())
+
+        when: 'getFollowings of user1'
+        def response = userController.getFollowings(user1.getId())
+
+        then: 'should have user2 in the response body'
+        assert response[0].getFirstName() == user2.getFirstName()
+
+        cleanup: 'delete the created users'
+        userDao.delete(user1)
+        userDao.delete(user2)
+    }
+
+    def "a list of followers for user should be correctly returned"() {
+        setup: 'Persist an initial user'
+
+        String newEmail1 = 'test@test.com'
+        String username1 = 'daveUsername'
+        String password1 = 'encrypted'
+        String firstName1 = 'DaveFirstname'
+        String lastName1 = 'DaveLastName'
+        User user1 = createUser(newEmail1, username1, password1, firstName1, lastName1, '459fr2w-')
+        userDao.save(user1)
+
+        and: 'persist the other user we want to follow & follow it'
+
+        String newEmail2 = 'test@test2123.com'
+        String username2 = 'razine123'
+        String password2 = 'encrypted'
+        String firstName2 = 'razineFristName'
+        String lastName2 = 'BENSARI-razine'
+        User user2 = createUser(newEmail2, username2, password2, firstName2, lastName2, '258459fr2w-')
+        userDao.save(user2)
+        userController.followUser(user1.getId(), user2.getId())
+
+        when: 'getFollowers of user2'
+        def response = userController.getFollowers(user2.getId())
+
+        then: 'should have user1 in the response body'
+        assert response[0].getFirstName() == user1.getFirstName()
+
+        cleanup: 'delete the created users'
+        userDao.delete(user1)
+        userDao.delete(user2)
+    }
+
+    def "Should delete a user by email when needed"() {
+        setup: "Persist an initial user"
+        String email = "test@test9009.com"
+        userDao.save(createUser(email, "raz123412", "pass", "razine1234", "bensari2341", null))
+
+        when: "We fetch the user and delete it"
+        userController.deleteUserByEmail(email)
+        def deletedUser = userDao.findUserByEmail(email)
+
+        then: "Verify that user is deleted"
+        deletedUser == null
+
+        cleanup: "Sanity check if user was not deleted properly"
+        if (deletedUser != null) {
+            userDao.delete(deletedUser)
+        }
+    }
+
+    def "Should get top 10% of users that owns the stock based on their score"() {
+        setup: "Persist 20 users"
+        List<User> users = [
+                createUser("test1@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 1),
+                createUser("test2@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 2),
+                createUser("test3@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 3),
+                createUser("test4@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 4),
+                createUser("test5@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 5),
+                createUser("test6@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 6),
+                createUser("test7@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 7),
+                createUser("test8@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 8),
+                createUser("test9@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 9),
+                createUser("test10@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 10),
+                createUser("test11@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 11),
+                createUser("test12@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 12),
+                createUser("test13@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 13),
+                createUser("test14@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 14),
+                createUser("test15@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 15),
+                createUser("test16@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 16),
+                createUser("test17@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 17),
+                createUser("test18@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 18),
+                createUser("test19@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 19),
+                createUser("test20@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 20),
+        ]
+        List<User> usersPersisted = userDao.saveAll(users)
+
+        and: "apple stock should be in DB"
+        Stock stock = stockDao.save(new Stock(symbol: "aapl", companyName: "Apple"))
+
+        and: "Should all own the stock with appl symbol"
+        List<Owns> ownsList = new ArrayList<>()
+        users.forEach({ user ->
+            ownsList.add(ownsDao.save(new Owns(user, stock, new Date(), 3, 12.12, 26)))
+        })
+
+        when: "the request is received"
+        def res = userController.getTopUserForStock("aapl")
+
+        then: "We should get the top 10 percent user - in this case only 2 users with best scores"
+        res.statusCode == HttpStatus.OK
+        res.getBody().size() == 2
+        res.getBody().any {it.getScore() == 19 || it.getScore() == 20}
+
+        cleanup:
+        ownsDao.deleteAll(ownsList)
+        stockDao.delete(stock)
+        userDao.deleteAll(usersPersisted)
+    }
+
+    def "Should return all followers that own the given stock"() {
+        setup: "Persist a user (followee - the one that is followed)"
+        User followee = createUser("test0@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 1)
+        userDao.save(followee)
+
+        and: "persist 20 of his followers"
+        List<User> users = [
+                createUser("test1@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 1),
+                createUser("test2@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 2),
+                createUser("test3@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 3),
+                createUser("test4@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 4),
+                createUser("test5@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 5),
+                createUser("test6@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 6),
+                createUser("test7@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 7),
+                createUser("test8@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 8),
+                createUser("test9@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 9),
+                createUser("test10@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 10),
+                createUser("test11@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 11),
+                createUser("test12@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 12),
+                createUser("test13@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 13),
+                createUser("test14@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 14),
+                createUser("test15@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 15),
+                createUser("test16@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 16),
+                createUser("test17@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 17),
+                createUser("test18@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 18),
+                createUser("test19@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 19),
+                createUser("test20@test.com", RandomStringUtils.random(9, true, false), "pass", "razineFN", "bensari", null, 20),
+        ]
+        List<User> usersPersisted = userDao.saveAll(users)
+
+        and: "persist the relationship"
+        List<Follows> followsList = new ArrayList<>()
+        users.forEach({
+            followsList.add(followsDao.save(new Follows(it, followee, new Date())))
+        })
+
+        and: "the common stock is stored in db"
+        def symbol = "AAPL"
+        Stock stock = stockDao.save(new Stock(symbol: symbol, companyName: "Apple"))
+
+        and: "10 of his followers owns the given stock (first 10 in the list)"
+        List<Owns> ownsList = new ArrayList<>()
+        (1..10).each{
+            ownsList.add(ownsDao.save(new Owns(users[it], stock, new Date(), 3, 12.12, 26)))
+        }
+
+        when: "the request is made"
+        def res = userController.getStockOwnedByFollowers(followee.getId(), symbol)
+
+        then: "only the 10 followers are returned"
+        res.statusCode == HttpStatus.OK
+        res.getBody().size() == 10
+
+        cleanup:
+        userDao.delete(followee)
+        userDao.deleteAll(usersPersisted)
+        ownsDao.deleteAll(ownsList)
+        stockDao.delete(stock)
+        followsDao.deleteAll(followsList)
+    }
 }

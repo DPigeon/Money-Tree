@@ -1,42 +1,41 @@
 package com.capstone.moneytree.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.security.auth.login.CredentialNotFoundException;
-import javax.validation.Valid;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.capstone.moneytree.exception.EntityNotFoundException;
 import com.capstone.moneytree.exception.InvalidMediaFileException;
 import com.capstone.moneytree.handler.ExceptionMessage;
+import com.capstone.moneytree.model.SanitizedUser;
+import com.capstone.moneytree.model.TransactionStatus;
+import com.capstone.moneytree.model.UserCompleteProfile;
+import com.capstone.moneytree.model.node.Transaction;
 import com.capstone.moneytree.model.node.User;
+import com.capstone.moneytree.service.api.StockService;
+import com.capstone.moneytree.service.api.TransactionService;
 import com.capstone.moneytree.service.api.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.security.auth.login.CredentialNotFoundException;
+import javax.validation.Valid;
+import java.util.*;
 
 @MoneyTreeController
 @RequestMapping("/users")
-public class UserController {
+public class UserController extends AbstractController {
 
    private final UserService userService;
-   private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+   private final TransactionService transactionService;
+   private final StockService stockService;
 
    @Autowired
-   public UserController(UserService userService) {
+   public UserController(UserService userService, TransactionService transactionService, StockService stockService) {
       this.userService = userService;
+      this.transactionService = transactionService;
+      this.stockService = stockService;
    }
 
    /**
@@ -50,7 +49,7 @@ public class UserController {
 
       userService.getAllUsers().forEach(users::add);
 
-      LOG.info("Returning {} users", users.size());
+      LOGGER.info("Returning {} users", users.size());
 
       return users;
    }
@@ -69,20 +68,16 @@ public class UserController {
    }
 
    /**
-    * A method that updates a user with a new Alpaca key. This should be done only once at beginning
+    * A method that updates a user with a new Alpaca key. This should be done only
+    * once at beginning
     *
-    * @param id  The user ID sent from the frontend
-    * @param key The Alpaca API key sent from the frontend
+    * @param id   The user ID sent from the frontend
+    * @param code The Alpaca API code sent from the frontend
     * @return The new updated user from the database
     */
-   @PostMapping("/{id}/register-alpaca-key/{key}")
-   public ResponseEntity<User> registerAlpacaApiKey(@Valid @PathVariable Long id, @Valid @PathVariable String key) {
-      User updatedUser = userService.registerAlpacaApiKey(id, key);
-
-      if (updatedUser == null) {
-         throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage());
-      }
-
+   @PostMapping("/{id}/register-alpaca-key/{code}")
+   public ResponseEntity<User> registerAlpacaApiKey(@Valid @PathVariable Long id, @Valid @PathVariable String code) {
+      User updatedUser = userService.registerAlpacaApiKey(id, code);
       return ResponseEntity.ok(updatedUser);
    }
 
@@ -92,15 +87,31 @@ public class UserController {
    }
 
    /**
+    * A method that returns a complete profile for user with the list of follows, transactions, ownedStocks, etc
+    * @param username   The username sent from frontend
+    * @return The complete user info for profile page
+    */
+   @GetMapping("/profile/{username}")
+   UserCompleteProfile getUserByUsername(@PathVariable String username) {
+      User user = userService.getUserByUsername(username);
+      UserCompleteProfile completeUserProfile = new UserCompleteProfile(user);
+      completeUserProfile.setFollowers(userService.getFollowers(user.getId()));
+      completeUserProfile.setFollowing(userService.getFollowings(user.getId()));
+      completeUserProfile.setTransactions(transactionService.getUserTransactions(user.getId()));
+      completeUserProfile.setOwnedStocks(stockService.getUserStocks(user.getId()));
+      completeUserProfile.setPercentile(userService.getUserPercentile(user.getUsername()));
+      return completeUserProfile;
+   }
+
+   /**
     * /login POST endpoint to authenticate a user
     *
     * @param credentials A User object with email and unencrypted password
-    * @return The full User object from the database if login is successful with 200 OK, 404 NOT_FOUND otherwise
+    * @return The full User object from the database if login is successful with
+    *         200 OK, 404 NOT_FOUND otherwise
     */
    @PostMapping("/login")
-   public User login(@RequestBody User credentials)
-           throws
-           CredentialNotFoundException {
+   public User login(@RequestBody User credentials) throws CredentialNotFoundException {
       return userService.login(credentials);
    }
 
@@ -113,12 +124,50 @@ public class UserController {
 
    @PostMapping("/profile-picture/{id}")
    ResponseEntity<User> editUserProfilePicture(@PathVariable Long id,
-                                               @RequestParam(required = false) MultipartFile imageFile) {
+         @RequestParam(required = false) MultipartFile imageFile, @RequestParam String selection) {
       User userToUpdate = this.userService.getUserById(id);
       if (imageFile == null || imageFile.isEmpty()) {
          throw new InvalidMediaFileException("The provided profile picture is null or empty");
       }
-      return ResponseEntity.ok(this.userService.editUserProfilePicture(userToUpdate, imageFile));
+      return ResponseEntity.ok(this.userService.editUserProfilePicture(userToUpdate, imageFile, selection));
+   }
+
+   /**
+    * Following a user endpoint
+    * 
+    * @param userId         The ID of the user that is following a user
+    * @param userToFollowId The ID of the user to follow
+    * @return A response object
+    */
+
+   @PostMapping("/{userId}/follow/{userToFollowId}")
+   ResponseEntity<Long> followUser(@PathVariable Long userId, @PathVariable Long userToFollowId) {
+      Long res = this.userService.followUser(userId, userToFollowId);
+      return ResponseEntity.ok(res);
+   }
+
+   /**
+    * Unfollowing a user endpoint
+    * 
+    * @param userId           The ID of the user that is following a user
+    * @param userToUnfollowId The ID of the user to unfollow
+    * @return A response object
+    */
+
+   @DeleteMapping("/{userId}/unfollow/{userToUnfollowId}")
+   ResponseEntity<Long> unfollowUser(@PathVariable Long userId, @PathVariable Long userToUnfollowId) {
+      Long res = this.userService.unfollowUser(userId, userToUnfollowId);
+      return ResponseEntity.ok(res);
+   }
+
+   @GetMapping("/followings/{id}")
+   List<SanitizedUser> getFollowings(@PathVariable Long id) {
+      return userService.getFollowings(id);
+   }
+
+   @GetMapping("/followers/{id}")
+   List<SanitizedUser> getFollowers(@PathVariable Long id) {
+      return userService.getFollowers(id);
    }
 
    @DeleteMapping("/delete-by-email/{email}")
@@ -129,5 +178,47 @@ public class UserController {
       } catch (Exception e) {
          throw new EntityNotFoundException(ExceptionMessage.ENTITY_NOT_FOUND.getMessage());
       }
+   }
+
+   @GetMapping("/search")
+   public ResponseEntity<List<Map<String, String>>> getSearchUsers() {
+      return ResponseEntity.ok(userService.getSearchUsers());
+   }
+
+   @GetMapping("/{symbol}/top")
+   public ResponseEntity<List<User>> getTopUserForStock(@PathVariable String symbol) {
+      return ResponseEntity.ok(userService.getTopUsers(symbol));
+   }
+
+   @GetMapping("/{id}/owned_by_followers/{symbol}")
+   public ResponseEntity<List<User>> getStockOwnedByFollowers(@PathVariable Long id, @PathVariable String symbol) {
+      return ResponseEntity.ok(userService.getFollowersWhoOwnsTheStock(id, symbol));
+   }
+
+   @GetMapping("/leaderboard")
+   public ResponseEntity<List<SanitizedUser>> getLeaderboard() {
+      return ResponseEntity.ok(userService.getLeaderboard());
+   }
+
+   @GetMapping("/{userId}/timeline")
+   public ResponseEntity<List<Pair<SanitizedUser, Transaction>>> getTimeline(@PathVariable Long userId){
+      List<Pair<SanitizedUser,Transaction>> list = new ArrayList<>();
+      // get followings
+      this.userService.getFollowings(userId).stream()
+              // foreach followings: get completed transactions
+              .forEach(user -> {
+                  this.transactionService.getUserTransactions(user.getId()).stream()
+                          .filter(t -> t.getStatus() == TransactionStatus.COMPLETED)
+                          //foreach transactions: add to list along with user info
+                          .forEach(transaction -> {
+                             list.add(Pair.of(user, transaction));
+                          });
+              });
+      // sort by transaction date desc
+      list.sort((pair1, pair2) ->
+              pair2.getSecond().getPurchasedAt().compareTo(
+                      pair1.getSecond().getPurchasedAt()
+      ));
+      return ResponseEntity.ok(list);
    }
 }

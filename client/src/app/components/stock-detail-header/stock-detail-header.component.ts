@@ -1,3 +1,4 @@
+import { MarketClock } from './../../interfaces/market-clock';
 import { Component, Input } from '@angular/core';
 import { Stock } from './../../interfaces/stock';
 
@@ -8,6 +9,8 @@ import { Stock } from './../../interfaces/stock';
 })
 export class StockDetailHeaderComponent {
   @Input() stockInfo: Stock;
+  @Input() marketClock: MarketClock;
+
   constructor() {}
 
   get companyLogo(): string {
@@ -50,5 +53,10 @@ export class StockDetailHeaderComponent {
       );
     }
     return '';
+  }
+  nextOpen(): string {
+    return this.marketClock
+      ? this.marketClock.nextOpen.replace('T', ' at ').split(':00-')[0]
+      : '';
   }
 }

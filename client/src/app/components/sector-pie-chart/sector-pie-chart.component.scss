@@ -1,0 +1,22 @@
+@import "../../../styles.scss";
+.card-container {
+  max-height: 275px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.chart-unavailable {
+  padding-top: 100px;
+  text-align: center;
+}
+.title {
+  font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+  display: block;
+}
+.percentile {
+  color: $primary-color;
+  display: block;
+  text-align: center;
+  font-size: 12px;
+}

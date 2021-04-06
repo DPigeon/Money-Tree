@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { UserSearch } from 'src/app/interfaces/userSearch';
+
 import { StoreFacadeService } from '../../store/store-facade.service';
 
 @Component({
@@ -6,9 +8,23 @@ import { StoreFacadeService } from '../../store/store-facade.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+  @Input() userPhotoURL: string;
+  userSearch$ = this.storeFacade.userSearch$;
+  showSearchBar = false;
   constructor(private storeFacade: StoreFacadeService) {}
+  ngOnInit(): void {
+    this.storeFacade.loadUserSearchList();
 
+    this.userSearch$.subscribe((userList: UserSearch[]) => {
+      // Loading search user list
+      if (!!userList) {
+        this.showSearchBar = true;
+      } else {
+        this.showSearchBar = false;
+      }
+    });
+  }
   logout(): void {
     this.storeFacade.logCurrentUserOut();
   }

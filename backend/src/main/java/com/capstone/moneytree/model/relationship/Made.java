@@ -1,14 +1,14 @@
 package com.capstone.moneytree.model.relationship;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import org.neo4j.ogm.annotation.EndNode;
+import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
-import org.neo4j.ogm.annotation.typeconversion.DateLong;
+import org.neo4j.ogm.annotation.GeneratedValue;
 
-import com.capstone.moneytree.model.Entity;
 import com.capstone.moneytree.model.node.Transaction;
 import com.capstone.moneytree.model.node.User;
 
@@ -17,20 +17,29 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@RelationshipEntity(type = "MADE")
 @NodeEntity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Made extends Entity {
+@RelationshipEntity(type = "Made")
+public class Made {
 
-   @StartNode
-   User user;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-   @EndNode
-   Transaction transaction;
+    @StartNode
+    User user;
 
-   @DateLong
-   Date transactionDate;
+    @EndNode
+    Transaction transaction;
+
+    ZonedDateTime transactionDate;
+
+    public Made(User user, Transaction transaction, ZonedDateTime transactionDate) {
+        this.user = user;
+        this.transaction = transaction;
+        this.transactionDate = transactionDate;
+    }
 }

@@ -9,7 +9,13 @@ public enum ExceptionMessage {
     MISSING_FIELDS("The entity is missing fields!"),
     FAILED_TO_UPLOAD_S3("Failed to upload image to S3"),
     BAD_REQUEST_MESSAGE("Bad request!"),
-    CREDENTIALS_NOT_FOUND("Credentials not found");
+    CREDENTIALS_NOT_FOUND("Credentials not found"),
+    ALPACA_ERROR("A request to alpaca failed"),
+    ORDER_ERROR("Could not process order to send to alpaca"),
+    ALPACA_CLOCK_ERROR("Getting Alpaca market clock info failed"),
+    USER_ALREADY_FOLLOWED("User already followed"),
+    STOCK_NOT_FOUND("The requested stock was not found"),
+    ALPACA_TOKEN_BLANK("User token for alpaca API is blank!");
 
     private final String message;
 

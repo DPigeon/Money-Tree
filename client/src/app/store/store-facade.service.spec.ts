@@ -9,7 +9,8 @@ const userInfo = {
   firstName: 'John',
   lastName: 'Doe',
   username: 'john1',
-  avatarUrl: '',
+  avatarURL: '',
+  coverPhotoURL: '',
   email: 'john1@gmail.com',
   score: 12,
   rank: 10000,
@@ -49,6 +50,19 @@ describe('StoreFacadeService', () => {
     );
   });
 
+  it('should dispatch load stock historical data action', () => {
+    const spy = jest.spyOn(store, 'dispatch');
+    service.loadCurrentStockHistoricalData('TSLA', '1d', '5m');
+    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith(
+      appActions.loadStockHistoricalData({
+        stockTicker: 'TSLA',
+        chartRange: '1d',
+        chartInterval: '5m',
+      })
+    );
+  });
+
   it('should dispatach create new user', () => {
     const spy = jest.spyOn(store, 'dispatch');
     service.createNewUser(userInfo);
@@ -83,5 +97,11 @@ describe('StoreFacadeService', () => {
     const spy = jest.spyOn(store, 'dispatch');
     service.logCurrentUserOut();
     expect(spy).toHaveBeenCalledWith(appActions.logCurrentUserOut());
+  });
+
+  it('should dispatach user list', () => {
+    const spy = jest.spyOn(store, 'dispatch');
+    service.loadUserSearchList();
+    expect(spy).toHaveBeenCalledWith(appActions.loadUserSearchList());
   });
 });

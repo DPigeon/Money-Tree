@@ -1,0 +1,36 @@
+@import "../../../styles.scss";
+.mat-row {
+  height: auto;
+}
+
+th.mat-header-cell:last-of-type,
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type,
+td.mat-cell:last-of-type {
+  padding: 2px 3px;
+}
+.mat-header-cell {
+  padding: 2px 3px;
+}
+.mat-cell {
+  padding: 3px 2px 2px 2px;
+  white-space: nowrap;
+}
+.table-container {
+  overflow: auto;
+  max-height: 420px;
+  width: 100%;
+}
+table {
+  width: 100%;
+}
+.symbol {
+  cursor: pointer;
+  color: $primary-color;
+}
+.negative-change {
+  color: $mt-red;
+}
+.positive-change {
+  color: $mt-green;
+}

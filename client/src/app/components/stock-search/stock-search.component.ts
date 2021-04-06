@@ -1,44 +1,97 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   MatAutocompleteActivatedEvent,
   MatAutocompleteTrigger,
 } from '@angular/material/autocomplete';
 import { Router } from '@angular/router';
-import { StockSearch } from 'src/app/interfaces/stockSearch';
 import FuzzySearch from 'fuzzy-search';
+import { UserSearch } from 'src/app/interfaces/userSearch';
 declare var require: any;
 const NASDAQ = require('src/assets/stock-information/NASDAQ.json');
 const AMEX = require('src/assets/stock-information/AMEX.json');
 const NYSE = require('src/assets/stock-information/NYSE.json');
 const allStockData = NASDAQ.concat(AMEX, NYSE);
 
-const searcher: FuzzySearch = new FuzzySearch(
-  allStockData,
-  ['Name', 'Symbol'],
-  {
-    caseSensitive: false,
-    sort: true,
-  }
-);
+export interface SearchItem {
+  type: string;
+  name: string;
+  id: string;
+  profileImage?: string;
+}
 
 @Component({
   selector: 'app-stock-search-input',
   templateUrl: './stock-search.component.html',
   styleUrls: ['./stock-search.component.scss'],
 })
-export class StockSearchComponent {
+export class StockSearchComponent implements OnInit {
+  @Input() userSearch$: any;
   query = '';
-  searchResults: StockSearch[] = [];
-  activeOption: StockSearch = { Symbol: '', Name: '' };
+  searchResults: SearchItem[] = [];
+  activeOption: SearchItem = { type: '', id: '', name: '' };
+  selectedSearchOption = 'all';
+  allSearcher: FuzzySearch = null;
+  userSearcher: FuzzySearch = null;
+  stockSearcher: FuzzySearch = null;
+
   @ViewChild(MatAutocompleteTrigger) autoComplete: MatAutocompleteTrigger;
 
   constructor(private router: Router) {}
 
+  async ngOnInit(): Promise<void> {
+    const allUsers: UserSearch[] = this.userSearch$.map((u: UserSearch) => ({
+      ...u,
+      type: 'user',
+    }));
+    const allStocks: any = allStockData.map((s: any) => ({
+      ...s,
+      type: 'stock',
+    }));
+    const users: any = await this.getStocksAndUsers([], allUsers);
+    this.userSearcher = new FuzzySearch(users, ['name'], {
+      caseSensitive: false,
+      sort: true,
+    });
+    const stocks: any = await this.getStocksAndUsers(allStocks, []);
+    this.stockSearcher = new FuzzySearch(stocks, ['name', 'id'], {
+      caseSensitive: false,
+      sort: true,
+    });
+    const all = stocks.concat(users);
+    this.allSearcher = new FuzzySearch(all, ['name', 'id'], {
+      caseSensitive: false,
+      sort: true,
+    });
+  }
+
+  async getStocksAndUsers(stocks: any, users: any): Promise<SearchItem[]> {
+    const allSearch: SearchItem[] = [];
+    stocks.forEach((s) => {
+      allSearch.push({ type: s.type, name: s.Name, id: s.Symbol });
+    });
+    users.forEach((u) => {
+      allSearch.push({
+        type: u.type,
+        name: u.firstName + ' ' + u.lastName,
+        id: u.id,
+        profileImage: u.avatarURL,
+      });
+    });
+    return allSearch;
+  }
+
   queryFilter(e: KeyboardEvent): void {
     if (this.query === '') {
       this.searchResults = [];
+      this.selectedSearchOption = 'all';
     } else {
-      this.searchResults = searcher.search(this.query).slice(0, 5);
+      if (this.selectedSearchOption === 'users') {
+        this.searchResults = this.userSearcher.search(this.query).slice(0, 10);
+      } else if (this.selectedSearchOption === 'stocks') {
+        this.searchResults = this.stockSearcher.search(this.query).slice(0, 10);
+      } else {
+        this.searchResults = this.allSearcher.search(this.query).slice(0, 10);
+      }
       if (e && e.key === 'Enter') {
         this.handleKeyboardSelectionEvent();
         this.autoComplete.closePanel();
@@ -47,21 +100,41 @@ export class StockSearchComponent {
   }
 
   handleKeyboardSelectionEvent(): void {
-    if (this.activeOption.Symbol !== '' || this.activeOption.Name !== '') {
-      this.router.navigate(['/stock-detail/' + this.activeOption.Symbol]);
-      this.query = this.activeOption.Name;
+    if (this.activeOption.id !== '' || this.activeOption.name !== '') {
+      this.navigateTo(
+        this.activeOption.type,
+        this.activeOption.id,
+        this.activeOption.name
+      );
+      this.query = this.activeOption.name;
     } else if (this.searchResults.length > 0) {
-      this.router.navigate(['/stock-detail/' + this.searchResults[0].Symbol]);
-      this.query = this.searchResults[0].Name;
+      this.navigateTo(
+        this.searchResults[0].type,
+        this.searchResults[0].id,
+        this.searchResults[0].name
+      );
     }
   }
 
   getActiveOption(e: MatAutocompleteActivatedEvent): void {
     if (!!e.option) {
       this.activeOption = {
-        Symbol: e.option.value.Symbol,
-        Name: e.option.value.Name,
+        type: e.option.value.type,
+        id: e.option.value.id,
+        name: e.option.value.name,
       };
     }
+  }
+
+  isSelectedClass(type: string): string {
+    return type === this.selectedSearchOption
+      ? 'selectedOption'
+      : 'searchOption';
+  }
+
+  navigateTo(type: string, id: string, name: string): void {
+    const route = (type === 'user' ? '/profile/' : '/stock-detail/') + id;
+    this.router.navigate([route]);
+    this.query = name;
   }
 }

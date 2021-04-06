@@ -1,0 +1,95 @@
+@import "../../../styles.scss";
+
+@media only screen and (min-width: 601px) {
+  .action-wrapper {
+    width: 350px;
+    .w-100 {
+      text-align: right;
+    }
+  }
+  .close-button {
+    position: fixed;
+    margin-left: -10px;
+    margin-top: -45px;
+    font-size: 22px;
+    z-index: 999 !important;
+    cursor: pointer;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .action-wrapper {
+    padding: 40px;
+    margin: auto;
+    width: 80%;
+
+    .w-100 {
+      text-align: right;
+    }
+  }
+  .close-button {
+    position: fixed;
+    margin-left: -10px;
+    margin-top: -25px;
+    font-size: 22px;
+    z-index: 999 !important;
+    cursor: pointer;
+  }
+}
+
+.sell-buy-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+}
+.sell-buy-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  .radio-group {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0 10px 0;
+  }
+  .sell-buy-field {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0 5px 0;
+    color: $primary-color;
+    font-weight: 500;
+    span {
+      color: black;
+      font-weight: normal;
+    }
+  }
+  .sell-buy-input {
+    width: 50px;
+    outline: none;
+  }
+  @media only screen and (max-width: 600px) {
+    .sell-buy-input {
+      width: 50px;
+    }
+  }
+  .quantity-error {
+    color: $mt-red;
+    font-size: 12px;
+    align-self: flex-end;
+  }
+}
+.sell-buy-button {
+  width: 100%;
+}
+.mat-flat-button {
+  height: auto;
+}

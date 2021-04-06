@@ -1,14 +1,14 @@
 package com.capstone.moneytree.controller;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,18 +16,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.capstone.moneytree.facade.MarketInteractionsFacade;
 
 import net.jacobpeterson.domain.alpaca.account.Account;
+import net.jacobpeterson.domain.alpaca.clock.Clock;
 import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
 import net.jacobpeterson.domain.alpaca.position.Position;
 
 @MoneyTreeController
 @RequestMapping("/alpaca")
-public class AlpacaController {
+public class AlpacaController extends AbstractController {
 
    private final MarketInteractionsFacade marketInteractionsFacade;
+   private final SimpMessagingTemplate messageSender;
 
    @Autowired
-   public AlpacaController(MarketInteractionsFacade marketInteractionsFacade) {
+   public AlpacaController(MarketInteractionsFacade marketInteractionsFacade, SimpMessagingTemplate messageSender) {
       this.marketInteractionsFacade = marketInteractionsFacade;
+      this.messageSender = messageSender;
    }
 
    /**
@@ -35,12 +38,11 @@ public class AlpacaController {
     *
     * @return ResponseEntity of Account.
     */
-   @GetMapping("/account")
-   public ResponseEntity<Account> getAccount() {
-      Account account = marketInteractionsFacade.getAccount();
-      Optional<Account> optional = Optional.of(account);
+   @GetMapping("/account/{userId}")
+   public ResponseEntity<Account> getAccount(@PathVariable(name = "userId") @Valid @NotBlank String userId) {
+      Account account = marketInteractionsFacade.getAccount(userId);
 
-      return ResponseEntity.of(optional);
+      return ResponseEntity.ok(account);
    }
 
    /**
@@ -48,12 +50,11 @@ public class AlpacaController {
     *
     * @return ResponseEntity of Position List.
     */
-   @GetMapping("/positions")
-   public ResponseEntity<List<Position>> getPositions() {
-      List<Position> positions = marketInteractionsFacade.getOpenPositions();
-      Optional<List<Position>> optional = Optional.of(positions);
+   @GetMapping("/positions/{userId}")
+   public ResponseEntity<List<Position>> getPositions(@PathVariable(name = "userId") @Valid @NotBlank String userId) {
+      List<Position> positions = marketInteractionsFacade.getOpenPositions(userId);
 
-      return ResponseEntity.of(optional);
+      return ResponseEntity.ok(positions);
    }
 
    /**
@@ -67,14 +68,16 @@ public class AlpacaController {
     * @param extendedHours Includes extended hours in result. Works only for timeframe less than 1D.
     * @return A PortfolioHistory of timeseries
     */
-   @GetMapping("/portfolio/period={periodLength}&unit={periodUnit}&timeframe={timeFrame}&dateend={dateEnd}&extended={extendedHours}")
+   @GetMapping("/portfolio/userId={userId}&period={periodLength}&unit={periodUnit}&timeframe={timeFrame}&dateend={dateEnd}&extended={extendedHours}")
    public ResponseEntity<PortfolioHistory> getPortfolio(
+           @PathVariable(name = "userId") @Valid @NotBlank String userId,
            @PathVariable(name = "periodLength") @Valid @NotBlank int periodLength,
            @PathVariable(name = "periodUnit") @Valid @NotBlank String periodUnit,
            @PathVariable(name = "timeFrame") @Valid @NotBlank String timeFrame,
-           @PathVariable(name = "dateEnd") @Valid @NotBlank LocalDate dateEnd,
+           @PathVariable(name = "dateEnd") @Valid @NotBlank String dateEnd,
            @PathVariable(name = "extendedHours") @Valid @NotBlank String extendedHours) {
       PortfolioHistory portfolioHistory = marketInteractionsFacade.getPortfolioHistory(
+              userId,
               periodLength,
               periodUnit,
               timeFrame,
@@ -83,4 +86,34 @@ public class AlpacaController {
 
       return ResponseEntity.ok(portfolioHistory);
    }
+
+   /**
+    *  Gets the market status (open/closed).
+    *
+    * @return market status.
+    */
+   @GetMapping("/market-status/{userId}")
+   public ResponseEntity<Clock> getMarketClock(@PathVariable(name = "userId") @Valid @NotBlank String userId) {
+      Clock marketClock = marketInteractionsFacade.getMarketClock(userId);
+      return ResponseEntity.ok(marketClock);
+   }
+
+   /**
+    * 1. To make a WS request, you must use a STOMP client with SockJS
+    * 2. Endpoint to connect is "http://localhost:8080/api/v1/ws"
+    * 3. Subscribe to the "/queue/user-{userId}" channel
+    * 4. Send a message to "/app/trade/updates" with content "{userId}" to receive trade updates on the user's alpaca account
+    * 5. Send a message to "/app/trade/disconnect" with content "{userId}" to disconnect from stream
+    * @param userId The user ID
+    */
+   @MessageMapping("/trade/updates")
+   public void registerToTradeUpdates(String userId) {
+      marketInteractionsFacade.listenToStreamUpdates(userId, messageSender);
+   }
+
+   @MessageMapping("/trade/disconnect")
+   public void disconnectFromTradeUpdates(String userId) {
+      marketInteractionsFacade.disconnectFromStream(userId);
+   }
 }
+

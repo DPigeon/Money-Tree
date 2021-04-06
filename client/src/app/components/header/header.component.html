@@ -9,7 +9,10 @@
   </div>
 
   <div class="search-box-container">
-    <app-stock-search-input></app-stock-search-input>
+    <app-stock-search-input
+      *ngIf="showSearchBar"
+      [userSearch$]="userSearch$ | async"
+    ></app-stock-search-input>
   </div>
 
   <div class="right-side-buttons">
@@ -47,11 +50,7 @@
 
   <mat-menu #menu="matMenu">
     <figure>
-      <img
-        id="user-photo"
-        src="../../../assets/user-photo.png"
-        alt="user-photo"
-      />
+      <img id="user-photo" src="{{ userPhotoURL }}" alt="user-photo" />
       <figcaption class="figcaption-in-menu">
         Hello Laurence! <br />
         <span id="score">Score:</span><span id="score-value">260</span>
@@ -84,7 +83,12 @@
         <mat-icon id="menu-item-icon">trending_up</mat-icon>
         <span>Your Profile</span>
       </button>
-      <button mat-menu-item routerLink="/home" routerLinkActive="active">
+      <button
+        mat-menu-item
+        routerLink="/home"
+        routerLinkActive="active"
+        (click)="logout()"
+      >
         <mat-icon id="menu-item-icon">exit_to_app</mat-icon>
         <span>Log out</span>
       </button>

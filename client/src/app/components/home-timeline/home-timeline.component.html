@@ -1,0 +1,34 @@
+<h1>Here is your network's recent activity</h1>
+<div class="timeline-container">
+  <ng-container *ngFor="let f of feed">
+    <mat-card class="card-container">
+      <div class="feed-row">
+        <img
+          (click)="navigateTo('user', f.username)"
+          class="profile-picture"
+          alt="Avatar"
+          width="50"
+          height="50"
+          [src]="f.profilePicture"
+        />
+        <div class="feed-col">
+          <span (click)="navigateTo('user', f.username)" class="feed-link">{{
+            f.name
+          }}</span>
+          <span class="feed-line">
+            {{ getFeedLine(f.type, f.quantity, f.avgPrice)[0] }}
+            <span (click)="navigateTo('stock', f.symbol)" class="feed-link">{{
+              f.symbol
+            }}</span>
+            {{ getFeedLine(f.type, f.quantity, f.avgPrice)[1] }}</span
+          >
+          <span class="feed-time">{{ getFeedTime(f.time) }}</span>
+        </div>
+      </div>
+    </mat-card>
+  </ng-container>
+  <div *ngIf = "!!feed && feed.length == 0" class="no-feed-container">
+    <div>You have no news from your followers, try finding users in the leaderboard to follow for news</div>
+    <button mat-raised-button color="primary" routerLink="/leaderboard">View leaderboard</button>
+  </div>
+</div>

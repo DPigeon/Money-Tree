@@ -1,0 +1,35 @@
+package com.capstone.moneytree.facade
+
+import spock.lang.Specification
+
+import javax.mail.internet.MimeMessage
+
+class SmtpServerRuleTest extends Specification {
+
+    private SmtpServerRule smtpServerRuleUtils
+
+    def "It should initialize the smtpServer"() {
+        given: "A mocked port for emails"
+        int port = 2525
+
+        when: "Initializes the smtpServer"
+        smtpServerRuleUtils = new SmtpServerRule(port)
+
+        then:
+        assert smtpServerRuleUtils != null
+    }
+
+    def "It should get messages from smtpServer"() {
+        given: "A mocked port for emails and a server"
+        int port = 2525
+        smtpServerRuleUtils = new SmtpServerRule(port)
+        smtpServerRuleUtils.before()
+
+        when: "retrieving the messages"
+        MimeMessage[] messages = smtpServerRuleUtils.getMessages()
+        smtpServerRuleUtils.after()
+
+        then: "Get the right messages"
+        assert messages.length == 0
+    }
+}

@@ -7,7 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ import com.capstone.moneytree.exception.ExceptionAmazonS3;
 public class AmazonS3Facade {
 
    private static final Logger LOG = LoggerFactory.getLogger(AmazonS3Facade.class);
-   private AmazonS3 s3;
+   private final AmazonS3 s3;
 
    public AmazonS3Facade(@Value("${aws.access.key.id}") String accessKey, @Value("${aws.secret.access.key}") String secretKey) {
       AWSCredentials credentials = new BasicAWSCredentials(

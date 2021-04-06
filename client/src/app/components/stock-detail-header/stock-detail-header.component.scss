@@ -1,19 +1,20 @@
 @import "../../../styles.scss";
 
 .company-title {
-  display: flex;
+  
   align-items: center;
   margin-bottom: 20px;
   justify-content: space-between;
-  align-items: center;
 
   .company-header {
     display: flex;
-    flex-direction: row;
+    flex-flow: wrap;
     align-items: center;
+
     h1 {
       margin: 0;
       font-size: 30px;
+      margin-right: 1rem;
 
       .ticker {
         font-size: 36px;
@@ -21,6 +22,10 @@
         color: $primary-color;
         margin-right: 10px;
       }
+    }
+
+    .chips-container{
+      margin-top: 1rem ;
     }
 
     .company-logo {
@@ -32,8 +37,33 @@
       margin-right: 10px;
     }
   }
-}
 
+  .mat-chip {
+    color: $primary-color;
+    background-color: white;
+    border: lightgoldenrodyellow solid 0.01px;
+    max-width: 120px;
+    align-items: center;
+    overflow: hidden;
+    display: inline-flex;
+  }
+
+  .open-market {
+    color: rgba(2, 131, 38, 0.87) !important;
+    background-color: rgba(210, 252, 207, 1) !important;
+  }
+  .closed-market {
+    color: $mt-red !important;
+    background-color: rgb(243, 220, 219) !important;
+  }
+}
+.next-opening-message {
+  color: $mt-red;
+  font-weight: 500;
+  text-align: right;
+  font-size: small;
+  margin: 40px 0 -5px 0;
+}
 .stock-pricing {
   margin-left: 1rem;
   display: flex;

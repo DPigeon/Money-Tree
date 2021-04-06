@@ -1,0 +1,49 @@
+<div class="table-container">
+  <table *ngIf="!!alpacaPositions && alpacaPositions.length != 0" mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="company">
+      <th position="sticky" mat-header-cell *matHeaderCellDef>Company</th>
+      <td
+        class="symbol"
+        (click)="navigateToStockPage(element.company)"
+        mat-cell
+        *matCellDef="let element"
+      >
+        {{ element.company }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Amount $</th>
+      <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="gain_loss">
+      <th mat-header-cell *matHeaderCellDef>Gain/Loss $</th>
+      <td mat-cell *matCellDef="let element" [class]="stockChangeColor(element.gain_loss)">
+        <span *ngIf="element.gain_loss < 0">&darr;</span>
+        <span *ngIf="element.gain_loss > 0">&uarr;</span>
+        {{ formatStat(element.gain_loss) }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>Price $</th>
+      <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="change">
+      <th mat-header-cell *matHeaderCellDef>Change Today</th>
+      <td mat-cell *matCellDef="let element" [class]="stockChangeColor(element.change)">
+        <span *ngIf="element.change < 0">&darr;</span>
+        <span *ngIf="element.change > 0">&uarr;</span>
+        {{ formatStat(element.change) }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <div *ngIf="!!alpacaPositions && alpacaPositions.length == 0">
+    Currently owns no stocks
+  </div>
+</div>

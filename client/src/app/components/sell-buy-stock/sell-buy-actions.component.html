@@ -1,0 +1,71 @@
+<div class="action-wrapper">
+  <div class="w-100">
+    <mat-icon class="close-button" mat-dialog-close>close</mat-icon>
+  </div>
+
+  <div mat-dialog-title class="sell-buy-title">
+    {{ getProcessActionType() }} Actions<mat-icon>card_travel</mat-icon>
+  </div>
+  <div mat-dialog-content class="sell-buy-container">
+    <label>Please choose the type of your order</label>
+    <mat-radio-group
+      class="radio-group"
+      aria-label="Select an option"
+      color="primary"
+      [(ngModel)]="isMarketOrder"
+      (change)="clearInputs()"
+    >
+      <mat-radio-button [value]="true">Market Order</mat-radio-button>
+      <mat-radio-button [value]="false">Limit Order</mat-radio-button>
+    </mat-radio-group>
+
+    <div class="sell-buy-field">Available Balance: <span>{{ balance | currency:'USD' }}</span></div>
+    <div class="sell-buy-field">Company Name:<span>{{ stockName }}</span></div>
+    <div *ngIf="isMarketOrder" class="sell-buy-field">
+      Current Price:<span>$ {{ stockPrice }}</span>
+    </div>
+    <div *ngIf="!isMarketOrder" class="sell-buy-field">
+      Price:
+      <input
+        *ngIf="!isMarketOrder"
+        [(ngModel)]="price"
+        class="sell-buy-input"
+        type="number"
+        min="0"
+        matInput
+      />
+    </div>
+    <span class="quantity-error" *ngIf="price < 0">Only Positive Number</span>
+    <div class="sell-buy-field">
+      Quantity:
+      <input
+        [(ngModel)]="quantity"
+        class="sell-buy-input"
+        type="number"
+        min="0"
+        matInput
+      />
+    </div>
+    <span class="quantity-error" *ngIf="quantity < 0"
+      >Only Positive Number</span
+    >
+    <div *ngIf="isMarketOrder" class="sell-buy-field">
+      Estimated Total:<span>{{getTotal() | currency:'USD'}}</span>
+    </div>
+    <div *ngIf="!isMarketOrder" class="sell-buy-field">
+      Total:<span>{{getTotal() | currency:'USD' }}</span>
+    </div>
+    <div class="sell-buy-field">Remaining Balance:<span>{{getRemainingBalance() | currency:'USD'}}</span></div>
+  </div>
+  <div mat-dialog-actions>
+    <button
+      class="sell-buy-button"
+      mat-flat-button
+      color="primary"
+      (click)="processActions()"
+      [disabled]="buySellVerify()"
+    >
+      {{ getProcessActionType().toUpperCase() }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+@import "../../../styles.scss";
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.8em 0 0.8em 0;
+}
+.title {
+  margin-left: 5px;
+  font-weight: 500;
+}
+.followings-container {
+  padding: 10px;
+  height: calc(90vh - 100px);
+  margin-bottom: 20px;
+  overflow-y: hidden;
+
+  .mat-form-field {
+    width: 100% !important;
+    line-height: 1;
+
+    .search-icon {
+      color: $placeholder-color;
+    }
+    .clear-icon {
+      color: $placeholder-color;
+    }
+  }
+  .users-following-container {
+    margin-top: 10px;
+    overflow-y: auto;
+    height: calc(100% - 100px);
+
+    .following-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 10px;
+
+      .following-picture {
+        border-radius: 50%;
+        margin-right: 5px;
+        margin-right: 10px;
+        object-fit: cover;
+      }
+
+      .following-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+
+        .following-name {
+          outline: none;
+          cursor: pointer;
+          font-weight: 500;
+        }
+
+        .following-score-label {
+          color: $mt-red;
+          font-weight: 500;
+          font-size: 12px;
+        }
+
+        .following-score {
+          color: $primary-color;
+          font-weight: 500;
+          font-size: 12px;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}

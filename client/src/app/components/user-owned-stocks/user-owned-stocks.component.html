@@ -4,8 +4,7 @@
     <mat-icon>local_atm</mat-icon>
   </div>
 
-  <div *ngIf="false" class="user-stock-container">
-    <!--ngIf to change -->
+  <div *ngIf="userHasThisStock()" class="user-stock-container">
     <div class="col-left">
       <div class="row">
         <span class="label">No. of Shares: </span>
@@ -19,7 +18,7 @@
       <mat-divider [inset]="true"></mat-divider>
       <div class="row">
         <span class="label">% Portfolio: </span>
-        <span id="user-stock-portfolio">{{ userStockPortfolio }}</span>
+        <span id="user-stock-portfolio">% {{ userStockPortfolio }}</span>
       </div>
       <mat-divider [inset]="true"></mat-divider>
     </div>
@@ -30,32 +29,37 @@
       </div>
       <mat-divider [inset]="true"></mat-divider>
       <div class="row">
-        <span id="user-stock-value">{{ userStockTotalValue }}</span>
+        <span id="user-stock-value">$ {{ userStockTotalValue }}</span>
       </div>
       <mat-divider [inset]="true"></mat-divider>
       <div class="row" [ngClass]="stockChangeColor()">
-        <span id="user-stock-change"
-          >{{ userStockChange }}
-          <span *ngIf="!isUserStockIncrease()">&darr;</span>
-          <span *ngIf="isUserStockIncrease()">&uarr;</span>
-          {{ userStockPercentageChange }}
+        <span id="user-stock-change">$ {{ profitOrLossAmount }}
+          <span *ngIf="!isUserGained()">&darr;</span>
+          <span *ngIf="isUserGained()">&uarr;</span>
+          % {{ profitOrLossPercent }}
         </span>
       </div>
       <mat-divider [inset]="true"></mat-divider>
     </div>
   </div>
-  <div *ngIf="true" class="user-stock-empty-container">
-    <!--ngIf to change -->
-    At the moment, You don’t have any {{ stockSymbol }} shares in
-    your portfolio.
+  <div *ngIf="!userHasThisStock() && stockInfo" class="user-stock-empty-container">
+    At the moment, You don’t have any
+    {{stockSymbol}}({{stockCompanyName }}) shares in your
+    portfolio.
   </div>
-  <div *ngIf="false" class="buttons-container">
-    <!--ngIf to change -->
-    <button class="btn-half" mat-raised-button color="primary">BUY</button>
-    <button class="btn-half" mat-raised-button color="primary">SELL</button>
+  <div *ngIf="userHasThisStock()" class="buttons-container">
+
+    <button class="btn-half" mat-raised-button color="primary" (click)="openSellOrBuyActionsModal('buy')">
+      BUY
+    </button>
+    <button class="btn-half" mat-raised-button color="primary" (click)="openSellOrBuyActionsModal('sell')">
+      SELL
+    </button>
   </div>
-  <div *ngIf="true" class="buy-button">
-    <!--ngIf to change -->
-    <button class="btn" mat-raised-button color="primary">BUY</button>
+
+  <div *ngIf="!userHasThisStock()" class="buy-button">
+    <button class="btn" mat-raised-button color="primary" (click)="openSellOrBuyActionsModal('buy')">
+      BUY
+    </button>
   </div>
 </mat-card>

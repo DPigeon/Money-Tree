@@ -1,0 +1,26 @@
+<mat-card class="transaction-history-container">
+  <mat-card-title>Transaction History</mat-card-title>
+  <div class="wrapper">
+    <div *ngIf="transactions && !transactions.length">You have no transactions yet</div>
+    <ng-container *ngFor="let transaction of transactions">
+
+      <div class="single-transaction-container">
+        <span>{{transactionFormatStart(transaction)}}
+          <a [routerLink]="['../../stock-detail', transaction.symbol]">{{transaction.symbol}}</a>
+          {{transactionFormatEnd(transaction)}}</span>
+
+      </div>
+
+      <div *ngIf="transaction.status=='COMPLETED'  ; else elseBlock"
+        [ngClass]="transaction.status=='COMPLETED' ? 'transaction-status-date': 'transaction-status-pending'">
+        {{transaction.time_in_force | date}}
+      </div>
+      <ng-template #elseBlock>
+        <div class="transaction-status-pending">Pending</div>
+      </ng-template>
+
+      <mat-divider [inset]="true"></mat-divider>
+
+    </ng-container>
+  </div>
+</mat-card>

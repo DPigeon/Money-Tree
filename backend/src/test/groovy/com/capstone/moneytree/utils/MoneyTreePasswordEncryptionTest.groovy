@@ -1,6 +1,5 @@
 package com.capstone.moneytree.utils
 
-
 import spock.lang.Specification
 
 class MoneyTreePasswordEncryptionTest extends Specification {

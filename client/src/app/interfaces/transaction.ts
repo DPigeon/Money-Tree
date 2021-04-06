@@ -1,9 +1,13 @@
-import { Stock } from './stock';
-
 export interface Transaction {
-  qty: number;
-  status: string; // This is the status of the order
-  orderType: string; // This is the type of order
-  averagePricePerShare: number;
-  stockFulfilled: Stock;
+  symbol: string;
+  qty?: number;
+  total?: number;
+  side?: string; // buy / sell
+  type: string; // market / limit
+  timeInForce: string;
+  status?: string; // This is the status of the order
+  averagePricePerShare?: number;
+  client_order_id?: string;
+  limitPrice?: number; // price for limit order
+  industry?: string;
 }
