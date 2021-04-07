@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
@@ -8,12 +8,11 @@ import { User } from 'src/app/interfaces/user';
   templateUrl: './followings-search.component.html',
   styleUrls: ['./followings-search.component.scss'],
 })
-export class FollowingsSearchComponent implements OnInit {
+export class FollowingsSearchComponent {
   @Input() followings$: Observable<User[]>;
   followingSearch = '';
 
-  constructor(private router: Router) {}
-  ngOnInit(): void {}
+  constructor(private router: Router) { }
 
   navigateToFollowingProfile(username: string): void {
     this.router.navigate(['/profile/' + username]);

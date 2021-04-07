@@ -134,8 +134,7 @@ export class EditProfileComponent {
           const allErrorNames = Object.keys(
             this.editProfileForm.get(field).errors
           );
-          const result = field + ',' + allErrorNames[0]; // the result would be for example "firstName,required"
-          return result;
+          return field + ',' + allErrorNames[0]; // the result would be for example "firstName,required";
         }
       }
     }

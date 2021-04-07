@@ -1,5 +1,4 @@
 import { UserProfile } from './../../interfaces/user';
-import { Transaction } from './../../interfaces/transaction';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MATERIAL_MODULE_DEPENDENCIES,
@@ -72,7 +71,9 @@ describe('SectorsPieChartComponent', () => {
         ]);
         expect(spy).toHaveBeenCalled();
       })
-      .catch(() => {});
+      .catch(() => {
+      // this is intentional for test
+      });
     expect(component.isUnavailableChart).toBe(false);
   });
 });
