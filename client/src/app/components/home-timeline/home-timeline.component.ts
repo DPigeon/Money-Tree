@@ -20,7 +20,7 @@ export class HomeTimelineComponent implements OnChanges {
     this.router.navigate([route]);
   }
   getFeedLine(type: string, qty: number, avgPrice: number): string[] {
-    const action = type.includes('BUY') ? 'Bought' : ' Sold';
+    const action = type.includes('BUY') ? 'Bought' : 'Sold';
     const line1 = action + ' ' + qty + ' shares of';
     const line2 = ' stocks at an average of $' + avgPrice + ' a share.';
     return [line1, line2];
