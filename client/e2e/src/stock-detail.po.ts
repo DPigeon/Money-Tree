@@ -66,4 +66,45 @@ export class StockDetail {
   getChartOptions(): ElementFinder {
     return element(by.id('chart-options'));
   }
+  getStockStockBuyButton(): ElementFinder {
+    return element(by.buttonText('BUY'));
+  }
+  getStockStockSellButton(): ElementFinder {
+    return element(by.buttonText('SELL'));
+  }
+  getStockQuantityInput(): ElementFinder {
+    return element(by.id('stock-quantity-input'));
+  }
+  getPopupStockActionButton(): ElementFinder {
+    return element(by.className('sell-buy-button'));
+  }
+  getStockConfirmationSnackBar(): ElementFinder {
+    return element(by.className('mat-snack-bar-container'));
+  }
+  placeMarketOrder(ticker = 'bb'): void {
+    this.navigateToStockDetailPage(ticker);
+    const buyButton = this.getStockStockBuyButton();
+    buyButton.click();
+    browser.sleep(1000);
+    const quantityInput = this.getStockQuantityInput();
+    quantityInput.sendKeys(1);
+    const popupBuyButton = this.getPopupStockActionButton();
+    browser.sleep(1000);
+    popupBuyButton.click();
+  }
+  getStockLimitRadioButton(): ElementFinder {
+    return element(by.id('buy-limit'));
+  }
+  getLimitPriceInput(): ElementFinder {
+    return element(by.id('limit-price-input'));
+  }
+  getStockSymbolHomePage(): ElementFinder {
+    return element(by.className('symbol'));
+  }
+  getUserScore(): ElementFinder {
+    return element(by.className('user-score'));
+  }
+  getAdditionalInfomation(): ElementFinder {
+    return element(by.className('additional-info'));
+  }
 }

@@ -15,8 +15,8 @@
       [(ngModel)]="isMarketOrder"
       (change)="clearInputs()"
     >
-      <mat-radio-button [value]="true">Market Order</mat-radio-button>
-      <mat-radio-button [value]="false">Limit Order</mat-radio-button>
+      <mat-radio-button id="buy-market" [value]="true">Market Order</mat-radio-button>
+      <mat-radio-button id="buy-limit" [value]="false">Limit Order</mat-radio-button>
     </mat-radio-group>
 
     <div class="sell-buy-field">Available Balance: <span>{{ balance | currency:'USD' }}</span></div>
@@ -27,6 +27,7 @@
     <div *ngIf="!isMarketOrder" class="sell-buy-field">
       Price:
       <input
+        id="limit-price-input"
         *ngIf="!isMarketOrder"
         [(ngModel)]="price"
         class="sell-buy-input"
@@ -39,6 +40,7 @@
     <div class="sell-buy-field">
       Quantity:
       <input
+        id="stock-quantity-input"
         [(ngModel)]="quantity"
         class="sell-buy-input"
         type="number"
