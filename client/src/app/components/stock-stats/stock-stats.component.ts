@@ -9,7 +9,7 @@ import { Stock } from './../../interfaces/stock';
 export class StockStatsComponent {
   @Input() stockInfo: Stock;
   constructor() {
-    //empty constructor
+    // empty constructor
   }
 
   get stockOpenPrice(): string {

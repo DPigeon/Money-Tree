@@ -46,7 +46,7 @@ describe('HomeComponent', () => {
           provide: MatDialogRef,
           useValue: {
             close: (dialogResult: any) => {
-              //testing matdialog
+              // testing matdialog
             },
           },
         },
