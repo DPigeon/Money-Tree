@@ -48,6 +48,5 @@ public interface UserService {
     List<User> getFollowersWhoOwnsTheStock(Long id, String symbol);
     List<SanitizedUser> getLeaderboard();
     void deleteUserByEmail(String email);
-
     Float getUserPercentile(String username);
 }

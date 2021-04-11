@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.capstone.moneytree.model.MoneyTreeOrderType;
 import com.capstone.moneytree.model.node.Transaction;
-import com.capstone.moneytree.model.node.User;
-
 import net.jacobpeterson.domain.alpaca.order.Order;
 
 public interface TransactionService {
