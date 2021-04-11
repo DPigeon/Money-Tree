@@ -546,6 +546,33 @@ class DefaultTransactionServiceTest extends Specification {
         thrown(EntityNotFoundException)
     }
 
+
+    def "Should properly construct a transaction from an order"() {
+        given: "An alpaca order"
+        Order alpacaOrder = new Order()
+        alpacaOrder.setCreatedAt(ZonedDateTime.parse("2021-04-01T11:00:00-00:00"))
+        alpacaOrder.setClientOrderId('order-id-01')
+        alpacaOrder.setType('market')
+        alpacaOrder.setQty('1')
+        alpacaOrder.setSide('buy')
+        alpacaOrder.setSubmittedAt(ZonedDateTime.parse("2021-04-01T11:00:00-00:00"))
+        alpacaOrder.setSymbol('AAPL')
+        Stock stock = Stock.builder().industry('Tech').symbol('AAPL').build()
+
+        when: "Constructing a new transaction"
+        Transaction t = transactionService.constructTransactionFromOrder(alpacaOrder, stock)
+
+        then: "Transaction has to be constructed based on the alpaca order given"
+        t.getStatus() == TransactionStatus.PENDING
+        t.getPurchasedAt() == alpacaOrder.getCreatedAt()
+        t.getClientOrderId() == alpacaOrder.getClientOrderId()
+        t.getMoneyTreeOrderType() == MoneyTreeOrderType.MARKET_BUY
+        t.getQuantity() == Float.parseFloat(alpacaOrder.getQty())
+        t.getPurchasedAt() == alpacaOrder.getSubmittedAt()
+        t.getSymbol() == alpacaOrder.getSymbol()
+        t.getIndustry() == stock.getIndustry()
+    }
+
     Stock buildStock(Asset asset) {
         return Stock.builder()
                 .status(asset.getStatus())
