@@ -86,15 +86,17 @@ describe('HomeTimelineComponent Unit Test', () => {
       'Dec',
     ];
 
-    const currentDate = new Date(); // checking the function by passing the current time
-    const time = `${currentDate.getFullYear()}-${
-      currentDate.getMonth() + 1
-    }-${currentDate.getDay()}`;
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+
+    const time = `${twoDaysAgo.getFullYear()}-${
+      twoDaysAgo.getMonth() + 1
+    }-${twoDaysAgo.getDate()}`;
 
     expect(component.getFeedTime(time)).toEqual(
       `${
-        months[currentDate.getMonth()]
-      } ${currentDate.getDay()}, ${currentDate.getFullYear()}`
+        months[twoDaysAgo.getMonth()]
+      } ${twoDaysAgo.getDate()}, ${twoDaysAgo.getFullYear()}`
     );
   });
 });
