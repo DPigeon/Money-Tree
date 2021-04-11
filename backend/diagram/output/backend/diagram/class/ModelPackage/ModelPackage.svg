@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="948px" preserveAspectRatio="none" style="width:3164px;height:948px;" version="1.1" viewBox="0 0 3164 948" width="3164px" zoomAndPan="magnify"><defs><filter height="300%" id="f1r2gw520sulrx" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--MD5=[5d4cd377749310b66bf14896f5cd8d9b]
+cluster model--><polygon fill="#FFFFFF" filter="url(#f1r2gw520sulrx)" points="16,6,65,6,72,29.6094,3147,29.6094,3147,941,16,941,16,6" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="16" x2="72" y1="29.6094" y2="29.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="43" x="20" y="22.5332">model</text><!--MD5=[45a32c0017ac643a1c335155c17e1893]
+cluster relationship--><polygon fill="#FFFFFF" filter="url(#f1r2gw520sulrx)" points="40,328.5,130,328.5,137,352.1094,1924,352.1094,1924,917,40,917,40,328.5" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="40" x2="137" y1="352.1094" y2="352.1094"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="84" x="44" y="345.0332">relationship</text><!--MD5=[b9de0669a29c7bc934fd916b09c39491]
+cluster node--><polygon fill="#FFFFFF" filter="url(#f1r2gw520sulrx)" points="1948,280,1990,280,1997,303.6094,2799,303.6094,2799,816.5,1948,816.5,1948,280" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="1948" x2="1997" y1="303.6094" y2="303.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="36" x="1952" y="296.5332">node</text><!--MD5=[be996cdb8e6bf2fc7cb89c555f2cd144]
+class Entity--><rect codeLine="3" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="89.5078" id="Entity" style="stroke:#A80036;stroke-width:1.5;" width="115" x="1830.5" y="104"/><ellipse cx="1869.8" cy="120" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M1872.5656,115.875 Q1872.7219,115.6563 1872.9094,115.5469 Q1873.0969,115.4375 1873.3156,115.4375 Q1873.6906,115.4375 1873.925,115.7031 Q1874.1594,115.9531 1874.1594,116.5625 L1874.1594,118.0156 Q1874.1594,118.625 1873.925,118.8906 Q1873.6906,119.1563 1873.3156,119.1563 Q1872.9719,119.1563 1872.7688,118.9531 Q1872.5656,118.7656 1872.4563,118.25 Q1872.4094,117.8906 1872.2219,117.7031 Q1871.8938,117.3281 1871.2844,117.1094 Q1870.675,116.8906 1870.05,116.8906 Q1869.2844,116.8906 1868.6438,117.2188 Q1868.0188,117.5469 1867.5188,118.2969 Q1867.0344,119.0469 1867.0344,120.0781 L1867.0344,121.1719 Q1867.0344,122.4063 1867.925,123.2344 Q1868.8156,124.0469 1870.4094,124.0469 Q1871.3469,124.0469 1872.0031,123.7969 Q1872.3938,123.6406 1872.8156,123.2031 Q1873.0813,122.9375 1873.2219,122.8594 Q1873.3781,122.7813 1873.5813,122.7813 Q1873.9094,122.7813 1874.1594,123.0469 Q1874.425,123.2969 1874.425,123.6406 Q1874.425,123.9844 1874.0813,124.3906 Q1873.5813,124.9688 1872.7844,125.2969 Q1871.7063,125.75 1870.4094,125.75 Q1868.8938,125.75 1867.6906,125.125 Q1866.7063,124.625 1866.0188,123.5625 Q1865.3313,122.4844 1865.3313,121.2031 L1865.3313,120.0469 Q1865.3313,118.7188 1865.9406,117.5781 Q1866.5656,116.4219 1867.6594,115.8125 Q1868.7531,115.1875 1869.9875,115.1875 Q1870.7219,115.1875 1871.3625,115.3594 Q1872.0188,115.5156 1872.5656,115.875 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="29" x="1889.2" y="124.9102">Entity</text><line style="stroke:#A80036;stroke-width:1.5;" x1="1831.5" x2="1944.5" y1="136" y2="136"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="1838.5" y="144"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="35" x="1850.5" y="151.4189">Long id</text><line style="stroke:#A80036;stroke-width:1.5;" x1="1831.5" x2="1944.5" y1="157.8359" y2="157.8359"/><ellipse cx="1841.5" cy="168.8359" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="58" x="1850.5" y="173.2549">Long getId()</text><ellipse cx="1841.5" cy="182.6719" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="89" x="1850.5" y="187.0908">void setId(Long id)</text><!--MD5=[ce15b93c066a6abd8b8a3a9d560bc305]
+class AlpacaOAuthResponse--><rect codeLine="9" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="89.5078" id="AlpacaOAuthResponse" style="stroke:#A80036;stroke-width:1.5;" width="160" x="2131" y="104"/><ellipse cx="2146" cy="120" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2148.7656,115.875 Q2148.9219,115.6563 2149.1094,115.5469 Q2149.2969,115.4375 2149.5156,115.4375 Q2149.8906,115.4375 2150.125,115.7031 Q2150.3594,115.9531 2150.3594,116.5625 L2150.3594,118.0156 Q2150.3594,118.625 2150.125,118.8906 Q2149.8906,119.1563 2149.5156,119.1563 Q2149.1719,119.1563 2148.9688,118.9531 Q2148.7656,118.7656 2148.6563,118.25 Q2148.6094,117.8906 2148.4219,117.7031 Q2148.0938,117.3281 2147.4844,117.1094 Q2146.875,116.8906 2146.25,116.8906 Q2145.4844,116.8906 2144.8438,117.2188 Q2144.2188,117.5469 2143.7188,118.2969 Q2143.2344,119.0469 2143.2344,120.0781 L2143.2344,121.1719 Q2143.2344,122.4063 2144.125,123.2344 Q2145.0156,124.0469 2146.6094,124.0469 Q2147.5469,124.0469 2148.2031,123.7969 Q2148.5938,123.6406 2149.0156,123.2031 Q2149.2813,122.9375 2149.4219,122.8594 Q2149.5781,122.7813 2149.7813,122.7813 Q2150.1094,122.7813 2150.3594,123.0469 Q2150.625,123.2969 2150.625,123.6406 Q2150.625,123.9844 2150.2813,124.3906 Q2149.7813,124.9688 2148.9844,125.2969 Q2147.9063,125.75 2146.6094,125.75 Q2145.0938,125.75 2143.8906,125.125 Q2142.9063,124.625 2142.2188,123.5625 Q2141.5313,122.4844 2141.5313,121.2031 L2141.5313,120.0469 Q2141.5313,118.7188 2142.1406,117.5781 Q2142.7656,116.4219 2143.8594,115.8125 Q2144.9531,115.1875 2146.1875,115.1875 Q2146.9219,115.1875 2147.5625,115.3594 Q2148.2188,115.5156 2148.7656,115.875 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="128" x="2160" y="124.9102">AlpacaOAuthResponse</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2132" x2="2290" y1="136" y2="136"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2139" y="144"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="99" x="2151" y="151.4189">String accessToken;</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2139" y="157.8359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="84" x="2151" y="165.2549">String tokenType;</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2139" y="171.6719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="64" x="2151" y="179.0908">String scope;</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2132" x2="2290" y1="185.5078" y2="185.5078"/><!--MD5=[256d8fe9ac1c650def06be8b0c4ec535]
+class AlpacaOrder--><rect codeLine="15" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="214.0313" id="AlpacaOrder" style="stroke:#A80036;stroke-width:1.5;" width="123" x="2326.5" y="42"/><ellipse cx="2351.85" cy="58" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2354.6156,53.875 Q2354.7719,53.6563 2354.9594,53.5469 Q2355.1469,53.4375 2355.3656,53.4375 Q2355.7406,53.4375 2355.975,53.7031 Q2356.2094,53.9531 2356.2094,54.5625 L2356.2094,56.0156 Q2356.2094,56.625 2355.975,56.8906 Q2355.7406,57.1563 2355.3656,57.1563 Q2355.0219,57.1563 2354.8188,56.9531 Q2354.6156,56.7656 2354.5063,56.25 Q2354.4594,55.8906 2354.2719,55.7031 Q2353.9438,55.3281 2353.3344,55.1094 Q2352.725,54.8906 2352.1,54.8906 Q2351.3344,54.8906 2350.6938,55.2188 Q2350.0688,55.5469 2349.5688,56.2969 Q2349.0844,57.0469 2349.0844,58.0781 L2349.0844,59.1719 Q2349.0844,60.4063 2349.975,61.2344 Q2350.8656,62.0469 2352.4594,62.0469 Q2353.3969,62.0469 2354.0531,61.7969 Q2354.4438,61.6406 2354.8656,61.2031 Q2355.1313,60.9375 2355.2719,60.8594 Q2355.4281,60.7813 2355.6313,60.7813 Q2355.9594,60.7813 2356.2094,61.0469 Q2356.475,61.2969 2356.475,61.6406 Q2356.475,61.9844 2356.1313,62.3906 Q2355.6313,62.9688 2354.8344,63.2969 Q2353.7563,63.75 2352.4594,63.75 Q2350.9438,63.75 2349.7406,63.125 Q2348.7563,62.625 2348.0688,61.5625 Q2347.3813,60.4844 2347.3813,59.2031 L2347.3813,58.0469 Q2347.3813,56.7188 2347.9906,55.5781 Q2348.6156,54.4219 2349.7094,53.8125 Q2350.8031,53.1875 2352.0375,53.1875 Q2352.7719,53.1875 2353.4125,53.3594 Q2354.0688,53.5156 2354.6156,53.875 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="68" x="2368.15" y="62.9102">AlpacaOrder</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2327.5" x2="2448.5" y1="74" y2="74"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2334.5" y="82"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="39" x="2346.5" y="89.4189">String id</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2334.5" y="95.8359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="92" x="2346.5" y="103.2549">String clientOrderId</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2334.5" y="109.6719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="79" x="2346.5" y="117.0908">String createdAt</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2334.5" y="123.5078"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="81" x="2346.5" y="130.9268">String updatedAt</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2334.5" y="137.3438"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="88" x="2346.5" y="144.7627">String submittedAt</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2334.5" y="151.1797"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="65" x="2346.5" y="158.5986">String symbol</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2334.5" y="165.0156"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="41" x="2346.5" y="172.4346">Float qty</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2334.5" y="178.8516"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="70" x="2346.5" y="186.2705">String filledQty</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2334.5" y="192.6875"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="97" x="2346.5" y="200.1064">String filledAvgPrice</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2334.5" y="206.5234"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="81" x="2346.5" y="213.9424">String orderType</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2334.5" y="220.3594"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="51" x="2346.5" y="227.7783">String side</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2334.5" y="234.1953"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="86" x="2346.5" y="241.6143">String timeInForce</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2327.5" x2="2448.5" y1="248.0313" y2="248.0313"/><!--MD5=[93b867cf5e7a1e913dd5047074c12207]
+class Mail--><rect codeLine="30" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="131.0156" id="Mail" style="stroke:#A80036;stroke-width:1.5;" width="646" x="2485" y="83.5"/><ellipse cx="2792.75" cy="99.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2795.5156,95.375 Q2795.6719,95.1563 2795.8594,95.0469 Q2796.0469,94.9375 2796.2656,94.9375 Q2796.6406,94.9375 2796.875,95.2031 Q2797.1094,95.4531 2797.1094,96.0625 L2797.1094,97.5156 Q2797.1094,98.125 2796.875,98.3906 Q2796.6406,98.6563 2796.2656,98.6563 Q2795.9219,98.6563 2795.7188,98.4531 Q2795.5156,98.2656 2795.4063,97.75 Q2795.3594,97.3906 2795.1719,97.2031 Q2794.8438,96.8281 2794.2344,96.6094 Q2793.625,96.3906 2793,96.3906 Q2792.2344,96.3906 2791.5938,96.7188 Q2790.9688,97.0469 2790.4688,97.7969 Q2789.9844,98.5469 2789.9844,99.5781 L2789.9844,100.6719 Q2789.9844,101.9063 2790.875,102.7344 Q2791.7656,103.5469 2793.3594,103.5469 Q2794.2969,103.5469 2794.9531,103.2969 Q2795.3438,103.1406 2795.7656,102.7031 Q2796.0313,102.4375 2796.1719,102.3594 Q2796.3281,102.2813 2796.5313,102.2813 Q2796.8594,102.2813 2797.1094,102.5469 Q2797.375,102.7969 2797.375,103.1406 Q2797.375,103.4844 2797.0313,103.8906 Q2796.5313,104.4688 2795.7344,104.7969 Q2794.6563,105.25 2793.3594,105.25 Q2791.8438,105.25 2790.6406,104.625 Q2789.6563,104.125 2788.9688,103.0625 Q2788.2813,101.9844 2788.2813,100.7031 L2788.2813,99.5469 Q2788.2813,98.2188 2788.8906,97.0781 Q2789.5156,95.9219 2790.6094,95.3125 Q2791.7031,94.6875 2792.9375,94.6875 Q2793.6719,94.6875 2794.3125,94.8594 Q2794.9688,95.0156 2795.5156,95.375 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="22" x="2813.25" y="104.4102">Mail</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2486" x2="3130" y1="115.5" y2="115.5"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2493" y="123.5"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="55" x="2505" y="130.9189">String email</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2493" y="137.3359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="66" x="2505" y="144.7549">String subject</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2493" y="151.1719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="79" x="2505" y="158.5908">String username</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2493" y="165.0078"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="124" x="2505" y="172.4268">TradeUpdate tradeUpdate</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2486" x2="3130" y1="178.8438" y2="178.8438"/><ellipse cx="2496" cy="189.8438" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="79" x="2505" y="194.2627">String toString ()</text><rect fill="#F24D5C" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2493" y="200.6797"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="620" x="2505" y="208.0986">String constructBody (String stockName, String qty, String action, String avgPrice, ZonedDateTime timestamp, String totalAmount)</text><!--MD5=[c04a228c2edc8cb4edb0b8536253a65d]
+class UserBuilder--><rect codeLine="39" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="71.6719" id="UserBuilder" style="stroke:#A80036;stroke-width:1.5;" width="98" x="2818" y="408"/><ellipse cx="2833" cy="424" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2835.7656,419.875 Q2835.9219,419.6563 2836.1094,419.5469 Q2836.2969,419.4375 2836.5156,419.4375 Q2836.8906,419.4375 2837.125,419.7031 Q2837.3594,419.9531 2837.3594,420.5625 L2837.3594,422.0156 Q2837.3594,422.625 2837.125,422.8906 Q2836.8906,423.1563 2836.5156,423.1563 Q2836.1719,423.1563 2835.9688,422.9531 Q2835.7656,422.7656 2835.6563,422.25 Q2835.6094,421.8906 2835.4219,421.7031 Q2835.0938,421.3281 2834.4844,421.1094 Q2833.875,420.8906 2833.25,420.8906 Q2832.4844,420.8906 2831.8438,421.2188 Q2831.2188,421.5469 2830.7188,422.2969 Q2830.2344,423.0469 2830.2344,424.0781 L2830.2344,425.1719 Q2830.2344,426.4063 2831.125,427.2344 Q2832.0156,428.0469 2833.6094,428.0469 Q2834.5469,428.0469 2835.2031,427.7969 Q2835.5938,427.6406 2836.0156,427.2031 Q2836.2813,426.9375 2836.4219,426.8594 Q2836.5781,426.7813 2836.7813,426.7813 Q2837.1094,426.7813 2837.3594,427.0469 Q2837.625,427.2969 2837.625,427.6406 Q2837.625,427.9844 2837.2813,428.3906 Q2836.7813,428.9688 2835.9844,429.2969 Q2834.9063,429.75 2833.6094,429.75 Q2832.0938,429.75 2830.8906,429.125 Q2829.9063,428.625 2829.2188,427.5625 Q2828.5313,426.4844 2828.5313,425.2031 L2828.5313,424.0469 Q2828.5313,422.7188 2829.1406,421.5781 Q2829.7656,420.4219 2830.8594,419.8125 Q2831.9531,419.1875 2833.1875,419.1875 Q2833.9219,419.1875 2834.5625,419.3594 Q2835.2188,419.5156 2835.7656,419.875 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="66" x="2847" y="428.9102">UserBuilder</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2819" x2="2915" y1="440" y2="440"/><ellipse cx="2829" cy="468.8359" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="36" x="2838" y="473.2549">params</text><line style="stroke:#A80036;stroke-width:1.0;" x1="2819" x2="2845" y1="454.918" y2="454.918"/><line style="stroke:#A80036;stroke-width:1.0;" x1="2819" x2="2845" y1="456.918" y2="456.918"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="44" x="2845" y="458.9189">@Builder</text><line style="stroke:#A80036;stroke-width:1.0;" x1="2889" x2="2915" y1="454.918" y2="454.918"/><line style="stroke:#A80036;stroke-width:1.0;" x1="2889" x2="2915" y1="456.918" y2="456.918"/><!--MD5=[95a66d2ba187cb945fff1ea8d0c5db02]
+class OrderBuilder--><rect codeLine="43" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="71.6719" id="OrderBuilder" style="stroke:#A80036;stroke-width:1.5;" width="102" x="2951" y="408"/><ellipse cx="2966" cy="424" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2968.7656,419.875 Q2968.9219,419.6563 2969.1094,419.5469 Q2969.2969,419.4375 2969.5156,419.4375 Q2969.8906,419.4375 2970.125,419.7031 Q2970.3594,419.9531 2970.3594,420.5625 L2970.3594,422.0156 Q2970.3594,422.625 2970.125,422.8906 Q2969.8906,423.1563 2969.5156,423.1563 Q2969.1719,423.1563 2968.9688,422.9531 Q2968.7656,422.7656 2968.6563,422.25 Q2968.6094,421.8906 2968.4219,421.7031 Q2968.0938,421.3281 2967.4844,421.1094 Q2966.875,420.8906 2966.25,420.8906 Q2965.4844,420.8906 2964.8438,421.2188 Q2964.2188,421.5469 2963.7188,422.2969 Q2963.2344,423.0469 2963.2344,424.0781 L2963.2344,425.1719 Q2963.2344,426.4063 2964.125,427.2344 Q2965.0156,428.0469 2966.6094,428.0469 Q2967.5469,428.0469 2968.2031,427.7969 Q2968.5938,427.6406 2969.0156,427.2031 Q2969.2813,426.9375 2969.4219,426.8594 Q2969.5781,426.7813 2969.7813,426.7813 Q2970.1094,426.7813 2970.3594,427.0469 Q2970.625,427.2969 2970.625,427.6406 Q2970.625,427.9844 2970.2813,428.3906 Q2969.7813,428.9688 2968.9844,429.2969 Q2967.9063,429.75 2966.6094,429.75 Q2965.0938,429.75 2963.8906,429.125 Q2962.9063,428.625 2962.2188,427.5625 Q2961.5313,426.4844 2961.5313,425.2031 L2961.5313,424.0469 Q2961.5313,422.7188 2962.1406,421.5781 Q2962.7656,420.4219 2963.8594,419.8125 Q2964.9531,419.1875 2966.1875,419.1875 Q2966.9219,419.1875 2967.5625,419.3594 Q2968.2188,419.5156 2968.7656,419.875 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="70" x="2980" y="428.9102">OrderBuilder</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2952" x2="3052" y1="440" y2="440"/><ellipse cx="2962" cy="468.8359" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="36" x="2971" y="473.2549">params</text><line style="stroke:#A80036;stroke-width:1.0;" x1="2952" x2="2980" y1="454.918" y2="454.918"/><line style="stroke:#A80036;stroke-width:1.0;" x1="2952" x2="2980" y1="456.918" y2="456.918"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="44" x="2980" y="458.9189">@Builder</text><line style="stroke:#A80036;stroke-width:1.0;" x1="3024" x2="3052" y1="454.918" y2="454.918"/><line style="stroke:#A80036;stroke-width:1.0;" x1="3024" x2="3052" y1="456.918" y2="456.918"/><ellipse cx="3129" cy="444" fill="#000000" rx="2" ry="2" style="stroke:none;stroke-width:1.0;"/><ellipse cx="3090" cy="444" fill="#000000" rx="2" ry="2" style="stroke:none;stroke-width:1.0;"/><ellipse cx="1005" cy="149" fill="#000000" rx="2" ry="2" style="stroke:none;stroke-width:1.0;"/><!--MD5=[e22acca41eda37096213a7436b50b4dd]
+class ToFulfill--><rect fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="48" id="ToFulfill" style="stroke:#A80036;stroke-width:1.5;" width="75" x="2020.5" y="125"/><ellipse cx="2035.5" cy="141" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2038.2656,136.875 Q2038.4219,136.6563 2038.6094,136.5469 Q2038.7969,136.4375 2039.0156,136.4375 Q2039.3906,136.4375 2039.625,136.7031 Q2039.8594,136.9531 2039.8594,137.5625 L2039.8594,139.0156 Q2039.8594,139.625 2039.625,139.8906 Q2039.3906,140.1563 2039.0156,140.1563 Q2038.6719,140.1563 2038.4688,139.9531 Q2038.2656,139.7656 2038.1563,139.25 Q2038.1094,138.8906 2037.9219,138.7031 Q2037.5938,138.3281 2036.9844,138.1094 Q2036.375,137.8906 2035.75,137.8906 Q2034.9844,137.8906 2034.3438,138.2188 Q2033.7188,138.5469 2033.2188,139.2969 Q2032.7344,140.0469 2032.7344,141.0781 L2032.7344,142.1719 Q2032.7344,143.4063 2033.625,144.2344 Q2034.5156,145.0469 2036.1094,145.0469 Q2037.0469,145.0469 2037.7031,144.7969 Q2038.0938,144.6406 2038.5156,144.2031 Q2038.7813,143.9375 2038.9219,143.8594 Q2039.0781,143.7813 2039.2813,143.7813 Q2039.6094,143.7813 2039.8594,144.0469 Q2040.125,144.2969 2040.125,144.6406 Q2040.125,144.9844 2039.7813,145.3906 Q2039.2813,145.9688 2038.4844,146.2969 Q2037.4063,146.75 2036.1094,146.75 Q2034.5938,146.75 2033.3906,146.125 Q2032.4063,145.625 2031.7188,144.5625 Q2031.0313,143.4844 2031.0313,142.2031 L2031.0313,141.0469 Q2031.0313,139.7188 2031.6406,138.5781 Q2032.2656,137.4219 2033.3594,136.8125 Q2034.4531,136.1875 2035.6875,136.1875 Q2036.4219,136.1875 2037.0625,136.3594 Q2037.7188,136.5156 2038.2656,136.875 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="43" x="2049.5" y="145.9102">ToFulfill</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2021.5" x2="2094.5" y1="157" y2="157"/><line style="stroke:#A80036;stroke-width:1.5;" x1="2021.5" x2="2094.5" y1="165" y2="165"/><ellipse cx="1983" cy="149" fill="#000000" rx="2" ry="2" style="stroke:none;stroke-width:1.0;"/><!--MD5=[bda486e35724722cc798a065e49ac151]
+class Follows--><rect codeLine="50" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="117.1797" id="Follows" style="stroke:#A80036;stroke-width:1.5;" width="322" x="56" y="385.5"/><ellipse cx="191.25" cy="401.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M194.0156,397.375 Q194.1719,397.1563 194.3594,397.0469 Q194.5469,396.9375 194.7656,396.9375 Q195.1406,396.9375 195.375,397.2031 Q195.6094,397.4531 195.6094,398.0625 L195.6094,399.5156 Q195.6094,400.125 195.375,400.3906 Q195.1406,400.6563 194.7656,400.6563 Q194.4219,400.6563 194.2188,400.4531 Q194.0156,400.2656 193.9063,399.75 Q193.8594,399.3906 193.6719,399.2031 Q193.3438,398.8281 192.7344,398.6094 Q192.125,398.3906 191.5,398.3906 Q190.7344,398.3906 190.0938,398.7188 Q189.4688,399.0469 188.9688,399.7969 Q188.4844,400.5469 188.4844,401.5781 L188.4844,402.6719 Q188.4844,403.9063 189.375,404.7344 Q190.2656,405.5469 191.8594,405.5469 Q192.7969,405.5469 193.4531,405.2969 Q193.8438,405.1406 194.2656,404.7031 Q194.5313,404.4375 194.6719,404.3594 Q194.8281,404.2813 195.0313,404.2813 Q195.3594,404.2813 195.6094,404.5469 Q195.875,404.7969 195.875,405.1406 Q195.875,405.4844 195.5313,405.8906 Q195.0313,406.4688 194.2344,406.7969 Q193.1563,407.25 191.8594,407.25 Q190.3438,407.25 189.1406,406.625 Q188.1563,406.125 187.4688,405.0625 Q186.7813,403.9844 186.7813,402.7031 L186.7813,401.5469 Q186.7813,400.2188 187.3906,399.0781 Q188.0156,397.9219 189.1094,397.3125 Q190.2031,396.6875 191.4375,396.6875 Q192.1719,396.6875 192.8125,396.8594 Q193.4688,397.0156 194.0156,397.375 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="43" x="211.75" y="406.4102">Follows</text><line style="stroke:#A80036;stroke-width:1.5;" x1="57" x2="377" y1="417.5" y2="417.5"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="64" y="425.5"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="35" x="76" y="432.9189">Long id</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="64" y="439.3359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="131" x="76" y="446.7549">@ StartNode User follower</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="64" y="453.1719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="152" x="76" y="460.5908">@ EndNode User userToFollow</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="64" y="467.0078"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="77" x="76" y="474.4268">Date followDate</text><line style="stroke:#A80036;stroke-width:1.5;" x1="57" x2="377" y1="480.8438" y2="480.8438"/><ellipse cx="67" cy="491.8438" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="296" x="76" y="496.2627">Follows (User follower, User userToFollow, Date followDate)</text><!--MD5=[d2bca4cf16758516f9e2d9a144f2219d]
+class Owns--><rect codeLine="58" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="158.6875" id="Owns" style="stroke:#A80036;stroke-width:1.5;" width="420" x="1488" y="364.5"/><ellipse cx="1677.75" cy="380.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M1680.5156,376.375 Q1680.6719,376.1563 1680.8594,376.0469 Q1681.0469,375.9375 1681.2656,375.9375 Q1681.6406,375.9375 1681.875,376.2031 Q1682.1094,376.4531 1682.1094,377.0625 L1682.1094,378.5156 Q1682.1094,379.125 1681.875,379.3906 Q1681.6406,379.6563 1681.2656,379.6563 Q1680.9219,379.6563 1680.7188,379.4531 Q1680.5156,379.2656 1680.4063,378.75 Q1680.3594,378.3906 1680.1719,378.2031 Q1679.8438,377.8281 1679.2344,377.6094 Q1678.625,377.3906 1678,377.3906 Q1677.2344,377.3906 1676.5938,377.7188 Q1675.9688,378.0469 1675.4688,378.7969 Q1674.9844,379.5469 1674.9844,380.5781 L1674.9844,381.6719 Q1674.9844,382.9063 1675.875,383.7344 Q1676.7656,384.5469 1678.3594,384.5469 Q1679.2969,384.5469 1679.9531,384.2969 Q1680.3438,384.1406 1680.7656,383.7031 Q1681.0313,383.4375 1681.1719,383.3594 Q1681.3281,383.2813 1681.5313,383.2813 Q1681.8594,383.2813 1682.1094,383.5469 Q1682.375,383.7969 1682.375,384.1406 Q1682.375,384.4844 1682.0313,384.8906 Q1681.5313,385.4688 1680.7344,385.7969 Q1679.6563,386.25 1678.3594,386.25 Q1676.8438,386.25 1675.6406,385.625 Q1674.6563,385.125 1673.9688,384.0625 Q1673.2813,382.9844 1673.2813,381.7031 L1673.2813,380.5469 Q1673.2813,379.2188 1673.8906,378.0781 Q1674.5156,376.9219 1675.6094,376.3125 Q1676.7031,375.6875 1677.9375,375.6875 Q1678.6719,375.6875 1679.3125,375.8594 Q1679.9688,376.0156 1680.5156,376.375 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="32" x="1698.25" y="385.4102">Owns</text><line style="stroke:#A80036;stroke-width:1.5;" x1="1489" x2="1907" y1="396.5" y2="396.5"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="1496" y="404.5"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="35" x="1508" y="411.9189">Long id</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="1496" y="418.3359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="113" x="1508" y="425.7549">@ StartNode User user</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="1496" y="432.1719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="116" x="1508" y="439.5908">@ EndNode Stock stock</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="1496" y="446.0078"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="51" x="1508" y="453.4268">Date since</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="1496" y="459.8438"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="62" x="1508" y="467.2627">float quantity</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="1496" y="473.6797"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="66" x="1508" y="481.0986">float avgPrice</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="1496" y="487.5156"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="44" x="1508" y="494.9346">float total</text><line style="stroke:#A80036;stroke-width:1.5;" x1="1489" x2="1907" y1="501.3516" y2="501.3516"/><ellipse cx="1499" cy="512.3516" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="394" x="1508" y="516.7705">Owns (User user, Stock stock, Date since, float quantity, float avgPrice, float total</text><!--MD5=[4ad82892d1c48d2081acaeba4bb4d9db]
+class Made--><rect codeLine="69" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="117.1797" id="Made" style="stroke:#A80036;stroke-width:1.5;" width="388" x="1065" y="385.5"/><ellipse cx="1239.75" cy="401.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M1242.5156,397.375 Q1242.6719,397.1563 1242.8594,397.0469 Q1243.0469,396.9375 1243.2656,396.9375 Q1243.6406,396.9375 1243.875,397.2031 Q1244.1094,397.4531 1244.1094,398.0625 L1244.1094,399.5156 Q1244.1094,400.125 1243.875,400.3906 Q1243.6406,400.6563 1243.2656,400.6563 Q1242.9219,400.6563 1242.7188,400.4531 Q1242.5156,400.2656 1242.4063,399.75 Q1242.3594,399.3906 1242.1719,399.2031 Q1241.8438,398.8281 1241.2344,398.6094 Q1240.625,398.3906 1240,398.3906 Q1239.2344,398.3906 1238.5938,398.7188 Q1237.9688,399.0469 1237.4688,399.7969 Q1236.9844,400.5469 1236.9844,401.5781 L1236.9844,402.6719 Q1236.9844,403.9063 1237.875,404.7344 Q1238.7656,405.5469 1240.3594,405.5469 Q1241.2969,405.5469 1241.9531,405.2969 Q1242.3438,405.1406 1242.7656,404.7031 Q1243.0313,404.4375 1243.1719,404.3594 Q1243.3281,404.2813 1243.5313,404.2813 Q1243.8594,404.2813 1244.1094,404.5469 Q1244.375,404.7969 1244.375,405.1406 Q1244.375,405.4844 1244.0313,405.8906 Q1243.5313,406.4688 1242.7344,406.7969 Q1241.6563,407.25 1240.3594,407.25 Q1238.8438,407.25 1237.6406,406.625 Q1236.6563,406.125 1235.9688,405.0625 Q1235.2813,403.9844 1235.2813,402.7031 L1235.2813,401.5469 Q1235.2813,400.2188 1235.8906,399.0781 Q1236.5156,397.9219 1237.6094,397.3125 Q1238.7031,396.6875 1239.9375,396.6875 Q1240.6719,396.6875 1241.3125,396.8594 Q1241.9688,397.0156 1242.5156,397.375 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="30" x="1260.25" y="406.4102">Made</text><line style="stroke:#A80036;stroke-width:1.5;" x1="1066" x2="1452" y1="417.5" y2="417.5"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="1073" y="425.5"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="35" x="1085" y="432.9189">Long id</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="1073" y="439.3359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="113" x="1085" y="446.7549">@ StartNode User user</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="1073" y="453.1719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="174" x="1085" y="460.5908">@ EndNode Transaction transaction</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="1073" y="467.0078"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="154" x="1085" y="474.4268">ZonedDateTime transactionDate</text><line style="stroke:#A80036;stroke-width:1.5;" x1="1066" x2="1452" y1="480.8438" y2="480.8438"/><ellipse cx="1076" cy="491.8438" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="362" x="1085" y="496.2627">Made(User user, Transaction transaction, ZonedDateTime transactionDate)</text><!--MD5=[1d57375a02df6d707ad0d2ed64adc701]
+class ToFullfill--><rect codeLine="77" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="117.1797" id="ToFullfill" style="stroke:#A80036;stroke-width:1.5;" width="400" x="413" y="385.5"/><ellipse cx="585.75" cy="401.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M588.5156,397.375 Q588.6719,397.1563 588.8594,397.0469 Q589.0469,396.9375 589.2656,396.9375 Q589.6406,396.9375 589.875,397.2031 Q590.1094,397.4531 590.1094,398.0625 L590.1094,399.5156 Q590.1094,400.125 589.875,400.3906 Q589.6406,400.6563 589.2656,400.6563 Q588.9219,400.6563 588.7188,400.4531 Q588.5156,400.2656 588.4063,399.75 Q588.3594,399.3906 588.1719,399.2031 Q587.8438,398.8281 587.2344,398.6094 Q586.625,398.3906 586,398.3906 Q585.2344,398.3906 584.5938,398.7188 Q583.9688,399.0469 583.4688,399.7969 Q582.9844,400.5469 582.9844,401.5781 L582.9844,402.6719 Q582.9844,403.9063 583.875,404.7344 Q584.7656,405.5469 586.3594,405.5469 Q587.2969,405.5469 587.9531,405.2969 Q588.3438,405.1406 588.7656,404.7031 Q589.0313,404.4375 589.1719,404.3594 Q589.3281,404.2813 589.5313,404.2813 Q589.8594,404.2813 590.1094,404.5469 Q590.375,404.7969 590.375,405.1406 Q590.375,405.4844 590.0313,405.8906 Q589.5313,406.4688 588.7344,406.7969 Q587.6563,407.25 586.3594,407.25 Q584.8438,407.25 583.6406,406.625 Q582.6563,406.125 581.9688,405.0625 Q581.2813,403.9844 581.2813,402.7031 L581.2813,401.5469 Q581.2813,400.2188 581.8906,399.0781 Q582.5156,397.9219 583.6094,397.3125 Q584.7031,396.6875 585.9375,396.6875 Q586.6719,396.6875 587.3125,396.8594 Q587.9688,397.0156 588.5156,397.375 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="46" x="606.25" y="406.4102">ToFullfill</text><line style="stroke:#A80036;stroke-width:1.5;" x1="414" x2="812" y1="417.5" y2="417.5"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="421" y="425.5"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="71" x="433" y="432.9189">private Long id</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="421" y="439.3359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="179" x="433" y="446.7549">@ StartNode Transaction transaction</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="421" y="453.1719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="116" x="433" y="460.5908">@ EndNode Stock stock</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="421" y="467.0078"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="145" x="433" y="474.4268">ZonedDateTime fulfillmentDate</text><line style="stroke:#A80036;stroke-width:1.5;" x1="414" x2="812" y1="480.8438" y2="480.8438"/><ellipse cx="424" cy="491.8438" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="374" x="433" y="496.2627">ToFulfill (Transaction transaction, Stock stock, ZonedDateTime fulfillmentDate)</text><!--MD5=[303cad9661cd07caf3aac57a5b7bab81]
+class SanitizedStock--><rect codeLine="84" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="158.6875" id="SanitizedStock" style="stroke:#A80036;stroke-width:1.5;" width="181" x="848.5" y="364.5"/><ellipse cx="894.75" cy="380.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M897.5156,376.375 Q897.6719,376.1563 897.8594,376.0469 Q898.0469,375.9375 898.2656,375.9375 Q898.6406,375.9375 898.875,376.2031 Q899.1094,376.4531 899.1094,377.0625 L899.1094,378.5156 Q899.1094,379.125 898.875,379.3906 Q898.6406,379.6563 898.2656,379.6563 Q897.9219,379.6563 897.7188,379.4531 Q897.5156,379.2656 897.4063,378.75 Q897.3594,378.3906 897.1719,378.2031 Q896.8438,377.8281 896.2344,377.6094 Q895.625,377.3906 895,377.3906 Q894.2344,377.3906 893.5938,377.7188 Q892.9688,378.0469 892.4688,378.7969 Q891.9844,379.5469 891.9844,380.5781 L891.9844,381.6719 Q891.9844,382.9063 892.875,383.7344 Q893.7656,384.5469 895.3594,384.5469 Q896.2969,384.5469 896.9531,384.2969 Q897.3438,384.1406 897.7656,383.7031 Q898.0313,383.4375 898.1719,383.3594 Q898.3281,383.2813 898.5313,383.2813 Q898.8594,383.2813 899.1094,383.5469 Q899.375,383.7969 899.375,384.1406 Q899.375,384.4844 899.0313,384.8906 Q898.5313,385.4688 897.7344,385.7969 Q896.6563,386.25 895.3594,386.25 Q893.8438,386.25 892.6406,385.625 Q891.6563,385.125 890.9688,384.0625 Q890.2813,382.9844 890.2813,381.7031 L890.2813,380.5469 Q890.2813,379.2188 890.8906,378.0781 Q891.5156,376.9219 892.6094,376.3125 Q893.7031,375.6875 894.9375,375.6875 Q895.6719,375.6875 896.3125,375.8594 Q896.9688,376.0156 897.5156,376.375 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="80" x="915.25" y="385.4102">SanitizedStock</text><line style="stroke:#A80036;stroke-width:1.5;" x1="849.5" x2="1028.5" y1="396.5" y2="396.5"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="856.5" y="404.5"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="35" x="868.5" y="411.9189">Long id</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="856.5" y="418.3359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="65" x="868.5" y="425.7549">String symbol</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="856.5" y="432.1719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="102" x="868.5" y="439.5908">String companyName</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="856.5" y="446.0078"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="51" x="868.5" y="453.4268">Date since</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="856.5" y="459.8438"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="62" x="868.5" y="467.2627">float quantity</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="856.5" y="473.6797"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="66" x="868.5" y="481.0986">float avgPrice</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="856.5" y="487.5156"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="44" x="868.5" y="494.9346">float total</text><line style="stroke:#A80036;stroke-width:1.5;" x1="849.5" x2="1028.5" y1="501.3516" y2="501.3516"/><polygon fill="#4177AF" points="859.5,508.3516,855.5,514.3516,863.5,514.3516" style="stroke:#1963A0;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="155" x="868.5" y="516.7705">SanitizedStock(Owns ownsRel)</text><!--MD5=[c0ef2bebe5dca35cccaf083a7b777437]
+class SanitizedUser--><rect codeLine="94" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="200.1953" id="SanitizedUser" style="stroke:#A80036;stroke-width:1.5;" width="152" x="537" y="666.5"/><ellipse cx="571.35" cy="682.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M574.1156,678.375 Q574.2719,678.1563 574.4594,678.0469 Q574.6469,677.9375 574.8656,677.9375 Q575.2406,677.9375 575.475,678.2031 Q575.7094,678.4531 575.7094,679.0625 L575.7094,680.5156 Q575.7094,681.125 575.475,681.3906 Q575.2406,681.6563 574.8656,681.6563 Q574.5219,681.6563 574.3188,681.4531 Q574.1156,681.2656 574.0063,680.75 Q573.9594,680.3906 573.7719,680.2031 Q573.4438,679.8281 572.8344,679.6094 Q572.225,679.3906 571.6,679.3906 Q570.8344,679.3906 570.1938,679.7188 Q569.5688,680.0469 569.0688,680.7969 Q568.5844,681.5469 568.5844,682.5781 L568.5844,683.6719 Q568.5844,684.9063 569.475,685.7344 Q570.3656,686.5469 571.9594,686.5469 Q572.8969,686.5469 573.5531,686.2969 Q573.9438,686.1406 574.3656,685.7031 Q574.6313,685.4375 574.7719,685.3594 Q574.9281,685.2813 575.1313,685.2813 Q575.4594,685.2813 575.7094,685.5469 Q575.975,685.7969 575.975,686.1406 Q575.975,686.4844 575.6313,686.8906 Q575.1313,687.4688 574.3344,687.7969 Q573.2563,688.25 571.9594,688.25 Q570.4438,688.25 569.2406,687.625 Q568.2563,687.125 567.5688,686.0625 Q566.8813,684.9844 566.8813,683.7031 L566.8813,682.5469 Q566.8813,681.2188 567.4906,680.0781 Q568.1156,678.9219 569.2094,678.3125 Q570.3031,677.6875 571.5375,677.6875 Q572.2719,677.6875 572.9125,677.8594 Q573.5688,678.0156 574.1156,678.375 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="77" x="589.65" y="687.4102">SanitizedUser</text><line style="stroke:#A80036;stroke-width:1.5;" x1="538" x2="688" y1="698.5" y2="698.5"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="545" y="706.5"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="35" x="557" y="713.9189">Long id</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="545" y="720.3359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="77" x="557" y="727.7549">String firstName</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="545" y="734.1719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="75" x="557" y="741.5908">String lastName</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="545" y="748.0078"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="79" x="557" y="755.4268">String username</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="545" y="761.8438"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="82" x="557" y="769.2627">String avatarURL</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="545" y="775.6797"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="106" x="557" y="783.0986">String coverPhotoURL</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="545" y="789.5156"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="79" x="557" y="796.9346">String biography</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="545" y="803.3516"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="64" x="557" y="810.7705">Double score</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="545" y="817.1875"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="57" x="557" y="824.6064">Double rank</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="545" y="831.0234"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="64" x="557" y="838.4424">Float balance</text><line style="stroke:#A80036;stroke-width:1.5;" x1="538" x2="688" y1="844.8594" y2="844.8594"/><ellipse cx="548" cy="855.8594" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="126" x="557" y="860.2783">SanitizedUser (User user)</text><!--MD5=[8a62991b5be2d14f3fa30b90ab331534]
+class UserCompleteProfile--><rect codeLine="107" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="269.375" id="UserCompleteProfile" style="stroke:#A80036;stroke-width:1.5;" width="196" x="724" y="632"/><ellipse cx="760.6" cy="648" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M763.3656,643.875 Q763.5219,643.6563 763.7094,643.5469 Q763.8969,643.4375 764.1156,643.4375 Q764.4906,643.4375 764.725,643.7031 Q764.9594,643.9531 764.9594,644.5625 L764.9594,646.0156 Q764.9594,646.625 764.725,646.8906 Q764.4906,647.1563 764.1156,647.1563 Q763.7719,647.1563 763.5688,646.9531 Q763.3656,646.7656 763.2563,646.25 Q763.2094,645.8906 763.0219,645.7031 Q762.6938,645.3281 762.0844,645.1094 Q761.475,644.8906 760.85,644.8906 Q760.0844,644.8906 759.4438,645.2188 Q758.8188,645.5469 758.3188,646.2969 Q757.8344,647.0469 757.8344,648.0781 L757.8344,649.1719 Q757.8344,650.4063 758.725,651.2344 Q759.6156,652.0469 761.2094,652.0469 Q762.1469,652.0469 762.8031,651.7969 Q763.1938,651.6406 763.6156,651.2031 Q763.8813,650.9375 764.0219,650.8594 Q764.1781,650.7813 764.3813,650.7813 Q764.7094,650.7813 764.9594,651.0469 Q765.225,651.2969 765.225,651.6406 Q765.225,651.9844 764.8813,652.3906 Q764.3813,652.9688 763.5844,653.2969 Q762.5063,653.75 761.2094,653.75 Q759.6938,653.75 758.4906,653.125 Q757.5063,652.625 756.8188,651.5625 Q756.1313,650.4844 756.1313,649.2031 L756.1313,648.0469 Q756.1313,646.7188 756.7406,645.5781 Q757.3656,644.4219 758.4594,643.8125 Q759.5531,643.1875 760.7875,643.1875 Q761.5219,643.1875 762.1625,643.3594 Q762.8188,643.5156 763.3656,643.875 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="116" x="779.4" y="652.9102">UserCompleteProfile</text><line style="stroke:#A80036;stroke-width:1.5;" x1="725" x2="919" y1="664" y2="664"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="672"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="35" x="744" y="679.4189">Long id</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="685.8359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="77" x="744" y="693.2549">String firstName</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="699.6719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="75" x="744" y="707.0908">String lastName</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="713.5078"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="79" x="744" y="720.9268">String username</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="727.3438"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="82" x="744" y="734.7627">String avatarURL</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="741.1797"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="106" x="744" y="748.5986">String coverPhotoURL</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="755.0156"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="79" x="744" y="762.4346">String biography</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="768.8516"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="64" x="744" y="776.2705">Double score</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="782.6875"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="57" x="744" y="790.1064">Double rank</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="796.5234"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="64" x="744" y="803.9424">Float balance</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="810.3594"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="73" x="744" y="817.7783">Float percentile</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="824.1953"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="145" x="744" y="831.6143">List&lt;SanitizedUser&gt; followers</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="838.0313"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="143" x="744" y="845.4502">List&lt;SanitizedUser&gt; following</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="851.8672"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="170" x="744" y="859.2861">List&lt;SanitizedStock&gt; ownedStocks</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="732" y="865.7031"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="149" x="744" y="873.1221">List&lt;Transaction&gt; transactions</text><line style="stroke:#A80036;stroke-width:1.5;" x1="725" x2="919" y1="879.5391" y2="879.5391"/><polygon fill="#4177AF" points="735,886.5391,731,892.5391,739,892.5391" style="stroke:#1963A0;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="156" x="744" y="894.958">UserCompleteProfile (User user)</text><!--MD5=[3fd616f346a44cd59a91eb10b19e157c]
+class User--><rect codeLine="128" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="255.5391" id="User" style="stroke:#A80036;stroke-width:1.5;" width="173" x="2148.5" y="316"/><ellipse cx="2217.25" cy="332" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2220.0156,327.875 Q2220.1719,327.6563 2220.3594,327.5469 Q2220.5469,327.4375 2220.7656,327.4375 Q2221.1406,327.4375 2221.375,327.7031 Q2221.6094,327.9531 2221.6094,328.5625 L2221.6094,330.0156 Q2221.6094,330.625 2221.375,330.8906 Q2221.1406,331.1563 2220.7656,331.1563 Q2220.4219,331.1563 2220.2188,330.9531 Q2220.0156,330.7656 2219.9063,330.25 Q2219.8594,329.8906 2219.6719,329.7031 Q2219.3438,329.3281 2218.7344,329.1094 Q2218.125,328.8906 2217.5,328.8906 Q2216.7344,328.8906 2216.0938,329.2188 Q2215.4688,329.5469 2214.9688,330.2969 Q2214.4844,331.0469 2214.4844,332.0781 L2214.4844,333.1719 Q2214.4844,334.4063 2215.375,335.2344 Q2216.2656,336.0469 2217.8594,336.0469 Q2218.7969,336.0469 2219.4531,335.7969 Q2219.8438,335.6406 2220.2656,335.2031 Q2220.5313,334.9375 2220.6719,334.8594 Q2220.8281,334.7813 2221.0313,334.7813 Q2221.3594,334.7813 2221.6094,335.0469 Q2221.875,335.2969 2221.875,335.6406 Q2221.875,335.9844 2221.5313,336.3906 Q2221.0313,336.9688 2220.2344,337.2969 Q2219.1563,337.75 2217.8594,337.75 Q2216.3438,337.75 2215.1406,337.125 Q2214.1563,336.625 2213.4688,335.5625 Q2212.7813,334.4844 2212.7813,333.2031 L2212.7813,332.0469 Q2212.7813,330.7188 2213.3906,329.5781 Q2214.0156,328.4219 2215.1094,327.8125 Q2216.2031,327.1875 2217.4375,327.1875 Q2218.1719,327.1875 2218.8125,327.3594 Q2219.4688,327.5156 2220.0156,327.875 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="27" x="2237.75" y="336.9102">User</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2149.5" x2="2320.5" y1="348" y2="348"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2156.5" y="356"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="77" x="2168.5" y="363.4189">String firstName</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2156.5" y="369.8359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="75" x="2168.5" y="377.2549">String lastName</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2156.5" y="383.6719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="79" x="2168.5" y="391.0908">String username</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2156.5" y="397.5078"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="82" x="2168.5" y="404.9268">String avatarURL</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2156.5" y="411.3438"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="106" x="2168.5" y="418.7627">String coverPhotoURL</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2156.5" y="425.1797"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="55" x="2168.5" y="432.5986">String email</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2156.5" y="439.0156"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="64" x="2168.5" y="446.4346">Double score</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2156.5" y="452.8516"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="57" x="2168.5" y="460.2705">Double rank</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2156.5" y="466.6875"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="64" x="2168.5" y="474.1064">Float balance</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2156.5" y="480.5234"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="81" x="2168.5" y="487.9424">String password</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2156.5" y="494.3594"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="98" x="2168.5" y="501.7783">String alpacaApiKey</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2156.5" y="508.1953"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="79" x="2168.5" y="515.6143">String biography</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2149.5" x2="2320.5" y1="522.0313" y2="522.0313"/><polygon fill="#4177AF" points="2159.5,529.0313,2155.5,535.0313,2163.5,535.0313" style="stroke:#1963A0;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="74" x="2168.5" y="537.4502">int hashCode ()</text><polygon fill="#4177AF" points="2159.5,542.8672,2155.5,548.8672,2163.5,548.8672" style="stroke:#1963A0;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="147" x="2168.5" y="551.2861">boolean equals (Object object)</text><polygon fill="#4177AF" points="2159.5,556.7031,2155.5,562.7031,2163.5,562.7031" style="stroke:#1963A0;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="127" x="2168.5" y="565.1221">int compareTo (User user)</text><!--MD5=[a4cb0f987c11031dc931233a0e7767af]
+class Stock--><rect codeLine="146" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="103.3438" id="Stock" style="stroke:#A80036;stroke-width:1.5;" width="150" x="2633" y="392.5"/><ellipse cx="2688.75" cy="408.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2691.5156,404.375 Q2691.6719,404.1563 2691.8594,404.0469 Q2692.0469,403.9375 2692.2656,403.9375 Q2692.6406,403.9375 2692.875,404.2031 Q2693.1094,404.4531 2693.1094,405.0625 L2693.1094,406.5156 Q2693.1094,407.125 2692.875,407.3906 Q2692.6406,407.6563 2692.2656,407.6563 Q2691.9219,407.6563 2691.7188,407.4531 Q2691.5156,407.2656 2691.4063,406.75 Q2691.3594,406.3906 2691.1719,406.2031 Q2690.8438,405.8281 2690.2344,405.6094 Q2689.625,405.3906 2689,405.3906 Q2688.2344,405.3906 2687.5938,405.7188 Q2686.9688,406.0469 2686.4688,406.7969 Q2685.9844,407.5469 2685.9844,408.5781 L2685.9844,409.6719 Q2685.9844,410.9063 2686.875,411.7344 Q2687.7656,412.5469 2689.3594,412.5469 Q2690.2969,412.5469 2690.9531,412.2969 Q2691.3438,412.1406 2691.7656,411.7031 Q2692.0313,411.4375 2692.1719,411.3594 Q2692.3281,411.2813 2692.5313,411.2813 Q2692.8594,411.2813 2693.1094,411.5469 Q2693.375,411.7969 2693.375,412.1406 Q2693.375,412.4844 2693.0313,412.8906 Q2692.5313,413.4688 2691.7344,413.7969 Q2690.6563,414.25 2689.3594,414.25 Q2687.8438,414.25 2686.6406,413.625 Q2685.6563,413.125 2684.9688,412.0625 Q2684.2813,410.9844 2684.2813,409.7031 L2684.2813,408.5469 Q2684.2813,407.2188 2684.8906,406.0781 Q2685.5156,404.9219 2686.6094,404.3125 Q2687.7031,403.6875 2688.9375,403.6875 Q2689.6719,403.6875 2690.3125,403.8594 Q2690.9688,404.0156 2691.5156,404.375 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="30" x="2709.25" y="413.4102">Stock</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2634" x2="2782" y1="424.5" y2="424.5"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2641" y="432.5"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="65" x="2653" y="439.9189">String symbol</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2641" y="446.3359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="102" x="2653" y="453.7549">String companyName</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2641" y="460.1719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="70" x="2653" y="467.5908">String industry</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2634" x2="2782" y1="474.0078" y2="474.0078"/><polygon fill="#4177AF" points="2644,481.0078,2640,487.0078,2648,487.0078" style="stroke:#1963A0;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="124" x="2653" y="489.4268">boolean equals (Object o)</text><!--MD5=[4555bb1b0911a5adf28ce6dbe60fed2e]
+class Transaction--><rect codeLine="153" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="172.5234" id="Transaction" style="stroke:#A80036;stroke-width:1.5;" width="241" x="2356.5" y="357.5"/><ellipse cx="2440.25" cy="373.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2443.0156,369.375 Q2443.1719,369.1563 2443.3594,369.0469 Q2443.5469,368.9375 2443.7656,368.9375 Q2444.1406,368.9375 2444.375,369.2031 Q2444.6094,369.4531 2444.6094,370.0625 L2444.6094,371.5156 Q2444.6094,372.125 2444.375,372.3906 Q2444.1406,372.6563 2443.7656,372.6563 Q2443.4219,372.6563 2443.2188,372.4531 Q2443.0156,372.2656 2442.9063,371.75 Q2442.8594,371.3906 2442.6719,371.2031 Q2442.3438,370.8281 2441.7344,370.6094 Q2441.125,370.3906 2440.5,370.3906 Q2439.7344,370.3906 2439.0938,370.7188 Q2438.4688,371.0469 2437.9688,371.7969 Q2437.4844,372.5469 2437.4844,373.5781 L2437.4844,374.6719 Q2437.4844,375.9063 2438.375,376.7344 Q2439.2656,377.5469 2440.8594,377.5469 Q2441.7969,377.5469 2442.4531,377.2969 Q2442.8438,377.1406 2443.2656,376.7031 Q2443.5313,376.4375 2443.6719,376.3594 Q2443.8281,376.2813 2444.0313,376.2813 Q2444.3594,376.2813 2444.6094,376.5469 Q2444.875,376.7969 2444.875,377.1406 Q2444.875,377.4844 2444.5313,377.8906 Q2444.0313,378.4688 2443.2344,378.7969 Q2442.1563,379.25 2440.8594,379.25 Q2439.3438,379.25 2438.1406,378.625 Q2437.1563,378.125 2436.4688,377.0625 Q2435.7813,375.9844 2435.7813,374.7031 L2435.7813,373.5469 Q2435.7813,372.2188 2436.3906,371.0781 Q2437.0156,369.9219 2438.1094,369.3125 Q2439.2031,368.6875 2440.4375,368.6875 Q2441.1719,368.6875 2441.8125,368.8594 Q2442.4688,369.0156 2443.0156,369.375 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="65" x="2460.75" y="378.4102">Transaction</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2357.5" x2="2596.5" y1="389.5" y2="389.5"/><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2364.5" y="397.5"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="62" x="2376.5" y="404.9189">float quantity</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2364.5" y="411.3359"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="66" x="2376.5" y="418.7549">float avgPrice</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2364.5" y="425.1719"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="44" x="2376.5" y="432.5908">float total</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2364.5" y="439.0078"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="141" x="2376.5" y="446.4268">ZonedDateTime purchasedAt</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2364.5" y="452.8438"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="215" x="2376.5" y="460.2627">MoneyTreeOrderType moneyTreeOrderType</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2364.5" y="466.6797"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="92" x="2376.5" y="474.0986">String clientOrderId</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2364.5" y="480.5156"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="121" x="2376.5" y="487.9346">TransactionStatus status</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2364.5" y="494.3516"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="65" x="2376.5" y="501.7705">String symbol</text><rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="2364.5" y="508.1875"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="70" x="2376.5" y="515.6064">String industry</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2357.5" x2="2596.5" y1="522.0234" y2="522.0234"/><!--MD5=[dec3950355fdab03549c33b01f7a612c]
+class MoneyTreeOrderType--><rect codeLine="165" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="103.3438" id="MoneyTreeOrderType" style="stroke:#A80036;stroke-width:1.5;" width="149" x="1964.5" y="392.5"/><ellipse cx="1979.5" cy="408.5" fill="#EB937F" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M1978.3594,409.2969 L1978.3594,411.7969 L1982.6875,411.7969 L1982.6875,410.875 Q1982.6875,410.2656 1982.9219,410 Q1983.1719,409.7344 1983.5469,409.7344 Q1983.9219,409.7344 1984.1563,410 Q1984.3906,410.2656 1984.3906,410.875 L1984.3906,413.5 L1976.3906,413.5 Q1975.7656,413.5 1975.5,413.2656 Q1975.25,413.0313 1975.25,412.6406 Q1975.25,412.2656 1975.5156,412.0313 Q1975.7813,411.7969 1976.3906,411.7969 L1976.6563,411.7969 L1976.6563,405.1406 L1976.3906,405.1406 Q1975.7656,405.1406 1975.5,404.9063 Q1975.25,404.6719 1975.25,404.2813 Q1975.25,403.9063 1975.5,403.6719 Q1975.7656,403.4375 1976.3906,403.4375 L1984.0156,403.4375 L1984.0156,406.0313 Q1984.0156,406.6406 1983.7813,406.9063 Q1983.5625,407.1563 1983.1719,407.1563 Q1982.7969,407.1563 1982.5625,406.9063 Q1982.3281,406.6406 1982.3281,406.0313 L1982.3281,405.1406 L1978.3594,405.1406 L1978.3594,407.5938 L1979.8438,407.5938 Q1979.8438,406.9375 1979.9688,406.75 Q1980.2344,406.3438 1980.7031,406.3438 Q1981.0781,406.3438 1981.3125,406.6094 Q1981.5469,406.8594 1981.5469,407.4688 L1981.5469,409.4375 Q1981.5469,409.9844 1981.4219,410.1719 Q1981.1563,410.5625 1980.7031,410.5625 Q1980.2344,410.5625 1979.9688,410.1563 Q1979.8438,409.9688 1979.8438,409.2969 L1978.3594,409.2969 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="117" x="1993.5" y="413.4102">MoneyTreeOrderType</text><line style="stroke:#A80036;stroke-width:1.5;" x1="1965.5" x2="2112.5" y1="424.5" y2="424.5"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="70" x="1970.5" y="439.9189">MARKET_BUY</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="73" x="1970.5" y="453.7549">MARKET_SELL</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="52" x="1970.5" y="467.5908">LIMIT_BUY</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="55" x="1970.5" y="481.4268">LIMIT_SELL</text><line style="stroke:#A80036;stroke-width:1.5;" x1="1965.5" x2="2112.5" y1="487.8438" y2="487.8438"/><!--MD5=[e3d83ec5fd90ea9f3f2bfe265cb53458]
+class Status--><rect codeLine="172" fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="67.6719" id="Status" style="stroke:#A80036;stroke-width:1.5;" width="72" x="2383" y="732.5"/><ellipse cx="2400.25" cy="748.5" fill="#EB937F" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2399.1094,749.2969 L2399.1094,751.7969 L2403.4375,751.7969 L2403.4375,750.875 Q2403.4375,750.2656 2403.6719,750 Q2403.9219,749.7344 2404.2969,749.7344 Q2404.6719,749.7344 2404.9063,750 Q2405.1406,750.2656 2405.1406,750.875 L2405.1406,753.5 L2397.1406,753.5 Q2396.5156,753.5 2396.25,753.2656 Q2396,753.0313 2396,752.6406 Q2396,752.2656 2396.2656,752.0313 Q2396.5313,751.7969 2397.1406,751.7969 L2397.4063,751.7969 L2397.4063,745.1406 L2397.1406,745.1406 Q2396.5156,745.1406 2396.25,744.9063 Q2396,744.6719 2396,744.2813 Q2396,743.9063 2396.25,743.6719 Q2396.5156,743.4375 2397.1406,743.4375 L2404.7656,743.4375 L2404.7656,746.0313 Q2404.7656,746.6406 2404.5313,746.9063 Q2404.3125,747.1563 2403.9219,747.1563 Q2403.5469,747.1563 2403.3125,746.9063 Q2403.0781,746.6406 2403.0781,746.0313 L2403.0781,745.1406 L2399.1094,745.1406 L2399.1094,747.5938 L2400.5938,747.5938 Q2400.5938,746.9375 2400.7188,746.75 Q2400.9844,746.3438 2401.4531,746.3438 Q2401.8281,746.3438 2402.0625,746.6094 Q2402.2969,746.8594 2402.2969,747.4688 L2402.2969,749.4375 Q2402.2969,749.9844 2402.1719,750.1719 Q2401.9063,750.5625 2401.4531,750.5625 Q2400.9844,750.5625 2400.7188,750.1563 Q2400.5938,749.9688 2400.5938,749.2969 L2399.1094,749.2969 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="35" x="2414.75" y="753.4102">Status</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2384" x2="2454" y1="764.5" y2="764.5"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="43" x="2389" y="779.9189">PENDING</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="60" x="2389" y="793.7549">COMPLETED</text><!--MD5=[e511512a68bbbc8475bda5b365b2dd94]
+class OrderType--><rect fill="#FEFECE" filter="url(#f1r2gw520sulrx)" height="40" id="OrderType" style="stroke:#A80036;stroke-width:1.5;" width="89" x="2490.5" y="746.5"/><ellipse cx="2505.5" cy="762.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M2508.2656,758.375 Q2508.4219,758.1563 2508.6094,758.0469 Q2508.7969,757.9375 2509.0156,757.9375 Q2509.3906,757.9375 2509.625,758.2031 Q2509.8594,758.4531 2509.8594,759.0625 L2509.8594,760.5156 Q2509.8594,761.125 2509.625,761.3906 Q2509.3906,761.6563 2509.0156,761.6563 Q2508.6719,761.6563 2508.4688,761.4531 Q2508.2656,761.2656 2508.1563,760.75 Q2508.1094,760.3906 2507.9219,760.2031 Q2507.5938,759.8281 2506.9844,759.6094 Q2506.375,759.3906 2505.75,759.3906 Q2504.9844,759.3906 2504.3438,759.7188 Q2503.7188,760.0469 2503.2188,760.7969 Q2502.7344,761.5469 2502.7344,762.5781 L2502.7344,763.6719 Q2502.7344,764.9063 2503.625,765.7344 Q2504.5156,766.5469 2506.1094,766.5469 Q2507.0469,766.5469 2507.7031,766.2969 Q2508.0938,766.1406 2508.5156,765.7031 Q2508.7813,765.4375 2508.9219,765.3594 Q2509.0781,765.2813 2509.2813,765.2813 Q2509.6094,765.2813 2509.8594,765.5469 Q2510.125,765.7969 2510.125,766.1406 Q2510.125,766.4844 2509.7813,766.8906 Q2509.2813,767.4688 2508.4844,767.7969 Q2507.4063,768.25 2506.1094,768.25 Q2504.5938,768.25 2503.3906,767.625 Q2502.4063,767.125 2501.7188,766.0625 Q2501.0313,764.9844 2501.0313,763.7031 L2501.0313,762.5469 Q2501.0313,761.2188 2501.6406,760.0781 Q2502.2656,758.9219 2503.3594,758.3125 Q2504.4531,757.6875 2505.6875,757.6875 Q2506.4219,757.6875 2507.0625,757.8594 Q2507.7188,758.0156 2508.2656,758.375 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="57" x="2519.5" y="767.4102">OrderType</text><line style="stroke:#A80036;stroke-width:1.5;" x1="2491.5" x2="2578.5" y1="778.5" y2="778.5"/><!--MD5=[3a4fbd1bb937ab8695ff3ef26de25181]
+reverse link Entity to User--><path d="M1917.38,214.42 C1917.38,214.42 1917.38,329 1917.38,329 C1917.38,329 2054.16,329 2148.21,329 " fill="none" id="Entity-backto-User" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="none" points="1910.38,214.42,1917.38,194.42,1924.38,214.42,1910.38,214.42" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[4e22665c1b553b4c6ffa39fc17dda4b0]
+reverse link Entity to Stock--><path d="M1936.12,214.08 C1936.12,214.08 1936.12,294 1936.12,294 C1936.12,294 2683,294 2683,294 C2683,294 2683,348.99 2683,392.38 " fill="none" id="Entity-backto-Stock" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="none" points="1929.13,214.08,1936.12,194.08,1943.13,214.08,1929.13,214.08" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[588dfd921a813f588548c97dac69ecc4]
+reverse link Entity to Transaction--><path d="M1926.75,214.42 C1926.75,214.42 1926.75,309 1926.75,309 C1926.75,309 2387.5,309 2387.5,309 C2387.5,309 2387.5,331.07 2387.5,357.36 " fill="none" id="Entity-backto-Transaction" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="none" points="1919.75,214.42,1926.75,194.42,1933.75,214.42,1919.75,214.42" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[f8c40f07313ba25eb85650808cdc7f05]
+reverse link Transaction to OrderType--><path codeLine="184" d="M2535,543.85 C2535,543.85 2535,746.43 2535,746.43 " fill="none" id="Transaction-backto-OrderType" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="2535,530.85,2531,536.85,2535,542.85,2539,536.85,2535,530.85" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[1b8d326489396f1b141006500e1f37e4]
+reverse link Transaction to Status--><path codeLine="185" d="M2419,543.85 C2419,543.85 2419,732.3 2419,732.3 " fill="none" id="Transaction-backto-Status" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="2419,530.85,2415,536.85,2419,542.85,2423,536.85,2419,530.85" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[4f26f8bfa4f3fd4ccaf0d9df2fd087f4]
+link User to apoint29--><path d="M2321.53,552 C2545.89,552 3129,552 3129,552 C3129,552 3129,461.76 3129,446.26 " fill="none" id="User-apoint29" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[f83c8467c33d5a79a53bf9d4e0b3de93]
+link apoint29 to Stock--><path d="M3129,441.93 C3129,433.34 3129,401 3129,401 C3129,401 2904.36,401 2783.27,401 " fill="none" id="apoint29-Stock" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[6a48015bba052bc1de70c06ffc446b6c]
+link apoint29 to Owns--><path d="M3126.91,444 C3121.88,444 3109.5,444 3109.5,444 C3109.5,444 3109.5,271 3109.5,271 C3109.5,271 1869.25,271 1869.25,271 C1869.25,271 1869.25,318.93 1869.25,364.34 " fill="none" id="apoint29-Owns" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><!--MD5=[34cadf9e239f30a2ad285604c768f5dc]
+link User to apoint35--><path d="M2321.69,337 C2539.05,337 3090,337 3090,337 C3090,337 3090,426.4 3090,441.77 " fill="none" id="User-apoint35" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[155709e9d4e95f8be0471f89d5a48e01]
+link apoint35 to Transaction--><path d="M3090,446.3 C3090,458.27 3090,513 3090,513 C3090,513 2776.33,513 2597.74,513 " fill="none" id="apoint35-Transaction" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[0a847bb7bd24912a41f2fa8cdff22df1]
+link apoint35 to Made--><path d="M3087.91,444 C3082.88,444 3070.5,444 3070.5,444 C3070.5,444 3070.5,264 3070.5,264 C3070.5,264 1259,264 1259,264 C1259,264 1259,332.57 1259,385.06 " fill="none" id="apoint35-Made" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><!--MD5=[9d6cebbd9189e35cabd5156a23becebd]
+link User to apoint41--><path d="M2148.02,353 C1867.53,353 1005,353 1005,353 C1005,353 1005,173.7 1005,151.29 " fill="none" id="User-apoint41" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[a53b9cb06ee51de3ff9f1d7683bb2bf6]
+link apoint41 to User--><path d="M1007.08,149 C1040.66,149 1470.5,149 1470.5,149 C1470.5,149 1470.5,341 1470.5,341 C1470.5,341 1948.26,341 2148.42,341 " fill="none" id="apoint41-User" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[c4b2034cbaa1cd4595438ceefa72dddb]
+link apoint41 to Follows--><path d="M1002.74,149 C956.52,149 217,149 217,149 C217,149 217,299.33 217,385.36 " fill="none" id="apoint41-Follows" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><!--MD5=[a765614dbdd5e3ee84e97b429eb3644f]
+link Transaction to apoint48--><path d="M2418.5,357.11 C2418.5,327.16 2418.5,301 2418.5,301 C2418.5,301 1983,301 1983,301 C1983,301 1983,169.62 1983,151.15 " fill="none" id="Transaction-apoint48" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[2e5944c257b45ad5d535b758a9b61cde]
+link apoint48 to Stock--><path d="M1980.62,149 C1977.59,149 1972.75,149 1972.75,149 C1972.75,149 1972.75,286 1972.75,286 C1972.75,286 2733,286 2733,286 C2733,286 2733,346.19 2733,392.26 " fill="none" id="apoint48-Stock" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[85f318cc54c820152a6d741a556873cf]
+link apoint48 to ToFulfill--><path d="M1985.16,149 C1990.59,149 2005.42,149 2020.29,149 " fill="none" id="apoint48-ToFulfill" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><!--MD5=[5180d28ad5b9924f32a7361f93d9e54e]
+link AlpacaOAuthResponse to AlpacaOrder--><!--MD5=[09913b9e16e9b43e3df1e399fdbfa66f]
+link AlpacaOrder to Mail--><!--MD5=[313921eddb5cc2d06b8d6123807f8e90]
+link AlpacaOAuthResponse to UserBuilder--><!--MD5=[e76375b9b35964f785d6764cef9bbf17]
+link UserBuilder to OrderBuilder--><!--MD5=[cbb8987cff0edb9f794e0072895e02f4]
+link ToFullfill to SanitizedStock--><!--MD5=[e3740b7f8de2ae004583a2c1b6265f42]
+link ToFullfill to SanitizedUser--><!--MD5=[556532491c5e1c11f8c84a02c8387f3f]
+link SanitizedUser to UserCompleteProfile--><!--MD5=[42689aaf99b86356cb99d11f48e8d575]
+@startuml
+
+package model {
+    class Entity {
+        -Long id
+        +Long getId()
+        +void setId(Long id)
+    }
+
+    class AlpacaOAuthResponse {
+        -String accessToken;
+        -String tokenType;
+        -String scope;
+    }
+
+    class AlpacaOrder {
+        -String id
+        -String clientOrderId
+        -String createdAt
+        -String updatedAt
+        -String submittedAt
+        -String symbol
+        -Float qty
+        -String filledQty
+        -String filledAvgPrice
+        -String orderType
+        -String side
+        -String timeInForce
+    }
+
+    class Mail {
+        -String email
+        -String subject
+        -String username
+        -TradeUpdate tradeUpdate
+        +String toString ()
+        -String constructBody (String stockName, String qty, String action, String avgPrice, ZonedDateTime timestamp, String totalAmount)
+    }
+
+    class UserBuilder {
+        == @Builder ==
+        +params
+    }
+    class OrderBuilder {
+        == @Builder ==
+        +params
+    }
+
+    package relationship {
+
+        class Follows {
+            -Long id
+            -@ StartNode User follower
+            -@ EndNode User userToFollow
+            -Date followDate
+            +Follows (User follower, User userToFollow, Date followDate)
+        }
+
+        class Owns {
+            -Long id
+            -@ StartNode User user
+            -@ EndNode Stock stock
+            -Date since
+            -float quantity
+            -float avgPrice
+            -float total
+            +Owns (User user, Stock stock, Date since, float quantity, float avgPrice, float total
+        }
+
+        class Made {
+            -Long id
+            -@ StartNode User user
+            -@ EndNode Transaction transaction
+            -ZonedDateTime transactionDate
+            +Made(User user, Transaction transaction, ZonedDateTime transactionDate)
+        }
+
+        class ToFullfill {
+            -private Long id
+            -@ StartNode Transaction transaction
+            -@ EndNode Stock stock
+            -ZonedDateTime fulfillmentDate
+            +ToFulfill (Transaction transaction, Stock stock, ZonedDateTime fulfillmentDate)
+        }
+        class SanitizedStock {
+            -Long id
+            -String symbol
+            -String companyName
+            -Date since
+            -float quantity
+            -float avgPrice
+            -float total
+            ~SanitizedStock(Owns ownsRel)
+        }
+        class SanitizedUser {
+            -Long id
+            -String firstName
+            -String lastName
+            -String username
+            -String avatarURL
+            -String coverPhotoURL
+            -String biography
+            -Double score
+            -Double rank
+            -Float balance
+            +SanitizedUser (User user)
+        }
+        class UserCompleteProfile {
+            -Long id
+            -String firstName
+            -String lastName
+            -String username
+            -String avatarURL
+            -String coverPhotoURL
+            -String biography
+            -Double score
+            -Double rank
+            -Float balance
+            -Float percentile
+            -List<SanitizedUser> followers
+            -List<SanitizedUser> following
+            -List<SanitizedStock> ownedStocks
+            -List<Transaction> transactions
+            ~UserCompleteProfile (User user)
+        }
+    }
+
+    package node {
+        class User extends Entity {
+            -String firstName
+            -String lastName
+            -String username
+            -String avatarURL
+            -String coverPhotoURL
+            -String email
+            -Double score
+            -Double rank
+            -Float balance
+            -String password
+            -String alpacaApiKey
+            -String biography
+            ~int hashCode ()
+            ~boolean equals (Object object)
+            ~int compareTo (User user)
+        }
+
+        class Stock extends Entity {
+            -String symbol
+            -String companyName
+            -String industry
+            ~boolean equals (Object o)
+        }
+
+        class Transaction extends Entity {
+            -float quantity
+            -float avgPrice
+            -float total
+            -ZonedDateTime purchasedAt
+            -MoneyTreeOrderType moneyTreeOrderType
+            -String clientOrderId
+            -TransactionStatus status
+            -String symbol
+            -String industry
+        }
+
+        enum MoneyTreeOrderType {
+            MARKET_BUY
+            MARKET_SELL
+            LIMIT_BUY
+            LIMIT_SELL
+        }
+
+        enum Status {
+            PENDING
+            COMPLETED
+        }
+
+        hide OrderType methods
+        hide Status methods
+    }
+
+    /'
+    ' Relationships
+    '/
+    Transaction *- - OrderType
+    Transaction *- - Status
+
+    (User, Stock) . Owns
+    (User, Transaction) . Made
+    (User, User) . Follows
+    (Transaction, Stock) . ToFulfill
+
+    skinparam linetype ortho
+}
+
+@enduml
+
+@startuml
+
+package model {
+    class Entity {
+        -Long id
+        +Long getId()
+        +void setId(Long id)
+    }
+
+    class AlpacaOAuthResponse {
+        -String accessToken;
+        -String tokenType;
+        -String scope;
+    }
+
+    class AlpacaOrder {
+        -String id
+        -String clientOrderId
+        -String createdAt
+        -String updatedAt
+        -String submittedAt
+        -String symbol
+        -Float qty
+        -String filledQty
+        -String filledAvgPrice
+        -String orderType
+        -String side
+        -String timeInForce
+    }
+
+    class Mail {
+        -String email
+        -String subject
+        -String username
+        -TradeUpdate tradeUpdate
+        +String toString ()
+        -String constructBody (String stockName, String qty, String action, String avgPrice, ZonedDateTime timestamp, String totalAmount)
+    }
+
+    class UserBuilder {
+        == @Builder ==
+        +params
+    }
+    class OrderBuilder {
+        == @Builder ==
+        +params
+    }
+
+    package relationship {
+
+        class Follows {
+            -Long id
+            -@ StartNode User follower
+            -@ EndNode User userToFollow
+            -Date followDate
+            +Follows (User follower, User userToFollow, Date followDate)
+        }
+
+        class Owns {
+            -Long id
+            -@ StartNode User user
+            -@ EndNode Stock stock
+            -Date since
+            -float quantity
+            -float avgPrice
+            -float total
+            +Owns (User user, Stock stock, Date since, float quantity, float avgPrice, float total
+        }
+
+        class Made {
+            -Long id
+            -@ StartNode User user
+            -@ EndNode Transaction transaction
+            -ZonedDateTime transactionDate
+            +Made(User user, Transaction transaction, ZonedDateTime transactionDate)
+        }
+
+        class ToFullfill {
+            -private Long id
+            -@ StartNode Transaction transaction
+            -@ EndNode Stock stock
+            -ZonedDateTime fulfillmentDate
+            +ToFulfill (Transaction transaction, Stock stock, ZonedDateTime fulfillmentDate)
+        }
+        class SanitizedStock {
+            -Long id
+            -String symbol
+            -String companyName
+            -Date since
+            -float quantity
+            -float avgPrice
+            -float total
+            ~SanitizedStock(Owns ownsRel)
+        }
+        class SanitizedUser {
+            -Long id
+            -String firstName
+            -String lastName
+            -String username
+            -String avatarURL
+            -String coverPhotoURL
+            -String biography
+            -Double score
+            -Double rank
+            -Float balance
+            +SanitizedUser (User user)
+        }
+        class UserCompleteProfile {
+            -Long id
+            -String firstName
+            -String lastName
+            -String username
+            -String avatarURL
+            -String coverPhotoURL
+            -String biography
+            -Double score
+            -Double rank
+            -Float balance
+            -Float percentile
+            -List<SanitizedUser> followers
+            -List<SanitizedUser> following
+            -List<SanitizedStock> ownedStocks
+            -List<Transaction> transactions
+            ~UserCompleteProfile (User user)
+        }
+    }
+
+    package node {
+        class User extends Entity {
+            -String firstName
+            -String lastName
+            -String username
+            -String avatarURL
+            -String coverPhotoURL
+            -String email
+            -Double score
+            -Double rank
+            -Float balance
+            -String password
+            -String alpacaApiKey
+            -String biography
+            ~int hashCode ()
+            ~boolean equals (Object object)
+            ~int compareTo (User user)
+        }
+
+        class Stock extends Entity {
+            -String symbol
+            -String companyName
+            -String industry
+            ~boolean equals (Object o)
+        }
+
+        class Transaction extends Entity {
+            -float quantity
+            -float avgPrice
+            -float total
+            -ZonedDateTime purchasedAt
+            -MoneyTreeOrderType moneyTreeOrderType
+            -String clientOrderId
+            -TransactionStatus status
+            -String symbol
+            -String industry
+        }
+
+        enum MoneyTreeOrderType {
+            MARKET_BUY
+            MARKET_SELL
+            LIMIT_BUY
+            LIMIT_SELL
+        }
+
+        enum Status {
+            PENDING
+            COMPLETED
+        }
+
+        hide OrderType methods
+        hide Status methods
+    }
+
+    Transaction *- - OrderType
+    Transaction *- - Status
+
+    (User, Stock) . Owns
+    (User, Transaction) . Made
+    (User, User) . Follows
+    (Transaction, Stock) . ToFulfill
+
+    skinparam linetype ortho
+}
+
+@enduml
+
+PlantUML version 1.2021.00(Sun Jan 10 02:25:05 PST 2021)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: US
+--></g></svg>

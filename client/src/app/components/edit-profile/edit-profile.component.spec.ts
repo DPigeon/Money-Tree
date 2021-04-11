@@ -38,7 +38,9 @@ describe('EditProfileComponent', () => {
         {
           provide: MatDialogRef,
           useValue: {
-            close: (dialogResult: any) => {},
+            close: (dialogResult: any) => {
+              // testing matdialog
+            },
           },
         },
         {

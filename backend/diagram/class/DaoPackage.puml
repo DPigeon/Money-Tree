@@ -2,18 +2,55 @@
 
 package dao {
     interface UserDao extends Neo4jRepository {
-        ~List<User> findAll()
-        ~User findUserById(Long id)
+        ~List<Follows> findAll()
+        ~List<Follows> findByFollowerId(Long followerId)
+        ~List<Follows> findByUserToFollowId(Long userToFollowId)
+        ~List<Follows> findByFollowerIdAndUserToFollowId(Long followerId, Long userToFollowId)
     }
 
     interface StockDao extends Neo4jRepository {
         ~List<Stock> findAll()
         ~Stock findStockById(Long id)
+        ~Stock findBySymbol(String symbol)
+        ~Stock findByCompanyName(String companyName)
     }
 
     interface TransactionDao extends Neo4jRepository {
-        ~Transaction<Transaction> findAll()
+        ~List<Transaction> findAll()
+        ~List<Transaction> findByStatus(TransactionStatus status)
+        ~List<Transaction> findByMoneyTreeOrderType(MoneyTreeOrderType moneyTreeOrderType)
+        ~Transaction findByClientOrderId(String clientOrderId)
         ~Transaction findTransactionById(Long id)
+    }
+
+    interface ToFulfillDao extends Neo4jRepository {
+        ~ToFulfill findByTransactionId(Long transactionId)
+        ~List<ToFulfill> findAll()
+        ~List<ToFulfill> findByStockId(Long stockId)
+        ~List<ToFulfill> findByTransactionIdAndStockId(Long transactionId, Long stockId)
+    }
+
+    interface OwnsDao extends Neo4jRepository {
+        ~List<Owns> findAll()
+        ~List<Owns> findByStockId(Long stockId)
+        ~List<Owns> findByStockSymbol(String symbol)
+        ~List<Owns> findByUserId(Long userId)
+        ~List<Owns> findByUserIdAndStockId(Long userId, Long stockId)
+    }
+
+    interface MadeDao extends Neo4jRepository {
+        ~Made findByTransactionId(Long transactionID)
+        ~List<Made> findAll()
+        ~List<Made> findByTransactionDate(Date transactionDate)
+        ~List<Made> findByUserId(Long userId)
+        ~List<Made> findByTransactionStatus(TransactionStatus transactionStatus)
+    }
+
+    interface FollowsDao extends Neo4jRepository {
+        ~List<Follows> findAll()
+        ~List<Follows> findByFollowerId(Long followerId)
+        ~List<Follows> findByUserToFollowId(Long userToFollowId)
+        ~List<Follows> findByFollowerIdAndUserToFollowId(Long followerId, Long userToFollowId)
     }
 
     hide Neo4jRepository methods

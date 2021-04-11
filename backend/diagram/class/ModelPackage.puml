@@ -4,6 +4,37 @@ package model {
     class Entity {
         -Long id
         +Long getId()
+        +void setId(Long id)
+    }
+
+    class AlpacaOAuthResponse {
+        -String accessToken;
+        -String tokenType;
+        -String scope;
+    }
+
+    class AlpacaOrder {
+        -String id
+        -String clientOrderId
+        -String createdAt
+        -String updatedAt
+        -String submittedAt
+        -String symbol
+        -Float qty
+        -String filledQty
+        -String filledAvgPrice
+        -String orderType
+        -String side
+        -String timeInForce
+    }
+
+    class Mail {
+        -String email
+        -String subject
+        -String username
+        -TradeUpdate tradeUpdate
+        +String toString ()
+        -String constructBody (String stockName, String qty, String action, String avgPrice, ZonedDateTime timestamp, String totalAmount)
     }
 
     class UserBuilder {
@@ -18,20 +49,79 @@ package model {
     package relationship {
 
         class Follows {
-            -LocalDateTime since
+            -Long id
+            -@ StartNode User follower
+            -@ EndNode User userToFollow
+            -Date followDate
+            +Follows (User follower, User userToFollow, Date followDate)
         }
 
         class Owns {
-            -float qty
-            -float average_purchase_price
+            -Long id
+            -@ StartNode User user
+            -@ EndNode Stock stock
+            -Date since
+            -float quantity
+            -float avgPrice
+            -float total
+            +Owns (User user, Stock stock, Date since, float quantity, float avgPrice, float total
         }
 
         class Made {
-            -LocalDateTime placed_timestamp
+            -Long id
+            -@ StartNode User user
+            -@ EndNode Transaction transaction
+            -ZonedDateTime transactionDate
+            +Made(User user, Transaction transaction, ZonedDateTime transactionDate)
         }
 
-        class Fullfilled {
-            -LocalDateTime fulfilled_timestamp
+        class ToFullfill {
+            -private Long id
+            -@ StartNode Transaction transaction
+            -@ EndNode Stock stock
+            -ZonedDateTime fulfillmentDate
+            +ToFulfill (Transaction transaction, Stock stock, ZonedDateTime fulfillmentDate)
+        }
+        class SanitizedStock {
+            -Long id
+            -String symbol
+            -String companyName
+            -Date since
+            -float quantity
+            -float avgPrice
+            -float total
+            ~SanitizedStock(Owns ownsRel)
+        }
+        class SanitizedUser {
+            -Long id
+            -String firstName
+            -String lastName
+            -String username
+            -String avatarURL
+            -String coverPhotoURL
+            -String biography
+            -Double score
+            -Double rank
+            -Float balance
+            +SanitizedUser (User user)
+        }
+        class UserCompleteProfile {
+            -Long id
+            -String firstName
+            -String lastName
+            -String username
+            -String avatarURL
+            -String coverPhotoURL
+            -String biography
+            -Double score
+            -Double rank
+            -Float balance
+            -Float percentile
+            -List<SanitizedUser> followers
+            -List<SanitizedUser> following
+            -List<SanitizedStock> ownedStocks
+            -List<Transaction> transactions
+            ~UserCompleteProfile (User user)
         }
     }
 
@@ -40,29 +130,40 @@ package model {
             -String firstName
             -String lastName
             -String username
-            -String profile_picture_url
+            -String avatarURL
+            -String coverPhotoURL
             -String email
-            -double score
-            -double rank
-            -float available_balance
+            -Double score
+            -Double rank
+            -Float balance
             -String password
+            -String alpacaApiKey
+            -String biography
+            ~int hashCode ()
+            ~boolean equals (Object object)
+            ~int compareTo (User user)
         }
 
         class Stock extends Entity {
-            -String ticker
-            -String name
+            -String symbol
+            -String companyName
             -String industry
-            -String volatility
+            ~boolean equals (Object o)
         }
 
         class Transaction extends Entity {
-            -float qty
-            -float price
-            -OrderType order_type
-            -Status status
+            -float quantity
+            -float avgPrice
+            -float total
+            -ZonedDateTime purchasedAt
+            -MoneyTreeOrderType moneyTreeOrderType
+            -String clientOrderId
+            -TransactionStatus status
+            -String symbol
+            -String industry
         }
 
-        enum OrderType {
+        enum MoneyTreeOrderType {
             MARKET_BUY
             MARKET_SELL
             LIMIT_BUY
@@ -78,7 +179,7 @@ package model {
         hide Status methods
     }
 
-   /'
+    /'
     ' Relationships
     '/
     Transaction *-- OrderType
@@ -87,6 +188,7 @@ package model {
     (User, Stock) . Owns
     (User, Transaction) . Made
     (User, User) . Follows
+    (Transaction, Stock) . ToFulfill
 
     skinparam linetype ortho
 }

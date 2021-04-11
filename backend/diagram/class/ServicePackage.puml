@@ -2,86 +2,153 @@
 
 package service {
 
-    package MarketInteractions {
-        class MarketInteractionsFacade
-        hide MarketInteractionsFacade methods
-        hide MarketInteractionsFacade fields
-
-        class OrderDecorator extends MarketInteractionsFacade {
-            -Order order
-        }
-
-        class MarketOrderDecorator extends OrderDecorator {
-
-        }
-
-        class LimitOrderDecorator extends OrderDecorator {
-
-        }
-
-        class StopOrderDecorator extends OrderDecorator {
-            -Order order;
-            == @Override ==
-            +String decorator()
-        }
-
-        class StopLimitOrderDecorator extends OrderDecorator {
-
-        }
-    }
-
     package api {
+        interface AmazonS3Service {
+            ~String uploadImageToS3Bucket (MultipartFile image, String bucketName)
+            ~void deleteImageFromS3Bucket (String bucketName, String url)
+
+        }
+
         interface UserService {
-            ~Iterable<User> getAllUsers()
-            ~User getUserById(Long id)
+            ~List<User> getAllUsers()
+            ~User getUserByEmailAndUsername(String email, String username)
             ~User createUser(User user)
+            ~User updateUser(User userToUpdate, User user)
+            ~User registerAlpacaApiKey(Long id, String key)
+            ~UserValidator getUserValidator()
+            ~User login(User credentials) throws CredentialNotFoundException
+            ~User editUserProfilePicture(User user, MultipartFile imageFile, String selection)
+            ~Long followUser(Long userId, Long userToFollowId)
+            ~Long unfollowUser(Long userId, Long userToUnfollowId)
+            ~List<SanitizedUser> getFollowings(Long userId)
+            ~List<SanitizedUser> getFollowers(Long userId)
+            ~List<Map<String, String>> getSearchUsers()
+            ~List<User> getTopUsers(String symbol)
+            ~List<User> getFollowersWhoOwnsTheStock(Long id, String symbol)
+            ~List<SanitizedUser> getLeaderboard()
+            ~void deleteUserByEmail(String email)
+            ~Float getUserPercentile(String username)
         }
 
         interface StockService {
-            ~Iterable<Stock> getAllStocks()
-            ~Stock getStockById(Long id)
-            ~Stock createStock(Stock stock)
+            ~List<Stock> getAllStocks()
+            ~List<SanitizedStock> getUserStocks(Long userId)
+            ~HashMap<String, Long> getPeopleWhoOwnAlsoOwn(String symbol)
+            ~Stock getStockBySymbol(String symbol)
         }
 
         interface TransactionService {
-            ~Iterable<Transaction> getAllTransactions()
-            ~Transaction getTransactionById(Long id)
-            ~Transaction createTransaction(Transaction transaction)
+            ~List<Transaction> getAllTransactions()
+            ~List<Transaction> getTransactionsByOrderType(MoneyTreeOrderType moneyTreeOrderType)
+            ~List<Transaction> execute(String userId, Order order)
+            ~List<Transaction> getUserTransactions(Long userId)
+        }
+        interface StockMarketDataService {
+            ~BatchStocks getBatchStocksBySymbol(String symbols)
+            ~Book getBook(String symbol)
+            ~Quote getQuote(String symbol)
+            ~Company getCompanyInfo(String symbol)
+            ~List<News> getLastNNews(String symbol, int lastN)
+            ~KeyStats getKeyStats(String symbol)
+            ~List<Chart> getChart(String symbol, String range)
+            ~Logo getLogo(String symbol)
+        }
+        interface YahooFinanceService{
+            ~Mono<String> getHistoricalGraphData(String ticker, String range, String interval)
         }
     }
 
     package imp {
         abstract class AbstractService {
-            -{static} final Logger LOG
+            -static final Logger LOG
+        }
+
+        class DefaultAmazonS3Service extends AbstractService implements AmazonS3Service {
+            -final AmazonS3Facade amazonS3Facade
+            +DefaultAmazonS3Service(AmazonS3Facade amazonS3Facade)
+            ~String uploadImageToS3Bucket (MultipartFile image, String bucketName)
+            ~void deleteImageFromS3Bucket(String bucketName, String url)
         }
 
         class DefaultUserService extends AbstractService implements UserService {
             -final UserDao userDao
-            +DefaultUserService(UserDao userDao)
-            -- @Override --
-            +Iterable<User> getAllUsers()
-            +User getUserById(Long id)
-            +User createUser(User user)
-        }
+            -final OwnsDao ownsDao
+            -final FollowsDao followsDao
+            -final ValidatorFactory validatorFactory
+            -final MoneyTreePasswordEncryption passwordEncryption
+            -static final Logger LOGGER
+            -final AmazonS3Service amazonS3Service
+            -final String bucketName
+            +DefaultUserService(UserDao userDao, FollowsDao followsDao, OwnsDao ownsDao, ValidatorFactory validatorFactory, AmazonS3Service amazonS3Service, String bucketName) {
+                -- @Override --
+                ~List<User> getAllUsers()
+                ~User getUserByEmailAndUsername(String email, String username)
+                ~User createUser(User user)
+                ~User updateUser(User userToUpdate, User user)
+                ~User registerAlpacaApiKey(Long id, String key)
+                ~UserValidator getUserValidator()
+                ~User login(User credentials) throws CredentialNotFoundException
+                ~User editUserProfilePicture(User user, MultipartFile imageFile, String selection)
+                ~Long followUser(Long userId, Long userToFollowId)
+                ~Long unfollowUser(Long userId, Long userToUnfollowId)
+                ~List<SanitizedUser> getFollowings(Long userId)
+                ~List<SanitizedUser> getFollowers(Long userId)
+                ~List<Map<String, String>> getSearchUsers()
+                ~List<User> getTopUsers(String symbol)
+                ~List<User> getFollowersWhoOwnsTheStock(Long id, String symbol)
+                ~List<SanitizedUser> getLeaderboard()
+                ~void deleteUserByEmail(String email)
+                ~Float getUserPercentile(String username)
 
-        class DefaultStockService extends AbstractService implements StockService {
-            -final StockDao stockDao
-            +DefaultStockService(StockDao stockDao)
-            -- @Override --
-            +Iterable<Stock> getAllStocks()
-            +Stock getStockById(Long id)
-            +Stock createStock(Stock stock)
-        }
 
-        class DefaultTransactionService extends AbstractService implements TransactionService {
-            -final TransactionDao transactionDao
-            +DefaultTransactionService(TransactionDao transactionDao)
-            -- @Override --
-            +Iterable<Transaction> getAllTransactions()
-            +Stock getTransactionById(Long id)
-            +Stock createTransaction(Transaction transaction)
+
+            }
+
+            class DefaultStockMarketDataService extends AbstractService implements StockMarketDataService {
+                ~BatchStocks getBatchStocksBySymbol(String symbols)
+                ~Book getBook(String symbol)
+                ~Quote getQuote(String symbol)
+                ~Company getCompanyInfo(String symbol)
+                ~List<News> getLastNNews(String symbol, int lastN)
+                ~KeyStats getKeyStats(String symbol)
+                ~List<Chart> getChart(String symbol, String range)
+                ~Logo getLogo(String symbol)
+            }
+
+            class DefaultStockService extends AbstractService implements StockService {
+                -final StockDao stockDao
+                -final OwnsDao ownsDao
+                -static final Logger LOGGER
+                +DefaultStockService(StockDao stockDao, OwnsDao ownsDao)
+                -- @Override --
+                ~List<Stock> getAllStocks()
+                ~List<SanitizedStock> getUserStocks(Long userId)
+                ~HashMap<String, Long> getPeopleWhoOwnAlsoOwn(String symbol)
+                ~Stock getStockBySymbol(String symbol)
+            }
+
+            class DefaultTransactionService extends AbstractService implements TransactionService {
+                -static final Logger LOGGER
+                -final TransactionDao transactionDao
+                -final UserDao userDao
+                -final StockDao stockDao
+                -final MadeDao madeDao
+                -final ToFulfillDao toFulfillDao
+                -final AlpacaSession session
+                -final StockMarketDataService stockMarketDataService
+                +public DefaultTransactionService(TransactionDao transactionDao, UserDao userDao, StockDao stockDao, MadeDao madeDao, ToFulfillDao toFulfillDao, AlpacaSession session, StockMarketDataService stockMarketDataService)
+                -- @Override --
+                ~List<Transaction> getAllTransactions()
+                ~List<Transaction> getTransactionsByOrderType(MoneyTreeOrderType moneyTreeOrderType)
+                ~List<Transaction> execute(String userId, Order order)
+                ~List<Transaction> getUserTransactions(Long userId)
+            }
+            class DefaultYahooFinanceService extends AbstractService implements YahooFinanceService {
+                -@Autowired YahooFinanceFacade yahooFinanceFacade
+                -- @Override --
+                ~Mono<String> getHistoricalGraphData (String ticker, String range, String interval)
+            }
         }
     }
-}
 
-@enduml
+    @enduml

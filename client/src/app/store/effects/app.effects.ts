@@ -18,7 +18,7 @@ export class Effects {
     private transactionService: TransactionService,
     private userService: UserService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   getStock$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
@@ -500,13 +500,13 @@ export class Effects {
 
   mirrorError(backendError: any): AppError {
     if (backendError && backendError.error) {
-      const errorMessage: AppError = {
+
+      return {
         status: backendError.error.status,
         timestamp: backendError.error.timestamp,
         debugMessage: backendError.error.debugMessage,
         message: backendError.error.message,
       };
-      return errorMessage;
     }
     return null;
   }

@@ -1,0 +1,73 @@
+@startuml
+
+package facade {
+       class AlpacaSession {
+              -static final Logger
+              ~AlpacaAPI alpaca(String userId, String alpacaKey)
+       }
+       class AmazonS3Facade {
+              -static final Logger
+              -final AmazonS3 s3
+              ~AmazonS3Facade (String accessKey, String secretKey)
+              ~String uploadImageToS3Bucket (MultipartFile f, String bucketName)
+              ~File convertMultiPartToFile (MultipartFile file)
+              ~void cleanUpLocalFileCreated (File image)
+              ~void deleteImageFromS3Bucket (String bucketName, String url)
+       }
+       class EmailSender {
+              -static final Logger
+              @Autowired JavaMailSender mailSender
+              ~void sendOrderCompletedEmail (User user, TradeUpdate trade)
+              -Mail constructMail (User user, TradeUpdate trade)
+              -void send (String to, String subject, String text)
+       }
+       class MarketInteractionsFacade {
+              -static final Logger LOGGER
+              -final UserDao userDao
+              -AlpacaAPI alpacaAPI
+              -final Map<String, AlpacaStreamListener> userIdToStream
+              -final Map<String, Boolean> updateTracker
+              @Autowired StockDao stockDao
+              @Autowired TransactionDao transactionDao
+              @Autowired MadeDao madeDao
+              @Autowired OwnsDao ownsDao
+              @Autowired EmailSender emailSender
+              +@Autowired MarketInteractionsFacade (UserDao userDao)
+              ~void initializeAlpacaSession (String userId)
+              ~Account getAccount (String userId)
+              ~Clock getMarketClock (String userId)
+              ~List<Position> getOpenPositions (String userId)
+              ~PortfolioHistory getPortfolioHistory (String userId, int periodLength, int periodLength, String periodUnit, String timeFrame, tring dateEnd, boolean extendedHours)
+              ~void listenToStreamUpdates (String userId, SimpMessagingTemplate messageSender)
+              ~void disconnectFromStream (String userId)
+              -AlpacaStreamListener createStreamListener (String userId, SimpMessagingTemplate messageSender,
+              -void updateTransactionStatus (String clientOrderId, String avgPrice, String totalPrice)
+              -void changeStatusAndSave (Transaction transaction)
+              -void sendOrderCompletedEmail (String userId, TradeUpdate trade)
+              -User getUserById (Long userId)
+       }
+
+       class StockMarketDataFacade {
+              -final IEXCloudClient stockMarketDataClient
+              +StockMarketDataFacade( String pToken, String sToken, String profile)
+              ~BatchStock getBatchStocksBySymbol(String symbol)
+              ~Book getBook (String symbol)
+              ~Quote getQuote(String symbol)
+              ~Company getCompanyInfo(String symbol)
+              ~List<News> getLastNNews(String symbol, int lastN)
+              ~KeyStats getKeyStats(String symbol)
+              ~List<Chart> getChart(String symbol, String range)
+              ~Logo getLogo(String symbol)
+
+       }
+
+       class YahooFinanceService {
+              -final WebClient webClient
+              +YahooFinanceFacade(WebClient.Builder webClientBuilder)
+              ~Mono<String> getHistoricalGraphData(String ticker, String range, String interval)
+       }
+
+
+}
+
+@enduml
