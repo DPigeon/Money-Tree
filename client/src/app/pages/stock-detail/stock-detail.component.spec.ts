@@ -27,7 +27,9 @@ class MockStoreFacadeService {
 
 @Injectable()
 class MockRouter {
-  navigate() {}
+  navigate() {
+    //mock navigate
+  }
 }
 
 @Directive({ selector: '[oneviewPermitted]' })
@@ -94,7 +96,9 @@ describe('StockDetailComponent', () => {
   });
 
   afterEach(() => {
-    component.ngOnDestroy = function () {};
+    component.ngOnDestroy = function () {
+      //mock function
+    };
     fixture.destroy();
   });
 
@@ -110,7 +114,9 @@ describe('StockDetailComponent', () => {
     component.route = component.route || {};
     component.route.snapshot = {
       paramMap: {
-        get: function () {},
+        get: function () {
+          //mock function
+        },
       },
     };
     component.storeFacade = component.storeFacade || {};

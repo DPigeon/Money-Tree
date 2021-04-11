@@ -108,8 +108,7 @@ export class SignupFormComponent {
           // all failed validators are available in control.errors which is an object
           // and to get the names of failed validators we need the keys in errors Object
           const allErrorNames = Object.keys(this.signUpForm.get(field).errors);
-          const result = field + ',' + allErrorNames[0]; // the resslt would be for example "firstName,required"
-          return result;
+          return field + ',' + allErrorNames[0];
         }
       }
     }

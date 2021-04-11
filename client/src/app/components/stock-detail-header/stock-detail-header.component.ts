@@ -11,7 +11,9 @@ export class StockDetailHeaderComponent {
   @Input() stockInfo: Stock;
   @Input() marketClock: MarketClock;
 
-  constructor() {}
+  constructor() {
+    // empty constructor
+  }
 
   get companyLogo(): string {
     return this.stockInfo ? 'url(' + this.stockInfo.logo + ')' : '';
