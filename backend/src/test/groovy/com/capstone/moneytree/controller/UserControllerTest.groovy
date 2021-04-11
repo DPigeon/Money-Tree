@@ -6,8 +6,12 @@ import com.capstone.moneytree.dao.StockDao
 import com.capstone.moneytree.dao.ToFulfillDao
 import com.capstone.moneytree.dao.TransactionDao
 import com.capstone.moneytree.facade.AlpacaSession
+import com.capstone.moneytree.model.MoneyTreeOrderType
 import com.capstone.moneytree.model.SanitizedUser
+import com.capstone.moneytree.model.TransactionStatus
+import com.capstone.moneytree.model.node.Transaction
 import com.capstone.moneytree.model.relationship.Follows
+import com.capstone.moneytree.model.relationship.Made
 import com.capstone.moneytree.service.api.StockMarketDataService
 import com.capstone.moneytree.service.api.StockService
 import com.capstone.moneytree.service.api.TransactionService
@@ -15,6 +19,8 @@ import com.capstone.moneytree.service.impl.DefaultStockService
 import com.capstone.moneytree.service.impl.DefaultTransactionService
 import org.springframework.http.ResponseEntity
 import spock.lang.Ignore
+
+import java.time.ZonedDateTime
 
 import static com.capstone.moneytree.utils.MoneyTreeTestUtils.*
 
@@ -953,5 +959,63 @@ class UserControllerTest extends Specification {
         then: "response should match list1"
         res.statusCode == HttpStatus.OK
         res.getBody() == list1
+    }
+
+    def "getTimeline test"() {
+        given: "a user"
+        String email = "test@test.com"
+        String username = "Test"
+        String password = "encrypted"
+        String firstName = "John"
+        String lastName = "Doe"
+        User user = createUser(email, username, password, firstName, lastName, null)
+        user.setId(1)
+
+        and: "some other users that will be used as followers of user"
+        String email2 = "test2@test.com"
+        String username2 = "Test2"
+        String password2 = "encrypted2"
+        String firstName2 = "Kelly"
+        String lastName2 = "C"
+        User user2 = createUser(email2, username2, password2, firstName2, lastName2, null)
+        user2.setId(2)
+
+        String email3 = "test3@test.com"
+        String username3 = "Test3"
+        String password3 = "encrypted3"
+        String firstName3 = "Marry"
+        String lastName3 = "Lyn"
+        User user3 = createUser(email3, username3, password3, firstName3, lastName3, null)
+        user3.setId(3)
+
+        and: "some transactions for user 2 and user 3"
+        Transaction t1 = Transaction.builder().symbol('AAPL').quantity(5).status(TransactionStatus.COMPLETED).clientOrderId(null)
+        .moneyTreeOrderType(MoneyTreeOrderType.MARKET_BUY).purchasedAt(ZonedDateTime.parse("2021-04-01T11:00:00-00:00")).build()
+
+        Transaction t2 = Transaction.builder().symbol('TSLA').quantity(10).status(TransactionStatus.PENDING).clientOrderId(null)
+                .moneyTreeOrderType(MoneyTreeOrderType.MARKET_BUY).purchasedAt(ZonedDateTime.parse("2021-04-01T11:30:00-00:00")).build()
+
+        Transaction t3 = Transaction.builder().symbol('GOOG').quantity(2).status(TransactionStatus.COMPLETED).clientOrderId(null)
+                .moneyTreeOrderType(MoneyTreeOrderType.MARKET_BUY).purchasedAt(ZonedDateTime.parse("2021-04-01T11:31:00-00:00")).build()
+
+
+        and: "user followers are user2 and user 3"
+        userDao.findUserById(user.getId()) >> user
+        followsDao.findByFollowerId(user.getId()) >> List.of( new Follows(user, user2,null), new Follows(user, user3,null))
+
+        and: "user2 has (t1,t2) and user3 has only t3"
+        madeDao.findByUserId(2) >> List.of(new Made(user2,t1, t1.getPurchasedAt()), new Made(user2,t2, t2.getPurchasedAt()))
+        madeDao.findByUserId(3) >> List.of(new Made(user3,t3, t3.getPurchasedAt()))
+
+        when: "getTimeline"
+        def res = userController.getTimeline(user.getId())
+        then: "response should return all the followers' transactions that are Completed (sorted based on purchasedTime)"
+        res.statusCode == HttpStatus.OK
+        /* The first item of array should be user3,t3 because of the time of t3 is newer than the other transactions
+         the second item of the list should not be user1,t2 because t2 was a pending status */
+        res.getBody()[0].first.getId() == user3.getId()
+        res.getBody()[0].second.getSymbol() == t3.getSymbol()
+        res.getBody()[1].first.getId() == user2.getId()
+        res.getBody()[1].second.getSymbol() == t1.getSymbol()
     }
 }
