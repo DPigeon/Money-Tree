@@ -1,11 +1,11 @@
 @startuml
 
 /'
- ' MoneyTree's main package
- '/
+' MoneyTree's main package
+'/
 package com.capstone.moneytree {
 
-   /'
+    /'
     ' Gathers all packages together
     '/
     !include ./ControllerPackage.puml
@@ -13,13 +13,13 @@ package com.capstone.moneytree {
     !include ./DaoPackage.puml
     !include ./ModelPackage.puml
     !include ./AlpacaPackage.puml
-    !include ./IEXCloudPackage.puml
+    !include ./FacadePackage.puml
 
     class MoneyTreeApplication {
         +{static} void main(String[] args)
     }
 
-   /'
+    /'
     ' Package2Package Relationships
     '/
     DefaultUserService *-- UserDao
