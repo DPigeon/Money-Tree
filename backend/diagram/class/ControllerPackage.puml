@@ -2,74 +2,72 @@
 
 package controller {
     abstract class AbstractController {
-        -{static
+        -final Logger LOG
     }
-    final Logger LOG
-}
 
-class UserController extends AbstractController {
-    -final UserService userService
-    -final TransactionService transactionService
-    -final StockService stockService
-    +UserController(UserService userService, TransactionService transactionService, StockService stockService)
-    ~List<User> all()
-    ~User createUser( User user)
-    ~User getUser( Long id)
-    ~User registerAlpacaApiKey(Long id, String code)
-    ~UserCompleteProfile getUserByUserName(String username)
-    ~User editUserProfile (Long id, User user)
-    ~User editUserProfilePicture (Long id, MultipartFile imageFile, String selection)
-    ~Long followUser (Long userId, Long userToFollowId)
-    ~Long unfollowUser (Long userId, Long userToUnfollowId)
-    ~List<SanitizedUser> getFollowings (Long id)
-    ~List<SanitizedUser> getFollowers (Long id)
-    ~void deleteUserByEmail (String email)
-    ~List<Map<String,String>> getSearchUsers ()
-    ~List<User> getTopUserForStock(String symbol)
-    ~List<User> getStockOwnedByFollowers (Long id, String symbol)
-    ~List<SanitizedUser> getLeaderboard ()
-    ~List<Pair<SanitizedUser, Transaction>> getTimeline(Long userId)
-}
+    class UserController extends AbstractController {
+        -final UserService userService
+        -final TransactionService transactionService
+        -final StockService stockService
+        +UserController(UserService userService, TransactionService transactionService, StockService stockService)
+        ~List<User> all()
+        ~User createUser( User user)
+        ~User getUser( Long id)
+        ~User registerAlpacaApiKey(Long id, String code)
+        ~UserCompleteProfile getUserByUserName(String username)
+        ~User editUserProfile (Long id, User user)
+        ~User editUserProfilePicture (Long id, MultipartFile imageFile, String selection)
+        ~Long followUser (Long userId, Long userToFollowId)
+        ~Long unfollowUser (Long userId, Long userToUnfollowId)
+        ~List<SanitizedUser> getFollowings (Long id)
+        ~List<SanitizedUser> getFollowers (Long id)
+        ~void deleteUserByEmail (String email)
+        ~List<Map<String,String>> getSearchUsers ()
+        ~List<User> getTopUserForStock(String symbol)
+        ~List<User> getStockOwnedByFollowers (Long id, String symbol)
+        ~List<SanitizedUser> getLeaderboard ()
+        ~List<Pair<SanitizedUser, Transaction>> getTimeline(Long userId)
+    }
 
-class StockController extends AbstractController {
-    -final StockMarketDataService stockMarketDataService
-    -final YahooFinanceService yahooFinanceService
-    -final StockService stockService
-    +StockController (StockMarketDataService stockMarketDataService, YahooFinanceService yahooFinanceService, StockService stockService)
-    ~BatchStocks getBatchStocksBySymbol(String symbol)
-    ~Book getBook (String symbol)
-    ~Quote getQuote (String symbol)
-    ~Company getCompanyInfo (String symbol)
-    ~List<News> getLastNNews (String symbol, int n)
-    ~KeyStats getKeyStats (String symbol)
-    ~List<Chart> getChart (symbol, String range)
-    ~Logo getLogo (String symbol)
-    ~Mono<String> getYahooChart (String symbol, String range, String interval)
-    ~List<SanitizedStock> getUserStocks (String userId)
-    ~HashMap<String, Long> getPeopleWhoOwnAlsoOwn (String symbol)
-}
+    class StockController extends AbstractController {
+        -final StockMarketDataService stockMarketDataService
+        -final YahooFinanceService yahooFinanceService
+        -final StockService stockService
+        +StockController (StockMarketDataService stockMarketDataService, YahooFinanceService yahooFinanceService, StockService stockService)
+        ~BatchStocks getBatchStocksBySymbol(String symbol)
+        ~Book getBook (String symbol)
+        ~Quote getQuote (String symbol)
+        ~Company getCompanyInfo (String symbol)
+        ~List<News> getLastNNews (String symbol, int n)
+        ~KeyStats getKeyStats (String symbol)
+        ~List<Chart> getChart (symbol, String range)
+        ~Logo getLogo (String symbol)
+        ~Mono<String> getYahooChart (String symbol, String range, String interval)
+        ~List<SanitizedStock> getUserStocks (String userId)
+        ~HashMap<String, Long> getPeopleWhoOwnAlsoOwn (String symbol)
+    }
 
-class TransactionController extends AbstractController {
-    -final TransactionService transactionService
-    +TransactionController(TransactionService transactionService)
-    ~List<Transaction> all()
-    ~List<Transaction> executeTransaction(String userId, Order order)
-    ~List<Transaction> getUserTransactions(String userId)
-}
+    class TransactionController extends AbstractController {
+        -final TransactionService transactionService
+        +TransactionController(TransactionService transactionService)
+        ~List<Transaction> all()
+        ~List<Transaction> executeTransaction(String userId, Order order)
+        ~List<Transaction> getUserTransactions(String userId)
+    }
 
-class AlpacaController extends AbstractController {
-    -final MarketInteractionsFacade marketInteractionsFacade
-    -final SimpMessagingTemplate messageSender
-    +AlpacaController(MarketInteractionsFacade marketInteractionsFacade, SimpMessagingTemplate messageSender)
-    ~Account> getAccount(String userId)
-    ~List<Position> getPositions(String userId)
-    ~PortfolioHistory getPortfolioHistory(String userId, int periodLength, String periodUnit, String timeFrame, String dateEnd, String extendedHours)
-    ~Clock getMarketClock(String userId)
-    ~void registerToTradeUpdates(String userId)
-    ~void disconnectFromTradeUpdates(String userId)
+    class AlpacaController extends AbstractController {
+        -final MarketInteractionsFacade marketInteractionsFacade
+        -final SimpMessagingTemplate messageSender
+        +AlpacaController(MarketInteractionsFacade marketInteractionsFacade, SimpMessagingTemplate messageSender)
+        ~Account> getAccount(String userId)
+        ~List<Position> getPositions(String userId)
+        ~PortfolioHistory getPortfolioHistory(String userId, int periodLength, String periodUnit, String timeFrame, String dateEnd, String extendedHours)
+        ~Clock getMarketClock(String userId)
+        ~void registerToTradeUpdates(String userId)
+        ~void disconnectFromTradeUpdates(String userId)
 
 
-}
+    }
 }
 
 @enduml
