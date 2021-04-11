@@ -35,7 +35,6 @@ export class UserOwnedStocksComponent implements OnInit, OnChanges {
   constructor(public dialog: MatDialog) {}
   ngOnChanges(): void {
     this.calculateOwnedStockInfo();
-    console.log('called');
   }
   ngOnInit(): void {
     this.alpacaPositions$.subscribe((data) => (this.alpacaPositions = data));

@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/interfaces/user';
 import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 import { Observable } from 'rxjs';
+import { AlpacaUserPosition } from 'src/app/interfaces/alpacaPosition';
 
 const mockRouter = {
   navigate: jest.fn(),
@@ -39,7 +40,29 @@ const fakeUser: User = {
   firstName: 'userfn',
   lastName: 'userln',
   username: 'username',
+  balance: 80000,
 };
+const fakeUser2: User = {
+  id: 0,
+  firstName: 'userfn',
+  lastName: 'userln',
+  username: 'username',
+  balance: 80000,
+};
+
+const alpacaPositions: AlpacaUserPosition[] = [
+  {
+    symbol: 'AAPL',
+    avgPrice: '120',
+    qty: '5',
+    cost: '600',
+    currentPrice: '125',
+    currentValue: '600',
+    gainAmount: '25',
+    change: '1',
+    gainPercentage: '0.41',
+  },
+];
 
 // integration tests
 describe('HomeProfileComponent', () => {
@@ -81,7 +104,8 @@ describe('HomeProfileComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HomeProfileComponent);
     component = fixture.componentInstance;
-    component.currentUser = fakeUser;
+    component.user = fakeUser;
+    component.currentUser = fakeUser2;
     component.alpacaPositions$ = new Observable();
     fixture.detectChanges();
   });
@@ -102,44 +126,38 @@ describe('HomeProfileComponent Unit Test', () => {
     );
   });
 
-  // it('should set User Earnings', () => {
-  //   const fakeEarning1 = {
-  //     earnings: 1534521.123165,
-  //     totalGain: 213.5416516,
-  //     positive: true,
-  //   };
-  //   component.generateEarningsInfo();
-  //   expect(component.earningsInfo).toEqual({
-  //     earnings: 0,
-  //     totalGain: 0,
-  //     positive: true,
-  //     amount: '1534521.12',
-  //     gain: '213.54',
-  //     percentage: '0.00',
-  //   });
-  //   expect(component.getEarningSign(component.earningsInfo.positive)).toBe('+');
-  //   expect(component.getEarningsClass(component.earningsInfo.positive)).toBe(
-  //     'positive-change'
-  //   );
-
-  //   const fakeEarning2 = {
-  //     earnings: 1534521.123165,
-  //     totalGain: -213.5416516,
-  //     positive: true,
-  //   };
-  //   component.generateEarningsInfo();
-  //   expect(component.earningsInfo).toEqual({
-  //     amount: '1534521.12',
-  //     earnings: 0,
-  //     gain: '-213.54',
-  //     percentage: '-0.00',
-  //     positive: false,
-  //     totalGain: 0,
-  //   });
-  //   expect(component.getEarningSign(component.earningsInfo.positive)).toBe('');
-  // because for a negative number the - sign is already there
-  //   expect(component.getEarningsClass(component.earningsInfo.positive)).toBe(
-  //     'negative-change'
-  //   );
-  // });
+  it('it should correctly generate user earnings info (+gain)', () => {
+    component.alpacaPositions = alpacaPositions;
+    component.generateEarningsInfo();
+    expect(component.earningsInfo).toEqual({
+      balance: 100600,
+      gain: 25.0,
+      cost: 600,
+      percentage: 4.17,
+      positive: true,
+      earnings: 0,
+    });
+    expect(component.getEarningSign(component.earningsInfo.positive)).toBe('+');
+    expect(component.getEarningsClass(component.earningsInfo.positive)).toBe(
+      'positive-change'
+    );
+  });
+  it('it should correctly generate user earnings info (-gain)', () => {
+    component.alpacaPositions = alpacaPositions;
+    component.alpacaPositions[0].gainAmount = '-10.00';
+    component.generateEarningsInfo();
+    expect(component.earningsInfo).toEqual({
+      balance: 100600,
+      cost: 600,
+      earnings: 0,
+      gain: -10,
+      percentage: -1.67,
+      positive: false,
+    });
+    expect(component.getEarningSign(component.earningsInfo.positive)).toBe('');
+    // because for a negative number the - sign is already there
+    expect(component.getEarningsClass(component.earningsInfo.positive)).toBe(
+      'negative-change'
+    );
+  });
 });
