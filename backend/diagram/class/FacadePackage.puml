@@ -22,7 +22,7 @@ package facade {
               -void send (String to, String subject, String text)
        }
        class MarketInteractionsFacade {
-              -static final Logger LOGGER = LoggerFactory.getLogger(MarketInteractionsFacade.class)
+              -static final Logger LOGGER
               -final UserDao userDao
               -AlpacaAPI alpacaAPI
               -final Map<String, AlpacaStreamListener> userIdToStream

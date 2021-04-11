@@ -179,32 +179,6 @@ package model {
         hide Status methods
     }
 
-    package decorator {
-
-
-        class OrderDecorator extends Order {
-            +void decorate() \t\t ABSTRACT
-        }
-
-        class MarketOrderDecorator extends OrderDecorator {
-
-        }
-
-        class LimitOrderDecorator extends OrderDecorator {
-
-        }
-
-        class StopOrderDecorator extends OrderDecorator {
-
-        }
-
-        class StopLimitOrderDecorator extends OrderDecorator {
-
-        }
-
-    }
-
-
     /'
     ' Relationships
     '/
